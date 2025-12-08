@@ -169,7 +169,7 @@ local function GitSigns()
 end
 
 local function LspStatus()
-    local clients = vim.lsp.buf_get_clients()
+    local clients = vim.lsp.get_clients()
     local higroup = "%#StatuslineLspOn#"
     if #clients > 0 then
         return higroup .. "LSP" .. _Spacer(2)
@@ -317,4 +317,4 @@ vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
     end,
 })
 
--- Last Modified: Mon, 03 Feb 2025 01:06:49 AM
+-- Last Modified: Mon, 08 Dec 2025 07:07:18 PM
