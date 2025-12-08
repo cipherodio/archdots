@@ -69,6 +69,7 @@ __pycache__
 .local/drafts/
 .local/lib/
 .local/notes/
+.local/olds/
 .local/orgdata/
 .local/review/
 .local/screenshot/
