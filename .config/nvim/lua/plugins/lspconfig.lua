@@ -150,7 +150,8 @@ return {
             },
         },
         config = function(_, opts)
-            local lspconfig = require("lspconfig")
+            -- local lspconfig = require("lspconfig")
+            -- local lspconfig = vim.lsp.config
 
             --NOTE: Uncomment this if using diagnostics.signs
             -- for type, icon in pairs(opts.diagnostics.signs) do
@@ -167,10 +168,13 @@ return {
             })
 
             for server, config in pairs(opts.servers) do
-                lspconfig[server].setup(config)
+                -- lspconfig[server].setup(config)
+                -- lspconfig(server, config)
+                vim.lsp.config(server, config)
+                vim.lsp.enable(server)
             end
         end,
     },
 }
 
--- Last Modified: Mon, 20 Jan 2025 01:15:26 PM
+-- Last Modified: Mon, 08 Dec 2025 07:26:11 PM
