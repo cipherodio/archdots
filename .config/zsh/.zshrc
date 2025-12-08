@@ -88,7 +88,7 @@ echo -ne '\e[5 q'
 
 # Command not found
 function command_not_found_handler() {
-    print -P "Idiot fucker: %F{124}$0%f" >&2
+    print -P "Error: %F{124}$0%f" >&2
     return 127
 }
 
@@ -141,4 +141,4 @@ source "$ZPLUG"/system-clipboard/zsh-system-clipboard.zsh
 # Source zsh-fast-syntax-highlighting
 source "$ZPLUG"/fasthl/fast-syntax-highlighting.plugin.zsh
 
-# Last Modified: Tue, 04 Feb 2025 12:45:09 AM
+# Last Modified: Mon, 08 Dec 2025 08:25:52 PM
