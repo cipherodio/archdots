@@ -36,8 +36,8 @@ style = "ExtraBold Italic"
 [window]
 opacity = 1
 dynamic_padding = false
-padding.x = 2
-padding.y = 2
+padding.x = 12
+padding.y = 6
 decorations = "none"
 
 # [scrolling]
@@ -65,4 +65,4 @@ bindings = [
 { key = "Down", mods = "Control|Shift", action = "ScrollToBottom" },
 ]
 
-# Last Modified: Wed, 05 Feb 2025 12:04:13 AM
+# Last Modified: Mon, 08 Dec 2025 07:56:29 PM
