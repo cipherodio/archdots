@@ -1,6 +1,6 @@
 #!/bin/bash
 # Open web page via dmenu and open on $BROWSER
-TEXT="whatsapp\nchatgpt\nduckduckgo\ngithub\nudemy\ntrinket\ntorrent\n9901\nshopee\nshopee-wish\nfoodpanda\nludeon\nsuckless\narch\nunsplash\nwallhaven\nwallpapercave\nstackoverflow\nunixporn\nbilibili\nmangafire\nyewtu\nyoutube\ngmail"
+TEXT="whatsapp\nchatgpt\nduckduckgo\ngithub\nudemy\ntrinket\ntorrent\n9901\nshopee\nfoodpanda\nludeon\nsuckless\narch\nunsplash\nwallhaven\nstackoverflow\nunixporn\nmangafire\nyewtu\nyoutube\nprimevideo\ngmail"
 
 DMENU="$(echo -e $TEXT | dmenu -l 16 -p web)"
 
@@ -16,21 +16,19 @@ trinket) $BROWSER https://trinket.io/ ;;
 torrent) $BROWSER https://1337x.to/home/ ;;
 9901) $BROWSER http://localhost:9091/transmission/web/ ;;
 shopee) $BROWSER https://shopee.ph/ ;;
-shopee-wish) $BROWSER https://shopee.ph/buyer/likes ;;
 foodpanda) $BROWSER https://www.foodpanda.ph/ ;;
 ludeon) $BROWSER https://ludeon.com/forums/index.php ;;
 suckless) $BROWSER https://suckless.org ;;
 arch) $BROWSER https://bbs.archlinux.org/index.php ;;
 unsplash) $BROWSER https://unsplash.com/ ;;
 wallhaven) $BROWSER https://wallhaven.cc ;;
-wallpapercave) $BROWSER https://wallpapercave.com ;;
 stackoverflow) $BROWSER https://stackoverflow.com/ ;;
 unixporn) $BROWSER https://www.reddit.com/r/unixporn ;;
-bilibili) $BROWSER https://www.bilibili.tv/en/anime ;;
 mangafire) $BROWSER https://mangafire.to/ ;;
 yewtu) $BROWSER https://yewtu.be/feed/trending ;;
 youtube) $BROWSER https://www.youtube.com ;;
+primevideo) $BROWSER https://www.primevideo.com/ ;;
 gmail) $BROWSER https://gmail.com ;;
 esac
 
-# Last Modified: Mon, 08 Dec 2025 08:56:59 PM
+# Last Modified: Tue, 30 Dec 2025 01:53:40 PM
