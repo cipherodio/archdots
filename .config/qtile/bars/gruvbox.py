@@ -104,8 +104,9 @@ mainbar = [
         **widget_defaults,
         background=gruvdark["c13"],
         foreground=gruvdark["c12"],
-        format="{MemUsed: .0f}{mm}",
-        measure_mem="G",
+        format="{MemPercent:.0f}%",
+        # format="{MemUsed: .0f}{mm}",
+        # measure_mem="G",
     ),
     widget.Image(filename="~/.config/qtile/assets/background/sloperight.png"),
     widget.Image(
@@ -154,4 +155,4 @@ mainbar = [
 screens = [Screen(top=bar.Bar(mainbar, size=34))]
 
 
-# Last Modified: Mon, 08 Dec 2025 06:31:44 PM
+# Last Modified: Thu, 01 Jan 2026 05:50:52 PM
