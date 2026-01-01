@@ -1,7 +1,19 @@
 .cache
 .mono
 .dots
+.pulse-cookie
 cef_user_data
+go
+assets
+.zcompdump
+shaders
+olds
+nimble
+.Xauthority
+wallpapers
+lib
+resume
+torrents
 dconf
 backups
 elpa
@@ -28,5 +40,6 @@ state
 .steampath
 .steampid
 .venv
+unity3d
 var
 ibus
