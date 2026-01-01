@@ -9,4 +9,4 @@ dgroups_app_rules = [
     Rule(Match(title=re.compile(r"^(Steam\ setup|Steam|steam)$")), group="4"),
 ]
 
-# Last Modified: Mon, 20 Jan 2025 03:09:43 AM
+# Last Modified: Sat, 13 Dec 2025 03:20:10 PM
