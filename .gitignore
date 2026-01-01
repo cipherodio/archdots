@@ -62,6 +62,7 @@ __pycache__
 .config/transmission-daemon/torrents/
 .config/tremc/history.json
 .config/tmux/plugins/
+.config/unity3d/
 .config/zsh/zplug/
 .config/zsh/.history
 .config/zsh/.zcompdump
