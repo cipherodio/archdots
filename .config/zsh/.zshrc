@@ -1,3 +1,4 @@
+# shellcheck shell=zsh
 # shellcheck disable=2034,2016,1091
 # Prompt with git branch and git changes
 setopt prompt_subst
@@ -10,7 +11,13 @@ zstyle ':vcs_info:git:*' formats '%F{magenta} %f %F{yellow}%b%f%F{red}%u%f%F{
 zstyle ':vcs_info:*' unstagedstr ' [!]'
 zstyle ':vcs_info:*' stagedstr ' [+]'
 
-PROMPT='%F{blue}%B%~%b%f %B${vcs_info_msg_0_}%b> '
+PROMPT='%F{blue}%B$(prompt_pwd_pretty)%b%f %B${vcs_info_msg_0_}%b> '
+
+# Makes bm-dirs looks neat, showing ~/.config instead of ~/c
+prompt_pwd_pretty() {
+    [[ $PWD == $HOME ]] && { print -n '~'; return }
+    [[ $PWD == $HOME/* ]] && print -n "~${PWD:t}" || print -n "${PWD:t}"
+}
 
 # Install fzf
 if [ ! -d ~/.config/fzf ]; then
@@ -87,25 +94,22 @@ zle -N zle-line-init
 echo -ne '\e[5 q'
 
 # Command not found
-function command_not_found_handler() {
-    print -P "Error: %F{124}$0%f" >&2
+command_not_found_handler() {
+    print -P "Invalid command: %F{124}$1%f" >&2
     return 127
 }
 
 # Do cd then ls
 cd() {
-    new_directory="$*"
-    if [ $# -eq 0 ]; then
-        new_directory=${HOME}
-    fi
-    builtin cd "${new_directory}" && ls -AhN --color=auto --group-directories-first
+    builtin cd "$@" || return
+    [[ -o interactive ]] && command ls -AhN --color=auto --group-directories-first
 }
 
 # Use lf to jump in directories with ctrl-o
 # shellcheck disable=2164
 lfcd() {
-    tmp="$(mktemp -uq)"
-    trap 'rm -f $tmp >/dev/null 2>&1 &&
+    tmp="$(mktemp)"
+    trap 'rm -f "$tmp" >/dev/null 2>&1 &&
         trap - HUP INT QUIT TERM PWR EXIT' HUP INT QUIT TERM PWR EXIT
     lf -last-dir-path="$tmp" "$@"
     if [ -f "$tmp" ]; then
@@ -116,16 +120,16 @@ lfcd() {
 bindkey -s "^o" "^ulfcd\n"
 
 # Search $HOME with fzf and open in $EDITOR with alt-e
-editfile() {
-    rg "$HOME" --files | sort -u | fzf -m | xargs -r "$EDITOR"
+efzf() {
+    rg --files -0 "$HOME" | fzf -m --read0 --print0 | xargs -0 -r "$EDITOR"
 }
-bindkey -s "^[e" "^ueditfile\n"
+bindkey -s "^[e" "^uefzf\n"
 
 # Search in $HOME with fzf and cd to that directory with alt-d
-jumptodirectory() {
-    cd "$(rg "$HOME" -0 --files | xargs -0 dirname | sort -u | fzf)" || exit
+jfzf() {
+    cd "$(rg --files -0 "$HOME" | xargs -0 dirname | sort -u | fzf)" || return
 }
-bindkey -s "^[d" "^ujumptodirectory\n"
+bindkey -s "^[d" "^ujfzf\n"
 
 # Source fzf
 if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ]]; then
@@ -141,4 +145,4 @@ source "$ZPLUG"/system-clipboard/zsh-system-clipboard.zsh
 # Source zsh-fast-syntax-highlighting
 source "$ZPLUG"/fasthl/fast-syntax-highlighting.plugin.zsh
 
-# Last Modified: Mon, 08 Dec 2025 08:25:52 PM
+# Last Modified: Thu, 01 Jan 2026 02:24:37 PM
