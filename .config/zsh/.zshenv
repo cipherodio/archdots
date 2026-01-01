@@ -13,13 +13,12 @@ export LS_COLORS
 # Default programs:
 export EDITOR="nvim"
 export VISUAL="nvim"
-# export TERMINAL="alacritty"
-export TERMINAL="st"
+export TERMINAL="alacritty"
 export TERM="xterm-256color"
 export BROWSER="firefox"
 export READER="zathura"
 export FILE="lf"
-# export WM="qtile"
+export WM="qtile"
 
 # XDG Base Directory
 export XDG_LOCAL_HOME="$HOME/.local"
@@ -64,22 +63,25 @@ export SUDO_ASKPASS="$HOME/.local/bin/dmenu-pass"
 export SUDO_PROMPT=$'\e[1;31m'[$'\e[0m'sudo$'\e[1;31m']$'\e[0m'' password for '$'\e[1;31m''%p'$'\e[0m'': '
 export SPROMPT="%F{blue}[%fzsh%F{blue}]%f correct %F{red}%R%f to %F{blue}%r%f [nyae]: "
 
-# Fzf
 export FZF_DEFAULT_OPTS="
---color=bg+:#83a598
+--color=bg:#1d2021
+--color=bg+:#3c3836
 --color=fg:#ebdbb2
---color=current-fg:#282828
---color=pointer:#cc241d
---color=gutter:-1
---color=current-hl:#005577
---color=hl:#076678
---no-bold
---no-separator
---no-scrollbar
---cycle
---multi
+--color=fg+:#fbf1c7
+--color=hl:#fabd2f
+--color=hl+:#fabd2f
+--color=header:#83a598
+--color=info:#d3869b
+--color=pointer:#fe8019
+--color=marker:#fe8019
+--color=spinner:#fe8019
+--color=prompt:#b8bb26
+--color=border:#504945
+--color=query:#ebdbb2
+--gutter ' '
 --exact
---pointer='>'
+--no-separator
+--no-bold
 --reverse
 --height 40%
 "
@@ -110,4 +112,4 @@ export MOZ_USE_XINPUT2=1
 # Shortcuts
 [ ! -f "$XDG_CONFIG_HOME"/shell/shrc ] && setsid -f shortcuts >/dev/null 2>&1
 
-# Last Modified: Mon, 03 Feb 2025 01:14:55 AM
+# Last Modified: Fri, 02 Jan 2026 02:55:20 AM
