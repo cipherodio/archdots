@@ -1,0 +1,8 @@
+#!/bin/bash
+
+rm -rf ~/.config/nvim/lazy-lock.json
+rm -rf ~/.local/share/nvim/
+rm -rf ~/.local/state/nvim/
+rm -rf ~/.cache/nvim/
+
+# Last Modified: Tue, 30 Dec 2025 09:26:02 PM
