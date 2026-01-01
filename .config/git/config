@@ -1,11 +1,12 @@
 [user]
-	email = twoeightdev@gmail.com
-	name = twoeightdev
+	email = cipherodio@gmail.com
+	name = cipherodio
     useConfigOnly = true
 [pager]
 	branch = false
 [init]
 	defaultBranch = main
+	defaultRefFormat = files
 [core]
 	editor = nvim
     pager = LESS='--raw-control-chars' less
