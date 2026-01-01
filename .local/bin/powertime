@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# battime=$(acpi -b | awk '{print $5, $6}')
+battime=$(acpi -b | awk '{print $5}')
+
+dunstify "Battery Remaining" "$battime"
+
+# Last Modified: Tue, 09 Dec 2025 04:14:16 AM
