@@ -1,5 +1,5 @@
 [general]
-import = ["~/.config/alacritty/themes/gruvbox.toml"]
+import = ["~/.config/alacritty/themes/onedark.toml"]
 live_config_reload = true
 
 # [shell]
@@ -65,4 +65,4 @@ bindings = [
 { key = "Down", mods = "Control|Shift", action = "ScrollToBottom" },
 ]
 
-# Last Modified: Fri, 02 Jan 2026 02:58:50 AM
+# Last Modified: Fri, 09 Jan 2026 05:43:53 PM
