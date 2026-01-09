@@ -4,7 +4,7 @@
 Xcursor.size: 32
 Xcursor.theme: Adwaita
 
-#include "colorschemes/gruvbox"
+#include "colorschemes/onedark"
 
 ! special
 #define accent c04
