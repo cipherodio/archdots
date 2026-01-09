@@ -1,320 +1,250 @@
 local ui = require("utils.colors")
 
-local function _Spacer(n)
-    local spaces = string.rep(" ", n)
-    return "%#StatuslineTextMain#" .. spaces
+-- Helpers
+local function Spacer(n)
+    return "%#StatuslineTextMain#" .. string.rep(" ", n)
 end
 
-local function _Align()
+local function Align()
     return "%="
 end
 
-local function _Truncate()
+local function Truncate()
     return "%<"
 end
 
--- local separators = {
---     arrow = { "", "" },
---     rounded = { "", "" },
---     blank = { "", "" },
--- }
-
-local set_hl = function(group, options)
-    local bg = options.bg == nil and "" or "guibg=" .. options.bg
-    local fg = options.fg == nil and "" or "guifg=" .. options.fg
-    local gui = options.gui == nil and "" or "gui=" .. options.gui
-
-    vim.cmd(string.format("hi %s %s %s %s", group, bg, fg, gui))
+-- Highlight helper (colorscheme-safe)
+local function set_hl(group, opts)
+    vim.api.nvim_set_hl(0, group, {
+        fg = opts.fg,
+        bg = opts.bg,
+        bold = opts.gui == "bold",
+    })
 end
 
+-- Highlight definitions / Palette agnostic
 local highlights = {
-    { "StatuslineModeCommand", { fg = ui.gd.c01, bg = ui.gd.c05 } },
-    { "StatuslineModeNormal", { fg = ui.gd.c01, bg = ui.gd.c08 } },
-    { "StatuslineModeInsert", { fg = ui.gd.c01, bg = ui.gd.c03 } },
-    { "StatuslineModeVisual", { fg = ui.gd.c01, bg = ui.gd.c04 } },
-    { "StatuslineModeReplace", { fg = ui.gd.c01, bg = ui.gd.c06 } },
-    { "StatuslineModeSelect", { fg = ui.gd.c01, bg = ui.gd.c09 } },
-    { "StatuslineTextMain", { fg = ui.gd.c10, gui = "bold" } },
-    { "StatuslineFilename", { fg = ui.gd.c10, gui = "bold" } },
-    { "StatuslineSaved", { fg = ui.gd.c03, gui = "bold" } },
-    { "StatuslineNotSaved", { fg = ui.gd.c02, gui = "bold" } },
-    { "StatuslineReadOnly", { fg = ui.gd.c09, gui = "bold" } },
-    { "GsHeadSign", { fg = ui.gd.c08, gui = "bold" } },
-    { "GsAddSign", { fg = ui.gd.c03, gui = "bold" } },
-    { "GsChangeSign", { fg = ui.gd.c04, gui = "bold" } },
-    { "GsDeleteSign", { fg = ui.gd.c02, gui = "bold" } },
-    { "StatuslineLspOn", { fg = ui.gd.c11, gui = "bold" } },
-    { "StatuslineLspError", { fg = ui.gd.c02, gui = "bold" } },
-    { "StatuslineLspWarning", { fg = ui.gd.c04, gui = "bold" } },
-    { "StatuslineLspInfo", { fg = ui.gd.c05, gui = "bold" } },
-    { "StatuslineLspHint", { fg = ui.gd.c07, gui = "bold" } },
-    { "StatuslineCursorBegin", { fg = ui.gd.c03, gui = "bold" } },
-    { "StatuslineCursorEnd", { fg = ui.gd.c02, gui = "bold" } },
-    { "StatuslineFiletype", { fg = ui.gd.c12, gui = "bold" } },
-    { "StatuslineSepRight", { fg = ui.gd.c03, gui = "bold" } },
+    { "StatuslineModeCommand", { fg = ui.c00, bg = ui.c05 } },
+    { "StatuslineModeNormal", { fg = ui.c00, bg = ui.c06, gui = "bold" } },
+    { "StatuslineModeInsert", { fg = ui.c00, bg = ui.c03, gui = "bold" } },
+    { "StatuslineModeVisual", { fg = ui.c00, bg = ui.c04, gui = "bold" } },
+    { "StatuslineModeReplace", { fg = ui.c00, bg = ui.c06, gui = "bold" } },
+    { "StatuslineModeSelect", { fg = ui.c00, bg = ui.c12, gui = "bold" } },
+
+    { "StatuslineTextMain", { fg = ui.c13, bg = ui.c01, gui = "bold" } },
+    { "StatuslineFilename", { fg = ui.c13, bg = ui.c01, gui = "bold" } },
+
+    { "StatuslineSaved", { fg = ui.c03, bg = ui.c01, gui = "bold" } },
+    { "StatuslineNotSaved", { fg = ui.c02, bg = ui.c01, gui = "bold" } },
+    { "StatuslineReadOnly", { fg = ui.c12, bg = ui.c01, gui = "bold" } },
+
+    { "GsHeadSign", { fg = ui.c02, bg = ui.c01, gui = "bold" } },
+    { "GsAddSign", { fg = ui.c03, bg = ui.c01, gui = "bold" } },
+    { "GsChangeSign", { fg = ui.c04, bg = ui.c01, gui = "bold" } },
+    { "GsDeleteSign", { fg = ui.c02, bg = ui.c01, gui = "bold" } },
+
+    { "StatuslineLspOn", { fg = ui.c05, bg = ui.c01, gui = "bold" } },
+    { "StatuslineLspError", { fg = ui.c02, bg = ui.c01, gui = "bold" } },
+    { "StatuslineLspWarning", { fg = ui.c04, bg = ui.c01, gui = "bold" } },
+    { "StatuslineLspInfo", { fg = ui.c05, bg = ui.c01, gui = "bold" } },
+    { "StatuslineLspHint", { fg = ui.c07, bg = ui.c01, gui = "bold" } },
+
+    { "StatuslineCursorBegin", { fg = ui.c08, bg = ui.c01, gui = "bold" } },
+    { "StatuslineCursorEnd", { fg = ui.c08, bg = ui.c01, gui = "bold" } },
+    { "StatuslinePercent", { fg = ui.c13, bg = ui.c01 } },
+    { "StatuslineFiletype", { fg = ui.c16, gui = "bold" } },
 }
 
-for _, highlight in ipairs(highlights) do
-    set_hl(highlight[1], highlight[2])
+-- Apply highlights (fix for onedark.nvim reset)
+local function apply_highlights()
+    for _, hl in ipairs(highlights) do
+        set_hl(hl[1], hl[2])
+    end
 end
 
+apply_highlights()
+
+vim.api.nvim_create_autocmd("ColorScheme", {
+    callback = apply_highlights,
+})
+
+-- Mode
+local mode_names = {
+    n = "NORMAL",
+    i = "INSERT",
+    v = "VISUAL",
+    V = "V-LINE",
+    [""] = "V-BLOCK",
+    R = "REPLACE",
+    c = "COMMAND",
+    t = "TERMINAL",
+}
+
 local function ModeColor()
-    local current_mode = vim.api.nvim_get_mode().mode
-    local higroup = "%#StatuslineModeCommand#"
-    if current_mode == "n" then
+    local m = vim.api.nvim_get_mode().mode
+    if m == "n" then
         return "%#StatuslineModeNormal#"
-        -- higroup = "%#StatuslineModeNormal#"
-    elseif current_mode == "i" or current_mode == "ic" then
+    elseif m:find("i") then
         return "%#StatuslineModeInsert#"
-        -- higroup = "%#StatuslineModeInsert#"
-    elseif current_mode == "v" or current_mode == "V" or current_mode == "" then
+    elseif m:find("v") or m == "" then
         return "%#StatuslineModeVisual#"
-        -- higroup = "%#StatuslineModeVisual#"
-    elseif current_mode == "R" or current_mode == "Rv" then
+    elseif m:find("R") then
         return "%#StatuslineModeReplace#"
-        -- higroup = "%#StatuslineModeReplace#"
-    elseif current_mode == "s" or current_mode == "S" or current_mode == "" then
+    elseif m:find("s") then
         return "%#StatuslineModeSelect#"
-        -- higroup = "%#StatuslineModeSelect#"
-    elseif current_mode == "c" then
+    elseif m == "c" then
         return "%#StatuslineModeCommand#"
-        -- higroup = "%#StatuslineModeCommand#"
     end
-    return higroup
+    return "%#StatuslineModeCommand#"
 end
 
 local function Mode()
-    local modes = {
-        ["n"] = "NORMAL",
-        ["no"] = "NORMAL",
-        ["i"] = "INSERT",
-        ["ic"] = "INSERT",
-        ["v"] = "VISUAL",
-        ["V"] = "V-LINE",
-        [""] = "V-BLOCK",
-        ["s"] = "SELECT",
-        ["S"] = "S-LINE",
-        [""] = "S-BLOCK",
-        ["R"] = "REPLACE",
-        ["Rv"] = "V-REPLACE",
-        ["c"] = "COMMAND",
-        ["cv"] = "VIM EX",
-        ["ce"] = "EX",
-        ["r"] = "PROMPT",
-        ["rm"] = "MOAR",
-        ["r?"] = "CONFIRM",
-        ["!"] = "SHELL",
-        ["t"] = "TERMINAL",
-        ["niI"] = "INS-NOR",
-    }
-    local current_mode = vim.api.nvim_get_mode().mode
-    local value = ""
-    if modes[current_mode] == nil then
-        value = "UNKNOWN"
-    else
-        value = modes[current_mode]
+    local m = vim.api.nvim_get_mode().mode
+    return ModeColor() .. "  " .. (mode_names[m] or "UNKNOWN") .. " "
+end
+
+-- Path / Filename
+local function Path()
+    local path = vim.fn.expand("%:~:.:h")
+    if path == "" or path == "." then
+        return ""
     end
-    return ModeColor() .. "  " .. value .. " " .. _Spacer(0)
+    if #path > 30 then
+        path = "…" .. path:sub(-28)
+    end
+    return Spacer(1) .. "%#StatuslineTextMain#" .. path .. "/"
 end
 
 local function Filename()
-    local filename = vim.fn.expand("%:~:t")
-    local path = vim.fn.expand("%:~:.:h")
-    local higroup = "%#StatuslineFilename#"
-    if filename == "" then
-        return _Spacer(1) .. higroup .. "[No Name]"
+    local name = vim.fn.expand("%:t")
+    if name == "" then
+        return Spacer(1) .. "%#StatuslineFilename#[No Name]"
     end
-    if path == "." then
-        return _Spacer(1) .. higroup .. filename
-    end
-    return higroup .. filename
+    return Spacer(1) .. "%#StatuslineFilename#" .. name
 end
 
+-- Modified / Readonly
 local function Modified()
-    local buf_modified = vim.bo.modified
-    local buf_modifiable = vim.bo.modifiable
-    local buf_readonly = vim.bo.readonly
-    local hi_saved = "%#StatuslineSaved#"
-    local hi_notsaved = "%#StatuslineNotSaved#"
-    local hi_readonly = "%#StatuslineReadOnly#"
-    if buf_modified then
-        return _Spacer(1) .. hi_notsaved .. " " .. _Spacer(0)
-    elseif buf_modifiable == false or buf_readonly == true then
-        return _Spacer(1) .. hi_readonly .. " • " .. _Spacer(0)
-    else
-        return _Spacer(1) .. hi_saved .. " " .. _Spacer(0)
+    if vim.bo.modified then
+        return Spacer(1) .. "%#StatuslineNotSaved# "
+    elseif not vim.bo.modifiable or vim.bo.readonly then
+        return Spacer(1) .. "%#StatuslineReadOnly#• "
     end
+    return Spacer(1) .. "%#StatuslineSaved# "
 end
 
+-- GitSigns
 local function GitSigns()
-    if not vim.b.gitsigns_head or vim.b.gitsigns_git_status then
+    if not vim.b.gitsigns_head or not vim.b.gitsigns_status_dict then
         return ""
     end
 
-    local git_status = vim.b.gitsigns_status_dict
-    local git_head = vim.b.gitsigns_head
-    local branch_name = "%#GsHeadSign#" .. "  " .. git_head .. ""
-    local added = (git_status.added and git_status.added ~= 0)
-            and ("%#GsAddSign#" .. "  " .. git_status.added)
-        or ""
-    local changed = (git_status.changed and git_status.changed ~= 0)
-            and ("%#GsChangeSign#" .. "  " .. git_status.changed)
-        or ""
-    local removed = (git_status.removed and git_status.removed ~= 0)
-            and ("%#GsDeleteSign#" .. "  " .. git_status.removed)
-        or ""
+    local g = vim.b.gitsigns_status_dict
+    local out = { "%#GsHeadSign#  " .. vim.b.gitsigns_head }
 
-    return table.concat({ branch_name, added, changed, removed })
-    -- return branch_name .. added .. changed .. removed
+    if g.added and g.added > 0 then
+        table.insert(out, "%#GsAddSign#  " .. g.added)
+    end
+    if g.changed and g.changed > 0 then
+        table.insert(out, "%#GsChangeSign#  " .. g.changed)
+    end
+    if g.removed and g.removed > 0 then
+        table.insert(out, "%#GsDeleteSign#  " .. g.removed)
+    end
+
+    return table.concat(out)
 end
 
+-- LSP / Diagnostics
 local function LspStatus()
-    local clients = vim.lsp.get_clients()
-    local higroup = "%#StatuslineLspOn#"
-    if #clients > 0 then
-        return higroup .. "LSP" .. _Spacer(2)
-    else
+    if vim.bo.filetype == "lazy" or vim.bo.buftype == "nofile" then
         return ""
     end
+    if #vim.lsp.get_clients({ bufnr = 0 }) > 0 then
+        return "%#StatuslineLspOn#LSP" .. Spacer(2)
+    end
+    return ""
 end
 
 local function Diagnostics()
-    local count_error =
-        #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.ERROR })
-    local count_warning =
-        #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.WARN })
-    local count_info = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.INFO })
-    local count_hint = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.HINT })
-    local diag_count = 0
-    local icon_error = " "
-    local icon_warning = " "
-    local icon_info = " "
-    local icon_hint = " "
-    local higroup_error = "%#StatuslineLspError#"
-    local higroup_warning = "%#StatuslineLspWarning#"
-    local higroup_info = "%#StatuslineLspInfo#"
-    local higroup_hint = "%#StatuslineLspHint#"
-    local error, warning, info, hint = "", "", "", ""
-    if count_error == 0 then
-        error = ""
-    else
-        error = higroup_error .. icon_error .. count_error .. _Spacer(1)
+    if vim.bo.filetype == "lazy" or vim.bo.buftype == "nofile" then
+        return ""
     end
-    if count_warning == 0 then
-        warning = ""
-    else
-        warning = higroup_warning .. icon_warning .. count_warning .. _Spacer(1)
+
+    local counts = vim.diagnostic.count(0)
+    if not counts then
+        return ""
     end
-    if count_info == 0 then
-        info = ""
-    else
-        info = higroup_info .. icon_info .. count_info .. _Spacer(1)
+
+    local out = {}
+    local sev = vim.diagnostic.severity
+
+    if counts[sev.ERROR] then
+        table.insert(out, "%#StatuslineLspError# " .. counts[sev.ERROR] .. Spacer(1))
     end
-    if count_hint == 0 then
-        hint = ""
-    else
-        hint = higroup_hint .. icon_hint .. count_hint .. _Spacer(1)
+    if counts[sev.WARN] then
+        table.insert(out, "%#StatuslineLspWarning# " .. counts[sev.WARN] .. Spacer(1))
     end
-    if count_error + count_warning + count_info + count_hint == 0 then
-        diag_count = 0
-    else
-        diag_count = 1
+    if counts[sev.INFO] then
+        table.insert(out, "%#StatuslineLspInfo# " .. counts[sev.INFO] .. Spacer(1))
     end
-    return error .. warning .. info .. hint .. _Spacer(diag_count)
+    if counts[sev.HINT] then
+        table.insert(out, "%#StatuslineLspHint# " .. counts[sev.HINT] .. Spacer(1))
+    end
+
+    return table.concat(out)
 end
 
+-- Cursor position / Percentage
 local function Percentage()
-    local current_line = vim.fn.line(".")
-    local total_lines = vim.fn.line("$")
-    local percentage = vim.fn.floor(current_line / total_lines * 100)
-    local content = ""
-    local higroupmain = "%#StatuslineTextMain#"
-    local higroupaccent = "%#StatuslineTextMain#"
-    if current_line == 1 then
-        content = "Top"
-    elseif current_line == total_lines then
-        content = "End"
-    elseif percentage < 10 then
-        content = higroupaccent .. "·" .. higroupmain .. percentage .. "%%"
+    local l = vim.fn.line(".")
+    local t = vim.fn.line("$")
+
+    local label
+    if l == 1 then
+        label = "Top"
+    elseif l == t then
+        label = "End"
     else
-        content = percentage .. "%%"
+        label = math.floor((l / t) * 100) .. "%%"
     end
-    return higroupaccent .. "󰉸 " .. higroupmain .. content .. _Spacer(2)
+
+    return "%#StatuslinePercent#󰉸 " .. label .. Spacer(2)
 end
 
 local function CursorPosition()
-    local current_line = vim.fn.line(".")
-    local total_lines = vim.fn.line("$")
-    local current_col = vim.fn.virtcol(".")
-    local total_col = vim.fn.virtcol("$")
-    local higroupmain = "%#StatuslineTextMain#"
-    local startlinecolor = "%#StatuslineCursorBegin#"
-    local endlinecolor = "%#StatuslineCursorEnd#"
-    return startlinecolor
-        .. current_line
-        .. higroupmain
-        .. ":"
-        .. endlinecolor
-        .. total_lines
-        .. higroupmain
-        .. " "
-        .. ""
-        .. " "
-        .. startlinecolor
-        .. current_col
-        .. ":"
-        .. endlinecolor
-        .. total_col
-        .. _Spacer(2)
+    return "%#StatuslineCursorBegin#"
+        .. vim.fn.line(".")
+        .. "%#StatuslineTextMain#:"
+        .. "%#StatuslineCursorEnd#"
+        .. vim.fn.line("$")
+        .. "%#StatuslineTextMain#  "
+        .. "%#StatuslineCursorBegin#"
+        .. vim.fn.virtcol(".")
+        .. "%#StatuslineTextMain#:"
+        .. "%#StatuslineCursorEnd#"
+        .. vim.fn.virtcol("$")
+        .. Spacer(2)
 end
 
----@diagnostic disable-next-line: unused-function, unused-local
-local function Filetype()
-    local higroup = "%#StatuslineFiletype#"
-    local filetype = vim.bo.filetype:upper()
-    if filetype == "" then
-        return higroup .. "-" .. _Spacer(2)
-    else
-        return higroup .. filetype .. _Spacer(2)
-    end
-end
-
-local function Path()
-    local path = vim.fn.expand("%:~:.:h")
-    local higroup = "%#StatuslineTextMain#"
-    local max_width = 30
-    if path == "." or path == "" then
-        return ""
-    elseif #path > max_width then
-        path = "…" .. string.sub(path, -max_width + 2)
-    end
-    return _Spacer(1) .. higroup .. path .. "/"
-end
-
-Statusline = function()
+-- Statusline
+function _G.Statusline()
     return table.concat({
         Mode(),
         Path(),
         Filename(),
         Modified(),
         GitSigns(),
-        _Spacer(2),
-        _Align(),
+        Spacer(2),
+        Align(),
         Diagnostics(),
         LspStatus(),
         Percentage(),
         CursorPosition(),
-        _Truncate(),
+        Truncate(),
     })
 end
 
-vim.api.nvim_create_augroup("Statusline", { clear = true })
-vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
-    group = "Statusline",
-    pattern = "*",
-    callback = function()
-        vim.o.statusline = "%!v:lua.Statusline()"
-    end,
-})
+vim.o.statusline = "%!v:lua.Statusline()"
 
--- Last Modified: Mon, 08 Dec 2025 07:07:18 PM
+-- Last Modified: Thu, 08 Jan 2026 06:21:23 PM
