@@ -1,5 +1,5 @@
-config = config
-c = c
+config = config  # noqa: F821
+c = c  # noqa: F821
 
 config.load_autoconfig()
 config.source("gruvbox.py")
@@ -19,14 +19,19 @@ c.qt.args = [
     "enable-gpu-rasterization",
     "enable-viz-display-compositor",
     "enable-accelerated-2d-canvas",
+    # "ignore-gpu-blacklist",
+    # "enable-native-gpu-memory-buffers",
+    # "num-raster-threads=4",
 ]
 
 # Fonts
 c.fonts.default_family = "monospace"
 c.fonts.web.family.cursive = "sans"
 c.fonts.web.family.sans_serif = "sans-serif"
-c.fonts.default_size = "12pt"
-c.fonts.contextmenu = "12pt"
+c.fonts.default_size = "14pt"
+c.fonts.contextmenu = "14pt"
+# c.fonts.hints = "18pt default_family"
+c.fonts.hints = "bold 18pt default_family"
 
 # Enhancements
 c.colors.webpage.preferred_color_scheme = "dark"
@@ -118,7 +123,13 @@ config.bind("l", "scroll-px 100 0")
 config.bind("0", "zoom")
 config.bind("=", "zoom-in")
 config.bind("-", "zoom-out")
-config.bind("ya", "spawn ytubeaudio {url}")
-config.bind("yv", "spawn ytubevideo {url}")
-config.bind("<Alt-f>", "hint links spawn --detach mpv --profile=L60 {hint-url}")
-config.bind("<Alt-Shift-f>", "hint links spawn --detach mpv --profile=M60 {hint-url}")
+config.bind("ya", "spawn yta {url}")
+config.bind("yv", "spawn ytv {url}")
+config.bind(
+    "<Alt-f>", "hint links spawn --detach mpv --profile=L60 {hint-url}"
+)
+config.bind(
+    "<Alt-Shift-f>", "hint links spawn --detach mpv --profile=M60 {hint-url}"
+)
+
+# Last Modified: Fri, 02 Jan 2026 08:07:40 PM
