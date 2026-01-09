@@ -1,107 +1,114 @@
 local ui = require("utils.colors")
 
-local set_hl = function(group, options)
-    local bg = options.bg == nil and "" or "guibg=" .. options.bg
-    local fg = options.fg == nil and "" or "guifg=" .. options.fg
-    local gui = options.gui == nil and "" or "gui=" .. options.gui
-
-    vim.cmd(string.format("hi %s %s %s %s", group, bg, fg, gui))
-end
-
+-- Highlight definitions
 local highlights = {
-    { "WinBarModified", { fg = ui.gd.c02, gui = "bold" } },
-    { "ModifiedTextMain", { fg = ui.gd.c05, gui = "bold" } },
-    { "BufferColor", { fg = ui.gd.c03, gui = "bold" } },
+    WinBarModified = { fg = ui.c02, bg = ui.c01, bold = true },
+    ModifiedTextMain = { fg = ui.c05, bg = ui.c01, bold = true },
+    BufferColor = { fg = ui.c03, bg = ui.c01, bold = true },
 }
 
-for _, highlight in ipairs(highlights) do
-    set_hl(highlight[1], highlight[2])
+local function apply_highlights()
+    for group, opts in pairs(highlights) do
+        vim.api.nvim_set_hl(0, group, opts)
+    end
 end
 
-local function _Spacer(n)
-    local spaces = string.rep(" ", n)
-    return "%#ModifiedTextMain#" .. spaces
+apply_highlights()
+
+vim.api.nvim_create_autocmd("ColorScheme", {
+    callback = apply_highlights,
+})
+
+-- Helpers
+local function spacer(n)
+    return "%#ModifiedTextMain#" .. string.rep(" ", n)
 end
 
-local function _Align()
+local function align()
     return "%="
 end
 
-local winbar_filetype_exclude = {
-    "help",
-    "dashboard",
-    "lazy",
-    "neogitstatus",
-    "NvimTree",
-    "Trouble",
-    "toggleterm",
+local excluded_filetypes = {
+    help = true,
+    dashboard = true,
+    lazy = true,
+    neogitstatus = true,
+    NvimTree = true,
+    Trouble = true,
+    toggleterm = true,
 }
 
-if vim.tbl_contains(winbar_filetype_exclude, vim.bo.filetype) then
-    return ""
+-- Winbar components
+local function buffer_number()
+    local bufnr = vim.api.nvim_get_current_buf()
+    return "%#BufferColor#[" .. bufnr .. "]" .. spacer(1)
 end
 
-local function BufferNumber()
-    local buffer_number = vim.api.nvim_eval_statusline("%n", {}).str
-    local hibuff = "%#BufferColor#"
-
-    if buffer_number then
-        return hibuff .. "[" .. buffer_number .. "]" .. _Spacer(1)
+local function file_path()
+    local name = vim.api.nvim_buf_get_name(0)
+    if name == "" then
+        return ""
     end
+
+    -- Use ~ for home, then replace leading ~ with $HOME
+    name = vim.fn.fnamemodify(name, ":~")
+    name = name:gsub("^~", "$HOME")
+
+    -- Pretty separators
+    name = name:gsub("/", " ")
+
+    return "%#ModifiedTextMain#" .. name
 end
 
-local function FilePath()
-    local file_path = vim.api.nvim_eval_statusline("%F", {}).str
-    local hipath = "%#ModifiedTextMain#"
-
-    file_path = file_path:gsub("/", " ")
-    file_path = file_path:gsub("~", " $HOME")
-
-    if file_path then
-        return hipath .. file_path
-    end
-end
-
-local function SearchMatch()
+local function search_match()
     if vim.v.hlsearch == 0 then
         return ""
     end
 
-    local last_search = vim.fn.getreg("/")
-    if not last_search or last_search == "" then
+    local pat = vim.fn.getreg("/")
+    if pat == "" then
         return ""
     end
 
-    local ok, searchcount = pcall(vim.fn.searchcount, { maxcount = 9999 })
-    if not ok then
-        return "Invalid search"
+    local ok, sc = pcall(vim.fn.searchcount, { maxcount = 9999 })
+    if not ok or sc.total == 0 then
+        return ""
     end
-    return last_search .. "[" .. searchcount.current .. "/" .. searchcount.total .. "]"
+
+    return pat .. "[" .. sc.current .. "/" .. sc.total .. "]"
 end
 
-WinBars = function()
+-- Winbar renderer
+_G.WinBars = function()
+    if excluded_filetypes[vim.bo.filetype] then
+        return ""
+    end
+
     return table.concat({
-        BufferNumber(),
-        FilePath(),
-        _Align(),
-        SearchMatch(),
+        buffer_number(),
+        file_path(),
+        align(),
+        search_match(),
     })
 end
 
+-- Autocommands
 vim.api.nvim_create_augroup("WinBars", { clear = true })
+
 vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
     group = "WinBars",
-    pattern = "*",
     callback = function(args)
+        local win = 0
+
         if
-            not vim.api.nvim_win_get_config(0).zindex
+            not vim.api.nvim_win_get_config(win).zindex
             and vim.bo[args.buf].buftype == ""
             and vim.api.nvim_buf_get_name(args.buf) ~= ""
-            and not vim.wo[0].diff
+            and not vim.wo[win].diff
         then
-            vim.wo.winbar = "%{%v:lua.WinBars()%}"
+            vim.wo[win].winbar = "%{%v:lua.WinBars()%}"
         end
     end,
 })
 
--- Last Modified: Mon, 03 Feb 2025 01:07:12 AM
+-- Last Modified: Wed, 07 Jan 2026 06:59:32 PM
