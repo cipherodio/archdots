@@ -6,8 +6,8 @@ export PATH="$HOME/.local/bin:$PATH"
 unsetopt PROMPT_SP 2>/dev/null
 
 LS_COLORS="di=34:ln=31:pi=42:ex=32:tw=0:ow=0:st=0:*.zip=35:*.gz=35\
-:*.tar=35:*.xz=35:*.mp3=36:*.flac=36:*.mkv=36:*.mp4=36:*.webm=36:*.jpg=33\
-:*.png=33:*.jpeg=33"
+:*.tar=35:*.xz=35:*.mp3=36:*.flac=36:*.mkv=36:*.mp4=36:*.mov=36\
+:*.webm=36:*.jpg=33:*.png=33:*.jpeg=33"
 export LS_COLORS
 
 # Default programs:
@@ -102,8 +102,17 @@ export LESS_TERMCAP_ue=$'\e[0m'
 
 # Fix for java applications in dwm
 export _JAVA_AWT_WM_NONREPARENTING=1
-# Set Qt to use GTK theme
-export QT_QPA_PLATFORMTHEME="gtk2"
+
+# NOTE: Set Qt to use GTK theme (This breaks kdenlive, shotcut)
+
+# export QT_QPA_PLATFORMTHEME="gtk2"
+# export QT_QPA_PLATFORMTHEME="qt6ct"
+
+# NOTE: Disable scaling for now
+
+# export QT_SCALE_FACTOR=1.3
+# export GDK_DPI_SCALE=1.3
+
 # Enable DRM Content in qutebrowser
 # export QTWEBENGINE_CHROMIUM_FLAGS="--widevine-path=/usr/lib/chromium/libwidevinecdm.so"
 # Mozilla zoom in and out
@@ -112,4 +121,4 @@ export MOZ_USE_XINPUT2=1
 # Shortcuts
 [ ! -f "$XDG_CONFIG_HOME"/shell/shrc ] && setsid -f shortcuts >/dev/null 2>&1
 
-# Last Modified: Fri, 02 Jan 2026 02:55:20 AM
+# Last Modified: Sat, 10 Jan 2026 12:31:29 AM
