@@ -1,107 +1,159 @@
-local map = vim.keymap.set
-local g = vim.g
-local opts = { expr = true, silent = true }
-local noremaps = { noremap = true, silent = true }
+local km = require("utils.keymaps")
 
-g.mapleader = " "
-g.maplocalleader = " "
+local checkbox = require("utils.checkbox")
+local replace = require("utils.replace")
+local scheduled = require("utils.scheduled")
+
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
+-- Fast replace (no confirm)
+km.nmap("<leader>ar", replace.replace_word_fast, {
+    desc = "Replace word under cursor (entire file)",
+})
+
+-- Confirm replace
+km.nmap("<leader>aR", replace.replace_word_confirm, {
+    desc = "Replace word (confirm each)",
+})
 
 -- Basic
-map("n", "<leader>an", "<cmd>enew<cr>", { desc = "New file" })
-map("n", "<leader>w", vim.cmd.w, { desc = "Write" })
-map("n", "<leader>q", vim.cmd.q, { desc = "Quit" })
--- map({ "n", "o" }, "<c-'>", "gcc", { remap = true, desc = "Line comment" })
--- map({ "n", "x" }, "<c-;>", "gc", { remap = true, desc = "Block comment" })
-map({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlseach" })
+km.nmap("<leader>an", "<cmd>enew<cr>", { desc = "New file" })
+km.nmap("<leader>w", "<cmd>w<cr>", { desc = "Save file" })
+km.nmap("<leader>q", "<cmd>q!<cr>", { desc = "Force quit" })
 
--- Window/Buffers/Splits
-map("n", "<leader><tab>h", ":new<cr>", { desc = "Horizontal split" })
-map("n", "<leader><tab>v", ":vnew<cr>", { desc = "Vertical split" })
-map("n", "<leader><tab>d", ":bdelete<cr>", { desc = "Delete buffer" })
-map("n", "<C-h>", "<C-w>h", { desc = "Navigate left window", remap = true })
-map("n", "<C-j>", "<C-w>j", { desc = "Navigate bottom window", remap = true })
-map("n", "<C-k>", "<C-w>k", { desc = "Navigate top window", remap = true })
-map("n", "<C-l>", "<C-w>l", { desc = "Navigate right window", remap = true })
-map("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase window height" })
-map("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease window height" })
-map("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease window width" })
-map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase window width" })
-map("n", "<Tab>", "<cmd>bnext<cr>", { desc = "Got to next buffer" })
-map("n", "<Tab>", "<cmd>bprev<cr>", { desc = "Got to previous buffer" })
+-- Splits
+km.nmap("<leader><tab>h", "<cmd>new<cr>", { desc = "Horizontal split" })
+km.nmap("<leader><tab>v", "<cmd>vnew<cr>", { desc = "Vertical split" })
 
--- Move lines
-map("n", "<A-j>", "<cmd>m .+1<cr>==", { desc = "Move down" })
-map("n", "<A-k>", "<cmd>m .-2<cr>==", { desc = "Move up" })
-map("i", "<A-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move down" })
-map("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move up" })
-map("v", "<A-j>", ":m '>+1<cr>gv=gv", { desc = "Move down" })
-map("v", "<A-k>", ":m '<-2<cr>gv=gv", { desc = "Move up" })
+-- Buffers
+km.nmap("<Tab>", "<cmd>bnext<cr>", { desc = "Next buffer" })
+km.nmap("<S-Tab>", "<cmd>bprevious<cr>", { desc = "Previous buffer" })
 
--- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
-map("n", "n", "'Nn'[v:searchforward].'zv'", { expr = true, desc = "Next search" })
-map({ "x", "o" }, "n", "'Nn'[v:searchforward]", { expr = true, desc = "Next search" })
-map("n", "N", "'nN'[v:searchforward].'zv'", { expr = true, desc = "Previous search" })
-map({ "x", "o" }, "N", "'nN'[v:searchforward]", { expr = true, desc = "Previous search" })
+-- Close buffer, keep split layout
+km.nmap("<leader><tab>d", function()
+    local cur_buf = vim.api.nvim_get_current_buf()
+    local cur_win = vim.api.nvim_get_current_win()
 
--- Better up and down
-map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", opts)
-map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", opts)
+    vim.cmd.enew()
+    local empty_buf = vim.api.nvim_get_current_buf()
+
+    vim.api.nvim_win_set_buf(cur_win, empty_buf)
+    vim.api.nvim_buf_delete(cur_buf, { force = true })
+end, { desc = "Close file with split layout intact" })
+
+-- Window navigation
+km.nmap("<C-h>", "<C-w>h", { desc = "Move to left window" })
+km.nmap("<C-j>", "<C-w>j", { desc = "Move to lower window" })
+km.nmap("<C-k>", "<C-w>k", { desc = "Move to upper window" })
+km.nmap("<C-l>", "<C-w>l", { desc = "Move to right window" })
+
+-- Resize windows
+km.nmap("<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase window height" })
+km.nmap("<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease window height" })
+km.nmap("<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease window width" })
+km.nmap("<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase window width" })
+
+-- Move lines / selections
+km.nmap("<A-j>", "<cmd>m .+1<cr>==", { desc = "Move line down" })
+km.nmap("<A-k>", "<cmd>m .-2<cr>==", { desc = "Move line up" })
+
+km.imap("<A-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move line down" })
+km.imap("<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move line up" })
+
+km.vmap("<A-j>", ":m '>+1<cr>gv=gv", { desc = "Move selection down" })
+km.vmap("<A-k>", ":m '<-2<cr>gv=gv", { desc = "Move selection up" })
 
 -- Better indenting
-map("v", "<", "<gv")
-map("v", ">", ">gv")
+km.vmap("<", "<gv", { desc = "Indent left and stay in visual mode" })
+km.vmap(">", ">gv", { desc = "Indent right and stay in visual mode" })
 
--- Do not copy anything with x or c
-map({ "n", "v" }, "x", '"_x', noremaps)
-map({ "n", "v" }, "c", '"_c', noremaps)
+-- Do not yank on x / c
+km.nmap("x", '"_x', { desc = "Delete without yanking" })
+km.vmap("x", '"_x', { desc = "Delete without yanking" })
+km.nmap("c", '"_c', { desc = "Change without yanking" })
+km.vmap("c", '"_c', { desc = "Change without yanking" })
 
--- Only cut with dd when the line contains something
-map("n", "dd", function()
+-- Smart dd
+km.nmap("dd", function()
     if vim.fn.getline(".") == "" then
         return '"_dd'
     end
     return "dd"
-end, { expr = true })
+end, {
+    expr = true,
+    desc = "Delete line (don’t yank empty lines)",
+})
 
--- Jump to diagnostics
-local function diagnostic_goto(next, severity)
-    local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
-    severity = severity and vim.diagnostic.severity[severity] or nil
-    return function()
-        go({ severity = severity })
+-- Smart j/k
+km.nmap("j", "v:count == 0 ? 'gj' : 'j'", {
+    expr = true,
+    desc = "Move down (visual line if no count)",
+})
+
+km.nmap("k", "v:count == 0 ? 'gk' : 'k'", {
+    expr = true,
+    desc = "Move up (visual line if no count)",
+})
+
+-- Search navigation
+km.nmap("n", "'Nn'[v:searchforward] .. 'zv'", {
+    expr = true,
+    desc = "Next search result",
+})
+
+km.nmap("N", "'nN'[v:searchforward] .. 'zv'", {
+    expr = true,
+    desc = "Previous search result",
+})
+
+-- Escape clears hlsearch
+km.nmap("<esc>", function()
+    if vim.v.hlsearch == 1 then
+        vim.cmd("noh")
     end
-end
-
-map("n", "]d", diagnostic_goto(true), { desc = "Next diagnostic" })
-map("n", "[d", diagnostic_goto(false), { desc = "Previous diagnostic" })
-map("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next error" })
-map("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Previous error" })
-map("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next warning" })
-map("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Previous warning" })
+    return "<esc>"
+end, { expr = true, desc = "Escape and clear hlsearch" })
 
 -- Inlay hints
-map("n", "<leader>li", function()
+km.nmap("<leader>li", function()
     vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ 0 }), { 0 })
-end, { desc = "Inlay hints" })
+end, { desc = "Toggle inlay hints" })
 
--- Better gf to open markdown local link
-map("n", "gf", "^f/gf")
+-- Diagnostics
+km.nmap("[d", function()
+    vim.diagnostic.jump({ count = -1, float = true })
+end, { desc = "Previous diagnostic" })
 
--- Input date and time for due.nvim
-map("n", "<leader>at", function()
-    vim.ui.input(
-        { prompt = "Enter date and time (YYYY-MM-DD HH:MM AM/PM): " },
-        function(input)
-            if input then
-                -- Enclose the input inside square brackets
-                local enclosed_input = "[" .. input .. "]"
-                -- Insert the enclosed input at the cursor position
-                vim.api.nvim_put({ enclosed_input }, "c", true, true)
-            else
-                print("No input provided.")
-            end
-        end
-    )
-end, { desc = "Input date and time for due" })
+km.nmap("]d", function()
+    vim.diagnostic.jump({ count = 1, float = true })
+end, { desc = "Next diagnostic" })
 
--- Last Modified: Sat, 25 Jan 2025 03:13:02 PM
+-- Opens my agenda markdown file
+km.nmap("<leader>aq", function()
+    vim.cmd.edit(vim.fn.expand("~/.local/src/mdnotes/agenda.md"))
+end, {
+    desc = "Open agenda.md",
+})
+
+-- Markdown tools
+km.nmap("<C-Space>", checkbox.toggle, {
+    desc = "Toggle checkbox [ ] → [x] → [-]",
+})
+
+-- Insert @scheduled(YYYY-MM-DD)
+km.nmap("<leader>as", scheduled.insert_scheduled_checkbox, {
+    desc = "Insert @scheduled(YYYY-MM-DD)",
+})
+
+-- Insert @deadline(YYYY-MM-DD)
+km.nmap("<leader>ad", scheduled.insert_deadline_checkbox, {
+    desc = "Insert @deadline(YYYY-MM-DD)",
+})
+
+-- Insert both @scheduled(YYYY-MM-DD) @deadline(YYYY-MM-DD)
+km.nmap("<leader>aD", scheduled.insert_scheduled_and_deadline_checkbox, {
+    desc = "Insert @scheduled + @deadline checkbox",
+})
+
+-- Last Modified: Wed, 07 Jan 2026 02:30:05 AM
