@@ -3,6 +3,7 @@
 # Use neovim for vim if present
 [ -x "$(command -v nvim)" ] && alias vim="nvim" vimdiff="nvim -d"
 
+# ffmpeg="ffmpeg -hide_banner"
 # Verbosity and settings
 # shellcheck disable=SC2139,SC2304
 alias \
@@ -11,7 +12,6 @@ alias \
     rm="rm -vI" \
     bc="bc -ql" \
     mkd="mkdir -pv" \
-    ffmpeg="ffmpeg -hide_banner" \
     mbsync="mbsync -c $HOME/.config/mbsync/mbsyncrc" \
     ve="python -m venv" \
     va="source $HOME/.venv/devtool/bin/activate" \
@@ -65,4 +65,4 @@ alias \
     xdgf="xdg-mime query filetype" \
     xdgd="xdg-mime query default"
 
-# Last Modified: Thu, 30 Jan 2025 10:33:53 AM
+# Last Modified: Fri, 09 Jan 2026 07:16:47 PM
