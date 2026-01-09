@@ -6,47 +6,50 @@ return {
 
         return {
             bt_ignore = { "nofile", "terminal" },
+            relculright = true,
+            clickhandlers = {
+                Lnum = builtin.gitsigns_click,
+            },
             segments = {
+                -- Simulate signcolumn when gitsigns not in use
                 {
                     sign = {
                         name = { ".*" },
-                        text = { ".*" },
+                        namespace = { ".*" },
+                        maxwidth = 1,
+                        colwidth = 2,
+                        auto = false,
+                        wrap = true,
                     },
-                    click = "v:lua.ScSa",
                 },
+                -- Line numbers
                 {
-                    text = { builtin.lnumfunc },
+                    text = { builtin.lnumfunc, " " },
+                    colwidth = 1,
                     click = "v:lua.ScLa",
                 },
+                -- Folds
+                {
+                    text = { builtin.foldfunc, " " },
+                    hl = "FoldColumn",
+                    wrap = true,
+                    colwidth = 1,
+                    click = "v:lua.ScFa",
+                },
+                -- Gitsigns
                 {
                     sign = {
+                        name = { "GitSigns*" },
                         namespace = { "gitsigns" },
                         colwidth = 1,
-                        wrap = true,
-                        foldclosed = true,
+                        -- fillchar = "▎",
+                        fillchar = "┃",
+                        fillcharhl = "Nrline",
                     },
-                    condition = {
-                        function(args)
-                            return vim.wo[args.win].number
-                                or vim.b[args.buf].gitsigns_statusr
-                        end,
-                    },
-                    click = "v:lua.ScSa",
-                },
-                {
-                    text = {
-                        function(args)
-                            args.fold.close = ""
-                            args.fold.open = ""
-                            args.fold.sep = "▕"
-                            return builtin.foldfunc(args)
-                        end,
-                    },
-                    click = "v:lua.ScFa",
                 },
             },
         }
     end,
 }
 
--- Last Modified: Mon, 16 Dec 2024 11:06:16 PM
+-- Last Modified: Thu, 08 Jan 2026 12:56:14 PM
