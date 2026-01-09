@@ -48,11 +48,13 @@ __pycache__
 .config/newsboat/error.log
 .config/nimble/
 .config/nvim/lazy-lock.json
+.config/pitivi/
 .config/pulse/
 .config/qutebrowser/bookmarks/
 .config/qutebrowser/quickmarks
 .config/shell/shrc
 .config/shell/zshdirrc
+.config/Signal/
 .config/spotify/
 .config/systemd/
 .config/transmission-daemon/bandwidth-groups.json
@@ -72,9 +74,11 @@ __pycache__
 .local/notes/
 .local/olds/
 .local/orgdata/
+.local/podcast/
 .local/review/
 .local/screenshot/
 .local/share/applications/steam.desktop
+.local/share/audacity/
 .local/share/calcurse/
 .local/share/cargo/
 .local/share/delta/
