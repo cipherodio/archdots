@@ -35,6 +35,7 @@
     last = log -1 HEAD --stat
     graph = log --decorate --oneline --graph
     graphall = log --decorate --all --oneline --graph
+    a = add
     c = commit
     ca = commit -a
     d = diff
