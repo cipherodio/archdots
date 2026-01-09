@@ -1,73 +1,66 @@
+local timestamp = require("utils.timestamp")
 local autocmd = vim.api.nvim_create_autocmd
+
 local function augroup(name)
-    return vim.api.nvim_create_augroup(name, {
-        clear = true,
-    })
+    return vim.api.nvim_create_augroup(name, { clear = true })
 end
 
-autocmd({ "BufEnter", "InsertLeave", "CmdlineLeave", "WinEnter" }, {
-    desc = "Auto toggle on relative number",
-    group = augroup("auto_relative_number_on"),
-    callback = function()
-        if vim.o.number and vim.api.nvim_get_mode() ~= "i" then
-            vim.opt.relativenumber = true
-        end
-    end,
-})
-
--- autocmd({ "InsertEnter", "CmdlineEnter" }, {
-autocmd({ "BufLeave", "InsertEnter", "CmdlineEnter", "WinLeave" }, {
-    desc = "Auto toggle off relative number",
-    group = augroup("auto_relative_number_off"),
-    callback = function()
-        if vim.o.number then
-            vim.opt.relativenumber = false
-            vim.cmd.redraw()
-        end
-    end,
-})
+local groups = {
+    whitespaces = augroup("whitespaces"),
+    yankhighlight = augroup("yankhighlight"),
+    nocomment_o = augroup("nocomment_o"),
+    cursor_pos = augroup("cursor_pos"),
+    closewith_q = augroup("closewith_q"),
+    md_local_links = augroup("md_local_links"),
+    modified_time = augroup("modified_time"),
+    timestamp_highlight = augroup("timestamp_highlight"),
+}
 
 autocmd("BufWritePre", {
     desc = "Remove trailing white spaces",
-    group = augroup("whitespaces"),
-    command = "%s/\\s\\+$//e",
+    group = groups.whitespaces,
+    callback = function()
+        if not vim.bo.modifiable then
+            return
+        end
+        vim.cmd([[silent! %s/\s\+$//]])
+    end,
 })
 
 autocmd("TextYankPost", {
     desc = "Highlight text on yank",
-    group = augroup("yankhighlight"),
+    group = groups.yankhighlight,
     callback = function()
         vim.highlight.on_yank({
             higroup = "IncSearch",
-            timeout = "700",
+            timeout = 700,
         })
     end,
 })
 
 autocmd("BufWinEnter", {
     desc = "Never insert comment when using 'o' to enter insert mode",
-    group = augroup("no_comment_on_o"),
+    group = groups.nocomment_o,
     callback = function()
         vim.opt.formatoptions:remove({ "o" })
     end,
 })
 
 autocmd("BufReadPost", {
-    desc = "Auto save cursor position",
-    group = augroup("save_cursor_position"),
-    pattern = "*",
+    group = groups.cursor_pos,
     callback = function()
-        local mark = vim.api.nvim_buf_get_mark(0, '"')
-        local lcount = vim.api.nvim_buf_line_count(0)
-        if mark[1] > 0 and mark[1] <= lcount then
-            pcall(vim.api.nvim_win_set_cursor, 0, mark)
-        end
+        vim.schedule(function()
+            local mark = vim.api.nvim_buf_get_mark(0, '"')
+            if mark[1] > 1 then
+                pcall(vim.api.nvim_win_set_cursor, 0, mark)
+            end
+        end)
     end,
 })
 
 autocmd("FileType", {
     desc = "Close with just letter q",
-    group = augroup("close_with_q"),
+    group = groups.closewith_q,
     pattern = {
         "",
         "help",
@@ -85,133 +78,51 @@ autocmd("FileType", {
     end,
 })
 
-autocmd("BufWritePre", {
-    desc = "Auto create dir if nonexistent after save",
-    group = augroup("auto_create_dir"),
-    callback = function(event)
-        if event.match:match("^%w%w+://") then
-            return
-        end
-        local file = vim.loop.fs_realpath(event.match) or event.match
-        vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
-    end,
-})
-
 autocmd("FileType", {
-    desc = "Fix manpage bugs",
-    group = augroup("man_bugfixes"),
-    pattern = { "man" },
-    callback = function(event)
-        vim.opt_local.signcolumn = "no"
-        vim.bo[event.buf].buflisted = false
-    end,
-})
-
-autocmd("FileType", {
-    desc = "Check for spelling of specific filetypes and enable wrapping",
-    group = augroup("wrap_and_spell"),
-    pattern = {
-        "gitcommit",
-        "text",
-        "NeogitCommitMessage",
-    },
+    desc = "Better gf to open markdown local links",
+    group = groups.md_local_links,
+    pattern = "markdown",
     callback = function()
-        vim.opt_local.spell = true
-        vim.opt_local.wrap = true
+        vim.keymap.set("n", "gf", "^f/gf", { buffer = true })
     end,
-})
-
-autocmd("FileType", {
-    desc = "Disable conceallevel for json filetypes",
-    group = augroup("json_conceal"),
-    pattern = { "json", "jsonc", "json5" },
-    callback = function()
-        vim.opt_local.conceallevel = 0
-    end,
-})
-
-autocmd("BufWritePost", {
-    desc = "Auto reload bin script shortcuts when configuration is updated",
-    group = augroup("reload_shortcuts"),
-    pattern = { "bm-files", "bm-dirs" },
-    command = "silent! !shortcuts",
-})
-
-autocmd("BufWritePost", {
-    desc = "Auto reload xdefaults when configuraton is updated",
-    group = augroup("reload_xdefaults"),
-    pattern = { "xdefaults" },
-    command = "silent! !xrdb %",
-})
-
-autocmd("BufWritePost", {
-    desc = "Auto reload dunstrc when configuration is updated",
-    group = augroup("reload_dunst"),
-    pattern = { "dunstrc" },
-    command = "silent! !pkill dunst; dunst &",
 })
 
 autocmd("BufWritePre", {
-    desc = "Auto timestamp at the end of the file if modified",
-    group = augroup("modified_time"),
-    pattern = "*",
-    callback = function()
-        local bufnr = vim.api.nvim_get_current_buf()
-
-        if not vim.api.nvim_buf_get_option(bufnr, "modifiable") then
-            vim.notify("Current file is not modifiable!", vim.log.levels.WARN)
+    desc = "Update Last Modified timestamp",
+    group = groups.modified_time,
+    callback = function(args)
+        if vim.bo[args.buf].buftype ~= "" then
             return
         end
 
-        if not vim.api.nvim_buf_get_option(bufnr, "modified") then
+        if vim.bo[args.buf].filetype == "gitcommit" then
             return
         end
 
-        local filetype = vim.bo.filetype
-        local comment_prefix = {
-            lua = "--",
-            python = "#",
-            sh = "#",
-            bash = "#",
-            javascript = "//",
-            c = "//",
-            cpp = "//",
-            java = "//",
-            go = "//",
-            html = "<!--",
-            css = "/*",
-            zsh = "#",
-            toml = "#",
-            tmux = "#",
-        }
-
-        if not comment_prefix[filetype] then
-            return
-        end
-
-        local suffix = (filetype == "html" and " -->")
-            or (filetype == "css" and " */")
-            or ""
-        local prefix = comment_prefix[filetype] or "#"
-        local time = os.date("%a, %d %b %Y %I:%M:%S %p")
-        local comment_line = string.format("%s Last Modified: %s%s", prefix, time, suffix)
-        local last_line_number = vim.fn.line("$")
-        local last_line = vim.fn.getline(last_line_number)
-
-        if last_line:match(vim.pesc(prefix) .. " Last Modified:") then
-            vim.fn.setline(last_line_number, comment_line)
-            vim.notify("Updated 'Last Modified' timestamp at the end of the file!")
-        else
-            vim.api.nvim_buf_set_lines(
-                bufnr,
-                last_line_number,
-                last_line_number,
-                false,
-                { "", comment_line }
-            )
-            vim.notify("Added 'Last Modified' timestamp at the end of the file!")
-        end
+        timestamp.update(args.buf)
     end,
 })
 
--- Last Modified: Sat, 25 Jan 2025 03:10:52 PM
+autocmd({ "BufEnter", "BufWinEnter", "ColorScheme" }, {
+    group = groups.timestamp_highlight,
+    callback = function()
+        -- Only apply to normal file buffers
+        if vim.bo.buftype ~= "" then
+            return
+        end
+
+        local win = vim.api.nvim_get_current_win()
+
+        -- Clear only this window’s matches
+        pcall(vim.fn.clearmatches, win)
+
+        -- Add timestamp highlight
+        vim.fn.matchadd(
+            "TimestampHighlight",
+            [[\v\w{3},\s\d{2}\s\w{3}\s\d{4}\s\d{2}:\d{2}:\d{2}\s(AM|PM)]],
+            10
+        )
+    end,
+})
+
+-- Last Modified: Wed, 07 Jan 2026 01:12:55 AM
