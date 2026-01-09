@@ -1,13 +1,25 @@
 return {
-    "lukas-reineke/indent-blankline.nvim",
-    main = "ibl",
-    dependencies = "nvim-treesitter/nvim-treesitter",
+    "saghen/blink.indent",
     event = { "BufReadPost", "BufNewFile" },
     opts = {
-        indent = { char = "│", tab_char = "│" },
-        scope = { enabled = false },
-        exclude = { filetypes = { "lazy", "dashboard", "mason" } },
+        static = {
+            char = "│",
+        },
+        scope = {
+            char = "│",
+        },
+        blocked = {
+            filetypes = {
+                "checkhealth",
+                "lazy",
+                "dashboard",
+                "markdown-agenda",
+                "help",
+                "man",
+                "gitcommit",
+            },
+        },
     },
 }
 
--- Last Modified: Thu, 12 Dec 2024 02:45:20 PM
+-- Last Modified: Thu, 08 Jan 2026 11:56:55 AM
