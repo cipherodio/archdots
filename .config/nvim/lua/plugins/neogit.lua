@@ -1,5 +1,6 @@
 return {
     "NeogitOrg/neogit",
+    lazy = true,
     dependencies = {
         "nvim-lua/plenary.nvim",
         "sindrets/diffview.nvim",
@@ -27,4 +28,4 @@ return {
     },
 }
 
--- Last Modified: Fri, 13 Dec 2024 12:00:48 PM
+-- Last Modified: Sun, 04 Jan 2026 04:33:16 PM
