@@ -1,7 +1,9 @@
--- Experimental loader
 vim.loader.enable()
+-- vim.cmd.colorscheme("gruvbox")
+vim.cmd.colorscheme("onedark")
+-- vim.cmd.colorscheme("gruvbox-material")
 
-local function safereq(module)
+local function secured(module)
     local success, err_msg = pcall(require, module)
     if not success then
         local msg = ("Error loading %s\n%s"):format(module, err_msg)
@@ -11,12 +13,12 @@ local function safereq(module)
     end
 end
 
--- Load modules
-safereq("core.options")
-safereq("core.statusline")
-safereq("core.winbar")
-safereq("core.keymaps")
-safereq("core.autocmds")
-safereq("core.bootstrap")
+secured("core.options")
+secured("core.autocmds")
+secured("core.keymaps")
+secured("core.statusline")
+secured("core.winbar")
+secured("core.lsp")
+secured("core.lazy")
 
--- Last Modified: Sat, 14 Dec 2024 08:22:00 PM
+-- Last Modified: Thu, 08 Jan 2026 06:30:51 PM
