@@ -1,0 +1,36 @@
+#define bg #232326
+#define fg #a7aab0
+
+! black
+#define c00 #101012
+#define c08 #5a5b5e
+
+! red
+#define c01 #de5d68
+#define c09 #833b3b
+
+! green
+#define c02 #8fb573
+#define c10 #7c5c20
+
+! yellow
+#define c03 #dbb671
+#define c11 #e2c792
+
+! blue
+#define c04 #57a5e5
+#define c12 #68aee8
+
+! magenta
+#define c05 #bb70d2
+#define c13 #79428a
+
+! cyan
+#define c06 #51a8b3
+#define c14 #2b5d63
+
+! white
+#define c07 #a7aab0
+#define c15 #818387
+
+! vim: ft=xdefaults
