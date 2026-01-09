@@ -1,368 +1,208 @@
 return {
-    "ibhagwan/fzf-lua",
-    cmd = "FzfLua",
-    dependencies = "nvim-tree/nvim-web-devicons",
-    keys = {
-        {
-            "<leader>fw",
-            function()
-                return require("fzf-lua").live_grep()
-            end,
-            desc = "Project live grep",
+    {
+        "ibhagwan/fzf-lua",
+        cmd = { "FzfLua" },
+        dependencies = "nvim-tree/nvim-web-devicons",
+        keys = {
+            {
+                "<leader>ff",
+                function()
+                    require("fzf-lua").files()
+                end,
+                desc = "Files",
+            },
+            {
+                "<leader>gf",
+                function()
+                    require("fzf-lua").git_files()
+                end,
+                desc = "Git files",
+            },
+            {
+                "<leader>gi",
+                function()
+                    require("fzf-lua").git_status()
+                end,
+                desc = "Info/status",
+            },
+            {
+                "<leader>gt",
+                function()
+                    require("fzf-lua").git_commits()
+                end,
+                desc = "Check git commits",
+            },
+            {
+                "<leader>gb",
+                function()
+                    require("fzf-lua").git_branches()
+                end,
+                desc = "Branches",
+            },
+            {
+                "<leader>fw",
+                function()
+                    require("fzf-lua").live_grep()
+                end,
+                desc = "Project live grep",
+            },
+            {
+                "<leader>fo",
+                function()
+                    require("fzf-lua").oldfiles()
+                end,
+                desc = "Recent files",
+            },
+            {
+                "<leader><tab><tab>",
+                function()
+                    require("fzf-lua").buffers()
+                end,
+                desc = "Buffers",
+            },
+            {
+                "<leader>fk",
+                function()
+                    require("fzf-lua").keymaps()
+                end,
+                desc = "Keymaps",
+            },
+            {
+                "<leader>la",
+                function()
+                    require("fzf-lua").lsp_code_actions()
+                end,
+                desc = "Actions",
+            },
+            {
+                "<leader>ls",
+                function()
+                    require("fzf-lua").lsp_document_symbols()
+                end,
+                desc = "Symbol lsp document",
+            },
+            {
+                "<leader>ld",
+                function()
+                    require("fzf-lua").diagnostics_document()
+                end,
+                desc = "Document diagnostics",
+            },
+            {
+                "<leader>lw",
+                function()
+                    require("fzf-lua").diagnostics_workspace()
+                end,
+                desc = "Workspace diagnostics",
+            },
+            {
+                "<leader>fh",
+                function()
+                    require("fzf-lua").helptags()
+                end,
+                desc = "Help",
+            },
+            {
+                "<leader>fC",
+                function()
+                    require("fzf-lua").commands()
+                end,
+                desc = "Commands",
+            },
+            {
+                "<leader>fc",
+                function()
+                    require("fzf-lua").command_history()
+                end,
+                desc = "Command history",
+            },
+            {
+                "<leader>fr",
+                function()
+                    require("fzf-lua").registers()
+                end,
+                desc = "Registers",
+            },
+            {
+                "<leader>fm",
+                function()
+                    require("fzf-lua").manpages()
+                end,
+                desc = "Man pages",
+            },
+            {
+                "<leader>fx",
+                function()
+                    require("fzf-lua").files({ cwd = "~/" })
+                end,
+                desc = "Home search",
+            },
+            {
+                "<leader>fX",
+                function()
+                    require("fzf-lua").files({ cwd = "~/.local/" })
+                end,
+                desc = "Local search",
+            },
+            {
+                "<leader>fn",
+                function()
+                    require("fzf-lua").files({ cwd = "~/.local/src/mdnotes/" })
+                end,
+                desc = "Notes in markdown",
+            },
         },
-        {
-            "<leader>ff",
-            function()
-                return require("fzf-lua").files()
-            end,
-            desc = "Files",
-        },
-        {
-            "<leader>fo",
-            function()
-                return require("fzf-lua").oldfiles()
-            end,
-            desc = "Recent files",
-        },
-        {
-            "<leader>fn",
-            function()
-                return require("fzf-lua").files({ cwd = "~/.local/src/mdnotes/" })
-            end,
-            desc = "Notes in markdown",
-        },
-        {
-            "<leader>fx",
-            function()
-                return require("fzf-lua").files({ cwd = "~/" })
-            end,
-            desc = "Home search",
-        },
-        {
-            "<leader>fX",
-            function()
-                return require("fzf-lua").files({ cwd = "~/.local/" })
-            end,
-            desc = "Local search",
-        },
-        {
-            "<leader>fk",
-            function()
-                return require("fzf-lua").keymaps()
-            end,
-            desc = "Keymaps",
-        },
-        {
-            "<leader>fh",
-            function()
-                return require("fzf-lua").helptags()
-            end,
-            desc = "Help",
-        },
-        {
-            "<leader>fc",
-            function()
-                return require("fzf-lua").command_history()
-            end,
-            desc = "Command history",
-        },
-        {
-            "<leader>fC",
-            function()
-                return require("fzf-lua").commands()
-            end,
-            desc = "Commands",
-        },
-        {
-            "<leader>fr",
-            function()
-                return require("fzf-lua").registers()
-            end,
-            desc = "Registers",
-        },
-        {
-            "<leader>fm",
-            function()
-                return require("fzf-lua").manpages()
-            end,
-            desc = "Man pages",
-        },
-        {
-            "<leader>ft",
-            function()
-                return require("fzf-lua").tmux_buffers()
-            end,
-            desc = "Tmux buffers",
-        },
-        {
-            "<leader>fT",
-            function()
-                return require("fzf-lua").grep({
-                    search = "TODO|HACK|PERF|NOTE|FIX|FIXME",
-                    no_esc = true,
-                })
-            end,
-            desc = "TODO comments",
-        },
-        {
-            "<leader>ls",
-            function()
-                return require("fzf-lua").lsp_document_symbols()
-            end,
-            desc = "Symbol lsp document",
-        },
-        {
-            "<leader>la",
-            function()
-                return require("fzf-lua").lsp_code_actions()
-            end,
-            desc = "Actions",
-        },
-        {
-            "<leader>ld",
-            function()
-                return require("fzf-lua").diagnostics_document()
-            end,
-            desc = "Document diagnostics",
-        },
-        {
-            "<leader>lw",
-            function()
-                return require("fzf-lua").diagnostics_workspace()
-            end,
-            desc = "Workspace diagnostics",
-        },
-        {
-            "<leader>gf",
-            function()
-                return require("fzf-lua").git_files()
-            end,
-            desc = "Files",
-        },
-        {
-            "<leader>gi",
-            function()
-                return require("fzf-lua").git_status()
-            end,
-            desc = "Info/status",
-        },
-        {
-            "<leader>gb",
-            function()
-                return require("fzf-lua").git_branches()
-            end,
-            desc = "Branches",
-        },
-        {
-            "<leader>gt",
-            function()
-                return require("fzf-lua").git_commits()
-            end,
-            desc = "Check git commits",
-        },
-        {
-            "<leader><tab><tab>",
-            function()
-                return require("fzf-lua").buffers()
-            end,
-            desc = "Buffers",
+        opts = {
+            winopts = {
+                border = "single",
+                row = 0.55,
+                col = 0.50,
+                backdrop = 100,
+                preview = {
+                    hidden = false, -- disables/enables previewer
+                    scrollbar = false,
+                    title_pos = "left",
+                    layout = "vertical",
+                    vertical = "down:70%",
+                },
+            },
+            fzf_opts = { ["--separator"] = " " },
+            files = { prompt = "   Files: " },
+            git = {
+                files = { prompt = "   Git Files" },
+                status = { prompt = "   Git Status" },
+                commits = { prompt = "   Git Commits" },
+                branches = { prompt = "   Git Branch" },
+            },
+            grep = { prompt = "   Grep Word " },
+            oldfiles = { prompt = "   Recent Files " },
+            buffers = { prompt = "   Buffers " },
+            keymaps = { prompt = "   Keymaps " },
+            lsp = {
+                code_actions = { prompt = "   Code Actions " },
+                symbols = { prompt = "   Lsp document symbols " },
+            },
+            diagnostics = { prompt = "   Diagnostics " },
+            helptags = { prompt = "  Help " },
+            command = { prompt = "   Commands " },
+            command_history = { prompt = "   Command History " },
+            registers = { prompt = "   Registers " },
+            manpages = { rompt = "  Man Pages " },
         },
     },
-    opts = {
-        winopts = {
-            border = "single",
-            row = 0.50,
-            col = 0.50,
-            preview = {
-                scrollbar = false,
-                title_pos = "left",
-            },
-        },
-        grep = {
-            prompt = "   Grep Word ",
-            no_header = true,
-            fzf_opts = { ["--separator"] = " " },
-            winopts = {
-                preview = {
-                    layout = "vertical",
-                    vertical = "down:70%",
-                },
-            },
-        },
-        files = {
-            formatter = "path.filename_first",
-            prompt = "   Files ",
-            cwd_prompt = false,
-            no_header = true,
-            fzf_opts = { ["--separator"] = " " },
-            winopts = {
-                preview = {
-                    layout = "vertical",
-                    vertical = "down:70%",
-                },
-            },
-        },
-        oldfiles = {
-            formatter = "path.filename_first",
-            prompt = "   Recent Files ",
-            fzf_opts = { ["--separator"] = " " },
-            winopts = {
-                preview = {
-                    layout = "vertical",
-                    vertical = "down:70%",
-                },
-            },
-        },
-        keymaps = {
-            prompt = "   Keymaps ",
-            fzf_opts = { ["--separator"] = " " },
-            winopts = {
-                preview = {
-                    layout = "vertical",
-                    vertical = "down:10%",
-                },
-            },
-        },
-        helptags = {
-            prompt = "  Help ",
-            fzf_opts = { ["--separator"] = " " },
-            winopts = {
-                preview = {
-                    layout = "vertical",
-                    vertical = "down:70%",
-                },
-            },
-        },
-        command_history = {
-            prompt = "   Command History ",
-            fzf_opts = {
-                ["--separator"] = " ",
-                ["--header"] = " ",
-            },
-            winopts = {
-                preview = {
-                    layout = "vertical",
-                    vertical = "down:70%",
-                },
-            },
-        },
-        commands = {
-            prompt = "   Commands ",
-            fzf_opts = { ["--separator"] = " " },
-            winopts = {
-                preview = {
-                    layout = "vertical",
-                    vertical = "down:70%",
-                },
-            },
-        },
-        registers = {
-            prompt = "   Registers ",
-            fzf_opts = { ["--separator"] = " " },
-            winopts = {
-                preview = {
-                    layout = "vertical",
-                    vertical = "down:70%",
-                },
-            },
-        },
-        manpages = {
-            prompt = "  Man Pages ",
-            fzf_opts = { ["--separator"] = " " },
-            preview_opts = "hidden",
-        },
-        lsp = {
-            code_actions = {
-                prompt = "   Code Actions ",
-                winopts = {
-                    preview = {
-                        layout = "vertical",
-                        vertical = "down:70%",
-                    },
-                },
-            },
-            symbols = {
-                prompt = "   Lsp document symbols ",
-                fzf_opts = { ["--separator"] = " " },
-                winopts = {
-                    preview = {
-                        layout = "vertical",
-                        vertical = "down:70%",
-                    },
-                },
-            },
-        },
-        diagnostics = {
-            prompt = "   Diagnostics ",
-            fzf_opts = { ["--separator"] = " " },
-            winopts = {
-                preview = {
-                    layout = "vertical",
-                    vertical = "down:70%",
-                },
-            },
-        },
-        git = {
-            files = {
-                prompt = "   Git Files",
-                fzf_opts = { ["--separator"] = " " },
-                winopts = {
-                    preview = {
-                        layout = "vertical",
-                        vertical = "down:70%",
-                    },
-                },
-            },
-            branches = {
-                prompt = "   Git Branch",
-                no_header = true,
-                fzf_opts = { ["--separator"] = " " },
-                winopts = {
-                    preview = {
-                        layout = "vertical",
-                        vertical = "down:70%",
-                    },
-                },
-            },
-            commits = {
-                prompt = "   Git Commits",
-                no_header = true,
-                fzf_opts = { ["--separator"] = " " },
-                winopts = {
-                    preview = {
-                        layout = "vertical",
-                        vertical = "down:70%",
-                    },
-                },
-            },
-            status = {
-                prompt = "   Git Status",
-                no_header = true,
-                fzf_opts = { ["--separator"] = " " },
-                winopts = {
-                    preview = {
-                        layout = "vertical",
-                        vertical = "down:70%",
-                    },
-                },
-            },
-        },
-        buffers = {
-            formatter = "path.filename_first",
-            prompt = "   Buffers ",
-            no_header = true,
-            fzf_opts = {
-                ["--separator"] = " ",
-                ["--with-nth"] = "-1..",
-            },
-            winopts = {
-                preview = {
-                    layout = "vertical",
-                    vertical = "down:70%",
-                },
+    {
+        "otavioschwanck/fzf-lua-explorer.nvim",
+        dependencies = { "ibhagwan/fzf-lua" },
+        keys = {
+            {
+                "<leader>fb",
+                function()
+                    require("fzf-lua-explorer").explorer()
+                end,
+                desc = "File browser",
             },
         },
     },
 }
 
--- Last Modified: Fri, 13 Dec 2024 08:40:15 AM
+-- Last Modified: Wed, 07 Jan 2026 01:20:00 AM
