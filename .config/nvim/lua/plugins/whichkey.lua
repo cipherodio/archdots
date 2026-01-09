@@ -12,17 +12,6 @@ return {
                 { "<leader>m", group = "markdown" },
                 { "<leader>d", group = "debugger" },
                 { "<leader><tab>", group = "buffers" },
-                { "<leader>o", group = "orgmode" },
-                { "<leader>ob", group = "org buffer" },
-                { "<leader>od", group = "org date" },
-                { "<leader>oi", group = "org insert" },
-                { "<leader>ol", group = "org links" },
-                { "<leader>on", group = "org notes" },
-                { "<leader>ox", group = "org clock" },
-                { "<leader>n", group = "org roam" },
-                { "<leader>na", group = "alias" },
-                { "<leader>nd", group = "navigate" },
-                { "<leader>no", group = "origin" },
             },
         },
         win = {
@@ -48,4 +37,4 @@ return {
     },
 }
 
--- Last Modified: Mon, 16 Dec 2024 11:06:29 PM
+-- Last Modified: Tue, 06 Jan 2026 04:50:52 PM
