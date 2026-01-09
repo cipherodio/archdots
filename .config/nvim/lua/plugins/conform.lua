@@ -41,12 +41,22 @@ return {
                 prettier = {
                     prepend_args = {
                         "--tab-width",
-                        "2",
+                        "4",
                         "--print-width",
-                        "80",
+                        "72",
                         "--prose-wrap",
                         "always",
                     },
+                },
+                ["markdown-toc"] = {
+                    args = {
+                        "-i",
+                        "$FILENAME",
+                        "--bullets",
+                        "-",
+                        -- "%s- [%s](<%s#%s>)",
+                    },
+                    stdin = false,
                 },
             },
             log_level = vim.log.levels.ERROR,
@@ -54,4 +64,4 @@ return {
     end,
 }
 
--- Last Modified: Mon, 20 Jan 2025 01:14:22 PM
+-- Last Modified: Thu, 01 Jan 2026 02:59:03 PM
