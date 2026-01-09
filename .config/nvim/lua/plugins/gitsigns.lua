@@ -67,7 +67,7 @@ return {
         {
             "<leader>gu",
             function()
-                return require("gitsigns").undo_stage_hunk()
+                return require("gitsigns").stage_hunk()
             end,
             desc = "Unstage hunk",
         },
@@ -102,30 +102,32 @@ return {
         {
             "<leader>g]",
             function()
-                return require("gitsigns").next_hunk()
+                ---@diagnostic disable-next-line: param-type-mismatch
+                return require("gitsigns").nav_hunk("next", { wrap = false })
             end,
             desc = "Next hunk",
         },
         {
             "<leader>g[",
             function()
-                return require("gitsigns").prev_hunk()
+                ---@diagnostic disable-next-line: param-type-mismatch
+                return require("gitsigns").nav_hunk("prev", { wrap = false })
             end,
             desc = "Previous hunk",
         },
     },
     opts = {
-        -- signcolumn = false,
-        signs = {
-            add = { text = "+" },
-            change = { text = "┃" },
-            delete = { text = "_" },
-            topdelete = { text = "-" },
-            changedelete = { text = "~" },
-        },
         attach_to_untracked = true,
         numhl = false,
+        signs = {
+            add = { text = "┃" },
+            change = { text = "┃" },
+            delete = { text = "┃" },
+            topdelete = { text = "┃" },
+            changedelete = { text = "┃" },
+            untracked = { text = "┃" },
+        },
     },
 }
 
--- Last Modified: Sat, 25 Jan 2025 03:22:15 PM
+-- Last Modified: Wed, 07 Jan 2026 03:13:11 AM
