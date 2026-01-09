@@ -1,6 +1,6 @@
 #!/bin/bash
 # Open web page via dmenu and open on $BROWSER
-TEXT="whatsapp\nchatgpt\nduckduckgo\ngithub\nudemy\ntrinket\ntorrent\n9901\nshopee\nfoodpanda\nludeon\nsuckless\narch\nunsplash\nwallhaven\nstackoverflow\nunixporn\nmangafire\nyewtu\nyoutube\nprimevideo\ngmail"
+TEXT="whatsapp\nchatgpt\nduckduckgo\ngithub\nudemy\nfacebook\ntrinket\ntorrent\n9901\nshopee\nfoodpanda\nludeon\nsuckless\narch\nunsplash\nwallhaven\nstackoverflow\nunixporn\nmangafire\nyewtu\nyoutube\nprimevideo\ngmail"
 
 DMENU="$(echo -e $TEXT | dmenu -l 16 -p web)"
 
@@ -12,6 +12,7 @@ chatgpt) $BROWSER https://chatgpt.com/ ;;
 duckduckgo) $BROWSER https://duckduckgo.com ;;
 github) $BROWSER https://github.com ;;
 udemy) $BROWSER https://www.udemy.com/ ;;
+facebook) $BROWSER https://www.facebook.com/ ;;
 trinket) $BROWSER https://trinket.io/ ;;
 torrent) $BROWSER https://1337x.to/home/ ;;
 9901) $BROWSER http://localhost:9091/transmission/web/ ;;
@@ -31,4 +32,4 @@ primevideo) $BROWSER https://www.primevideo.com/ ;;
 gmail) $BROWSER https://gmail.com ;;
 esac
 
-# Last Modified: Tue, 30 Dec 2025 01:53:40 PM
+# Last Modified: Sat, 03 Jan 2026 05:00:33 PM
