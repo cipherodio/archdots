@@ -1,52 +1,51 @@
 local M = {}
 
--- Catppuccin mocha
-M.cm = {
-    c01 = "#1e1e2e",
-    c02 = "#f38ba8",
-    c03 = "#a6e3a1",
-    c04 = "#f9e2af",
-    c05 = "#89b4fa",
-    c06 = "#f5c2e7",
-    c07 = "#94e2d5",
-    c08 = "#cba6f7",
-    c09 = "#fab387",
-    c10 = "#b4befe",
-    c11 = "#74c7ec",
-    c12 = "#f5e0dc",
-}
-
--- Kanagawa dragon
-M.kd = {
-    c01 = "#181616",
-    c02 = "#c4746e",
-    c03 = "#8a9a7b",
-    c04 = "#c4b28a",
-    c05 = "#8ba4b0",
-    c06 = "#a292a3",
-    c07 = "#8ea4a2",
-    c08 = "#957fb8",
-    c09 = "#b6927b",
-    c10 = "#9cabca",
-    c11 = "#7fb4ca",
-    c12 = "#a99c8b",
-}
-
-M.gd = {
-    c01 = "#1d2021",
+-- Gruvbox dark contrast
+M.gruvbox = {
+    c00 = "#1d2021",
+    c01 = "#282828",
     c02 = "#cc241d",
     c03 = "#98971a",
     c04 = "#d79921",
     c05 = "#458588",
     c06 = "#b16286",
     c07 = "#689d7a",
-    c08 = "#8f3f71",
-    c09 = "#fe8019",
-    c10 = "#d3869b",
-    c11 = "#83a598",
-    c12 = "#ebdbb2",
+    c08 = "#a89984",
+    c09 = "#928374",
+    c10 = "#fb4934",
+    c11 = "#b8bb26",
+    c12 = "#fabd2f",
+    c13 = "#83a598",
+    c14 = "#d3869b",
+    c15 = "#8ec07c",
+    c16 = "#ebdbb2",
 }
 
-return M
+-- Onedark warmer
+M.onedark = {
+    c00 = "#232326",
+    c01 = "#2c2d31",
+    c02 = "#de5d68",
+    c03 = "#8fb573",
+    c04 = "#dbb671",
+    c05 = "#57a5e5",
+    c06 = "#bb70d2",
+    c07 = "#51a8b3",
+    c08 = "#a7aab0",
+    c09 = "#5a5b5e",
+    c10 = "#833b3b",
+    c11 = "#7c5c20",
+    c12 = "#e2c792",
+    c13 = "#68aee8",
+    c14 = "#79428a",
+    c15 = "#2b5d63",
+    c16 = "#818387",
+}
 
--- Last Modified: Mon, 03 Feb 2025 01:05:32 AM
+-- Active colorscheme
+local ACTIVE = "onedark"
+
+-- Export active palette as flat table
+return M[ACTIVE]
+
+-- Last Modified: Thu, 08 Jan 2026 06:32:25 PM
