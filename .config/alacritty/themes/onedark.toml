@@ -1,0 +1,43 @@
+[colors.primary]
+background = "#232326" # bg0
+foreground = "#a7aab0" # fg
+
+[colors.cursor]
+text   = "#232326"
+cursor = "#b8bcbf"
+
+[colors.selection]
+text       = "#b8bcbf"
+background = "#2c2d31" # bg1
+
+[colors.normal]
+black   = "#101012"
+red     = "#ca4949"
+green   = "#8a9a7b"
+yellow  = "#c99076"
+blue    = "#5f819d"
+magenta = "#b971a7"
+cyan    = "#4d8ca8"
+white   = "#b8bcbf"
+
+[colors.bright]
+black   = "#35363b" # bg2
+red     = "#e06c75"
+green   = "#98c379"
+yellow  = "#e5c07b"
+blue    = "#61afef"
+magenta = "#c678dd"
+cyan    = "#56b6c2"
+white   = "#dcdfe4"
+
+[colors.dim]
+black   = "#1b1c1e" # bg_d
+red     = "#a24343"
+green   = "#6f7f63"
+yellow  = "#a87960"
+blue    = "#4b657d"
+magenta = "#8f5b85"
+cyan    = "#3d6f84"
+white   = "#9da1a5"
+
+# Last Modified: Fri, 09 Jan 2026 06:13:10 PM
