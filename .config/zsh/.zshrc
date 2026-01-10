@@ -19,12 +19,6 @@ prompt_pwd_pretty() {
     [[ $PWD == $HOME/* ]] && print -n "~${PWD:t}" || print -n "${PWD:t}"
 }
 
-# Install fzf
-if [ ! -d ~/.config/fzf ]; then
-    git clone --depth 1 https://github.com/junegunn/fzf ~/.config/fzf
-    ~/.config/fzf/install --no-bash --no-fish --xdg --all
-fi
-
 # Install zsh-fast-syntax-highlighting
 if [ ! -d "$ZPLUG"/fasthl ]; then
     git clone https://github.com/zdharma-continuum/fast-syntax-highlighting "$ZPLUG"/fasthl
@@ -131,11 +125,6 @@ jfzf() {
 }
 bindkey -s "^[d" "^ujfzf\n"
 
-# Source fzf
-if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ]]; then
-    source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
-fi
-
 # Source zsh-auto-suggestions
 source "$ZPLUG"/auto-suggestions/zsh-autosuggestions.zsh
 
@@ -145,4 +134,4 @@ source "$ZPLUG"/system-clipboard/zsh-system-clipboard.zsh
 # Source zsh-fast-syntax-highlighting
 source "$ZPLUG"/fasthl/fast-syntax-highlighting.plugin.zsh
 
-# Last Modified: Fri, 02 Jan 2026 06:30:32 AM
+# Last Modified: Sun, 11 Jan 2026 01:53:36 AM
