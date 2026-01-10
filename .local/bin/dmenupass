@@ -1,0 +1,8 @@
+#!/bin/sh
+# provides SUDO_ASKPASS variable, used as pass prompt if needed
+# dmenu -P -p "$1" <&- && echo
+# dmenu -p "Password" <&-
+
+dmenu -fn Monospace-18 -P -p "$1" <&-
+
+# Last Modified: Sat, 10 Jan 2026 06:21:33 AM
