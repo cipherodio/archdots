@@ -5,11 +5,6 @@ export PATH="$HOME/.local/bin:$PATH"
 
 unsetopt PROMPT_SP 2>/dev/null
 
-LS_COLORS="di=34:ln=31:pi=42:ex=32:tw=0:ow=0:st=0:*.zip=35:*.gz=35\
-:*.tar=35:*.xz=35:*.mp3=36:*.flac=36:*.mkv=36:*.mp4=36:*.mov=36\
-:*.webm=36:*.jpg=33:*.png=33:*.jpeg=33"
-export LS_COLORS
-
 # Default programs:
 export EDITOR="nvim"
 export VISUAL="nvim"
@@ -63,21 +58,9 @@ export SUDO_ASKPASS="$HOME/.local/bin/dmenu-pass"
 export SUDO_PROMPT=$'\e[1;31m'[$'\e[0m'sudo$'\e[1;31m']$'\e[0m'' password for '$'\e[1;31m''%p'$'\e[0m'': '
 export SPROMPT="%F{blue}[%fzsh%F{blue}]%f correct %F{red}%R%f to %F{blue}%r%f [nyae]: "
 
+# Fzf
+export FZF_DEFAULT_OPTS_FILE="$XDG_CONFIG_HOME/fzf/themes/onedark"
 export FZF_DEFAULT_OPTS="
---color=bg:#1d2021
---color=bg+:#3c3836
---color=fg:#ebdbb2
---color=fg+:#fbf1c7
---color=hl:#fabd2f
---color=hl+:#fabd2f
---color=header:#83a598
---color=info:#d3869b
---color=pointer:#fe8019
---color=marker:#fe8019
---color=spinner:#fe8019
---color=prompt:#b8bb26
---color=border:#504945
---color=query:#ebdbb2
 --gutter ' '
 --exact
 --no-separator
@@ -103,22 +86,24 @@ export LESS_TERMCAP_ue=$'\e[0m'
 # Fix for java applications in dwm
 export _JAVA_AWT_WM_NONREPARENTING=1
 
-# NOTE: Set Qt to use GTK theme (This breaks kdenlive, shotcut)
+# NOTE: Set Qt to use GTK theme (For now this breaks kdenlive, shotcut)
 
 # export QT_QPA_PLATFORMTHEME="gtk2"
 # export QT_QPA_PLATFORMTHEME="qt6ct"
 
-# NOTE: Disable scaling for now
-
-# export QT_SCALE_FACTOR=1.3
-# export GDK_DPI_SCALE=1.3
+# Scaling
+export QT_SCALE_FACTOR=1.2
+export GDK_DPI_SCALE=1.2
 
 # Enable DRM Content in qutebrowser
 # export QTWEBENGINE_CHROMIUM_FLAGS="--widevine-path=/usr/lib/chromium/libwidevinecdm.so"
 # Mozilla zoom in and out
 export MOZ_USE_XINPUT2=1
 
+# Ls colors
+. "$HOME/.config/lscolors/onedark"
+
 # Shortcuts
 [ ! -f "$XDG_CONFIG_HOME"/shell/shrc ] && setsid -f shortcuts >/dev/null 2>&1
 
-# Last Modified: Sat, 10 Jan 2026 12:31:29 AM
+# Last Modified: Sun, 11 Jan 2026 02:40:49 AM
