@@ -134,7 +134,7 @@ keys = [
     Key(
         [mod, "shift"],
         "s",
-        lazy.spawn("dmenu-playlist"),
+        lazy.spawn("mpcplaylist"),
         desc="Search ncmpcpp song",
     ),
     Key(
@@ -155,12 +155,10 @@ keys = [
         lazy.spawn(mpcnext),
         desc="Next song in ncmpcpp",
     ),
-    Key([mod], "F9", lazy.spawn("dmenu-mount"), desc="Mount drive"),
-    Key(
-        [mod, "shift"], "F9", lazy.spawn("dmenu-unmount"), desc="Unmount drive"
-    ),
-    Key([mod], "w", lazy.spawn("dmenu-favlink"), desc="Web search via dmenu"),
-    Key([mod], "s", lazy.spawn("dmenu-google"), desc="Web search via dmenu"),
+    Key([mod], "F9", lazy.spawn("mount"), desc="Mount drive"),
+    Key([mod, "shift"], "F9", lazy.spawn("unmounter"), desc="Unmount drive"),
+    Key([mod], "w", lazy.spawn("bookmarklink"), desc="Web search via dmenu"),
+    # Key([mod], "s", lazy.spawn("dmenu-google"), desc="Web search via dmenu"),
     Key([mod], "F12", lazy.spawn("torrtoggle"), desc="Torrent daemon toggle"),
     Key(
         [mod, "shift"],
@@ -170,7 +168,7 @@ keys = [
     ),
     Key([mod], "c", lazy.spawn("camtoggle"), desc="Webcam"),
     Key([mod, "shift"], "c", lazy.spawn(camkill), desc="Webcam"),
-    Key([mod], "F8", lazy.spawn("dmenu-record"), desc="Record screen"),
+    Key([mod], "F8", lazy.spawn("screencast"), desc="Record screen"),
 ]
 
 keys.extend(
@@ -232,4 +230,4 @@ keys.extend(
     ]
 )
 
-# Last Modified: Sat, 03 Jan 2026 05:09:44 PM
+# Last Modified: Sat, 10 Jan 2026 10:29:31 PM
