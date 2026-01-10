@@ -10,7 +10,9 @@ HOME_DIR="$HOME"
 SRC_DIR="$HOME_DIR/.local/src"
 DOTS_DIR="$HOME_DIR/.config/.dots"
 
+# --------------------------------------------------
 # Helpers
+# --------------------------------------------------
 msg() {
     echo "==> $1"
 }
@@ -35,22 +37,37 @@ clone_if_missing() {
     fi
 }
 
+# --------------------------------------------------
 # Preconditions
+# --------------------------------------------------
 msg "Checking required commands"
-command -v git >/dev/null || die "git not installed"
+command -v git  >/dev/null || die "git not installed"
 command -v make >/dev/null || die "make not installed"
 command -v sudo >/dev/null || die "sudo not installed"
 msg "All required commands available"
 
-mkdir -p "$SRC_DIR"
-msg "Ensured source directory exists"
+# --------------------------------------------------
+# User directories (workspace)
+# --------------------------------------------------
+msg "Creating user directories"
 
+mkdir -p \
+    "$SRC_DIR" \
+    "$HOME_DIR/.local"/{downloads,notes,review,screenshot,torrent} \
+    "$HOME_DIR/.venv"
+
+msg "Done creating user directories"
+
+# --------------------------------------------------
 # SSH sanity check
+# --------------------------------------------------
 msg "Checking GitHub SSH authentication"
 ssh -T git@github.com 2>&1 | grep -qi "github" || die "SSH auth failed"
 msg "GitHub SSH authentication OK"
 
+# --------------------------------------------------
 # Source builds
+# --------------------------------------------------
 msg "Building dmenu"
 clone_if_missing "$DMENU_REPO" "$SRC_DIR/archdmenu"
 (
@@ -61,24 +78,32 @@ clone_if_missing "$DMENU_REPO" "$SRC_DIR/archdmenu"
 )
 msg "Done building dmenu"
 
+# --------------------------------------------------
 # Startpage
+# --------------------------------------------------
 msg "Processing startpage"
 clone_if_missing "$STARTPAGE_REPO" "$SRC_DIR/startpage"
 msg "Done processing startpage"
 
+# --------------------------------------------------
 # Notes
+# --------------------------------------------------
 msg "Processing notes"
 clone_if_missing "$NOTES_REPO" "$SRC_DIR/mdnotes"
 msg "Done processing notes"
 
-# Fix git remotes (inline)
+# --------------------------------------------------
+# Fix git remotes
+# --------------------------------------------------
 msg "Fixing git remotes"
 cd "$HOME_DIR" || exit
 git --git-dir="$DOTS_DIR" --work-tree="$HOME_DIR" \
     remote set-url origin git@github.com:cipherodio/archdots.git
-msg "Done Fixing git remotes"
+msg "Done fixing git remotes"
 
+# --------------------------------------------------
 # Done
+# --------------------------------------------------
 msg "setup.sh complete"
 
-# Last Modified: Sat, 10 Jan 2026 06:10:18 PM
+# Last Modified: Sat, 10 Jan 2026 06:56:32 PM
