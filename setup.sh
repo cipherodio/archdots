@@ -41,7 +41,7 @@ clone_if_missing() {
 # Preconditions
 # --------------------------------------------------
 msg "Checking required commands"
-command -v git  >/dev/null || die "git not installed"
+command -v git >/dev/null || die "git not installed"
 command -v make >/dev/null || die "make not installed"
 command -v sudo >/dev/null || die "sudo not installed"
 msg "All required commands available"
