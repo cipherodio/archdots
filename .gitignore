@@ -34,7 +34,6 @@ __pycache__
 .config/emacs/tree-sitter/
 .config/emacs/var/
 .config/fontforge/
-.config/fzf/
 .config/GIMP/
 .config/go/
 .config/ibus/
