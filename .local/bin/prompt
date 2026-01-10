@@ -1,0 +1,7 @@
+#!/bin/sh
+# Gives a menu prompt labeled with $1 to perform command $2
+# [ "$(printf "No\\nYes" | dmenu -i -p "$1" -m 0 -nb darkred -sb red -sf white -nf gray)" = "Yes" ] && $2
+
+[ "$(printf "no\nyes" | dmenu -p "$1")" = "yes" ] && eval "$2"
+
+# Last Modified: Sat, 10 Jan 2026 03:43:31 AM
