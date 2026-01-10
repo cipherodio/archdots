@@ -1,43 +1,46 @@
+# OneDark.nvim — style = "warmer"
+# Inspired by: navarasu/onedark.nvim
+
 [colors.primary]
-background = "#232326" # bg0
-foreground = "#a7aab0" # fg
+background = "#232326"
+foreground = "#a7aab0"
 
 [colors.cursor]
+cursor = "#57a5e5"
 text   = "#232326"
-cursor = "#b8bcbf"
 
 [colors.selection]
-text       = "#b8bcbf"
-background = "#2c2d31" # bg1
+background = "#35363b"
+text       = "#a7aab0"
 
 [colors.normal]
 black   = "#101012"
-red     = "#ca4949"
-green   = "#8a9a7b"
-yellow  = "#c99076"
-blue    = "#5f819d"
-magenta = "#b971a7"
-cyan    = "#4d8ca8"
-white   = "#b8bcbf"
+red     = "#de5d68"
+green   = "#8fb573"
+yellow  = "#dbb671"
+blue    = "#57a5e5"
+magenta = "#bb70d2"
+cyan    = "#51a8b3"
+white   = "#a7aab0"
 
 [colors.bright]
-black   = "#35363b" # bg2
-red     = "#e06c75"
-green   = "#98c379"
-yellow  = "#e5c07b"
-blue    = "#61afef"
-magenta = "#c678dd"
-cyan    = "#56b6c2"
-white   = "#dcdfe4"
+black   = "#5a5b5e"
+red     = "#de5d68"
+green   = "#8fb573"
+yellow  = "#e2c792"
+blue    = "#68aee8"
+magenta = "#bb70d2"
+cyan    = "#51a8b3"
+white   = "#818387"
 
 [colors.dim]
-black   = "#1b1c1e" # bg_d
-red     = "#a24343"
-green   = "#6f7f63"
-yellow  = "#a87960"
-blue    = "#4b657d"
-magenta = "#8f5b85"
-cyan    = "#3d6f84"
-white   = "#9da1a5"
+black   = "#1b1c1e"
+red     = "#833b3b"
+green   = "#2b5d63"
+yellow  = "#7c5c20"
+blue    = "#1a2a37"
+magenta = "#79428a"
+cyan    = "#2b5d63"
+white   = "#5a5b5e"
 
-# Last Modified: Fri, 09 Jan 2026 06:13:10 PM
+# Last Modified: Sun, 11 Jan 2026 01:28:31 AM
