@@ -1,0 +1,14 @@
+--color=bg:#232326
+--color=bg+:#35363b
+--color=fg:#a7aab0
+--color=fg+:#e2c792
+--color=hl:#dbb671
+--color=hl+:#dbb671
+--color=header:#68aee8
+--color=info:#bb70d2
+--color=pointer:#57a5e5
+--color=marker:#c49060
+--color=spinner:#c49060
+--color=prompt:#8fb573
+--color=border:#5a5b5e
+--color=query:#a7aab0
