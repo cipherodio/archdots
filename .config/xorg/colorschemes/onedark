@@ -1,5 +1,5 @@
-#define bg #232326
-#define fg #a7aab0
+#define bg  #232326
+#define fg  #a7aab0
 
 ! black
 #define c00 #101012
@@ -7,11 +7,11 @@
 
 ! red
 #define c01 #de5d68
-#define c09 #833b3b
+#define c09 #de5d68
 
 ! green
 #define c02 #8fb573
-#define c10 #7c5c20
+#define c10 #8fb573
 
 ! yellow
 #define c03 #dbb671
@@ -23,11 +23,11 @@
 
 ! magenta
 #define c05 #bb70d2
-#define c13 #79428a
+#define c13 #bb70d2
 
 ! cyan
 #define c06 #51a8b3
-#define c14 #2b5d63
+#define c14 #51a8b3
 
 ! white
 #define c07 #a7aab0
