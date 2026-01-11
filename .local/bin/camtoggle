@@ -1,2 +1,28 @@
 #!/bin/sh
-pkill -f /dev/video || mpv --no-osc --no-input-default-bindings --input-conf=/dev/null --geometry=-0-0 --autofit=30% --title="mpvfloat" --profile=low-latency --untimed /dev/video0
+# Toggle webcam preview via mpv with dmenu confirmation
+
+confirm() {
+    printf "Yes" | dmenu -i -p "$1" >/dev/null
+}
+
+if pgrep -f 'mpv.* /dev/video0' >/dev/null; then
+    confirm "[● CAM ON] Turn OFF camera?" &&
+        pkill -f 'mpv.* /dev/video0' &&
+        notify-send "Camera" "OFF"
+else
+    confirm "[○ CAM OFF] Turn ON camera?" && {
+        mpv \
+            --no-osc \
+            --no-input-default-bindings \
+            --input-conf=/dev/null \
+            --geometry=-0-0 \
+            --autofit=30% \
+            --title="mpvfloat" \
+            --profile=low-latency \
+            --untimed \
+            /dev/video0 &
+        notify-send "Camera" "ON"
+    }
+fi
+
+# Last Modified: Sun, 11 Jan 2026 02:49:01 PM
