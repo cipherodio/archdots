@@ -1,5 +1,6 @@
 #!/bin/bash
 
+### Colors
 reset="\033[0m"
 magenta="\033[1;35m"
 green="\033[1;32m"
@@ -18,19 +19,66 @@ c5=${red}
 c6=${yellow}
 c7=${cyan}
 
-name=$USER
-host=$(cat /proc/sys/kernel/hostname)
-distro=$(uname -o | awk -F '"' '/PRETTY_NAME/ { print $2 }' /etc/os-release)
-namekernel=$(uname -r)
-kernel=${namekernel%%-*}
-cpu=$(lscpu | grep "Model name" | cut -f 2 -d ":" | awk '{print $2,$3,$4}')
-gpu=$(lspci | grep VGA | cut -f 3 -d "[" | awk 'FNR == 1 {print $1, $2, $3}')
-pkg=$(pacman -Qqs | wc -l)
-getwm=$(xprop -id "$(xprop -root -notype | awk '$1=="_NET_SUPPORTING_WM_CHECK:"{print $5}')" -notype -f _NET_WM_NAME 8t | grep "WM_NAME" | cut -f2 -d \")
-mem=$(free --mega | awk 'NR == 2 { print $3"|"$2" MB" }')
-# uptime=$(uptime -p | sed 's/up //')
-uptime=$(uptime -p | sed -e 's/hour/hr/' -e 's/hours/hrs/' -e 's/minutes/mins/' -e 's/minute/min/' -e 's/up //')
+### Cache
+cache="$HOME/.cache/sysarch.static"
 
+# Create cache if missing
+if [ ! -f "$cache" ]; then
+    cpu="$(
+        lscpu | awk -F: '
+        /Model name/ {
+            sub(/^ +AMD /,"",$2)
+            sub(/ with Radeon Graphics.*/,"",$2)
+            print $2
+        }'
+    )"
+
+    gpu="$(
+        lspci | awk '
+        /VGA|3D/ {
+            if (match($0, /RX [0-9]{4}/))
+                print substr($0, RSTART, RLENGTH)
+            exit
+        }'
+    )"
+
+    distro="$(awk -F= '/PRETTY_NAME/ {gsub(/"/,"",$2); print $2}' /etc/os-release)"
+    kernel="$(uname -r | cut -d- -f1)"
+    pkg="$(pacman -Qq | wc -l)"
+
+    mkdir -p "$(dirname "$cache")"
+
+    {
+        echo "cpu=\"$cpu\""
+        echo "gpu=\"$gpu\""
+        echo "distro=\"$distro\""
+        echo "kernel=\"$kernel\""
+        echo "pkg=\"$pkg\""
+    } >"$cache"
+fi
+
+# Load cached values
+# shellcheck source=/dev/null
+. "$cache"
+
+### Live info (fast)
+name="$USER"
+host="$(cat /proc/sys/kernel/hostname)"
+uptime="$(uptime -p | sed \
+    -e 's/up //' \
+    -e 's/hours/hrs/' \
+    -e 's/hour/hr/' \
+    -e 's/minutes/mins/' \
+    -e 's/minute/min/')"
+
+mem="$(free --mega | awk 'NR==2 {print $3 "|" $2 " MB"}')"
+
+getwm="$(xprop -id "$(xprop -root -notype |
+    awk '$1=="_NET_SUPPORTING_WM_CHECK:"{print $5}')" \
+    -notype -f _NET_WM_NAME 8t |
+    awk -F\" '/WM_NAME/ {print $2}')"
+
+### Output
 echo "               "
 echo -e "Hi ${c5}$name${c0}, Welcome to ${c2}$host${c0}"
 echo -e "    uptime ${c6}$uptime"
@@ -45,4 +93,4 @@ echo -e "${c7} [packages] ${c0}  ${c3}$pkg${c0}"
 echo -e "${c1} [shell] ${c0}     ${c3}${SHELL##*/}${c0}"
 echo -e "${c4} [ram] ${c0}       ${c3}$mem${c0}"
 
-# Last Modified: Mon, 03 Feb 2025 08:56:12 AM
+# Last Modified: Sun, 11 Jan 2026 05:56:28 PM
