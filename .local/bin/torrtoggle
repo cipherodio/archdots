@@ -1,9 +1,19 @@
 #!/bin/sh
-# Transmission-daemon toggle
+# Transmission-daemon toggle with Yes confirmation
 
-if pgrep -x transmission-da > /dev/null
-then
-    pkill -3 transmission-da && notify-send "Transmission deactivated"
+confirm() {
+    printf "Yes" | dmenu -i -p "$1" >/dev/null
+}
+
+if pidof transmission-daemon >/dev/null; then
+    confirm "[● ON] Turn OFF transmission-daemon?" &&
+        killall transmission-daemon &&
+        notify-send "Transmission" "Daemon stopped"
 else
-    transmission-daemon && notify-send "Transmission enabled"
+    ifinstalled transmission-daemon
+    confirm "[○ OFF] Turn ON transmission-daemon?" &&
+        transmission-daemon >/dev/null 2>&1 &&
+        notify-send "Transmission" "Daemon started"
 fi
+
+# Last Modified: Sun, 11 Jan 2026 02:18:27 PM
