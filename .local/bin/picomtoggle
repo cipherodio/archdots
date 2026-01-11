@@ -1,8 +1,20 @@
 #!/bin/sh
-# Picom toggle
-if pgrep -x "picom" > /dev/null
-then
-    pkill picom && notify-send "Picom deactivated"
+# Toggle picom on/off with dmenu confirmation
+
+confirm() {
+    printf "Yes" | dmenu -i -p "$1" >/dev/null
+}
+
+if pgrep -x picom >/dev/null; then
+    confirm "[● ON] Turn OFF picom?" && {
+        notify-send "Picom" "OFF"
+        pkill picom
+    }
 else
-    picom -b && notify-send "Picom enabled"
+    confirm "[○ OFF] Turn ON picom?" && {
+        picom -b
+        notify-send "Picom" "ON"
+    }
 fi
+
+# Last Modified: Sun, 11 Jan 2026 03:07:11 PM
