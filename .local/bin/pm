@@ -1,35 +1,26 @@
 #!/bin/sh
-# Package manager wrapper
+# Package manager wrapper (pacman)
 
-# pm_pacman() {
-#     cmd="$1"
-#     shift
-#     case "$cmd" in
-#     (install) sudo pacman -S "$@" ;;
-#     (update) sudo pacman -Syu "$@" ;;
-#     (remove) sudo pacman -Rns "$@" ;;
-#     (*) sudo pacman "$cmd" "$@" ;;
-#     esac
-# }
-
-pm_yay() {
+pm_pacman() {
     cmd="$1"
     shift
+
     case "$cmd" in
-        (i) yay -S "$@" ;;
-        (u) yay -Syu "$@" ;;
-        (r) yay -Rns "$@" ;;
-        (c) yay -Sc "$@" ;;
-        (s) yay -Ss "$@" ;;
-        (q) yay -Qi "$@" ;;
-        (*) yay "$cmd" "$@" ;;
+    i) sudo pacman -S "$@" ;;   # Sync packages
+    u) sudo pacman -Syu "$@" ;; # Sync and update packages
+    r) sudo pacman -Rns "$@" ;; # Uninstall package including dependencies
+    c) sudo pacman -Sc ;;       # Remove packages that are no longer installed
+    s) pacman -Ss "$@" ;;       # Search for a packages
+    q) pacman -Qi "$@" ;;       # Query package database and display information
+    *) sudo pacman "$cmd" "$@" ;;
     esac
 }
 
-# shellcheck disable=2043,2145,2294
-for pm in yay; do
-    if [ -n "$(command -v $pm)" ]; then
-        eval "pm_${pm} $@"
-        break
-    fi
-done
+command -v pacman >/dev/null 2>&1 || {
+    echo "pacman not found"
+    exit 1
+}
+
+pm_pacman "$@"
+
+# Last Modified: Sun, 11 Jan 2026 04:34:00 PM
