@@ -155,7 +155,7 @@ keys = [
         lazy.spawn(mpcnext),
         desc="Next song in ncmpcpp",
     ),
-    Key([mod], "F9", lazy.spawn("mount"), desc="Mount drive"),
+    Key([mod], "F9", lazy.spawn("mounter"), desc="Mount drive"),
     Key([mod, "shift"], "F9", lazy.spawn("unmounter"), desc="Unmount drive"),
     Key([mod], "w", lazy.spawn("bookmarklink"), desc="Web search via dmenu"),
     # Key([mod], "s", lazy.spawn("dmenu-google"), desc="Web search via dmenu"),
@@ -230,4 +230,4 @@ keys.extend(
     ]
 )
 
-# Last Modified: Sat, 10 Jan 2026 10:29:31 PM
+# Last Modified: Sun, 11 Jan 2026 11:39:54 AM
