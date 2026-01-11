@@ -1,13 +1,13 @@
 #!/bin/sh
-# Set wallpaper and copy to $HOME/.local/share/bg
+# Set wallpaper (stored at $XDG_DATA_HOME/bg)
 
-bgloc="${XDG_DATA_HOME:-$HOME/.local/share/}/bg"
+bgloc="${XDG_DATA_HOME:-$HOME/.local/share}/bg"
 
 if [ -f "$1" ]; then
-    cp "$1" "${XDG_DATA_HOME:-$HOME/.local/share/}/bg"
-    notify-send -i ~/.local/share/bg " Wallpaper changed."
+    cp -f "$1" "$bgloc"
+    notify-send -i "$bgloc" " Wallpaper changed."
 fi
 
 xwallpaper --zoom "$bgloc"
 
-# Last Modified: Tue, 04 Feb 2025 10:43:52 PM
+# Last Modified: Sun, 11 Jan 2026 05:44:21 PM
