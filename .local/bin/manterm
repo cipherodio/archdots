@@ -1,3 +1,21 @@
 #!/bin/sh
-# Search manpage in dmenu
-manpage=$(man -k . | dmenu -i -l 10 | awk '{ print $1}') && if [ -z "$manpage" ]; then exit; else $TERMINAL -e man "$manpage" & fi
+# Search man pages via dmenu (deduplicated, section-aware)
+
+: "${TERMINAL:=alacritty}"
+
+choice=$(
+    apropos . |
+        awk '{ print $1 " " $2 }' |
+        sort -u |
+        dmenu -i -l 10 -p man
+) || exit 0
+
+[ -z "$choice" ] && exit 0
+
+# Extract name and section
+name=$(printf '%s\n' "$choice" | awk '{print $1}')
+section=$(printf '%s\n' "$choice" | sed -n 's/.*(\(.*\)).*/\1/p')
+
+"$TERMINAL" -e man "$section" "$name" &
+
+# Last Modified: Sun, 11 Jan 2026 04:39:10 PM
