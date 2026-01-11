@@ -20,7 +20,6 @@ emacs = "emacsclient -c -a 'emacs' "
 mpctoggle = "mpc toggle"
 mpcprev = "mpc prev"
 mpcnext = "mpc next"
-camkill = "camtoggle kill"
 
 keys = [
     # Navigation
@@ -109,13 +108,13 @@ keys = [
     Key([mod, "shift"], "b", lazy.spawn(qbrowser), desc="Qute web browser"),
     Key([mod], "F2", lazy.spawn("podconnect"), desc="Connect airpods"),
     Key([mod], "F1", lazy.spawn("ekill"), desc="Emacs daemon toggle"),
-    Key([mod], "e", lazy.spawn(emacs), desc="Emacs"),
+    # Key([mod], "e", lazy.spawn(emacs), desc="Emacs"),
     Key([mod], "grave", lazy.spawn("emojis"), desc="Emojis"),
     Key([], "Print", lazy.spawn("screenshot"), desc="Take screenshot"),
     Key([mod], "Print", lazy.spawn("timeshot"), desc="Timed screenshot"),
     Key(
         [mod],
-        "p",
+        "s",
         lazy.spawn("spotify-toggle"),
         desc="Play toggle for spotify",
     ),
@@ -158,7 +157,6 @@ keys = [
     Key([mod], "F9", lazy.spawn("mounter"), desc="Mount drive"),
     Key([mod, "shift"], "F9", lazy.spawn("unmounter"), desc="Unmount drive"),
     Key([mod], "w", lazy.spawn("bookmarklink"), desc="Web search via dmenu"),
-    # Key([mod], "s", lazy.spawn("dmenu-google"), desc="Web search via dmenu"),
     Key([mod], "F12", lazy.spawn("torrtoggle"), desc="Torrent daemon toggle"),
     Key(
         [mod, "shift"],
@@ -166,8 +164,15 @@ keys = [
         lazy.spawn("torrclear"),
         desc="Remove finished torrent",
     ),
-    Key([mod], "c", lazy.spawn("camtoggle"), desc="Webcam"),
-    Key([mod, "shift"], "c", lazy.spawn(camkill), desc="Webcam"),
+    Key([mod], "p", lazy.spawn("picomtoggle"), desc="Picom toggle"),
+    Key([mod], "g", lazy.spawn("gameon"), desc="Toggle Picom and Unclutter"),
+    Key([mod], "c", lazy.spawn("camtoggle"), desc="Webcam toggle"),
+    Key(
+        [mod, "shift"],
+        "c",
+        lazy.spawn("cluttertoggle"),
+        desc="Unclutter toggle",
+    ),
     Key([mod], "F8", lazy.spawn("screencast"), desc="Record screen"),
 ]
 
@@ -230,4 +235,4 @@ keys.extend(
     ]
 )
 
-# Last Modified: Sun, 11 Jan 2026 11:39:54 AM
+# Last Modified: Sun, 11 Jan 2026 03:15:27 PM
