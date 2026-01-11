@@ -32,11 +32,6 @@ alias \
     rg="\rg --ignore-file ~/.config/ripgrep/ignore" \
     o="$FILE" \
     v="$EDITOR" \
-    yu="yay -Syu" \
-    yi="yay -S" \
-    yr="yay -Rns" \
-    ys="yay -Ss" \
-    yq="yay -Qi" \
     ec="emacsclient -c -n -a 'emacs'" \
     z="zathura"
 
@@ -65,4 +60,4 @@ alias \
     xdgf="xdg-mime query filetype" \
     xdgd="xdg-mime query default"
 
-# Last Modified: Fri, 09 Jan 2026 07:16:47 PM
+# Last Modified: Sun, 11 Jan 2026 04:34:21 PM
