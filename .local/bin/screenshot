@@ -1,9 +1,19 @@
 #!/bin/sh
 # Take screenshot
+
 output="$HOME/.local/screenshot/$(date '+%G-%d-%b-%I:%M%p').png"
 
-case "$(printf "Selected area\\nCurrent window\\nFullscreen" | dmenu -l 3 -i -p "Screenshot")" in
-"Selected area") maim -u -s "${output}" && notify-send "📸 Screenshot taken." ;;
-"Current window") maim -B -q -d 0.2 -i "$(xdotool getactivewindow)" "${output}" && notify-send "📸 Screenshot taken." ;;
-"Fullscreen") maim -q -d 0.2 "${output}" && notify-send "📸 Screenshot taken." ;;
+case "$(printf "Selected area\nCurrent window\nFullscreen" | dmenu -l 3 -i -p "Screenshot")" in
+"Selected area")
+    maim -u -s "$output" && notify-send "📸 Screenshot taken."
+    ;;
+"Current window")
+    maim -B -q -d 0.2 -i "$(xdotool getactivewindow)" "$output" &&
+        notify-send "📸 Screenshot taken."
+    ;;
+"Fullscreen")
+    maim -q -d 0.2 "$output" && notify-send "📸 Screenshot taken."
+    ;;
 esac
+
+# Last Modified: Sun, 11 Jan 2026 05:38:42 PM
