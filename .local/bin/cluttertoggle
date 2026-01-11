@@ -1,8 +1,19 @@
 #!/bin/sh
-# Script to toggle unclutter on/off.
-if pgrep -x "unclutter" > /dev/null
-then
-    pkill unclutter && notify-send "Unclutter deactivated"
+# Toggle unclutter on/off with dmenu confirmation
+
+confirm() {
+    printf "Yes" | dmenu -i -p "$1" >/dev/null
+}
+
+if pgrep -x unclutter >/dev/null; then
+    confirm "[● ON] Turn OFF unclutter?" &&
+        pkill unclutter &&
+        notify-send "Unclutter" "OFF"
 else
-    unclutter --timeout 3 -jitter 50 --ignore-scrolling && notify-send "Unclutter enabled"
+    confirm "[○ OFF] Turn ON unclutter?" && {
+        unclutter --timeout 3 -jitter 50 --ignore-scrolling &
+        notify-send "Unclutter" "ON"
+    }
 fi
+
+# Last Modified: Sun, 11 Jan 2026 02:55:49 PM
