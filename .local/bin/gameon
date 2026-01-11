@@ -1,10 +1,22 @@
 #!/bin/sh
+# Toggle game mode (disable/enable picom + unclutter)
 
-if pgrep -x "unclutter" > /dev/null && pgrep -x "picom" > /dev/null
-then
-    pkill unclutter && pkill picom && notify-send "Game on!"
+confirm() {
+    printf "Yes" | dmenu -i -p "$1" >/dev/null
+}
+
+if pgrep -x picom >/dev/null || pgrep -x unclutter >/dev/null; then
+    confirm "[● GAME MODE] Disable picom & unclutter?" && {
+        notify-send "Game Mode" "ON"
+        pkill picom 2>/dev/null
+        pkill unclutter 2>/dev/null
+    }
 else
-    unclutter --timeout 3 -jitter 50 --ignore-scrolling &
-    picom -b &
-    notify-send "Unclutter and picom enabled"
+    confirm "[○ NORMAL MODE] Enable picom & unclutter?" && {
+        unclutter --timeout 3 -jitter 50 --ignore-scrolling &
+        picom -b
+        notify-send "Game Mode" "OFF"
+    }
 fi
+
+# Last Modified: Sun, 11 Jan 2026 03:17:27 PM
