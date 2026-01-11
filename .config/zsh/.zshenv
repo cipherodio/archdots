@@ -55,7 +55,7 @@ export SAVEHIST=1000
 export HISTFILE="$ZDOTDIR/.history"
 export LESSHISTFILE="-"
 export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
-export  SUDO_PROMPT="[sudo] password for %p: "
+export SUDO_PROMPT="[sudo] password for %p: "
 export SPROMPT="%F{blue}[%fzsh%F{blue}]%f correct %F{red}%R%f to %F{blue}%r%f [nyae]: "
 
 # Fzf
@@ -106,4 +106,4 @@ export MOZ_USE_XINPUT2=1
 # Shortcuts
 [ ! -f "$XDG_CONFIG_HOME"/shell/shrc ] && setsid -f shortcuts >/dev/null 2>&1
 
-# Last Modified: Sun, 11 Jan 2026 01:05:28 PM
+# Last Modified: Mon, 12 Jan 2026 07:47:24 AM
