@@ -1,102 +1,106 @@
 #!/bin/sh
+# dmenu-based screen/audio/webcam recorder (auto-detect running recording)
 
-getdim() { xrandr | grep -oP '(?<=current ).*(?=,)' | tr -d ' '; }
+getdim() {
+    xdpyinfo | awk '/dimensions:/ {print $2}'
+}
+
+is_recording() {
+    [ -f /tmp/recordingpid ] &&
+        kill -0 "$(cat /tmp/recordingpid)" 2>/dev/null
+}
 
 killrecording() {
-    recpid="$(cat /tmp/recordingpid)"
-    kill -15 "$recpid"
+    pid=$(cat /tmp/recordingpid 2>/dev/null) || exit 1
+    kill -15 "$pid" 2>/dev/null
     rm -f /tmp/recordingpid
+    notify-send "Recording" "Stopped"
+}
+
+record() {
+    "$@" >/dev/null 2>&1 &
+    echo $! >/tmp/recordingpid
+    notify-send "Recording" "Started"
 }
 
 screencast() {
-    ffmpeg -y \
-        -f x11grab \
-        -framerate 30 \
-        -s "$(getdim)" \
-        -i "$DISPLAY" \
-        -r 24 \
-        -use_wallclock_as_timestamps 1 \
+    record ffmpeg -y \
+        -f x11grab -framerate 30 -s "$(getdim)" -i "$DISPLAY" \
         -f alsa -thread_queue_size 1024 -i default \
-        -c:v h264 \
-        -crf 0 -preset ultrafast -c:a aac \
-        "$HOME/screencast-$(date '+%y%m%d-%H%M-%S').mp4" &
-    echo $! >/tmp/recordingpid
+        -c:v h264 -crf 0 -preset ultrafast -c:a aac \
+        "$HOME/screencast-$(date '+%y%m%d-%H%M-%S').mp4"
 }
 
 video() {
-    ffmpeg \
-        -f x11grab \
-        -framerate 30 \
-        -s "$(getdim)" \
-        -i "$DISPLAY" \
-        -c:v libx264 -qp 0 -r 30 \
-        "$HOME/video-$(date '+%y%m%d-%H%M-%S').mkv" &
-    echo $! >/tmp/recordingpid
+    record ffmpeg \
+        -f x11grab -framerate 30 -s "$(getdim)" -i "$DISPLAY" \
+        -c:v libx264 -qp 0 \
+        "$HOME/video-$(date '+%y%m%d-%H%M-%S').mkv"
 }
 
-webcamhidef() {
-    ffmpeg \
-        -f v4l2 \
-        -i /dev/video0 \
-        -video_size 1920x1080 \
-        "$HOME/webcam-$(date '+%y%m%d-%H%M-%S').mkv" &
-    echo $! >/tmp/recordingpid
-}
-
-webcam() {
-    ffmpeg \
-        -f v4l2 \
-        -i /dev/video0 \
-        -video_size 640x480 \
-        "$HOME/webcam-$(date '+%y%m%d-%H%M-%S').mkv" &
-    echo $! >/tmp/recordingpid
+videoselected() {
+    slop -f "%x %y %w %h" | {
+        read -r X Y W H
+        record ffmpeg \
+            -f x11grab -framerate 30 \
+            -video_size "${W}x${H}" \
+            -i ":0.0+${X},${Y}" \
+            -c:v libx264 -qp 0 \
+            "$HOME/box-$(date '+%y%m%d-%H%M-%S').mkv"
+    }
 }
 
 audio() {
-    ffmpeg \
+    record ffmpeg \
         -f alsa -i default \
         -c:a mp3 \
-        "$HOME/audio-$(date '+%y%m%d-%H%M-%S').mp3" &
-    echo $! >/tmp/recordingpid
+        "$HOME/audio-$(date '+%y%m%d-%H%M-%S').mp3"
+}
+
+webcam() {
+    record ffmpeg \
+        -f v4l2 -video_size 640x480 -i /dev/video0 \
+        "$HOME/webcam-$(date '+%y%m%d-%H%M-%S').mkv"
+}
+
+webcamhidef() {
+    record ffmpeg \
+        -f v4l2 -video_size 1920x1080 -i /dev/video0 \
+        "$HOME/webcam-$(date '+%y%m%d-%H%M-%S').mkv"
 }
 
 askrecording() {
-    choice=$(printf "screencast\\nvideo\\nvideo selected\\naudio\\nwebcam\\nwebcam (hi-def)" | dmenu -i -p "Select recording style:")
+    choice=$(printf "screencast\nvideo\nvideo selected\naudio\nwebcam\nwebcam (hi-def)" |
+        dmenu -i -p "Select recording:") || exit 0
+
     case "$choice" in
     screencast) screencast ;;
-    audio) audio ;;
     video) video ;;
     *selected) videoselected ;;
+    audio) audio ;;
     webcam) webcam ;;
     "webcam (hi-def)") webcamhidef ;;
     esac
 }
 
 asktoend() {
-    response=$(printf "No\\nYes" | dmenu -i -p "Recording still active. End recording?") &&
-        [ "$response" = "Yes" ] && killrecording
-}
-
-videoselected() {
-    slop -f "%x %y %w %h" >/tmp/slop
-    read -r X Y W H </tmp/slop
-    rm /tmp/slop
-
-    ffmpeg \
-        -f x11grab \
-        -framerate 30 \
-        -video_size "$W"x"$H" \
-        -i :0.0+"$X,$Y" \
-        -c:v libx264 -qp 0 -r 30 \
-        "$HOME/box-$(date '+%y%m%d-%H%M-%S').mkv" &
-    echo $! >/tmp/recordingpid
+    choice=$(printf "No\nYes" | dmenu -i -p "Recording active. End?") || exit 0
+    [ "$choice" = "Yes" ] && killrecording
 }
 
 case "$1" in
 screencast) screencast ;;
-audio) audio ;;
 video) video ;;
+audio) audio ;;
 *selected) videoselected ;;
 kill) killrecording ;;
-*) ([ -f /tmp/recordingpid ] && asktoend && exit) || askrecording ;;
+*)
+    if is_recording; then
+        asktoend
+    else
+        askrecording
+    fi
+    ;;
 esac
+
+# Last Modified: Sun, 11 Jan 2026 05:33:29 PM
