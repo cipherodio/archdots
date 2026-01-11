@@ -1,9 +1,13 @@
 #!/bin/sh
+# Take screenshot with timer
 
-timer="$(printf "0.5\n5\n10\n" | dmenu -p 'Seconds to wait')"
-[ "$timer" ] || exit
+timer=$(printf '%s\n' 0.5 5 10 | dmenu -p 'Seconds to wait') || exit
+
 output="$HOME/.local/screenshot/$(date '+%G-%d-%b-%I:%M%p').png"
 
 sleep "$timer"
-maim -q | tee "${output}" | xclip -sel clip -t image/png
+
+maim -q - | tee "$output" | xclip -selection clipboard -t image/png
 notify-send "📸 Screenshot taken."
+
+# Last Modified: Sun, 11 Jan 2026 05:40:10 PM
