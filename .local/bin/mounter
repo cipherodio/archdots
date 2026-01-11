@@ -1,5 +1,5 @@
 #!/bin/bash
-# dmenu mounter – USB drives + Android phones
+# Mount: USB drives + Android phones via dmenu
 # Mounts to ~/.local/mnt/<device>
 
 IFS=$'\n'
@@ -9,25 +9,16 @@ mkdir -p "$MNT"
 USER_UID="$(id -u)"
 USER_GID="$(id -g)"
 
-###############################################################################
-# ANDROID PHONES
-###############################################################################
-
+# Android phones
 phones="$(simple-mtpfs -l 2>/dev/null | sed 's/^/📱 /')"
 
-###############################################################################
-# USB DRIVES (unmounted partitions only)
-###############################################################################
-
+# USB Drives (unmounted partitions only)
 usbparts="$(
     lsblk -nrpo NAME,TYPE,MOUNTPOINT |
         awk '$2=="part" && $3=="" { printf "💾 %s\n", $1 }'
 )"
 
-###############################################################################
-# MENU
-###############################################################################
-
+# Menu
 choices="$(printf "%s\n%s\n" "$phones" "$usbparts" | sed '/^$/d')"
 
 if [ -z "$choices" ]; then
@@ -38,10 +29,7 @@ fi
 chosen="$(echo "$choices" | dmenu -i -p 'Mount which device?')"
 [ -n "$chosen" ] || exit 0
 
-###############################################################################
-# ACTION
-###############################################################################
-
+# Action
 case "$chosen" in
 💾*)
     dev="${chosen#💾 }"
@@ -84,4 +72,4 @@ case "$chosen" in
     ;;
 esac
 
-# Last Modified: Sat, 10 Jan 2026 06:08:37 AM
+# Last Modified: Sun, 11 Jan 2026 01:03:31 PM
