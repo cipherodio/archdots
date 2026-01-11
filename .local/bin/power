@@ -1,14 +1,30 @@
-#!/bin/bash
+#!/bin/sh
+# Power menu via dmenu
 
-opts=$(echo -e "  Poweroff\n󰊳  Restart\n󱑚  Suspend\n  Logout")
+confirm() {
+    printf "Yes" | dmenu -i -p "$1" >/dev/null
+}
 
-sel_opts=$(echo -e "$opts" | dmenu -p "Bye ""$USER""!")
+opts="  Poweroff
+󰊳  Restart
+󱑚  Suspend
+  Logout"
 
-case $sel_opts in
-"  Poweroff") systemctl poweroff -i ;;
-# "━ Lock") slock & mpc pause;;
-"󰊳  Restart") systemctl reboot -i ;;
-"󱑚  Suspend") systemctl suspend -i ;;
-"  Logout") pkill -KILL -u "$USER" ;;
-*) exit 1 ;;
+choice=$(printf '%s\n' "$opts" | dmenu -i -p "Bye $USER!") || exit 0
+
+case "$choice" in
+"  Poweroff")
+    confirm "Power off?" && systemctl poweroff -i
+    ;;
+"󰊳  Restart")
+    confirm "Restart?" && systemctl reboot -i
+    ;;
+"󱑚  Suspend")
+    confirm "Suspend?" && systemctl suspend -i
+    ;;
+"  Logout")
+    confirm "Logout?" && pkill -KILL -u "$USER"
+    ;;
 esac
+
+# Last Modified: Sun, 11 Jan 2026 05:06:47 PM
