@@ -20,6 +20,7 @@ export XDG_LOCAL_HOME="$HOME/.local"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
 
 # Relocate variables
 #export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority"
@@ -108,4 +109,4 @@ export MOZ_USE_XINPUT2=1
 # Shortcuts
 [ ! -f "$XDG_CONFIG_HOME"/shell/shrc ] && setsid -f shortcuts >/dev/null 2>&1
 
-# Last Modified: Mon, 12 Jan 2026 11:49:13 AM
+# Last Modified: Mon, 12 Jan 2026 12:27:51 PM
