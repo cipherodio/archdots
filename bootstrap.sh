@@ -35,8 +35,8 @@ msg "Installing system packages"
 
 sudo pacman -Syu --needed --noconfirm \
     xorg-xdpyinfo xorg-xev xorg-xinit xorg-xinput xorg-xprop \
-    xcape xwallpaper xorg-xsetroot xorg-xwininfo xclip xterm \
-    xdo xdotool \
+    xcape xwallpaper xorg-xset xorg-xsetroot xorg-xwininfo xclip \
+    xdo xdotool xterm \
     lib32-vulkan-radeon mesa-utils vulkan-tools \
     pipewire pipewire-alsa pipewire-pulse pulsemixer \
     ttf-dejavu ttf-liberation libertinus-font noto-fonts \
@@ -51,9 +51,9 @@ sudo pacman -Syu --needed --noconfirm \
     firefox firefox-dark-reader firefox-tridactyl firefox-ublock-origin \
     emacs alacritty lf dunst mpc mpd mpv ncmpcpp nsxiv newsboat gimp \
     qtile spotify-launcher transmission-cli zathura zathura-pdf-mupdf \
-    lua-language-server marksman bash-language-server stylua shfmt \
+    tree-sitter-cli lua-language-server marksman bash-language-server stylua \
     shellcheck prettier python-lsp-server ruff yaml-language-server \
-    vscode-json-languageserver python-debugpy
+    vscode-json-languageserver python-debugpy shfmt
 
 msg "Done installing system packages"
 
@@ -105,4 +105,4 @@ msg "Done ensuring SSH key"
 msg "Bootstrap complete"
 msg "Reboot recommended"
 
-# Last Modified: Mon, 12 Jan 2026 09:29:13 AM
+# Last Modified: Tue, 13 Jan 2026 02:10:18 AM
