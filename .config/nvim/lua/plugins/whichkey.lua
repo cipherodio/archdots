@@ -11,6 +11,7 @@ return {
                 { "<leader>l", group = "lsp" },
                 { "<leader>m", group = "markdown" },
                 { "<leader>d", group = "debugger" },
+                { "<leader>t", group = "treesitter" },
                 { "<leader><tab>", group = "buffers" },
             },
         },
@@ -37,4 +38,4 @@ return {
     },
 }
 
--- Last Modified: Tue, 06 Jan 2026 04:50:52 PM
+-- Last Modified: Tue, 13 Jan 2026 02:03:07 AM
