@@ -9,7 +9,8 @@ t   $HOME/.local/screenshot
 r   $HOME/.local/review
 n   $HOME/.local/notes
 p   $HOME/.config/nvim/lua/plugins
-f   /media/data
-i   /media/data/wallpapers
-x   /media/data/videos
+m   /data
+f   /data/documents
+i   /data/wallpapers
+x   /data/videos
 h   $HOME
