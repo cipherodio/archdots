@@ -93,6 +93,7 @@ __pycache__
 .local/share/man/
 .local/share/newsboat/
 .local/share/node_modules/
+.local/share/npm/
 .local/share/nvim/
 .local/share/qtile/
 .local/share/qutebrowser/
