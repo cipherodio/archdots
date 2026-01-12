@@ -88,11 +88,6 @@ msg "Installing Python user packages"
 pip install --user --upgrade pulsectl-asyncio
 msg "Done installing Python user packages"
 
-# NPM packages
-msg "Installing NPM package"
-npm install -g markdown-toc
-msg "Done installing NPM package"
-
 # SSH key
 msg "Ensuring SSH key exists"
 
@@ -110,4 +105,4 @@ msg "Done ensuring SSH key"
 msg "Bootstrap complete"
 msg "Reboot recommended"
 
-# Last Modified: Sat, 10 Jan 2026 06:57:11 PM
+# Last Modified: Mon, 12 Jan 2026 09:29:13 AM
