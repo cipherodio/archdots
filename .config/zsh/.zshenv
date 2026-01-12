@@ -107,6 +107,6 @@ export MOZ_USE_XINPUT2=1
 . "$HOME/.config/lscolors/onedark"
 
 # Shortcuts
-[ ! -f "$XDG_CONFIG_HOME"/shell/shrc ] && setsid -f shortcuts >/dev/null 2>&1
+[ ! -f "$XDG_CONFIG_HOME/shell/shrc" ] && setsid -f shortcuts >/dev/null 2>&1
 
-# Last Modified: Mon, 12 Jan 2026 12:27:51 PM
+# Last Modified: Tue, 13 Jan 2026 01:54:18 AM
