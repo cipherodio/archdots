@@ -4,7 +4,6 @@ return {
         branch = "main",
         lazy = false,
         event = { "BufReadPre", "BufNewFile" },
-        build = ":TSUpdate",
 
         dependencies = {
             "andymass/vim-matchup",
@@ -13,6 +12,7 @@ return {
         config = function()
             local ts = require("nvim-treesitter")
 
+            -- Parsers (explicit, deterministic)
             local parsers = {
                 "bash",
                 "commonlisp",
@@ -48,33 +48,26 @@ return {
                 "zathurarc",
             }
 
-            -- Prevents ENTER prompt
-            local function silent_install(list, opts)
-                local old_more = vim.o.more
-                local old_shortmess = vim.o.shortmess
+            -- Global message suppression (no ENTER prompts)
+            vim.opt.more = false
+            vim.opt.shortmess:append("F")
 
-                vim.o.more = false
-                vim.o.shortmess = old_shortmess .. "F"
-
-                ts.install(list, opts)
-
-                vim.o.more = old_more
-                vim.o.shortmess = old_shortmess
+            if vim.fn.has("nvim-0.11") == 1 then
+                vim.opt.messagesopt = {
+                    "wait:1000",
+                    "history:500",
+                }
             end
 
-            -- one-time bootstrap marker
+            -- One-time bootstrap (sync, silent, deterministic)
             local marker = vim.fn.stdpath("state") .. "/treesitter_bootstrap_done"
 
             if vim.fn.filereadable(marker) == 0 then
-                -- FIRST RUN: blocking + silent (bootstrap)
-                silent_install(parsers, { sync = true })
+                ts.install(parsers, { sync = true })
                 vim.fn.writefile({ "done" }, marker)
-            else
-                -- NORMAL RUNS: async (no spam anyway)
-                ts.install(parsers, { sync = false })
             end
 
-            -- Treesitter setup (main API)
+            -- Treesitter setup
             ts.setup({
                 highlight = {
                     enable = true,
@@ -95,9 +88,9 @@ return {
             vim.g.matchup_matchparen_deferred = 1
             vim.g.matchup_matchparen_timeout = 300
 
-            -- attach Treesitter per buffer
+            -- Safe Treesitter attach (with augroup)
             vim.api.nvim_create_autocmd("FileType", {
-                pattern = "*",
+                group = vim.api.nvim_create_augroup("TreesitterAttach", { clear = true }),
                 callback = function()
                     pcall(vim.treesitter.start)
                     vim.wo.foldmethod = "expr"
@@ -105,8 +98,20 @@ return {
                     vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
                 end,
             })
+
+            -- Manual Treesitter update
+            vim.keymap.set("n", "<leader>tu", function()
+                vim.notify(
+                    "Updating Treesitter parsers in background. Check :messages for errors.",
+                    vim.log.levels.INFO
+                )
+
+                vim.cmd("TSUpdate")
+            end, {
+                desc = "Update Treesitter parsers",
+            })
         end,
     },
 }
 
--- Last Modified: Sat, 10 Jan 2026 12:38:33 AM
+-- Last Modified: Tue, 13 Jan 2026 02:02:34 AM
