@@ -17,6 +17,8 @@ __pycache__
 .ssh/known_hosts.old
 .venv/
 .pulse-cookie
+.config/audacity/
+.config/blender/
 .config/cef_user_data/
 .config/dconf/
 .config/emacs/.org-id-locations
