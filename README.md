@@ -4,8 +4,7 @@
 
 ## 📔 Overview
 
-Personal _dotfiles_ for [archlinux](https://archlinux.org/) and
-[qtile](https://qtile.org/).
+Personal _dotfiles_ for [Archlinux](arch) and [Qtile](qtile).
 
 | **Dependencies**  | **Description** |
 | ----------------- | --------------- |
@@ -22,15 +21,16 @@ Personal _dotfiles_ for [archlinux](https://archlinux.org/) and
 
 ## 🚀 Dotfiles Installation
 
-I use **Git Bare** repository to manage my dotfiles and use a wrapper script
-[dot](.local/bin/dot) after initial configuration below.
+I use **Git Bare** repository to manage my dotfiles and use a wrapper
+script [dot](.local/bin/dot) after initial configuration below.
 
-```zsh
-mkdir ~/script
-cd ~/script
-curl -LO https://raw.githubusercontent.com/twoeightdev/archdots/main/setup.sh
-chmod +x setup.sh
-./setup.sh [OPTIONS]
-rm -rf ~/script
+```sh
+curl -fsSL https://raw.githubusercontent.com/cipherodio/archdots/main/bootstrap.sh | bash
 reboot
+
+cat ~/.ssh/githubkey.pub | xclip -selection clipboard
+./setup.sh
 ```
+
+[arch]: https://archlinux.org/
+[qtile]: https://qtile.org/
