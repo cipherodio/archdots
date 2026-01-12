@@ -410,3 +410,4 @@ EFISTUB
 wayland
 Post-installation
 xset
+Systemd-boot
