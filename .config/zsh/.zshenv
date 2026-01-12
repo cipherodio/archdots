@@ -43,9 +43,10 @@ export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/rgrc"
 export NIMBLE_DIR="$HOME/.config/nimble"
 
 # Npm path
+export PATH="$XDG_DATA_HOME/npm/bin:$PATH"
 # export PATH="$HOME/.local/share/node_modules/bin:$PATH"
 # export NPM_CONFIG_PREFIX="$HOME/.local/share/node_modules"
-export NPM_CONFIG_USERCONFIG="$HOME/.config/npm/npmrc"
+export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
 # export NPM_CONFIG_CACHE="$HOME/.cache/npm"
 # export NPM_CONFIG_TMPDIR="$XDG_RUNTIME_DIR/npm"
 # export NPM_CONFIG_TMPDIR="${XDG_RUNTIME_DIR:-/tmp}/npm"
@@ -107,4 +108,4 @@ export MOZ_USE_XINPUT2=1
 # Shortcuts
 [ ! -f "$XDG_CONFIG_HOME"/shell/shrc ] && setsid -f shortcuts >/dev/null 2>&1
 
-# Last Modified: Mon, 12 Jan 2026 11:44:46 AM
+# Last Modified: Mon, 12 Jan 2026 11:49:13 AM
