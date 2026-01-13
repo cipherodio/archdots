@@ -76,6 +76,7 @@ __pycache__
 .local/olds/
 .local/orgdata/
 .local/podcast/
+.local/projects/
 .local/review/
 .local/screenshot/
 .local/share/applications/steam.desktop
