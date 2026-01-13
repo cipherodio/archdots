@@ -30,6 +30,7 @@ reboot
 
 # Copy ssh key to github before running setup.sh
 cat ~/.ssh/githubkey.pub | xclip -selection clipboard
+
 ./setup.sh
 ```
 
