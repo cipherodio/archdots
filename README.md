@@ -28,6 +28,7 @@ script [dot](.local/bin/dot) after initial configuration below.
 curl -fsSL https://raw.githubusercontent.com/cipherodio/archdots/main/bootstrap.sh | bash
 reboot
 
+# Copy ssh key to github before running setup.sh
 cat ~/.ssh/githubkey.pub | xclip -selection clipboard
 ./setup.sh
 ```
