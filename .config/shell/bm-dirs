@@ -8,6 +8,7 @@ b   $HOME/.local/bin
 t   $HOME/.local/screenshot
 r   $HOME/.local/review
 n   $HOME/.local/notes
+k   $HOME/.local/projects
 p   $HOME/.config/nvim/lua/plugins
 m   /data
 f   /data/documents
