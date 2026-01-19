@@ -40,6 +40,7 @@ __pycache__
 .config/go/
 .config/ibus/
 .config/lf/shrc
+.config/mozilla/
 .config/mpd/database
 .config/mpd/log
 .config/mpd/pid
