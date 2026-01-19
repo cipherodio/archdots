@@ -17,10 +17,10 @@ def power():
 
 mainbar = [
     widget.Spacer(length=15, background=gruvdark["c01"]),
-    widget.Image(
-        background=gruvdark["c01"],
-        filename="~/.config/qtile/assets/logo/python-gruvbox.png",
-    ),
+    # widget.Image(
+    #     background=gruvdark["c01"],
+    #     filename="~/.config/qtile/assets/logo/python-gruvbox.png",
+    # ),
     widget.Image(
         background=gruvdark["c01"],
         filename="~/.config/qtile/assets/icons/clock.png",
@@ -155,4 +155,4 @@ mainbar = [
 screens = [Screen(top=bar.Bar(mainbar, size=34))]
 
 
-# Last Modified: Thu, 01 Jan 2026 05:50:52 PM
+# Last Modified: Wed, 14 Jan 2026 12:58:23 AM
