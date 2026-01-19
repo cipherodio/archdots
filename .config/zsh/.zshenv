@@ -13,7 +13,7 @@ export TERM="xterm-256color"
 export BROWSER="firefox"
 export READER="zathura"
 export FILE="lf"
-export WM="qtile"
+export WM="Qtile"
 
 # XDG Base Directory
 export XDG_LOCAL_HOME="$HOME/.local"
@@ -109,4 +109,4 @@ export MOZ_USE_XINPUT2=1
 # Shortcuts
 [ ! -f "$XDG_CONFIG_HOME/shell/shrc" ] && setsid -f shortcuts >/dev/null 2>&1
 
-# Last Modified: Tue, 13 Jan 2026 01:54:18 AM
+# Last Modified: Sun, 18 Jan 2026 03:07:23 PM
