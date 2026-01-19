@@ -21,7 +21,6 @@ wallhaven
 stackoverflow
 unixporn
 mangafire
-yewtu
 youtube
 primevideo
 gmail
@@ -55,10 +54,9 @@ wallhaven) "$BROWSER" https://wallhaven.cc ;;
 stackoverflow) "$BROWSER" https://stackoverflow.com/ ;;
 unixporn) "$BROWSER" https://www.reddit.com/r/unixporn ;;
 mangafire) "$BROWSER" https://mangafire.to/ ;;
-yewtu) "$BROWSER" https://yewtu.be/feed/trending ;;
 youtube) "$BROWSER" https://www.youtube.com ;;
 primevideo) "$BROWSER" https://www.primevideo.com/ ;;
 gmail) "$BROWSER" https://gmail.com ;;
 esac
 
-# Last Modified: Sun, 11 Jan 2026 02:29:10 PM
+# Last Modified: Fri, 16 Jan 2026 01:32:20 PM
