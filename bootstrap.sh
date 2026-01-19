@@ -45,15 +45,15 @@ sudo pacman -Syu --needed --noconfirm \
     maim ffmpeg ffmpegthumbnailer highlight imagemagick man-db \
     gnome-keyring libnotify mediainfo moreutils ntfs-3g poppler \
     picom psutils tmux ripgrep unrar unzip yt-dlp zip wget tree \
-    tesseract tesseract-data-eng tesseract-data-osd fd \
-    unclutter xdg-utils pacutils acpi npm fzf blender audacity \
+    tesseract tesseract-data-eng tesseract-data-osd fd unclutter npm \
+    xdg-utils pacutils acpi fzf blender audacity python-setproctitle \
     python-dbus-next python-iwlib python-mpd2 python-pip python-psutil \
     firefox firefox-dark-reader firefox-tridactyl firefox-ublock-origin \
     emacs alacritty lf dunst mpc mpd mpv ncmpcpp nsxiv newsboat gimp \
     qtile spotify-launcher transmission-cli zathura zathura-pdf-mupdf \
-    tree-sitter-cli lua-language-server marksman bash-language-server stylua \
+    tree-sitter-cli lua-language-server marksman bash-language-server \
     shellcheck prettier python-lsp-server ruff yaml-language-server \
-    vscode-json-languageserver python-debugpy shfmt
+    vscode-json-languageserver python-debugpy shfmt stylua
 
 msg "Done installing system packages"
 
@@ -105,4 +105,4 @@ msg "Done ensuring SSH key"
 msg "Bootstrap complete"
 msg "Reboot recommended"
 
-# Last Modified: Tue, 13 Jan 2026 02:10:18 AM
+# Last Modified: Sun, 18 Jan 2026 11:28:36 PM
