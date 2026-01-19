@@ -42,17 +42,27 @@ cmd open ${{
     esac
 }}
 
-# Extract files
 cmd extract ${{
     set -f
-    case $f in
-        *.tar.bz|*.tar.bz2|*.tbz|*.tbz2) tar xjvf $f;;
-        *.tar.gz|*.tgz) tar xzvf $f;;
-        *.tar.xz|*.txz) tar xJvf $f;;
-        *.zip) unzip $f;;
-        *.rar) unrar x $f;;
-        *.7z) 7z x $f;;
-    esac
+
+    printf "%s\n" "$fx" | while IFS= read -r file; do
+        dir="${file%.*}"
+
+        case "$file" in
+            *.tar|*.tar.gz|*.tgz|*.tar.bz*|*.tbz*|*.tar.xz|*.txz)
+                tar -xf "$file" --one-top-level="$dir"
+                ;;
+            *.zip)
+                unzip "$file" -d "$dir"
+                ;;
+            *.rar)
+                unrar x "$file" "$dir"
+                ;;
+            *.7z)
+                7z x "$file" -o"$dir"
+                ;;
+        esac
+    done
 }}
 
 # Compress current file or selected files with tar and gunzip
