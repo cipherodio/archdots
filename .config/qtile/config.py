@@ -1,6 +1,7 @@
 from libqtile import hook
 
-from bars.gruvbox import screens  # noqa: F401
+from bars.onedark import screens  # noqa: F401
+from modules.floating import floating_layout  # noqa: F401
 from modules.groups import groups  # noqa: F401
 from modules.keys import keys, mod  # noqa: F401
 from modules.layouts import layouts  # noqa: F401
@@ -15,7 +16,7 @@ focus_on_window_activation = "smart"
 reconfigure_screens = True
 auto_minimize = True
 wl_input_rules = None
-wmname = "qtile"
+wmname = "Qtile"
 
 
 # This will change your pointer cursor to the standard cursor
@@ -27,4 +28,4 @@ def runner():
     subprocess.Popen(["xsetroot", "-cursor_name", "left_ptr"])
 
 
-# Last Modified: Thu, 01 Jan 2026 05:48:16 PM
+# Last Modified: Sun, 18 Jan 2026 03:07:21 PM
