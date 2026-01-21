@@ -18,14 +18,18 @@ dconf
 backups
 elpa
 transient
+audacity
+blender
 fzf
 .git
 GIMP
 htop
 pulse
 __pycache__
+Signal
 spotify
 zplug
+projects
 downloads
 review
 screenshot
@@ -34,7 +38,7 @@ torrent
 mnt
 src
 state
-.mozilla
+mozilla
 .pki
 .steam
 .steampath
