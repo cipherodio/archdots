@@ -1,5 +1,6 @@
 from libqtile import bar, qtile, widget
 from libqtile.config import Screen
+from libqtile.lazy import lazy
 from utils.colors import onedark
 
 # Widgets
@@ -44,6 +45,7 @@ mainbar = [
         background=onedark["c01"],
         foreground=onedark["c09"],
         format="%a %d %b",
+        mouse_callbacks={"Button1": lazy.spawn("calnotify")},
     ),
     widget.Image(
         filename="~/.config/qtile/assets/onedark/background/curveright.png"
@@ -168,4 +170,4 @@ mainbar = [
 
 screens = [Screen(top=bar.Bar(mainbar, size=34))]
 
-# Last Modified: Wed, 14 Jan 2026 04:16:47 PM
+# Last Modified: Thu, 22 Jan 2026 03:40:43 AM
