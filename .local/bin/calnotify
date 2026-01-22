@@ -1,0 +1,5 @@
+#!/bin/sh
+
+notify-send "CALENDAR" "$(cal | sed "s/\<$(date +'%e' | tr -d ' ')\>/<b><span color='red'>&<\/span><\/b>/")"
+
+# Last Modified: Thu, 22 Jan 2026 03:47:23 AM
