@@ -3,7 +3,7 @@ from libqtile.config import Match
 from utils.colors import onedark
 
 floating_theme = {
-    "border_width": 3,
+    "border_width": 2,
     "border_focus": onedark["c12"],
     "border_normal": onedark["c01"],
 }
@@ -26,4 +26,4 @@ floating_layout = layout.Floating(
     ],
 )
 
-# Last Modified: Sun, 18 Jan 2026 03:04:02 PM
+# Last Modified: Sat, 24 Jan 2026 01:54:10 AM
