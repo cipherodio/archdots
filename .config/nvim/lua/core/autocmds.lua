@@ -6,15 +6,46 @@ local function augroup(name)
 end
 
 local groups = {
+    relnumbers = augroup("relnumbers"),
     whitespaces = augroup("whitespaces"),
     yankhighlight = augroup("yankhighlight"),
     nocomment_o = augroup("nocomment_o"),
     cursor_pos = augroup("cursor_pos"),
     closewith_q = augroup("closewith_q"),
+    create_dir = augroup("create_dir"),
     md_local_links = augroup("md_local_links"),
     modified_time = augroup("modified_time"),
     timestamp_highlight = augroup("timestamp_highlight"),
+    reload_shortcuts = augroup("reload_shortcuts"),
+    reload_xdefaults = augroup("reload_xdefaults"),
+    reload_dunst = augroup("reload_dunst"),
 }
+
+autocmd({ "BufEnter", "WinEnter", "InsertLeave", "CmdlineLeave" }, {
+    desc = "Enable relative number",
+    group = groups.relnumbers,
+    callback = function()
+        if vim.bo.buftype ~= "" then
+            return
+        end
+        if vim.wo.number and vim.api.nvim_get_mode().mode ~= "i" then
+            vim.wo.relativenumber = true
+        end
+    end,
+})
+
+autocmd({ "BufLeave", "WinLeave", "InsertEnter", "CmdlineEnter" }, {
+    desc = "Disable relative number",
+    group = groups.relnumbers,
+    callback = function()
+        if vim.bo.buftype ~= "" then
+            return
+        end
+        if vim.wo.number then
+            vim.wo.relativenumber = false
+        end
+    end,
+})
 
 autocmd("BufWritePre", {
     desc = "Remove trailing white spaces",
@@ -78,6 +109,18 @@ autocmd("FileType", {
     end,
 })
 
+autocmd("BufWritePre", {
+    desc = "Auto create dir if nonexistent after save",
+    group = groups.create_dir,
+    callback = function(event)
+        if event.match:match("^%w%w+://") then
+            return
+        end
+        local file = vim.loop.fs_realpath(event.match) or event.match
+        vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
+    end,
+})
+
 autocmd("FileType", {
     desc = "Better gf to open markdown local links",
     group = groups.md_local_links,
@@ -125,4 +168,32 @@ autocmd({ "BufEnter", "BufWinEnter", "ColorScheme" }, {
     end,
 })
 
--- Last Modified: Wed, 07 Jan 2026 01:12:55 AM
+autocmd("BufWritePost", {
+    desc = "Auto reload bin script shortcuts when configuration is updated",
+    group = groups.reload_shortcuts,
+    pattern = { "bm-files", "bm-dirs" },
+    callback = function()
+        vim.system({ "shortcuts" }, { detach = true })
+    end,
+})
+
+autocmd("BufWritePost", {
+    desc = "Auto reload xdefaults when configuraton is updated",
+    group = groups.reload_xdefaults,
+    pattern = { "xdefaults" },
+    callback = function(args)
+        vim.system({ "xrdb", args.file }, { detach = true })
+    end,
+})
+
+autocmd("BufWritePost", {
+    desc = "Auto reload dunstrc when configuration is updated",
+    group = groups.reload_dunst,
+    pattern = { "dunstrc" },
+    callback = function()
+        vim.system({ "pkill", "dunst" })
+        vim.system({ "dunst" }, { detach = true })
+    end,
+})
+
+-- Last Modified: Fri, 23 Jan 2026 02:49:22 AM
