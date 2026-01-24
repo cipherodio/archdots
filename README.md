@@ -15,9 +15,7 @@ Personal _dotfiles_ for [Archlinux](arch) and [Qtile](qtile).
 
 ## 📸 Screenshots
 
-![screenshot01](.local/wallpapers/screenshot001.png)
-
-![screenshot02](.local/wallpapers/screenshot002.png)
+![screenshot01](.local/wallpapers/screenshot01.png)
 
 ## 🚀 Dotfiles Installation
 
