@@ -34,7 +34,8 @@ cat ~/.ssh/githubkey.pub | xclip -selection clipboard
 
 ## Credits
 
-Inspired by [@darkkal44](https://github.com).
+Qtile widgets inspired by
+[@darkkal44](https://github.com/darkkal44/cozytile).
 
 [arch]: https://archlinux.org/
 [qtile]: https://qtile.org/
