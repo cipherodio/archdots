@@ -34,7 +34,7 @@ cat ~/.ssh/githubkey.pub | xclip -selection clipboard
 
 ## Credits
 
-Inspired by @darkkal44.
+Inspired by [@darkkal44](https://github.com).
 
 [arch]: https://archlinux.org/
 [qtile]: https://qtile.org/
