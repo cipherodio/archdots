@@ -32,5 +32,9 @@ cat ~/.ssh/githubkey.pub | xclip -selection clipboard
 ./setup.sh
 ```
 
+## Credits
+
+Inspired by @darkkal44.
+
 [arch]: https://archlinux.org/
 [qtile]: https://qtile.org/
