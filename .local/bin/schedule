@@ -1,0 +1,22 @@
+#!/bin/sh
+
+AGENDA_DIR="$HOME/.local/src/mdnotes/agenda.md"
+
+today=$(date +%e | tr -d ' ')
+
+GREEN=$(printf '\033[1;32m')
+RESET=$(printf '\033[0m')
+
+cal | awk -v today="$today" -v green="$GREEN" -v reset="$RESET" '
+NR <= 2 { print; next }
+{
+    for (i = 1; i <= NF; i++) {
+        if ($i == today)
+            $i = green $i reset
+    }
+    print
+}'
+
+highlight --out-format=ansi "$AGENDA_DIR"
+
+# Last Modified: Fri, 23 Jan 2026 02:12:03 AM
