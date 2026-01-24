@@ -49,8 +49,8 @@ local highlights = {
     { "StatuslineLspInfo", { fg = ui.c05, bg = ui.c01, gui = "bold" } },
     { "StatuslineLspHint", { fg = ui.c07, bg = ui.c01, gui = "bold" } },
 
-    { "StatuslineCursorBegin", { fg = ui.c08, bg = ui.c01, gui = "bold" } },
-    { "StatuslineCursorEnd", { fg = ui.c08, bg = ui.c01, gui = "bold" } },
+    { "StatuslineCursorBegin", { fg = ui.c16, bg = ui.c01, gui = "bold" } },
+    { "StatuslineCursorEnd", { fg = ui.c16, bg = ui.c01, gui = "bold" } },
     { "StatuslinePercent", { fg = ui.c13, bg = ui.c01 } },
     { "StatuslineFiletype", { fg = ui.c16, gui = "bold" } },
 }
@@ -247,4 +247,4 @@ end
 
 vim.o.statusline = "%!v:lua.Statusline()"
 
--- Last Modified: Thu, 08 Jan 2026 06:21:23 PM
+-- Last Modified: Fri, 23 Jan 2026 04:30:53 PM
