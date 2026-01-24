@@ -3,7 +3,7 @@ from utils.colors import onedark
 
 # Layouts
 layout_theme = {
-    "border_width": 3,
+    "border_width": 2,
     "border_focus": onedark["c12"],
     "border_normal": onedark["c01"],
 }
@@ -21,4 +21,4 @@ layouts = [
     # layout.Bsp(**layout_theme),
 ]
 
-# Last Modified: Sun, 18 Jan 2026 03:06:08 PM
+# Last Modified: Sat, 24 Jan 2026 01:53:49 AM
