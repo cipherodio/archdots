@@ -39,6 +39,11 @@ fi
 [ -f "$XDG_CONFIG_HOME/shell/aliasrc" ] && source "$XDG_CONFIG_HOME/shell/aliasrc"
 [ -f "$XDG_CONFIG_HOME/shell/zshdirrc" ] && source "$XDG_CONFIG_HOME/shell/zshdirrc"
 
+# LS colors (interactive only)
+if [[ -f $XDG_CONFIG_HOME/lscolors/onedark ]]; then
+  source "$XDG_CONFIG_HOME/lscolors/onedark"
+fi
+
 # Shell opts
 setopt glob_dots
 setopt extended_glob
@@ -134,4 +139,4 @@ source "$ZPLUG"/system-clipboard/zsh-system-clipboard.zsh
 # Source zsh-fast-syntax-highlighting
 source "$ZPLUG"/fasthl/fast-syntax-highlighting.plugin.zsh
 
-# Last Modified: Sun, 11 Jan 2026 01:53:36 AM
+# Last Modified: Mon, 26 Jan 2026 03:42:08 AM
