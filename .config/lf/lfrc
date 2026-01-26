@@ -129,7 +129,6 @@ cmd chmod ${{
 cmd bulkrename $vidir
 cmd mkdir $mkdir -p "$(echo $* | tr ' ' '\ ')"
 cmd touch $touch "$(echo $* | tr ' ' '\ ')"
-cmd setbg "$1"
 
 #map o &mimeopen $f
 #map O &mimeopen --ask $f
@@ -167,7 +166,7 @@ map c push A<c-u> # new rename
 map I push A<c-a> # at the very beginning
 map i push A<a-b><a-b><a-f> # before extention
 map a push A<a-b> # after extention
-map bg $setbg $f
+map bg &setwallpaper "$f"
 
 # Directories
 source "~/.config/lf/shrc"
