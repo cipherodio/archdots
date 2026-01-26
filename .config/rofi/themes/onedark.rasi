@@ -21,7 +21,7 @@ configuration {
     fg-dim: #5a5b5e;
     accent: #68aee8;
 
-    font: "Iosevka Nerd Font 18";
+    font: "Iosevka Nerd Font 16";
 }
 
 /* Window */
