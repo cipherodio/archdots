@@ -12,7 +12,7 @@ mvol = "pulsemixer --toggle-mute"
 brightup = "brightnessctl set +10%"
 brightdown = "brightnessctl set 10%-"
 powermenu = "power"
-dmenu = "dmenu_run"
+rofi = "rofi -show drun"
 filemanager = "alacritty -e lf"
 browser = "firefox"
 qbrowser = "qutebrowser"
@@ -102,7 +102,7 @@ keys = [
     Key([mod, "control"], "x", lazy.shutdown(), desc="Shutdown qtile"),
     # Programs
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-    Key([mod], "d", lazy.spawn(dmenu), desc="Dmenu"),
+    Key([mod], "d", lazy.spawn(rofi), desc="Rofi"),
     Key([mod], "o", lazy.spawn(filemanager), desc="File manager lf"),
     Key([mod], "b", lazy.spawn(browser), desc="Firefox web browser"),
     Key([mod, "shift"], "b", lazy.spawn(qbrowser), desc="Qute web browser"),
@@ -156,7 +156,7 @@ keys = [
     ),
     Key([mod], "F9", lazy.spawn("mounter"), desc="Mount drive"),
     Key([mod, "shift"], "F9", lazy.spawn("unmounter"), desc="Unmount drive"),
-    Key([mod], "w", lazy.spawn("bookmarklink"), desc="Web search via dmenu"),
+    Key([mod], "w", lazy.spawn("bookmarklink"), desc="Web search via rofi"),
     Key([mod], "F12", lazy.spawn("torrtoggle"), desc="Torrent daemon toggle"),
     Key(
         [mod, "shift"],
@@ -235,4 +235,4 @@ keys.extend(
     ]
 )
 
-# Last Modified: Sun, 11 Jan 2026 03:15:27 PM
+# Last Modified: Mon, 26 Jan 2026 05:34:11 PM
