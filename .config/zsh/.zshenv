@@ -42,6 +42,8 @@ export GRADLE_USER_HOME="$XDG_DATA_HOME"/gradle
 export CARGO_HOME="$XDG_DATA_HOME"/cargo
 export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/rgrc"
 export NIMBLE_DIR="$HOME/.config/nimble"
+export TASKRC="$XDG_CONFIG_HOME/task/taskrc"
+export TASKDATA="$XDG_DATA_HOME/task"
 
 # Npm path
 export PATH="$XDG_DATA_HOME/npm/bin:$PATH"
@@ -57,7 +59,7 @@ export HISTSIZE=1000
 export SAVEHIST=1000
 export HISTFILE="$ZDOTDIR/.history"
 export LESSHISTFILE="-"
-export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
+export SUDO_ASKPASS="$HOME/.local/bin/rofipass"
 export SUDO_PROMPT="[sudo] password for %p: "
 export SPROMPT="%F{blue}[%fzsh%F{blue}]%f correct %F{red}%R%f to %F{blue}%r%f [nyae]: "
 
@@ -103,10 +105,7 @@ export GDK_DPI_SCALE=1.2
 # Mozilla zoom in and out
 export MOZ_USE_XINPUT2=1
 
-# Ls colors
-. "$HOME/.config/lscolors/onedark"
-
 # Shortcuts
 [ ! -f "$XDG_CONFIG_HOME/shell/shrc" ] && setsid -f shortcuts >/dev/null 2>&1
 
-# Last Modified: Sun, 18 Jan 2026 03:07:23 PM
+# Last Modified: Mon, 26 Jan 2026 03:10:30 PM
