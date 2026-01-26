@@ -2,7 +2,7 @@
 
 # xrandr --dpi 144
 xrate
-setbg &
+setwallpaper &
 xrdb "${XDG_CONFIG_HOME:-$HOME/.config}"/xorg/xdefaults &
 xrdbpid=$!
 # /usr/bin/emacs --daemon &
@@ -20,4 +20,4 @@ done >/dev/null 2>&1
 dbus-update-activation-environment --all
 dbus-launch ssh-agent qtile start
 
-# Last Modified: Tue, 13 Jan 2026 06:33:21 PM
+# Last Modified: Mon, 26 Jan 2026 04:54:36 PM
