@@ -104,6 +104,7 @@ __pycache__
 .local/share/qutebrowser/
 .local/share/spotify-launcher/
 .local/share/Steam/
+.local/share/task/
 .local/share/Terraria/
 .local/share/tmux/
 .local/share/vulkan/
