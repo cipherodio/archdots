@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
-set -Eeuo pipefail
-
-# setup.sh — user environment setup (post-login)
+# Author: cipherodio
+# Description: Run after bootstrap.sh and copying ssh key to github
+# via firefox `cat ~/.ssh/githubkey.pub | xclip -selection clipboard`
+# User environment setup (post-login)
 # Assumes:
 #   - dotfiles are installed and sourced
 #   - PATH, npm prefix, SSH config are active
+
+set -Eeuo pipefail
 
 # Safety
 [[ $EUID -eq 0 ]] && {
@@ -12,14 +15,21 @@ set -Eeuo pipefail
     exit 1
 }
 
+# Variables
+HOME_DIR="$HOME"
+
 REPO_BASE="git@github.com:cipherodio/"
-DMENU_REPO="${REPO_BASE}archdmenu.git"
 STARTPAGE_REPO="${REPO_BASE}startpage.git"
 NOTES_REPO="${REPO_BASE}mdnotes.git"
 
-HOME_DIR="$HOME"
 SRC_DIR="$HOME_DIR/.local/src"
 DOTS_DIR="$HOME_DIR/.config/.dots"
+
+FIREFOX_SRC="$HOME_DIR/.config/firefox/user.js"
+FIREFOX_DIR="$HOME_DIR/.config/mozilla/firefox"
+PROFILES_INI="$FIREFOX_DIR/profiles.ini"
+
+CHROME_SRC="$HOME_DIR/.config/firefox/chrome/onedark"
 
 # Helpers
 msg() {
@@ -63,10 +73,10 @@ mkdir -p \
 
 msg "Done creating user directories"
 
-# GitHub SSH check (REAL check, fail only if needed)
+# GitHub SSH check
 msg "Checking GitHub SSH access"
 
-if git ls-remote "$DMENU_REPO" >/dev/null 2>&1; then
+if git ls-remote "$STARTPAGE_REPO" >/dev/null 2>&1; then
     msg "GitHub SSH access OK"
 else
     die "GitHub SSH access failed.
@@ -75,20 +85,6 @@ Ensure:
   - your key is added (ssh-add)
   - the key is uploaded to GitHub"
 fi
-
-# Build dmenu
-msg "Building dmenu"
-
-clone_if_missing "$DMENU_REPO" "$SRC_DIR/archdmenu"
-
-(
-    cd "$SRC_DIR/archdmenu"
-    make clean >/dev/null 2>&1 || true
-    make
-    sudo make install
-)
-
-msg "Done building dmenu"
 
 # Startpage
 msg "Processing startpage"
@@ -100,12 +96,48 @@ msg "Processing notes"
 clone_if_missing "$NOTES_REPO" "$SRC_DIR/mdnotes"
 msg "Done processing notes"
 
-# NPM packages (env already active)
+# NPM packages
 msg "Installing NPM packages"
-
 npm install -g markdown-toc
-
 msg "Done installing NPM packages"
+
+# Firefox user.js + chrome CSS
+msg "Configuring Firefox user.js and chrome CSS"
+
+if [[ ! -f "$FIREFOX_SRC" ]]; then
+    msg "No Firefox user.js found, skipping Firefox config"
+else
+    [[ -f "$PROFILES_INI" ]] || die "Firefox profiles.ini not found"
+
+    PROFILE_PATH="$(
+        sed -n '/^\[Install/{n;/^Default=/s/^Default=//p;q}' "$PROFILES_INI"
+    )"
+
+    [[ -n "$PROFILE_PATH" ]] || die "Failed to detect Firefox profile path"
+
+    PROFILE_DIR="$FIREFOX_DIR/$PROFILE_PATH"
+    USERJS_DST="$PROFILE_DIR/user.js"
+    CHROME_DST="$PROFILE_DIR/chrome"
+
+    [[ -d "$PROFILE_DIR" ]] || die "Firefox profile directory not found"
+
+    # User.js
+    if [[ -f "$USERJS_DST" ]]; then
+        cp "$USERJS_DST" "$USERJS_DST.bak"
+        msg "Backed up existing user.js"
+    fi
+
+    cp "$FIREFOX_SRC" "$USERJS_DST"
+    msg "Installed Firefox user.js"
+
+    # Chrome CSS
+    mkdir -p "$CHROME_DST"
+
+    cp "$CHROME_SRC/userChrome.css" "$CHROME_DST/userChrome.css"
+    cp "$CHROME_SRC/userContent.css" "$CHROME_DST/userContent.css"
+
+    msg "Installed Firefox chrome CSS"
+fi
 
 # Change dotfiles remote (HTTPS → SSH)
 msg "Fixing dotfiles git remote"
@@ -118,4 +150,4 @@ msg "Done fixing git remotes"
 # Done
 msg "setup.sh complete"
 
-# Last Modified: Tue, 13 Jan 2026 01:37:40 PM
+# Last Modified: Mon, 26 Jan 2026 05:51:15 PM
