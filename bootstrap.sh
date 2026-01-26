@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Author: cipherodio
+# Description: Run on fresh installed Arch Linux
+
 set -Eeuo pipefail
 
 REPO_BASE="https://github.com/cipherodio"
@@ -35,7 +38,7 @@ msg "Installing system packages"
 
 sudo pacman -Syu --needed --noconfirm \
     xorg-xdpyinfo xorg-xev xorg-xinit xorg-xinput xorg-xprop \
-    xcape xwallpaper xorg-xset xorg-xsetroot xorg-xwininfo xclip \
+    xcape xorg-xset xorg-xsetroot xorg-xwininfo xclip \
     xdo xdotool xterm \
     lib32-vulkan-radeon mesa-utils vulkan-tools \
     pipewire pipewire-alsa pipewire-pulse pulsemixer \
@@ -44,7 +47,7 @@ sudo pacman -Syu --needed --noconfirm \
     evtest exfatprogs brightnessctl dosfstools bc btop htop nvtop \
     maim ffmpeg ffmpegthumbnailer highlight imagemagick man-db \
     gnome-keyring libnotify mediainfo moreutils ntfs-3g poppler \
-    picom psutils tmux ripgrep unrar unzip yt-dlp zip wget tree \
+    picom feh psutils tmux ripgrep unrar unzip yt-dlp zip wget tree \
     tesseract tesseract-data-eng tesseract-data-osd fd unclutter npm \
     xdg-utils pacutils acpi fzf blender audacity python-setproctitle \
     python-dbus-next python-iwlib python-mpd2 python-pip python-psutil \
@@ -105,4 +108,4 @@ msg "Done ensuring SSH key"
 msg "Bootstrap complete"
 msg "Reboot recommended"
 
-# Last Modified: Sun, 18 Jan 2026 11:28:36 PM
+# Last Modified: Mon, 26 Jan 2026 03:41:26 PM
