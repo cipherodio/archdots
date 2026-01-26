@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Delete a taskwarrior task and purge
+# Usage: twd <task-id>
+
+set -euo pipefail
+
+if [[ $# -ne 1 ]]; then
+    printf 'Usage: %s <task-id>\n' "${0##*/}" >&2
+    exit 1
+fi
+
+task "$1" delete rc.confirmation=0
+task purge rc.confirmation=0
+
+# Last Modified: Mon, 26 Jan 2026 05:58:38 AM
