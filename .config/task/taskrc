@@ -1,0 +1,51 @@
+news.version=3.4.2
+verbose=0
+allow.delete=yes
+allow.purge=yes
+confirmation=1
+
+dateformat=Y-M-D a h:N
+
+report.list.labels=ID,Project,Description,Date & Time,Due,Tags
+report.list.columns=id,project,description,due,due.relative,tags
+
+report.next.labels=ID,Project,Description,Date & Time,Due,Tags
+report.next.columns=id,project,description,due,due.relative,tags
+
+report.deleted.description=Deleted tasks
+
+report.deleted.labels=ID,Status,Project,Description,Date & Time,Due,Tags
+report.deleted.columns=id,status,project,description,due,due.relative,tags
+report.deleted.filter=status:deleted
+
+color.alternate=none
+color.label=bold blue
+color.overdue=rgb300 on gray18
+color.due=
+color.uda.priority.H=white on rgb201
+color.uda.priority.M=white
+color.tagged=
+color.tag.next=
+color.selected=yellow
+color.active=white on rgb021
+color.blocking=bold black on white
+color.blocked=gray17
+
+weekstart=monday
+
+color.calendar.today=black on cyan
+# color.calendar.today=bold green
+# color.calendar.weekend=red
+
+# color.calendar.header=bold cyan
+# color.calendar.month=bold cyan
+# color.calendar.weeknumber=gray15
+#
+# color.calendar.day=gray17
+# color.calendar.weekend=gray14
+#
+# color.calendar.today=bold black on gray18
+# color.calendar.due=bold black on red
+# color.calendar.duetoday=bold white on blue
+# color.calendar.overdue=bold black on bright red
+# color.calendar.scheduled=green
