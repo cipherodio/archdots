@@ -1,8 +1,13 @@
-#!/bin/sh
-# Reads file names from stdin and selects them in lf.
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Select files in lf from stdin
 
-while read -r file; do
-    [ -z "$file" ] && continue
+set -euo pipefail
+
+while IFS= read -r file; do
+    [ -n "$file" ] || continue
     lf -remote "send select \"$file\""
-	lf -remote "send toggle"
+    lf -remote "send toggle"
 done
+
+# Last Modified: Mon, 26 Jan 2026 04:20:27 AM

@@ -1,24 +1,28 @@
-#!/bin/bash
-# Mount: USB drives + Android phones via dmenu
-# Mounts to ~/.local/mnt/<device>
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Mount USB drives and Android phones using rofi
+# Mount point: ~/.local/mnt/<device>
 
-IFS=$'\n'
+set -euo pipefail
+
 MNT="$HOME/.local/mnt"
 mkdir -p "$MNT"
 
 USER_UID="$(id -u)"
 USER_GID="$(id -g)"
 
-# Android phones
-phones="$(simple-mtpfs -l 2>/dev/null | sed 's/^/📱 /')"
-
-# USB Drives (unmounted partitions only)
-usbparts="$(
-    lsblk -nrpo NAME,TYPE,MOUNTPOINT |
-        awk '$2=="part" && $3=="" { printf "💾 %s\n", $1 }'
+# --- Android devices (simple-mtpfs) ---
+phones="$(
+    simple-mtpfs -l 2>/dev/null |
+        sed 's/^/📱 /' || true
 )"
 
-# Menu
+# --- USB partitions (unmounted only) ---
+usbparts="$(
+    lsblk -nrpo NAME,TYPE,MOUNTPOINT |
+        awk '$2=="part" && $3=="" { printf "💾 %s\n", $1 }' || true
+)"
+
 choices="$(printf "%s\n%s\n" "$phones" "$usbparts" | sed '/^$/d')"
 
 if [ -z "$choices" ]; then
@@ -26,18 +30,17 @@ if [ -z "$choices" ]; then
     exit 0
 fi
 
-chosen="$(echo "$choices" | dmenu -i -p 'Mount which device?')"
+chosen="$(printf "%s\n" "$choices" | rofi -dmenu -i -p 'Mount which device?')"
 [ -n "$chosen" ] || exit 0
 
-# Action
 case "$chosen" in
 💾*)
     dev="${chosen#💾 }"
     name="$(basename "$dev")"
     mp="$MNT/$name"
 
-    fstype="$(lsblk -no FSTYPE "$dev")"
     mkdir -p "$mp"
+    fstype="$(lsblk -no FSTYPE "$dev")"
 
     case "$fstype" in
     vfat | exfat | fat | ntfs)
@@ -72,4 +75,4 @@ case "$chosen" in
     ;;
 esac
 
-# Last Modified: Sun, 11 Jan 2026 01:03:31 PM
+# Last Modified: Mon, 26 Jan 2026 04:37:54 AM

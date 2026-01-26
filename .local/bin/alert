@@ -1,11 +1,16 @@
-#!/bin/sh
-# This script gives audio notification in dunst,
-# except for the following:
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Skip audio notification for specific senders
 
-[ "$1" = "audiobar" ] && exit 0
-[ "$1" = "mpcnotify" ] && exit 0
-[ "$1" = "Signal" ] && exit 0
+set -euo pipefail
 
-paplay ~/.local/share/audio/beep.wav
+case ${1:-} in
+audiobar | mpcnotify | Signal)
+    exit 0
+    ;;
+esac
 
-# Last Modified: Thu, 01 Jan 2026 12:28:34 AM
+sound="$HOME/.local/share/audio/beep.wav"
+paplay "$sound"
+
+# Last Modified: Mon, 26 Jan 2026 01:03:51 AM

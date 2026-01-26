@@ -1,14 +1,39 @@
-#!/bin/sh
-# Wrapper for dotfiles
-# shellcheck disable=2086,2048
-dotfiles() { git --git-dir=$HOME/.config/.dots --work-tree=$HOME "$@"; }
-if [ $1 = 'out' ]; then
-    dotfiles pull &&
-    dotfiles update-index --assume-unchanged ~/LICENSE ~/README.md ~/setup.sh &&
-    rm -rf ~/LICENSE ~/README.md ~/setup.sh
-elif [ $1 = 'in' ]; then
-    dotfiles update-index --no-assume-unchanged ~/LICENSE ~/README.md ~/setup.sh &&
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Wrapper for bare-repo dotfiles management
+
+set -euo pipefail
+
+dotfiles() {
+    git --git-dir="$HOME/.config/.dots" --work-tree="$HOME" "$@"
+}
+
+cmd=${1-}
+
+case $cmd in
+out)
+    dotfiles pull
+    dotfiles update-index --assume-unchanged \
+        "$HOME/LICENSE" \
+        "$HOME/README.md" \
+        "$HOME/setup.sh"
+    rm -rf \
+        "$HOME/LICENSE" \
+        "$HOME/README.md" \
+        "$HOME/setup.sh"
+    ;;
+
+in)
+    dotfiles update-index --no-assume-unchanged \
+        "$HOME/LICENSE" \
+        "$HOME/README.md" \
+        "$HOME/setup.sh"
     dotfiles checkout -f
-else
-    dotfiles $*
-fi
+    ;;
+
+*)
+    dotfiles "$@"
+    ;;
+esac
+
+# Last Modified: Mon, 26 Jan 2026 03:58:55 AM

@@ -1,16 +1,27 @@
-#!/bin/sh
-# Toggle webcam preview via mpv with dmenu confirmation
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Toggle webcam preview via mpv with rofi confirmation
+
+set -euo pipefail
+
+CAM_DEVICE=/dev/video0
+MPV_MATCH="mpv.* $CAM_DEVICE"
 
 confirm() {
-    printf "Yes" | dmenu -i -p "$1" >/dev/null
+    printf 'Yes\n' | rofi -dmenu -i -p "$1" >/dev/null
 }
 
-if pgrep -f 'mpv.* /dev/video0' >/dev/null; then
-    confirm "[● CAM ON] Turn OFF camera?" &&
-        pkill -f 'mpv.* /dev/video0' &&
+camera_running() {
+    pgrep -f "$MPV_MATCH" >/dev/null
+}
+
+if camera_running; then
+    if confirm "[● CAM ON] Turn OFF camera?"; then
+        pkill -f "$MPV_MATCH"
         notify-send "Camera" "OFF"
+    fi
 else
-    confirm "[○ CAM OFF] Turn ON camera?" && {
+    if confirm "[○ CAM OFF] Turn ON camera?"; then
         mpv \
             --no-osc \
             --no-input-default-bindings \
@@ -20,9 +31,9 @@ else
             --title="mpvfloat" \
             --profile=low-latency \
             --untimed \
-            /dev/video0 &
+            "$CAM_DEVICE" &
         notify-send "Camera" "ON"
-    }
+    fi
 fi
 
-# Last Modified: Sun, 11 Jan 2026 02:49:01 PM
+# Last Modified: Mon, 26 Jan 2026 06:07:07 AM

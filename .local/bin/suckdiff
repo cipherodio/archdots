@@ -1,17 +1,34 @@
-#!/bin/sh
-# shellcheck disable=2046
-git checkout main &&
-    dotfiles="/home/twoeightdev/.local/work/diffs"
-project=$(basename $(pwd))
-diffdir="${dotfiles}/${project}_diffs/"
-olddiffdir="${dotfiles}/${project}_diffs/old/"
-rm -rf "$olddiffdir" &&
-    mkdir -p "$olddiffdir" &&
-    mkdir -p "$diffdir" &&
-    mv "$diffdir"*.diff "$olddiffdir" || true &&
-    make clean && rm -f config.h && git reset --hard origin/main &&
-    for branch in $(git for-each-ref --format='%(refname)' refs/heads/ | cut -d'/' -f3); do
-        if [ "$branch" != "main" ]; then
-            git diff main.."$branch" >"${diffdir}${project}_${branch}.diff"
-        fi
-    done
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Generate per-branch diffs against main
+
+set -euo pipefail
+
+DOTFILES="$HOME/.local/work/diffs"
+PROJECT="$(basename "$(pwd)")"
+
+DIFFDIR="$DOTFILES/${PROJECT}_diffs"
+OLDDIFFDIR="$DIFFDIR/old"
+
+# Ensure we're on main and clean
+git checkout main
+make clean
+rm -f config.h
+git fetch origin
+git reset --hard origin/main
+
+# Prepare diff directories
+mkdir -p "$OLDDIFFDIR" "$DIFFDIR"
+
+# Archive old diffs
+mv "$DIFFDIR"/*.diff "$OLDDIFFDIR"/ 2>/dev/null || true
+
+# Generate diffs for each branch
+while IFS= read -r branch; do
+    [ "$branch" = "main" ] && continue
+    git diff main.."$branch" >"$DIFFDIR/${PROJECT}_${branch}.diff"
+done < <(
+    git for-each-ref --format='%(refname:short)' refs/heads/
+)
+
+# Last Modified: Mon, 26 Jan 2026 04:56:21 PM

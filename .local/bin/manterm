@@ -1,5 +1,8 @@
-#!/bin/sh
-# Search man pages via dmenu (deduplicated, section-aware)
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Search via rofi and open man pages in a terminal
+
+set -euo pipefail
 
 : "${TERMINAL:=alacritty}"
 
@@ -7,15 +10,14 @@ choice=$(
     apropos . |
         awk '{ print $1 " " $2 }' |
         sort -u |
-        dmenu -i -l 10 -p man
+        rofi -dmenu -i -lines 10 -p man
 ) || exit 0
 
-[ -z "$choice" ] && exit 0
+[ -n "$choice" ] || exit 0
 
-# Extract name and section
-name=$(printf '%s\n' "$choice" | awk '{print $1}')
-section=$(printf '%s\n' "$choice" | sed -n 's/.*(\(.*\)).*/\1/p')
+name="${choice%% *}"
+section="$(sed -n 's/.*(\(.*\)).*/\1/p' <<<"$choice")"
 
 "$TERMINAL" -e man "$section" "$name" &
 
-# Last Modified: Sun, 11 Jan 2026 04:39:10 PM
+# Last Modified: Mon, 26 Jan 2026 04:24:12 PM

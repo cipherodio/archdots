@@ -1,29 +1,37 @@
-#!/bin/sh
-# Progress bar script for audio in dunst.
-# This script needs `bc` package installed.
-# Use this script in your keybind:
-# audiobar 0 +5
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Show volume change as a dunst progress bar
 
-SINK=$1
-DELTA=$2
+set -euo pipefail
 
-# message ID
-msgId="991049"
+sink=${1:-0}
+delta=${2:-0}
 
-CUR="$(pactl get-sink-volume "$SINK" | awk '{print $5}' | grep -oe '[0-9]*')"
-NEW="$(echo "$CUR""$DELTA" | bc)"
-NEW=$((NEW > 150 ? 150 : NEW))
-NEW=$((NEW < 0 ? 0 : NEW))
+msg_id=991049
+max_vol=150
+min_vol=0
 
-echo "sink: $SINK"
-echo "vol: $NEW"
+# Get current volume (integer percent)
+current_vol=$(
+    pactl get-sink-volume "$sink" |
+        awk '{print $5}' |
+        tr -d '%'
+)
 
-pactl set-sink-volume "$SINK" $NEW%
+# Calculate new volume
+new_vol=$((current_vol + delta))
+((new_vol > max_vol)) && new_vol=$max_vol
+((new_vol < min_vol)) && new_vol=$min_vol
 
-dunstify -a "audiobar" \
+# Apply volume
+pactl set-sink-volume "$sink" "${new_vol}%"
+
+# Notify
+dunstify \
+    -a "audiobar" \
     -u low \
-    -r "$msgId" \
-    -h int:value:"$NEW" \
-    "󰕾 Volume: ${NEW}%"
+    -r "$msg_id" \
+    -h "int:value:$new_vol" \
+    "󰕾 Volume: ${new_vol}%"
 
-# Last Modified: Thu, 30 Jan 2025 06:33:12 PM
+# Last Modified: Mon, 26 Jan 2026 01:07:05 AM

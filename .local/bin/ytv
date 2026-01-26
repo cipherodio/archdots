@@ -1,3 +1,21 @@
-#!/bin/sh
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Download YouTube video (best video + audio) as MP4 using yt-dlp
 
-yt-dlp -f 'bestvideo+bestaudio' --merge-output-format mp4 --restrict-filenames -o "$HOME/.local/downloads/%(title)s.%(ext)s" "$1"
+set -euo pipefail
+
+url="${1:-}"
+
+if [[ -z "$url" ]]; then
+    printf 'Usage: ytv <youtube-url>\n' >&2
+    exit 1
+fi
+
+yt-dlp \
+    -f 'bestvideo+bestaudio' \
+    --merge-output-format mp4 \
+    --restrict-filenames \
+    -o "$HOME/.local/downloads/%(title)s.%(ext)s" \
+    "$url"
+
+# Last Modified: Mon, 26 Jan 2026 06:00:04 AM

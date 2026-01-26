@@ -1,7 +1,15 @@
-#!/bin/sh
-# Sxiv statusbar
-filename=$(basename "$1")
-filesize=$(du -Hh "$1" | cut -f 1)
-# The '[0]' stands for the first frame of a multi-frame file, e.g. gif
-geometry=$(identify -format '%wx%h' "$1[0]")
-echo "${filesize} | ${geometry} | ${filename}"
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: nsxiv statusbar image information
+
+set -euo pipefail
+
+file="$1"
+
+filename="$(basename -- "$file")"
+filesize="$(du -Hh -- "$file" | cut -f1)"
+geometry="$(identify -format '%wx%h' "${file}[0]")"
+
+printf "%s | %s | %s\n" "$filesize" "$geometry" "$filename"
+
+# Last Modified: Mon, 26 Jan 2026 04:17:15 AM

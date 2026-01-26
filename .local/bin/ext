@@ -1,40 +1,61 @@
-#!/bin/sh
-# A general, all-purpose extraction script
-# Default behavior: extract archive into new directory
-# Behavior with `-c` option: extract contents into current directory
-while getopts "hc" o; do case "${o}" in
-  c) extracthere="True" ;;
-  *) printf "Options:\\n   -c: Extract archive into current directory rather than a new one.\\n" && exit 1 ;;
-esac done
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: General-purpose archive extraction script
 
-if [ -z "$extracthere" ]; then
-  archive="$(readlink -f "$*")" &&
-  directory="$(echo "$archive" | sed 's/\.[^\/.]*$//')" &&
-  mkdir -p "$directory" &&
-  cd "$directory" || exit 1
-else
-  archive="$(readlink -f "$(echo "$*" | cut -d' ' -f2)" 2>/dev/null)"
+set -euo pipefail
+
+extract_here=false
+
+usage() {
+    printf "Options:\n"
+    printf "  -c  Extract archive into current directory (default: new directory)\n"
+    exit 1
+}
+
+while getopts ":hc" opt; do
+    case "$opt" in
+    c) extract_here=true ;;
+    h | *) usage ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+[ $# -eq 1 ] || {
+    printf "Give archive to extract as argument.\n"
+    exit 1
+}
+
+archive="$(readlink -f -- "$1")"
+
+[ -f "$archive" ] || {
+    printf "File \"%s\" not found.\n" "$archive"
+    exit 1
+}
+
+if ! $extract_here; then
+    dir="${archive%.*}"
+    mkdir -p -- "$dir"
+    cd -- "$dir"
 fi
 
-[ -z "$archive" ] && printf "Give archive to extract as argument.\\n" && exit 1
+case "$archive" in
+*.tar.bz2 | *.tbz2) tar xvjf "$archive" ;;
+*.tar.xz) tar -xJf "$archive" ;;
+*.tar.gz | *.tgz) tar xvzf "$archive" ;;
+*.tar) tar xvf "$archive" ;;
+*.bz2) bunzip2 "$archive" ;;
+*.gz) gunzip "$archive" ;;
+*.xz) unxz "$archive" ;;
+*.lzma) unlzma "$archive" ;;
+*.rar) unrar x -ad "$archive" ;;
+*.zip) unzip "$archive" ;;
+*.Z) uncompress "$archive" ;;
+*.7z) 7z x "$archive" ;;
+*.exe) cabextract "$archive" ;;
+*)
+    printf "extract: '%s' - unknown archive method\n" "$archive"
+    exit 1
+    ;;
+esac
 
-if [ -f "$archive" ] ; then
-  case "$archive" in
-    *.tar.bz2|*.tbz2) tar xvjf "$archive" ;;
-    *.tar.xz) tar -xf "$archive" ;;
-    *.tar.gz|*.tgz) tar xvzf "$archive" ;;
-    *.lzma) unlzma "$archive" ;;
-    *.bz2) bunzip2 "$archive" ;;
-    *.rar) unrar x -ad "$archive" ;;
-    *.gz) gunzip "$archive" ;;
-    *.tar) tar xvf "$archive" ;;
-    *.zip) unzip "$archive" ;;
-    *.Z) uncompress "$archive" ;;
-    *.7z) 7z x "$archive" ;;
-    *.xz) unxz "$archive" ;;
-    *.exe) cabextract "$archive" ;;
-    *) printf "extract: '%s' - unknown archive method\\n" "$archive" ;;
-  esac
-else
-  printf "File \"%s\" not found.\\n" "$archive"
-fi
+# Last Modified: Mon, 26 Jan 2026 04:05:17 AM

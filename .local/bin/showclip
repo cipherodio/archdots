@@ -1,6 +1,13 @@
-#!/bin/sh
-# Display contents of clipboard
-clip=$(xclip -o -selection clipboard)
-prim=$(xclip -o -selection primary)
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Display contents of clipboard and primary selection
+
+set -euo pipefail
+
+clip="$(xclip -o -selection clipboard 2>/dev/null || true)"
+prim="$(xclip -o -selection primary 2>/dev/null || true)"
+
 [ -n "$clip" ] && notify-send "Clipboard" "$clip"
 [ -n "$prim" ] && notify-send "Primary" "$prim"
+
+# Last Modified: Mon, 26 Jan 2026 04:55:12 PM

@@ -1,40 +1,50 @@
-#!/bin/bash
-# Unmount: USB drives + Android phones via dmenu
-# Unmount devices in ~/.local/mnt/<device>
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Unmount USB drives and Android phones using rofi
+# Unmounts devices in ~/.local/mnt
 
-set -e
+set -euo pipefail
 IFS=$'\n'
 
 MNT="$HOME/.local/mnt"
 
-# Android phones
-mounteddroids="$(mount | grep simple-mtpfs | awk '{print "📱 " $3}')"
+# Android devices (simple-mtpfs)
+mounteddroids="$(
+    mount |
+        awk '/simple-mtpfs/ { print "📱 " $3 }' || true
+)"
 
-# USB Drives
-mountedusb="$(lsblk -nrpo mountpoint,size |
-    awk -v m="$MNT" '
-        $1 ~ "^"m"/" {
-            printf "💾 %s (%s)\n",$1,$2
-        }
-    ')"
+# USB mounts under ~/.local/mnt
+mountedusb="$(
+    lsblk -nrpo MOUNTPOINT,SIZE |
+        awk -v m="$MNT" '
+            $1 ~ "^"m"/" {
+                printf "💾 %s (%s)\n", $1, $2
+            }
+        ' || true
+)"
 
-# Menu
 choices="$(printf "%s\n%s\n" "$mounteddroids" "$mountedusb" | sed '/^$/d')"
-[ -n "$choices" ]
 
-chosen="$(echo "$choices" | dmenu -i -p 'Unmount which device?')"
-[ -n "$chosen" ]
+if [ -z "$choices" ]; then
+    notify-send "unmounter" "No mounted devices found"
+    exit 0
+fi
 
-# Parse mountpoint
+chosen="$(printf "%s\n" "$choices" | rofi -dmenu -i -p 'Unmount which device?')"
+[ -n "$chosen" ] || exit 0
+
+# Extract mountpoint
 mp="$chosen"
 mp="${mp#📱 }"
 mp="${mp#💾 }"
 mp="${mp%% (*}"
 
-# Unmount + cleanup
+# Unmount
 sudo -A umount -l "$mp"
+
 rmdir "$mp" 2>/dev/null || true
 
 notify-send "Device unmounted" "$mp"
 
-# Last Modified: Sun, 11 Jan 2026 01:03:08 PM
+# Last Modified: Mon, 26 Jan 2026 05:01:57 PM

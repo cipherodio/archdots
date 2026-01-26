@@ -1,19 +1,27 @@
-#!/bin/sh
-# Toggle unclutter on/off with dmenu confirmation
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Toggle unclutter on/off with rofi confirmation
+
+set -euo pipefail
 
 confirm() {
-    printf "Yes" | dmenu -i -p "$1" >/dev/null
+    printf 'Yes\n' | rofi -dmenu -i -p "$1" >/dev/null
 }
 
-if pgrep -x unclutter >/dev/null; then
-    confirm "[● ON] Turn OFF unclutter?" &&
-        pkill unclutter &&
+unclutter_running() {
+    pgrep -x unclutter >/dev/null
+}
+
+if unclutter_running; then
+    if confirm "[● ON] Turn OFF unclutter?"; then
+        pkill unclutter
         notify-send "Unclutter" "OFF"
+    fi
 else
-    confirm "[○ OFF] Turn ON unclutter?" && {
+    if confirm "[○ OFF] Turn ON unclutter?"; then
         unclutter --timeout 3 -jitter 50 --ignore-scrolling &
         notify-send "Unclutter" "ON"
-    }
+    fi
 fi
 
-# Last Modified: Sun, 11 Jan 2026 02:55:49 PM
+# Last Modified: Mon, 26 Jan 2026 06:07:46 AM

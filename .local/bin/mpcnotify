@@ -1,12 +1,20 @@
-#!/bin/sh
-# Script to be used with ncmpcpp.
-# Shows current played song.
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Show currently playing song from MPD via dunst
 
-msgId="280307"
+set -euo pipefail
 
-msong=$(mpc current)
+MSG_ID="280307"
 
-dunstify -a "mpcnotify" \
+song="$(mpc current)"
+
+# Exit quietly if nothing is playing
+[ -n "$song" ] || exit 0
+
+dunstify \
+    -a "mpcnotify" \
     -u low \
-    -r "$msgId" \
-    "Now Playing $msong"
+    -r "$MSG_ID" \
+    "Now Playing" "$song"
+
+# Last Modified: Mon, 26 Jan 2026 04:41:52 AM

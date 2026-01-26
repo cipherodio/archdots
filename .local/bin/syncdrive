@@ -1,30 +1,22 @@
-#!/bin/sh
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Sync personal data, music, and wallpapers using rsync + rofi
 
-me="$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")"
+set -euo pipefail
 
 # Personal data
-sourcefiledir="$HOME/.config/dev/rsync/"
-targetfiledir="$HOME/.config/mnt/sdb1/rsync/"
+sourcefiledir="$HOME/.local/src/rsync/"
+targetfiledir="$HOME/.local/mnt/sda1/rsync/"
+
 # Music
-sourcemusicdir="/media/data/music/"
-targetmusicdir="$HOME/.config/mnt/sdb1/music/"
+sourcemusicdir="/data/music/"
+targetmusicdir="$HOME/.local/mnt/sda1/music/"
+
 # Wallpapers
-sourcewalldir="/media/data/walls/"
-targetwalldir="$HOME/.config/mnt/sdb1/walls/"
+sourcewalldir="/data/wallpapers/"
+targetwalldir="$HOME/.local/mnt/sda1/walls/"
 
-menu() {
-    echo "usage:         " "$me" "[OPTION]"
-    echo " "
-    echo "dpr:           dry run for personal data transfer"
-    echo "pr:            sync personal data"
-    echo " "
-    echo "dmusic:        dry run for music data transfer"
-    echo "music:         sync music"
-    echo " "
-    echo "dwall:         dry run for wallpaper data transfer"
-    echo "wall:          sync wallpaper"
-}
-
+# Actions
 dpr() {
     rsync -anPv "$sourcefiledir" "$targetfiledir"
 }
@@ -34,23 +26,42 @@ pr() {
 }
 
 dmusic() {
-    rsync -anPv $sourcemusicdir "$targetmusicdir"
+    rsync -anPv "$sourcemusicdir" "$targetmusicdir"
 }
 
 music() {
-    rsync -aPv $sourcemusicdir "$targetmusicdir"
+    rsync -aPv "$sourcemusicdir" "$targetmusicdir"
 }
 
 dwall() {
-    rsync -anPv $sourcewalldir "$targetwalldir"
+    rsync -anPv "$sourcewalldir" "$targetwalldir"
 }
 
 wall() {
-    rsync -aPv $sourcewalldir "$targetwalldir"
+    rsync -aPv "$sourcewalldir" "$targetwalldir"
 }
 
-if [ -n "$1" ]; then
-    $1
-else
-    menu
-fi
+# Rofi menu
+choice="$(
+    printf "%s\n" \
+        "📁 Dry run: personal data" \
+        "📁 Sync: personal data" \
+        "🎵 Dry run: music" \
+        "🎵 Sync: music" \
+        "🖼️  Dry run: wallpapers" \
+        "🖼️  Sync: wallpapers" |
+        rofi -dmenu -i -p "syncdrive"
+)"
+
+[ -z "$choice" ] && exit 0
+
+case "$choice" in
+"📁 Dry run: personal data") dpr ;;
+"📁 Sync: personal data") pr ;;
+"🎵 Dry run: music") dmusic ;;
+"🎵 Sync: music") music ;;
+"🖼️  Dry run: wallpapers") dwall ;;
+"🖼️  Sync: wallpapers") wall ;;
+esac
+
+# Last Modified: Mon, 26 Jan 2026 04:58:42 PM

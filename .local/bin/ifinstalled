@@ -1,8 +1,15 @@
-#!/bin/sh
-# Check to see if a command exists and if it doesn't
-# It informs the user that they need that command to continue
-for x in "$@"; do
-    if ! which "$x" >/dev/null 2>&1 && ! pacman -Qq "$x" >/dev/null 2>&1; then
-        notify-send "📦 $x" "must be installed for this function." && exit 1 ;
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Check if required commands/packages are installed
+
+set -euo pipefail
+
+for cmd in "$@"; do
+    if ! command -v "$cmd" >/dev/null 2>&1 &&
+        ! pacman -Qq "$cmd" >/dev/null 2>&1; then
+        notify-send "📦 $cmd" "must be installed for this function."
+        exit 1
     fi
 done
+
+# Last Modified: Mon, 26 Jan 2026 04:14:29 AM

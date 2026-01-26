@@ -1,94 +1,125 @@
-#!/bin/sh
-# dmenu-based screen/audio/webcam recorder (auto-detect running recording)
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Rofi-based screen/audio/webcam recorder
+# Auto-detect running recording
+
+set -euo pipefail
+
+PIDFILE="/tmp/recordingpid"
+OUTDIR="$HOME"
+RECTYPE=""
 
 getdim() {
     xdpyinfo | awk '/dimensions:/ {print $2}'
 }
 
+cleanup_pid() {
+    rm -f "$PIDFILE"
+}
+
 is_recording() {
-    [ -f /tmp/recordingpid ] &&
-        kill -0 "$(cat /tmp/recordingpid)" 2>/dev/null
+    if [[ -f "$PIDFILE" ]]; then
+        if kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
+            return 0
+        else
+            cleanup_pid
+        fi
+    fi
+    return 1
+}
+
+confirm() {
+    printf 'Yes\n' | rofi -dmenu -i -p "$1" >/dev/null
 }
 
 killrecording() {
-    pid=$(cat /tmp/recordingpid 2>/dev/null) || exit 1
-    kill -15 "$pid" 2>/dev/null
-    rm -f /tmp/recordingpid
-    notify-send "Recording" "Stopped"
+    local pid
+    pid="$(cat "$PIDFILE" 2>/dev/null)" || return 1
+    kill -15 "$pid" 2>/dev/null || true
+    cleanup_pid
+    notify-send "Recording" "Stopped (${RECTYPE:-unknown})"
 }
 
 record() {
+    RECTYPE="$1"
+    shift
     "$@" >/dev/null 2>&1 &
-    echo $! >/tmp/recordingpid
-    notify-send "Recording" "Started"
+    printf '%s\n' "$!" >"$PIDFILE"
+    notify-send "Recording" "Started ($RECTYPE)"
 }
 
+trap 'is_recording && killrecording' INT TERM
+
 screencast() {
-    record ffmpeg -y \
+    record screencast ffmpeg -y \
         -f x11grab -framerate 30 -s "$(getdim)" -i "$DISPLAY" \
         -f alsa -thread_queue_size 1024 -i default \
         -c:v h264 -crf 0 -preset ultrafast -c:a aac \
-        "$HOME/screencast-$(date '+%y%m%d-%H%M-%S').mp4"
+        "$OUTDIR/screencast-$(date '+%y%m%d-%H%M-%S').mp4"
 }
 
 video() {
-    record ffmpeg \
+    record video ffmpeg \
         -f x11grab -framerate 30 -s "$(getdim)" -i "$DISPLAY" \
         -c:v libx264 -qp 0 \
-        "$HOME/video-$(date '+%y%m%d-%H%M-%S').mkv"
+        "$OUTDIR/video-$(date '+%y%m%d-%H%M-%S').mkv"
 }
 
 videoselected() {
     slop -f "%x %y %w %h" | {
         read -r X Y W H
-        record ffmpeg \
+        record "video selected" ffmpeg \
             -f x11grab -framerate 30 \
             -video_size "${W}x${H}" \
             -i ":0.0+${X},${Y}" \
             -c:v libx264 -qp 0 \
-            "$HOME/box-$(date '+%y%m%d-%H%M-%S').mkv"
+            "$OUTDIR/box-$(date '+%y%m%d-%H%M-%S').mkv"
     }
 }
 
 audio() {
-    record ffmpeg \
+    record audio ffmpeg \
         -f alsa -i default \
         -c:a mp3 \
-        "$HOME/audio-$(date '+%y%m%d-%H%M-%S').mp3"
+        "$OUTDIR/audio-$(date '+%y%m%d-%H%M-%S').mp3"
 }
 
 webcam() {
-    record ffmpeg \
+    record webcam ffmpeg \
         -f v4l2 -video_size 640x480 -i /dev/video0 \
-        "$HOME/webcam-$(date '+%y%m%d-%H%M-%S').mkv"
+        "$OUTDIR/webcam-$(date '+%y%m%d-%H%M-%S').mkv"
 }
 
 webcamhidef() {
-    record ffmpeg \
+    record "webcam hi-def" ffmpeg \
         -f v4l2 -video_size 1920x1080 -i /dev/video0 \
-        "$HOME/webcam-$(date '+%y%m%d-%H%M-%S').mkv"
+        "$OUTDIR/webcam-$(date '+%y%m%d-%H%M-%S').mkv"
 }
 
 askrecording() {
-    choice=$(printf "screencast\nvideo\nvideo selected\naudio\nwebcam\nwebcam (hi-def)" |
-        dmenu -i -p "Select recording:") || exit 0
+    local choice
+    choice="$(
+        printf '%s\n' \
+            screencast \
+            video \
+            "video selected" \
+            audio \
+            webcam \
+            "webcam (hi-def)" |
+            rofi -dmenu -i -p "Select recording"
+    )" || exit 0
 
     case "$choice" in
     screencast) screencast ;;
     video) video ;;
-    *selected) videoselected ;;
+    "video selected") videoselected ;;
     audio) audio ;;
     webcam) webcam ;;
     "webcam (hi-def)") webcamhidef ;;
     esac
 }
 
-asktoend() {
-    choice=$(printf "No\nYes" | dmenu -i -p "Recording active. End?") || exit 0
-    [ "$choice" = "Yes" ] && killrecording
-}
-
-case "$1" in
+case "${1:-}" in
 screencast) screencast ;;
 video) video ;;
 audio) audio ;;
@@ -96,11 +127,11 @@ audio) audio ;;
 kill) killrecording ;;
 *)
     if is_recording; then
-        asktoend
+        confirm "Recording active. Stop?" && killrecording
     else
         askrecording
     fi
     ;;
 esac
 
-# Last Modified: Sun, 11 Jan 2026 05:33:29 PM
+# Last Modified: Mon, 26 Jan 2026 04:51:34 PM

@@ -1,3 +1,9 @@
-#!/bin/sh
-# Disables keyboard in screenshot
-maim -sk pic-selected-"$(date '+%y%m%d-%H%M-%S').png"
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Take a screenshot with keyboard input disabled
+
+set -euo pipefail
+
+maim -sk "pic-selected-$(date '+%y%m%d-%H%M-%S').png"
+
+# Last Modified: Mon, 26 Jan 2026 04:18:59 AM

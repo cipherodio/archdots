@@ -1,3 +1,13 @@
-#!/bin/sh
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Skip to next track in Spotify via MPRIS
 
-dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next > /dev/null 2>&1
+set -euo pipefail
+
+dbus-send --print-reply \
+    --dest=org.mpris.MediaPlayer2.spotify \
+    /org/mpris/MediaPlayer2 \
+    org.mpris.MediaPlayer2.Player.Next \
+    >/dev/null 2>&1
+
+# Last Modified: Mon, 26 Jan 2026 04:55:19 PM

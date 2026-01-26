@@ -1,19 +1,35 @@
-#!/bin/sh
-# Take screenshot
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Take screenshots using maim + rofi
 
-output="$HOME/.local/screenshot/$(date '+%G-%d-%b-%I:%M%p').png"
+set -euo pipefail
 
-case "$(printf "Selected area\nCurrent window\nFullscreen" | dmenu -l 3 -i -p "Screenshot")" in
+OUTDIR="$HOME/.local/screenshot"
+mkdir -p "$OUTDIR"
+
+output="$OUTDIR/$(date '+%G-%d-%b-%I:%M%p').png"
+
+choice="$(
+    printf '%s\n' \
+        "Selected area" \
+        "Current window" \
+        "Fullscreen" |
+        rofi -dmenu -i -p "Screenshot"
+)" || exit 0
+
+case "$choice" in
 "Selected area")
-    maim -u -s "$output" && notify-send "📸 Screenshot taken."
+    maim -u -s "$output" &&
+        notify-send "📸 Screenshot taken" "$output"
     ;;
 "Current window")
     maim -B -q -d 0.2 -i "$(xdotool getactivewindow)" "$output" &&
-        notify-send "📸 Screenshot taken."
+        notify-send "📸 Screenshot taken" "$output"
     ;;
 "Fullscreen")
-    maim -q -d 0.2 "$output" && notify-send "📸 Screenshot taken."
+    maim -q -d 0.2 "$output" &&
+        notify-send "📸 Screenshot taken" "$output"
     ;;
 esac
 
-# Last Modified: Sun, 11 Jan 2026 05:38:42 PM
+# Last Modified: Mon, 26 Jan 2026 04:52:06 PM

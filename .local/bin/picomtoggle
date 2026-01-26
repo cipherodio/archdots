@@ -1,20 +1,35 @@
-#!/bin/sh
-# Toggle picom on/off with dmenu confirmation
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Toggle picom compositor using rofi
 
+set -euo pipefail
+
+# Sanity checks
+for cmd in rofi notify-send pgrep pkill picom; do
+    command -v "$cmd" >/dev/null 2>&1 || {
+        notify-send "picomtoggle error" "$cmd not found"
+        exit 1
+    }
+done
+
+# Rofi confirmation
 confirm() {
-    printf "Yes" | dmenu -i -p "$1" >/dev/null
+    local prompt="$1"
+    choice="$(printf "Yes\nNo\n" | rofi -dmenu -i -p "$prompt")"
+    [ "$choice" = "Yes" ]
 }
 
+# Toggle
 if pgrep -x picom >/dev/null; then
-    confirm "[● ON] Turn OFF picom?" && {
-        notify-send "Picom" "OFF"
+    if confirm "[● ON] Turn OFF picom?"; then
         pkill picom
-    }
+        notify-send "Picom" "OFF"
+    fi
 else
-    confirm "[○ OFF] Turn ON picom?" && {
+    if confirm "[○ OFF] Turn ON picom?"; then
         picom -b
         notify-send "Picom" "ON"
-    }
+    fi
 fi
 
-# Last Modified: Sun, 11 Jan 2026 03:07:11 PM
+# Last Modified: Mon, 26 Jan 2026 04:33:08 PM

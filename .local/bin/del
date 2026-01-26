@@ -1,10 +1,31 @@
-#!/bin/sh
-# move a file to trash (needs GNU mvA)
-td=~/.local/trash
-for o; do
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Move a file to trash (needs GNU mv)
+
+set -euo pipefail
+
+td="$HOME/.local/trash"
+mkdir -p "$td"
+
+args=()
+
+for o in "$@"; do
     case "$o" in
-        --) break;;
-        -*) rm "$@"; exit;;
+    --)
+        shift
+        break
+        ;;
+    -*)
+        exec rm "$@"
+        ;;
+    *)
+        args+=("$o")
+        ;;
     esac
 done
-mv --backup=t -v "$@" "$td"
+
+((${#args[@]})) || exit 0
+
+mv --backup=t -v "${args[@]}" "$td"
+
+# Last Modified: Mon, 26 Jan 2026 06:10:21 AM

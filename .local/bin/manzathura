@@ -1,20 +1,22 @@
-#!/bin/sh
-# Search man pages via dmenu and open as PDF in zathura
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Search man pages and open them as PDF in zathura
+
+set -euo pipefail
 
 choice=$(
     apropos . |
         awk '{ print $1 " " $2 }' |
         sort -u |
-        dmenu -i -l 10 -p man
+        rofi -dmenu -i -lines 10 -p man
 ) || exit 0
 
-[ -z "$choice" ] && exit 0
+[ -n "$choice" ] || exit 0
 
-# Extract name and section
-name=$(printf '%s\n' "$choice" | awk '{print $1}')
-section=$(printf '%s\n' "$choice" | sed -n 's/.*(\(.*\)).*/\1/p')
+name="${choice%% *}"
+section="$(sed -n 's/.*(\(.*\)).*/\1/p' <<<"$choice")"
 
 # IMPORTANT: -Tpdf must come BEFORE section/name
 man -Tpdf "$section" "$name" 2>/dev/null | zathura - &
 
-# Last Modified: Sun, 11 Jan 2026 04:47:05 PM
+# Last Modified: Mon, 26 Jan 2026 04:24:10 AM

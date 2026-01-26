@@ -1,4 +1,24 @@
-#!/bin/sh
-# Search music playlist in dmenu and play it on mpd
-track=$(mpc playlist -f "%position% - %title% - %artist% - %album%" | dmenu -i -l 10 -p "Track") && mpc play "${track%% *}"
-echo "$track"
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Select a track from MPD playlist via rofi and play it
+
+set -euo pipefail
+
+playlist="$(
+    mpc playlist -f "%position% - %title% - %artist% - %album%" || true
+)"
+
+[ -n "$playlist" ] || exit 0
+
+track="$(
+    printf '%s\n' "$playlist" |
+        rofi -dmenu -i -l 10 -p "Track"
+)"
+
+[ -n "$track" ] || exit 0
+
+mpc play "${track%% *}"
+
+printf '%s\n' "$track"
+
+# Last Modified: Mon, 26 Jan 2026 06:19:24 AM

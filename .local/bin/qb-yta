@@ -1,11 +1,30 @@
-#!/bin/sh
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Download YouTube audio as MP3 using yt-dlp
 
-url="$1"
+set -euo pipefail
 
-notify-send --urgency low " Youtube download" "started $url"~
-if yt-dlp -x --audio-format mp3 --audio-quality 0 --restrict-filenames -o "$HOME/.local/downloads/%(title)s.%(ext)s" "$url"
-    then
-        notify-send --urgency normal " Youtube download" "finished $url"
-    else
-        notify-send --urgency critical " Youtube download" "failed $url"
+url="${1:-}"
+
+[ -z "$url" ] && {
+    notify-send --urgency critical " Youtube download" "No URL provided"
+    exit 1
+}
+
+OUTDIR="$HOME/.local/downloads"
+
+notify-send --urgency low " Youtube download" "Started\n$url"
+
+if yt-dlp \
+    -x \
+    --audio-format mp3 \
+    --audio-quality 0 \
+    --restrict-filenames \
+    -o "$OUTDIR/%(title)s.%(ext)s" \
+    "$url"; then
+    notify-send --urgency normal " Youtube download" "Finished\n$url"
+else
+    notify-send --urgency critical " Youtube download" "Failed\n$url"
 fi
+
+# Last Modified: Mon, 26 Jan 2026 04:42:45 PM

@@ -1,3 +1,13 @@
-#!/bin/sh
-# Run RSS feeder
-newsboat -q && newsboat -x print-unread | cut -d ' ' -f 1 >~/.cache/news_unread
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Launch newsboat and cache unread article count
+
+set -euo pipefail
+
+CACHE="$HOME/.cache/news_unread"
+
+# Run newsboat quietly, then store unread count
+newsboat -q
+newsboat -x print-unread | awk '{print $1}' >"$CACHE"
+
+# Last Modified: Mon, 26 Jan 2026 05:19:52 AM
