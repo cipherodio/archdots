@@ -1,0 +1,153 @@
+statuspanel[type="overLink"],
+#statuspanel[type="overLink"] {
+  right: 0;
+  display: inline;
+}
+
+/* This is for background color startup */
+
+#browser vbox#appcontent tabbrowser,
+#content,
+#tabbrowser-tabpanels,
+browser[type=content-primary],
+browser[type=content] > html {
+  background: #1d2021 !important;
+}
+
+/* Personal UI Customizations */
+
+html#main-window {
+  --color-bg: #1d2021;
+  --color-alt-bg: #282828;
+  --color-fg: #ebddb2;
+  --color-text: #b8bb26;
+  --color-selected: #458588;
+  --toolbar-bgcolor: var(--color-bg) !important;
+}
+
+/* TABS */
+
+/* Declutter tabs */
+
+.tab-close-button,
+.tab-line,
+.tabbrowser-tab::before,
+.tabbrowser-tab::after,
+/* .tabbrowser-tab .tab-icon-image { */
+/*   display: none !important; */
+/* } */
+
+/* Remove new tab + icon */
+
+#tabs-newtab-button {
+  display: none !important;
+}
+
+/* Hide tab drop-down list icon */
+
+.browser-toolbar > * #alltabs-button {
+  display: none;
+}
+
+/* Tab base color background and inactive foreground color */
+
+#titlebar {
+  background-color: var(--color-bg) !important;
+  color: var(--color-fg) !important;
+}
+
+/* Tab selected foreground color */
+
+.tabbrowser-tab[selected="true"] {
+  color: var(--color-text) !important;
+}
+
+/* Remove hover background tab color */
+
+.tabbrowser-tab > .tab-stack .tab-background:not([selected="true"]) {
+  background-color: transparent !important;
+}
+
+/* Hide if only single tab */
+
+#tabbrowser-tabs tab:first-of-type:last-of-type {
+  visibility: collapse !important;
+}
+
+/* URL */
+
+/* Declutter url */
+
+/* Remove url star bookmark, reader, pip, across device icons */
+
+.urlbarView-favicon,
+.urlbar-history-dropmaker,
+#firefox-view-button,
+#identity-icon-box:has(> #identity-icon-label[value="Extension (Tabliss)"]),
+#identity-box:not(.extensionPage) > #identity-icon-box,
+#picture-in-picture-button,
+#reader-mode-button,
+#star-button-box {
+  display: none !important;
+}
+
+/* Tracker shield icon remove */
+
+#tracking-protection-icon-container,
+#urlbar-search-button {
+  display: none !important;
+}
+
+/* Url input field */
+
+#urlbar-background,
+#urlbar-container,
+.urlbar-input-box {
+  background-color: var(--color-bg) !important;
+  color: var(--color-fg) !important;
+  font-size: 14pt !important;
+}
+
+/* Url input suggested selection completion */
+
+#urlbar-input::selection {
+  background-color: var(--color-selected) !important;
+  color: var(--color-bg) !important;
+}
+
+/* Url bar suggestion list container */
+
+.urlbarView {
+  background-color: var(--color-bg) !important;
+  color: var(--color-fg) !important;
+}
+
+/* Url bar suggestion list hover */
+
+.urlbarView-row:hover {
+  background-color: none !important;
+  color: var(--color-selected) !important;
+}
+
+/* Url bar suggestion and selected row */
+
+.urlbarView:not(.megabar) .urlbarView-row:not([type="tip"])[selected],
+.urlbarView.megabar .urlbarView-row:not([type="tip"])[selected] > .urlbarView-row-inner {
+  background: var(--color-bg) !important;
+  color: var(--color-text) !important;
+  fill-opacity: 1;
+}
+
+/* Text that says "Search with Google" */
+
+.urlbarView-action {
+  background-color: none !important;
+  color: var(--color-text) !important;
+}
+
+/* Text that says: This time, search with: */
+
+#urlbar-one-offs-header-label {
+  color: var(--color-selected) !important;
+  font-size: 14pt !important;
+}
