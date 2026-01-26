@@ -1,4 +1,4 @@
-#!/bin/sh
+# shell aliases (sourced by zsh)
 
 # Use neovim for vim if present
 [ -x "$(command -v nvim)" ] && alias vim="nvim" vimdiff="nvim -d"
@@ -28,7 +28,7 @@ alias \
 # These common commands are just too long! abbreviate them
 # shellcheck disable=SC2139
 alias \
-    pk="pkill -9" \
+    pk="pkill" \
     rg="\rg --ignore-file ~/.config/ripgrep/ignore" \
     o="$FILE" \
     v="$EDITOR" \
@@ -52,7 +52,7 @@ alias \
     fne="fc-list : family | grep -i" \
     srm="shred -zvu -n 5" \
     xtar="tar xfv" \
-    sysinfo="echo "" && sysarch" \
+    sysinfo="echo && sysarch" \
     ifn="fc-cache -f -v" \
     gip="curl ipinfo.io/ip" \
     civ="convert +append" \
@@ -60,4 +60,4 @@ alias \
     xdgf="xdg-mime query filetype" \
     xdgd="xdg-mime query default"
 
-# Last Modified: Sun, 11 Jan 2026 04:34:21 PM
+# Last Modified: Mon, 26 Jan 2026 12:54:38 AM
