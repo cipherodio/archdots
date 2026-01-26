@@ -40,7 +40,7 @@
     show_indicators = false
     sticky_history = yes
     history_length = 20
-    dmenu = /usr/bin/dmenu -p dunst:
+    dmenu = rofi -dmenu -p dunst
     browser = /usr/bin/xdg-open
     always_run_script = true
     title = Dunst
