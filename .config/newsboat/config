@@ -65,6 +65,6 @@ highlight article ":.*\\(embedded flash\\)$" magenta default
 bind-key ` macro-prefix
 unbind-key ,
 browser linkhandler
-macro d set browser "setsid -f dmenu-handler"; open-in-browser; set browser linkhandler
+macro d set browser "setsid -f rofihandler"; open-in-browser; set browser linkhandler
 macro c set browser "echo %u | xclip -r -sel c"; open-in-browser ; set browser linkhandler
 macro b set browser "$BROWSER"; open-in-browser; set browser linkhandler
