@@ -58,4 +58,4 @@ user_pref("privacy.clearOnShutdown.cookies", false);
 // This could otherwise cause some issues on bank logins and other annoying sites:
 user_pref("network.http.referer.XOriginPolicy", 0);
 
-// Last Modified: Sun, 25 Jan 2026 09:28:04 PM
+// Last Modified: Mon, 26 Jan 2026 10:17:34 PM
