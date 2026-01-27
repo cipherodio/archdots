@@ -47,12 +47,7 @@ export TASKDATA="$XDG_DATA_HOME/task"
 
 # Npm path
 export PATH="$XDG_DATA_HOME/npm/bin:$PATH"
-# export PATH="$HOME/.local/share/node_modules/bin:$PATH"
-# export NPM_CONFIG_PREFIX="$HOME/.local/share/node_modules"
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
-# export NPM_CONFIG_CACHE="$HOME/.cache/npm"
-# export NPM_CONFIG_TMPDIR="$XDG_RUNTIME_DIR/npm"
-# export NPM_CONFIG_TMPDIR="${XDG_RUNTIME_DIR:-/tmp}/npm"
 
 # Misc
 export HISTSIZE=1000
@@ -61,7 +56,7 @@ export HISTFILE="$ZDOTDIR/.history"
 export LESSHISTFILE="-"
 export SUDO_ASKPASS="$HOME/.local/bin/rofipass"
 export SUDO_PROMPT="[sudo] password for %p: "
-export SPROMPT="%F{blue}[%fzsh%F{blue}]%f correct %F{red}%R%f to %F{blue}%r%f [nyae]: "
+# export SPROMPT="%F{blue}[%fzsh%F{blue}]%f correct %F{red}%R%f to %F{blue}%r%f [nyae]: "
 
 # Fzf
 export FZF_DEFAULT_OPTS_FILE="$XDG_CONFIG_HOME/fzf/themes/onedark"
@@ -102,10 +97,11 @@ export GDK_DPI_SCALE=1.2
 
 # Enable if using qutebrowser for DRM Content
 # export QTWEBENGINE_CHROMIUM_FLAGS="--widevine-path=/usr/lib/chromium/libwidevinecdm.so"
+
 # Mozilla zoom in and out
 export MOZ_USE_XINPUT2=1
 
 # Shortcuts
 [ ! -f "$XDG_CONFIG_HOME/shell/shrc" ] && setsid -f shortcuts >/dev/null 2>&1
 
-# Last Modified: Mon, 26 Jan 2026 03:10:30 PM
+# Last Modified: Mon, 26 Jan 2026 10:18:05 PM
