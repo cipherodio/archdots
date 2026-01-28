@@ -20,4 +20,41 @@ end, { desc = "Toggle conceal" })
 
 -- km.nmap("<Tab>", "za", { desc = "Toggle fold (markdown only)" })
 
--- Last Modified: Wed, 07 Jan 2026 02:44:14 AM
+-- New: Markdown TOC generator keybind
+-- km.nmap("<leader>mt", function()
+--     -- Run markdown-toc for current buffer
+--     local filename = vim.api.nvim_buf_get_name(0)
+--     vim.cmd("silent !markdown-toc --indent '    ' -i " .. filename .. " --bullets -")
+--     vim.cmd("edit!") -- reload file to reflect TOC changes
+-- end, { desc = "Generate Markdown TOC" })
+
+-- Async Markdown TOC generator
+km.nmap("<leader>mt", function()
+    local buf = 0
+    local filename = vim.api.nvim_buf_get_name(buf)
+    local row, col = unpack(vim.api.nvim_win_get_cursor(0)) -- save cursor
+
+    -- Run markdown-toc asynchronously
+    vim.fn.jobstart(
+        { "markdown-toc", "--indent", "    ", "-i", filename, "--bullets", "-" },
+        {
+            on_exit = function(_, exit_code)
+                if exit_code ~= 0 then
+                    vim.schedule(function()
+                        vim.notify("markdown-toc failed", vim.log.levels.ERROR)
+                    end)
+                    return
+                end
+
+                -- Reload buffer safely on main thread
+                vim.schedule(function()
+                    vim.cmd("edit!") -- reload file to reflect TOC changes
+                    vim.api.nvim_win_set_cursor(0, { row, col }) -- restore cursor
+                    vim.notify("TOC updated", vim.log.levels.INFO)
+                end)
+            end,
+        }
+    )
+end, { desc = "Generate Markdown TOC (async, 4-space bullets)" })
+
+-- Last Modified: Thu, 29 Jan 2026 12:06:36 AM
