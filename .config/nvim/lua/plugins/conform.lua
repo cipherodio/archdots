@@ -35,17 +35,15 @@ return {
                 sh = { "shfmt", "shellcheck" },
                 zsh = { "shellcheck" },
                 python = { "ruff_fix", "ruff_organize_imports", "ruff_format" },
-                markdown = { "prettier", "markdown-toc" },
+                markdown = { "prettier" },
             },
             formatters = {
                 prettier = {
                     prepend_args = {
-                        "--tab-width",
-                        "4",
-                        "--print-width",
-                        "72",
-                        "--prose-wrap",
-                        "always",
+                        "--config",
+                        vim.fn.expand("~/.config/prettier/.prettierrc"),
+                        "--stdin-filepath",
+                        "$FILENAME",
                     },
                 },
                 ["markdown-toc"] = {
@@ -64,4 +62,4 @@ return {
     end,
 }
 
--- Last Modified: Sat, 10 Jan 2026 06:58:51 PM
+-- Last Modified: Thu, 29 Jan 2026 06:13:54 AM
