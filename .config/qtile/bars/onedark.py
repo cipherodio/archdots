@@ -28,7 +28,8 @@ mainbar = [
         **widget_defaults,
         background=onedark["c01"],
         foreground=onedark["c09"],
-        format="%I:%M %p",
+        # format="%I:%M %p",
+        format="%H:%M | %I:%M %p",
     ),
     widget.Image(
         background=onedark["c01"],
@@ -41,7 +42,7 @@ mainbar = [
         background=onedark["c01"],
         foreground=onedark["c09"],
         format="%a %d %b",
-        mouse_callbacks={"Button1": lazy.spawn("calnotify")},
+        mouse_callbacks={"Button1": lazy.spawn("calaptnotify")},
     ),
     widget.Image(
         filename="~/.config/qtile/assets/onedark/background/curveright.png"
@@ -166,4 +167,4 @@ mainbar = [
 
 screens = [Screen(top=bar.Bar(mainbar, size=34))]
 
-# Last Modified: Sat, 24 Jan 2026 06:12:16 PM
+# Last Modified: Thu, 29 Jan 2026 03:59:47 AM
