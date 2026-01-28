@@ -29,9 +29,10 @@ km.nmap("<leader><tab>v", "<cmd>vnew<cr>", { desc = "Vertical split" })
 -- Buffers
 km.nmap("<Tab>", "<cmd>bnext<cr>", { desc = "Next buffer" })
 km.nmap("<S-Tab>", "<cmd>bprevious<cr>", { desc = "Previous buffer" })
+km.nmap("<leader><tab>d", "<cmd>bd<cr>", { desc = "Close buffer" })
 
 -- Close buffer, keep split layout
-km.nmap("<leader><tab>d", function()
+km.nmap("<leader><tab>i", function()
     local cur_buf = vim.api.nvim_get_current_buf()
     local cur_win = vim.api.nvim_get_current_win()
 
@@ -156,4 +157,4 @@ km.nmap("<leader>aD", scheduled.insert_scheduled_and_deadline_checkbox, {
     desc = "Insert @scheduled + @deadline checkbox",
 })
 
--- Last Modified: Wed, 07 Jan 2026 02:30:05 AM
+-- Last Modified: Wed, 28 Jan 2026 01:45:18 AM
