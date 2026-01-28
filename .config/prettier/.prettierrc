@@ -1,0 +1,7 @@
+{
+    "tabWidth": 4,
+    "printWidth": 72,
+    "proseWrap": "always",
+    "endOfLine": "lf",
+    "arrowParens": "always"
+}
