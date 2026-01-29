@@ -68,7 +68,7 @@ msg "Creating user directories"
 
 mkdir -p \
     "$SRC_DIR" \
-    "$HOME_DIR/.local"/{downloads,notes,review,screenshot,torrent,projects} \
+    "$HOME_DIR/.local"/{downloads,review,screenshot,torrent,projects} \
     "$HOME_DIR/.venv"
 
 msg "Done creating user directories"
@@ -150,4 +150,4 @@ msg "Done fixing git remotes"
 # Done
 msg "setup.sh complete"
 
-# Last Modified: Mon, 26 Jan 2026 05:51:15 PM
+# Last Modified: Thu, 29 Jan 2026 06:12:51 PM
