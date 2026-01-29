@@ -19,6 +19,7 @@ local groups = {
     reload_shortcuts = augroup("reload_shortcuts"),
     reload_xdefaults = augroup("reload_xdefaults"),
     reload_dunst = augroup("reload_dunst"),
+    lcd_notes = augroup("lcd_notes"),
 }
 
 autocmd({ "BufEnter", "WinEnter", "InsertLeave", "CmdlineLeave" }, {
@@ -196,4 +197,36 @@ autocmd("BufWritePost", {
     end,
 })
 
--- Last Modified: Thu, 29 Jan 2026 01:12:25 AM
+local uv = vim.loop
+
+local lcd_roots = {
+    uv.fs_realpath(vim.fn.expand("~/.local/src/mdnotes")),
+    -- uv.fs_realpath(vim.fn.expand("~/.local/src/private")),
+}
+
+autocmd("BufEnter", {
+    desc = "Set local cwd for notes/private trees",
+    group = groups.lcd_notes,
+    callback = function()
+        -- Ignore special buffers
+        if vim.bo.buftype ~= "" then
+            return
+        end
+
+        local path = vim.fn.expand("%:p")
+        if path == "" then
+            return
+        end
+
+        path = uv.fs_realpath(path) or path
+
+        for _, root in ipairs(lcd_roots) do
+            if root and path:sub(1, #root) == root then
+                vim.cmd("lcd %:p:h")
+                return
+            end
+        end
+    end,
+})
+
+-- Last Modified: Thu, 29 Jan 2026 07:01:59 PM
