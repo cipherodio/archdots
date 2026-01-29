@@ -1,16 +1,15 @@
 #!/usr/bin/env bash
+# Author: cipherodio
+# Description: Notes script
 
-# ========= DIRECTORIES =========
 JOURNAL_DIR="$HOME/.local/src/mdnotes/journal"
 STORIES_DIR="$HOME/.local/src/mdnotes/stories"
 REFERENCE_DIR="$HOME/.local/src/mdnotes/reference"
 INBOX_DIR="$HOME/.local/src/mdnotes/inbox"
 
-# ========= DATE / TIME =========
-META_DATE_FMT="%b %d, %Y %a" # Jan 28, 2026 Wed (metadata)
-FILE_DATE_FMT="%b-%d-%Y-%a"  # jan-28-2026-wed.md (filename)
-TIME_FMT="%I:%M %p"          # 03:11 PM
-# ===============================
+META_DATE_FMT="%b %d, %Y %a"
+FILE_DATE_FMT="%b-%d-%Y-%a"
+TIME_FMT="%I:%M %p"
 
 set -e
 
@@ -21,7 +20,6 @@ if [[ -z "$mode" ]]; then
     exit 1
 fi
 
-# For metadata
 current_date=$(date +"$META_DATE_FMT")
 current_time=$(date +"$TIME_FMT")
 
@@ -142,23 +140,43 @@ EOF
     ;;
 
 jj)
-    file=$(find "$JOURNAL_DIR" -maxdepth 1 -type f | sed "s|$HOME/.local/src/mdnotes/||" | fzf)
-    [[ -n "$file" ]] && exec "$EDITOR" "$HOME/.local/src/mdnotes/$file"
+    file=$(find "$JOURNAL_DIR" -maxdepth 1 -type f |
+        sed "s|$HOME/.local/src/mdnotes/||" | fzf)
+    if [[ -n "$file" ]]; then
+        exec "$EDITOR" \
+            -c "lcd $(dirname "$HOME/.local/src/mdnotes/$file")" \
+            "$HOME/.local/src/mdnotes/$file"
+    fi
     ;;
 
 ss)
-    file=$(find "$STORIES_DIR" -maxdepth 1 -type f | sed "s|$HOME/.local/src/mdnotes/||" | fzf)
-    [[ -n "$file" ]] && exec "$EDITOR" "$HOME/.local/src/mdnotes/$file"
+    file=$(find "$STORIES_DIR" -maxdepth 1 -type f |
+        sed "s|$HOME/.local/src/mdnotes/||" | fzf)
+    if [[ -n "$file" ]]; then
+        exec "$EDITOR" \
+            -c "lcd $(dirname "$HOME/.local/src/mdnotes/$file")" \
+            "$HOME/.local/src/mdnotes/$file"
+    fi
     ;;
 
 rr)
-    file=$(find "$REFERENCE_DIR" -maxdepth 1 -type f | sed "s|$HOME/.local/src/mdnotes/||" | fzf)
-    [[ -n "$file" ]] && exec "$EDITOR" "$HOME/.local/src/mdnotes/$file"
+    file=$(find "$REFERENCE_DIR" -maxdepth 1 -type f |
+        sed "s|$HOME/.local/src/mdnotes/||" | fzf)
+    if [[ -n "$file" ]]; then
+        exec "$EDITOR" \
+            -c "lcd $(dirname "$HOME/.local/src/mdnotes/$file")" \
+            "$HOME/.local/src/mdnotes/$file"
+    fi
     ;;
 
 ii)
-    file=$(find "$INBOX_DIR" -maxdepth 1 -type f | sed "s|$HOME/.local/src/mdnotes/||" | fzf)
-    [[ -n "$file" ]] && exec "$EDITOR" "$HOME/.local/src/mdnotes/$file"
+    file=$(find "$INBOX_DIR" -maxdepth 1 -type f |
+        sed "s|$HOME/.local/src/mdnotes/||" | fzf)
+    if [[ -n "$file" ]]; then
+        exec "$EDITOR" \
+            -c "lcd $(dirname "$HOME/.local/src/mdnotes/$file")" \
+            "$HOME/.local/src/mdnotes/$file"
+    fi
     ;;
 
 *)
@@ -168,4 +186,4 @@ ii)
     ;;
 esac
 
-# Last Modified: Thu, 29 Jan 2026 02:02:54 AM
+# Last Modified: Thu, 29 Jan 2026 06:07:07 PM
