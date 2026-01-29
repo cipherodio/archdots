@@ -2,26 +2,31 @@
 # Author: cipherodio
 # Description: Notes script
 
-JOURNAL_DIR="$HOME/.local/src/mdnotes/journal"
-STORIES_DIR="$HOME/.local/src/mdnotes/stories"
-REFERENCE_DIR="$HOME/.local/src/mdnotes/reference"
-INBOX_DIR="$HOME/.local/src/mdnotes/inbox"
+set -euo pipefail
 
+# Paths
+BASE_DIR="$HOME/.local/src/mdnotes"
+
+JOURNAL_DIR="$BASE_DIR/journal"
+STORIES_DIR="$BASE_DIR/stories"
+REFERENCE_DIR="$BASE_DIR/reference"
+INBOX_DIR="$BASE_DIR/inbox"
+
+mkdir -p "$JOURNAL_DIR" "$STORIES_DIR" "$REFERENCE_DIR" "$INBOX_DIR"
+
+# Date formats
 META_DATE_FMT="%b %d, %Y %a"
 FILE_DATE_FMT="%b-%d-%Y-%a"
 TIME_FMT="%I:%M %p"
 
-set -e
-
-mode="$1"
-
-if [[ -z "$mode" ]]; then
-    printf "Usage: cn [j|s|r|i|jj|ss|rr|ii]\n"
-    exit 1
-fi
-
 current_date=$(date +"$META_DATE_FMT")
 current_time=$(date +"$TIME_FMT")
+
+# Helpers
+usage() {
+    printf "Usage: cn [j|s|r|i|jj|ss|rr|ii]\n"
+    exit 1
+}
 
 prompt() {
     local label="$1"
@@ -36,15 +41,36 @@ slugify() {
         sed -E 's/[^a-z0-9]+/_/g; s/^_+|_+$//g'
 }
 
-mkdir -p "$JOURNAL_DIR" "$STORIES_DIR" "$REFERENCE_DIR" "$INBOX_DIR"
+open_editor() {
+    exec "$EDITOR" "$1"
+}
+
+pick_and_open() {
+    local dir="$1"
+
+    local file
+    file=$(find "$dir" -maxdepth 1 -type f |
+        sed "s|$BASE_DIR/||" |
+        fzf)
+
+    [[ -n "$file" ]] && open_editor "$BASE_DIR/$file"
+}
+
+title_case() {
+    printf "%s\n" "$1" | sed 's/.*/\u&/'
+}
+
+# Mode dispatch
+mode="${1:-}"
+[[ -z "$mode" ]] && usage
 
 case "$mode" in
 j)
     author="jeremy"
-    FILE_DATE=$(date +"$FILE_DATE_FMT" | tr '[:upper:]' '[:lower:]')
-    FILE_DATE=${FILE_DATE/thu/thurs}
-    filename="$FILE_DATE.md"
-    filepath="$JOURNAL_DIR/$filename"
+    file_date=$(date +"$FILE_DATE_FMT" | tr '[:upper:]' '[:lower:]')
+    file_date=${file_date/thu/thurs}
+
+    filepath="$JOURNAL_DIR/$file_date.md"
 
     if [[ ! -e "$filepath" ]]; then
         cat >"$filepath" <<EOF
@@ -57,7 +83,7 @@ time created: "$current_time"
 EOF
     fi
 
-    exec "$EDITOR" -c "lcd $(dirname "$filepath")" "$filepath"
+    open_editor "$filepath"
     ;;
 
 s)
@@ -66,15 +92,13 @@ s)
     description=$(prompt "Description")
     filename_input=$(prompt "Filename (leave blank to use title)")
 
-    [[ -z "$filename_input" ]] && slug=$(slugify "$title") || slug=$(slugify "$filename_input")
-    filename="$slug.md"
-    filepath="$STORIES_DIR/$filename"
-    title_cased=$(printf "%s\n" "$title" | sed 's/.*/\u&/')
+    slug=$(slugify "${filename_input:-$title}")
+    filepath="$STORIES_DIR/$slug.md"
 
     if [[ ! -e "$filepath" ]]; then
         cat >"$filepath" <<EOF
 ---
-title: $title_cased
+title: $(title_case "$title")
 author: $author
 date created: "$current_date"
 time created: "$current_time"
@@ -86,7 +110,7 @@ description: $description
 EOF
     fi
 
-    exec "$EDITOR" -c "lcd $(dirname "$filepath")" "$filepath"
+    open_editor "$filepath"
     ;;
 
 r)
@@ -95,14 +119,12 @@ r)
     description=$(prompt "Description")
     filename_input=$(prompt "Filename (leave blank to use title)")
 
-    [[ -z "$filename_input" ]] && slug=$(slugify "$title") || slug=$(slugify "$filename_input")
-    filename="$slug.md"
-    filepath="$REFERENCE_DIR/$filename"
-    title_cased=$(printf "%s\n" "$title" | sed 's/.*/\u&/')
+    slug=$(slugify "${filename_input:-$title}")
+    filepath="$REFERENCE_DIR/$slug.md"
 
     cat >"$filepath" <<EOF
 ---
-title: $title_cased
+title: $(title_case "$title")
 author: $author
 date created: "$current_date"
 time created: "$current_time"
@@ -111,7 +133,7 @@ description: $description
 
 EOF
 
-    exec "$EDITOR" -c "lcd $(dirname "$filepath")" "$filepath"
+    open_editor "$filepath"
     ;;
 
 i)
@@ -120,14 +142,12 @@ i)
     filename_input=$(prompt "Filename (leave blank to use title)")
     author="jeremy"
 
-    [[ -z "$filename_input" ]] && slug=$(slugify "$title") || slug=$(slugify "$filename_input")
-    filename="$slug.md"
-    filepath="$INBOX_DIR/$filename"
-    title_cased=$(printf "%s\n" "$title" | sed 's/.*/\u&/')
+    slug=$(slugify "${filename_input:-$title}")
+    filepath="$INBOX_DIR/$slug.md"
 
     cat >"$filepath" <<EOF
 ---
-title: $title_cased
+title: $(title_case "$title")
 author: $author
 date created: "$current_date"
 time created: "$current_time"
@@ -136,54 +156,15 @@ description: $description
 
 EOF
 
-    exec "$EDITOR" -c "lcd $(dirname "$filepath")" "$filepath"
+    open_editor "$filepath"
     ;;
 
-jj)
-    file=$(find "$JOURNAL_DIR" -maxdepth 1 -type f |
-        sed "s|$HOME/.local/src/mdnotes/||" | fzf)
-    if [[ -n "$file" ]]; then
-        exec "$EDITOR" \
-            -c "lcd $(dirname "$HOME/.local/src/mdnotes/$file")" \
-            "$HOME/.local/src/mdnotes/$file"
-    fi
-    ;;
+jj) pick_and_open "$JOURNAL_DIR" ;;
+ss) pick_and_open "$STORIES_DIR" ;;
+rr) pick_and_open "$REFERENCE_DIR" ;;
+ii) pick_and_open "$INBOX_DIR" ;;
 
-ss)
-    file=$(find "$STORIES_DIR" -maxdepth 1 -type f |
-        sed "s|$HOME/.local/src/mdnotes/||" | fzf)
-    if [[ -n "$file" ]]; then
-        exec "$EDITOR" \
-            -c "lcd $(dirname "$HOME/.local/src/mdnotes/$file")" \
-            "$HOME/.local/src/mdnotes/$file"
-    fi
-    ;;
-
-rr)
-    file=$(find "$REFERENCE_DIR" -maxdepth 1 -type f |
-        sed "s|$HOME/.local/src/mdnotes/||" | fzf)
-    if [[ -n "$file" ]]; then
-        exec "$EDITOR" \
-            -c "lcd $(dirname "$HOME/.local/src/mdnotes/$file")" \
-            "$HOME/.local/src/mdnotes/$file"
-    fi
-    ;;
-
-ii)
-    file=$(find "$INBOX_DIR" -maxdepth 1 -type f |
-        sed "s|$HOME/.local/src/mdnotes/||" | fzf)
-    if [[ -n "$file" ]]; then
-        exec "$EDITOR" \
-            -c "lcd $(dirname "$HOME/.local/src/mdnotes/$file")" \
-            "$HOME/.local/src/mdnotes/$file"
-    fi
-    ;;
-
-*)
-    printf "Unknown option: %s\n" "$mode"
-    printf "Usage: cn [j|s|r|i|jj|ss|rr|ii]\n"
-    exit 1
-    ;;
+*) usage ;;
 esac
 
-# Last Modified: Thu, 29 Jan 2026 06:07:07 PM
+# Last Modified: Thu, 29 Jan 2026 07:06:35 PM
