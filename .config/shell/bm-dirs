@@ -7,7 +7,7 @@ w   $HOME/.local/src
 b   $HOME/.local/bin
 t   $HOME/.local/screenshot
 r   $HOME/.local/review
-n   $HOME/.local/notes
+n   $HOME/.local/src/mdnotes
 k   $HOME/.local/projects
 p   $HOME/.config/nvim/lua/plugins
 m   /data
