@@ -1,3 +1,4 @@
+local lcd = require("utils.lcd")
 local timestamp = require("utils.timestamp")
 local autocmd = vim.api.nvim_create_autocmd
 
@@ -197,36 +198,12 @@ autocmd("BufWritePost", {
     end,
 })
 
-local uv = vim.loop
-
-local lcd_roots = {
-    uv.fs_realpath(vim.fn.expand("~/.local/src/mdnotes")),
-    -- uv.fs_realpath(vim.fn.expand("~/.local/src/private")),
-}
-
 autocmd("BufEnter", {
-    desc = "Set local cwd for notes/private trees",
+    desc = "Set local cwd for notes",
     group = groups.lcd_notes,
-    callback = function()
-        -- Ignore special buffers
-        if vim.bo.buftype ~= "" then
-            return
-        end
-
-        local path = vim.fn.expand("%:p")
-        if path == "" then
-            return
-        end
-
-        path = uv.fs_realpath(path) or path
-
-        for _, root in ipairs(lcd_roots) do
-            if root and path:sub(1, #root) == root then
-                vim.cmd("lcd %:p:h")
-                return
-            end
-        end
+    callback = function(args)
+        lcd.maybe_lcd(args.buf)
     end,
 })
 
--- Last Modified: Thu, 29 Jan 2026 07:01:59 PM
+-- Last Modified: Thu, 29 Jan 2026 11:31:58 PM
