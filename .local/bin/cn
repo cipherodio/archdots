@@ -1,6 +1,15 @@
 #!/usr/bin/env bash
 # Author: cipherodio
-# Description: Notes script
+# Description: Personal notes script
+# To search for specific file on
+# specific directory, use:
+# cn jj, cn ss, cn rr, cn ii
+#
+# Options:
+# cn j - journal for current day
+# cn s - create new story
+# cn r - permanent notes
+# cn i - quick notes
 
 set -euo pipefail
 
@@ -24,8 +33,30 @@ current_time=$(date +"$TIME_FMT")
 
 # Helpers
 usage() {
-    printf "Usage: cn [j|s|r|i|jj|ss|rr|ii]\n"
-    exit 1
+    local BOLD BLUE GREEN CYAN DIM RESET
+
+    BOLD=$(printf '\033[1m')
+    BLUE=$(printf '\033[34m')
+    GREEN=$(printf '\033[32m')
+    CYAN=$(printf '\033[36m')
+    DIM=$(printf '\033[2m')
+    RESET=$(printf '\033[0m')
+
+    printf "%sUsage:%s %scn%s %s[options]%s\n\n" \
+        "$BOLD" "$RESET" "$BLUE" "$RESET" "$CYAN" "$RESET"
+
+    printf "%sTo search for specific file on\n" "$DIM"
+    printf "specific directory, use:%s\n" "$RESET"
+    printf "  %scn jj%s, %scn ss%s,\n" "$GREEN" "$RESET" "$GREEN" "$RESET"
+    printf "  %scn rr%s, %scn ii%s\n\n" "$GREEN" "$RESET" "$GREEN" "$RESET"
+
+    printf "%sOptions:%s\n" "$BOLD" "$RESET"
+    printf "  %scn j%s   - journal for current day\n" "$GREEN" "$RESET"
+    printf "  %scn s%s   - create new story\n" "$GREEN" "$RESET"
+    printf "  %scn r%s   - permanent notes\n" "$GREEN" "$RESET"
+    printf "  %scn i%s   - quick note\n" "$GREEN" "$RESET"
+
+    exit 0
 }
 
 prompt() {
@@ -62,6 +93,7 @@ title_case() {
 
 # Mode dispatch
 mode="${1:-}"
+
 [[ -z "$mode" ]] && usage
 
 case "$mode" in
@@ -164,7 +196,9 @@ ss) pick_and_open "$STORIES_DIR" ;;
 rr) pick_and_open "$REFERENCE_DIR" ;;
 ii) pick_and_open "$INBOX_DIR" ;;
 
-*) usage ;;
+*)
+    usage
+    ;;
 esac
 
-# Last Modified: Thu, 29 Jan 2026 07:06:35 PM
+# Last Modified: Fri, 30 Jan 2026 01:31:53 AM
