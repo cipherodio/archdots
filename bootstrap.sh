@@ -27,36 +27,56 @@ need() {
 # Preconditions
 need sudo
 need git
-need curl
 
 sudo -v
 msg "Starting Arch one-shot bootstrap"
 msg "Done checking prerequisites"
 
 # System packages
-msg "Installing system packages"
+msg "Installing ${#PKGS[@]} system packages"
 
-sudo pacman -Syu --needed --noconfirm \
-    xorg-xdpyinfo xorg-xev xorg-xinit xorg-xinput xorg-xprop \
-    xcape xorg-xset xorg-xsetroot xorg-xwininfo xclip \
-    xdo xdotool xterm \
-    lib32-vulkan-radeon mesa-utils vulkan-tools \
-    pipewire pipewire-alsa pipewire-pulse pulsemixer \
-    ttf-dejavu ttf-liberation libertinus-font noto-fonts \
-    noto-fonts-emoji ttc-iosevka ttc-iosevka-aile ttf-iosevka-nerd \
-    evtest exfatprogs brightnessctl dosfstools bc btop htop nvtop \
-    maim ffmpeg ffmpegthumbnailer highlight imagemagick man-db \
-    gnome-keyring libnotify mediainfo moreutils ntfs-3g poppler \
-    picom feh psutils tmux ripgrep unrar unzip yt-dlp zip wget tree \
-    tesseract tesseract-data-eng tesseract-data-osd fd unclutter npm \
-    xdg-utils pacutils acpi fzf blender audacity python-setproctitle \
-    python-dbus-next python-iwlib python-mpd2 python-pip python-psutil \
-    firefox firefox-dark-reader firefox-tridactyl firefox-ublock-origin \
-    emacs alacritty lf dunst mpc mpd mpv ncmpcpp nsxiv newsboat gimp \
-    qtile spotify-launcher transmission-cli zathura zathura-pdf-mupdf \
-    tree-sitter-cli lua-language-server marksman bash-language-server \
-    shellcheck prettier python-lsp-server ruff yaml-language-server \
-    vscode-json-languageserver python-debugpy shfmt stylua
+PKGS=(
+    # X / Display
+    xcape xclip xdg-utils xdo xdotool
+    xorg-xdpyinfo xorg-xev xorg-xinit xorg-xinput xorg-xprop
+    xorg-xset xorg-xsetroot xorg-xwininfo xterm
+    # Drivers
+    lib32-vulkan-radeon mesa-utils vulkan-tools
+    # Audio
+    pipewire pipewire-alsa pipewire-pulse pulsemixer
+    # Fonts
+    libertinus-font noto-fonts noto-fonts-emoji
+    ttc-iosevka ttc-iosevka-aile ttf-iosevka-nerd
+    ttf-dejavu ttf-liberation
+    # System
+    acpi dunst libnotify npm picom qtile unclutter
+    # System tools
+    btop brightnessctl dosfstools evtest exfatprogs
+    htop nvtop ntfs-3g pacutils
+    # Utilities
+    bc fd fzf highlight man-db maim moreutils
+    pass psutils ripgrep tmux tree unrar unzip wget zip
+    # Media
+    feh ffmpeg ffmpegthumbnailer imagemagick mediainfo
+    mpc mpd mpv ncmpcpp nsxiv yt-dlp
+    # Programs
+    alacritty audacity blender emacs firefox
+    firefox-dark-reader firefox-extension-passff
+    firefox-tridactyl firefox-ublock-origin
+    gimp poppler spotify-launcher
+    tesseract tesseract-data-eng tesseract-data-osd
+    zathura zathura-pdf-mupdf
+    # Cli
+    lf newsboat transmission-cli
+    # Python
+    python-dbus-next python-iwlib python-mpd2
+    python-pip python-psutil python-setproctitle
+    # Dev
+    bash-language-server lua-language-server marksman prettier
+    python-debugpy python-lsp-server ruff shfmt shellcheck stylua
+    tree-sitter-cli vscode-json-languageserver yaml-language-server
+)
+sudo pacman -Syu --needed --noconfirm "${PKGS[@]}"
 
 msg "Done installing system packages"
 
@@ -108,4 +128,4 @@ msg "Done ensuring SSH key"
 msg "Bootstrap complete"
 msg "Reboot recommended"
 
-# Last Modified: Mon, 26 Jan 2026 03:41:26 PM
+# Last Modified: Sat, 31 Jan 2026 06:53:45 AM
