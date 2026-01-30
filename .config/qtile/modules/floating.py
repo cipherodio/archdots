@@ -19,6 +19,7 @@ floating_layout = layout.Floating(
         Match(wm_class="ssh-askpass"),
         Match(title="branchdialog"),
         Match(title="pinentry"),
+        Match(wm_class="Pinentry-gtk"),
         Match(wm_class="Steam setup"),
         Match(title="Steam Settings"),
         Match(title="Downloading spotify"),
@@ -26,4 +27,4 @@ floating_layout = layout.Floating(
     ],
 )
 
-# Last Modified: Mon, 26 Jan 2026 05:32:13 PM
+# Last Modified: Sat, 31 Jan 2026 12:42:10 AM
