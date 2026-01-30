@@ -31,3 +31,4 @@ format.appointmenttime=%I:%M %p
 format.dayheading=%B %e, %Y %A
 general.multipledays=yes
 general.systemevents=yes
+general.firstdayofweek=Monday
