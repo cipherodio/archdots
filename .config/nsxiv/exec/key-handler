@@ -16,7 +16,7 @@ choose_dir() {
 while read -r file; do
     case "$1" in
     w)
-        setbg "$file" &
+        setwallpaper "$file" &
         ;;
 
     c)
@@ -68,4 +68,4 @@ while read -r file; do
     esac
 done
 
-# Last Modified: Mon, 26 Jan 2026 07:12:24 AM
+# Last Modified: Fri, 30 Jan 2026 02:44:16 PM
