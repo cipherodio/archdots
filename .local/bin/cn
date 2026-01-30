@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
 # Author: cipherodio
-# Description: Personal notes script
-# To search for specific file on
-# specific directory, use:
+# Description: Personal notes script to search for specific
+# file on specific directory, use:
 # cn jj, cn ss, cn rr, cn ii
-#
 # Options:
 # cn j - journal for current day
 # cn s - create new story
@@ -201,4 +199,4 @@ ii) pick_and_open "$INBOX_DIR" ;;
     ;;
 esac
 
-# Last Modified: Fri, 30 Jan 2026 01:31:53 AM
+# Last Modified: Fri, 30 Jan 2026 11:05:36 PM
