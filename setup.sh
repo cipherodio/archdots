@@ -17,6 +17,7 @@ set -Eeuo pipefail
 
 # Variables
 HOME_DIR="$HOME"
+GPG_DIR="$HOME_DIR/.local/share/gnupg"
 
 REPO_BASE="git@github.com:cipherodio/"
 STARTPAGE_REPO="${REPO_BASE}startpage.git"
@@ -72,6 +73,29 @@ mkdir -p \
     "$HOME_DIR/.venv"
 
 msg "Done creating user directories"
+
+# GnuPG permissions
+msg "Setting GnuPG permissions"
+
+if [[ -d "$GPG_DIR" ]]; then
+    chmod 700 "$GPG_DIR"
+
+    # Safely chmod all files; ignore if empty
+    shopt -s nullglob
+    for f in "$GPG_DIR"/*; do
+        chmod 600 "$f"
+    done
+
+    # Safely chmod private-keys-v1.d if it exists
+    [[ -d "$GPG_DIR/private-keys-v1.d" ]] && chmod 700 "$GPG_DIR/private-keys-v1.d"
+    shopt -u nullglob
+
+    msg "GnuPG permissions set"
+else
+    msg "No GnuPG directory found, skipping"
+fi
+
+msg "Done setting permissions"
 
 # GitHub SSH check
 msg "Checking GitHub SSH access"
@@ -150,4 +174,4 @@ msg "Done fixing git remotes"
 # Done
 msg "setup.sh complete"
 
-# Last Modified: Thu, 29 Jan 2026 06:12:51 PM
+# Last Modified: Sat, 31 Jan 2026 07:03:53 AM
