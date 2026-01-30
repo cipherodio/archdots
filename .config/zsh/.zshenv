@@ -26,7 +26,7 @@ export XDG_STATE_HOME="$HOME/.local/state"
 #export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority"
 export TMUX_TMPDIR="$XDG_RUNTIME_DIR"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
-export PASSWORD_STORE_DIR="$XDG_DATA_HOME/pass"
+export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store"
 export INPUTRC="$XDG_CONFIG_HOME/shell/inputrc"
 export MBSYNCRC="$HOME/.config/mbsync/mbsyncrc"
 export NOTMUCH_CONFIG="$XDG_CONFIG_HOME/notmuchrc"
@@ -104,4 +104,4 @@ export MOZ_USE_XINPUT2=1
 # Shortcuts
 [ ! -f "$XDG_CONFIG_HOME/shell/shrc" ] && setsid -f shortcuts >/dev/null 2>&1
 
-# Last Modified: Mon, 26 Jan 2026 10:18:05 PM
+# Last Modified: Sat, 31 Jan 2026 12:08:39 AM
