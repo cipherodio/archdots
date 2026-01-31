@@ -54,7 +54,7 @@ PKGS=(
     btop brightnessctl dosfstools evtest exfatprogs
     htop nvtop ntfs-3g pacutils
     # Utilities
-    bc fd fzf highlight man-db maim moreutils
+    bc fd fzf highlight man-db maim moreutils rsync
     pass psutils ripgrep tmux tree unrar unzip wget zip
     # Media
     feh ffmpeg ffmpegthumbnailer imagemagick mediainfo
@@ -128,4 +128,4 @@ msg "Done ensuring SSH key"
 msg "Bootstrap complete"
 msg "Reboot recommended"
 
-# Last Modified: Sat, 31 Jan 2026 06:53:45 AM
+# Last Modified: Sat, 31 Jan 2026 09:21:46 PM
