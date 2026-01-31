@@ -11,7 +11,7 @@ declare -A bookmarks=(
     [chatgpt]="https://chatgpt.com/"
     [duckduckgo]="https://duckduckgo.com"
     [github]="https://github.com"
-    [udemy]="https://www.udemy.com/"
+    [udemy]="https://www.udemy.com/join/login-popup/?passwordredirect=True"
     [facebook]="https://www.facebook.com/"
     [trinket]="https://trinket.io/"
     [torrent]="https://1337x.to/home/"
@@ -44,4 +44,4 @@ url=${bookmarks[$choice]-}
 
 exec "$BROWSER" "$url"
 
-# Last Modified: Mon, 26 Jan 2026 06:05:57 AM
+# Last Modified: Sat, 31 Jan 2026 07:58:57 AM
