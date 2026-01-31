@@ -15,6 +15,9 @@ fi
 mkdir -p "$BACKUP_DIR"
 cd "$BACKUP_DIR"
 
+printf '==> Exporting public key…\n'
+gpg --armor --export "$KEY_EMAIL" >public.asc
+
 printf '==> Exporting secret key…\n'
 gpg --armor --export-secret-keys "$KEY_EMAIL" >private.asc
 
@@ -33,6 +36,7 @@ shred -u private.asc
 printf '\nBackup complete.\n'
 printf 'Files to store safely:\n'
 printf '  %s/private.asc.gpg\n' "$BACKUP_DIR"
+printf '  %s/public.asc\n' "$BACKUP_DIR"
 printf '  %s/ownertrust.txt\n' "$BACKUP_DIR"
 
-# Last Modified: Sat, 31 Jan 2026 07:27:25 PM
+# Last Modified: Sat, 31 Jan 2026 08:41:58 PM
