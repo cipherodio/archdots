@@ -91,6 +91,7 @@ __pycache__
 .local/share/gnupg/private-keys-v1.d/
 .local/share/gnupg/pubring.kbx
 .local/share/gnupg/pubring.kbx~
+.local/share/gnupg/random_seed
 .local/share/gnupg/trustdb.gpg
 .local/share/go/
 .local/share/icons/
@@ -100,6 +101,7 @@ __pycache__
 .local/share/node_modules/
 .local/share/npm/
 .local/share/nvim/
+.local/share/password-store/
 .local/share/qtile/
 .local/share/qutebrowser/
 .local/share/spotify-launcher/
