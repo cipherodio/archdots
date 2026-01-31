@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Restore GPG keys, ownertrust, and password-store
+
+set -euo pipefail
+
+BACKUP_DIR="${1:-}"
+PASS_DIR="${HOME}/.local/share/password-store"
+PASS_REPO="git@github.com:cipherodio/passwordstore.git"
+
+if [[ -z "$BACKUP_DIR" ]]; then
+    printf 'Usage: gpg-restore <backup-directory>\n' >&2
+    exit 1
+fi
+
+cd "$BACKUP_DIR"
+
+if [[ ! -f private.asc.gpg || ! -f ownertrust.txt ]]; then
+    printf 'Missing private.asc.gpg or ownertrust.txt\n' >&2
+    exit 1
+fi
+
+printf '==> Verifying encrypted backup integrity…\n'
+gpg --decrypt --dry-run private.asc.gpg >/dev/null
+
+printf '==> Importing secret key…\n'
+gpg --decrypt private.asc.gpg | gpg --import
+
+printf '==> Restoring ownertrust…\n'
+gpg --import-ownertrust ownertrust.txt
+
+printf '==> Verifying secret keys…\n'
+gpg --list-secret-keys
+
+printf '\n==> Restoring password-store…\n'
+
+if [[ -d "$PASS_DIR" ]]; then
+    printf 'Password-store already exists, skipping clone.\n'
+else
+    git clone "$PASS_REPO" "$PASS_DIR"
+fi
+
+chmod 700 "$PASS_DIR"
+find "$PASS_DIR" -type f -name '*.gpg' -exec chmod 600 {} \;
+
+printf '\n==> Verifying pass…\n'
+pass ls >/dev/null
+
+printf '\nRestore complete.\n'
+
+# Last Modified: Sat, 31 Jan 2026 07:30:21 PM
