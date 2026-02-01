@@ -96,7 +96,7 @@ mode="${1:-}"
 
 case "$mode" in
 j)
-    author="jeremy"
+    author="Jeremy"
     file_date=$(date +"$FILE_DATE_FMT" | tr '[:upper:]' '[:lower:]')
     file_date=${file_date/thu/thurs}
 
@@ -170,7 +170,7 @@ i)
     title=$(prompt "Title")
     description=$(prompt "Description")
     filename_input=$(prompt "Filename (leave blank to use title)")
-    author="jeremy"
+    author="Jeremy"
 
     slug=$(slugify "${filename_input:-$title}")
     filepath="$INBOX_DIR/$slug.md"
@@ -199,4 +199,4 @@ ii) pick_and_open "$INBOX_DIR" ;;
     ;;
 esac
 
-# Last Modified: Fri, 30 Jan 2026 11:05:36 PM
+# Last Modified: Sun, 01 Feb 2026 01:47:05 PM
