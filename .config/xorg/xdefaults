@@ -31,10 +31,4 @@ Xcursor.theme: Adwaita
 *color14: c14
 *color15: c15
 
-dmenu.font: monospace-16
-dmenu.foreground: fg
-dmenu.background: bg
-dmenu.selforeground: bg
-dmenu.selbackground: accent
-
 ! vim: ft=xdefaults
