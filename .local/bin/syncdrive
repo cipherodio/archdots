@@ -63,5 +63,3 @@ case "$choice" in
 "🖼️  Dry run: wallpapers") dwall ;;
 "🖼️  Sync: wallpapers") wall ;;
 esac
-
-# Last Modified: Mon, 26 Jan 2026 04:58:42 PM

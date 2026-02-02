@@ -30,5 +30,3 @@ function M.toggle()
 end
 
 return M
-
--- Last Modified: Thu, 08 Jan 2026 06:10:43 PM

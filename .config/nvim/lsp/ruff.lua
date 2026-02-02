@@ -9,5 +9,3 @@ return {
     },
     settings = {},
 }
-
--- Last Modified: Tue, 30 Dec 2025 12:38:12 PM

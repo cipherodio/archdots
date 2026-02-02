@@ -59,5 +59,3 @@ alias \
     cih="convert -append" \
     xdgf="xdg-mime query filetype" \
     xdgd="xdg-mime query default"
-
-# Last Modified: Mon, 26 Jan 2026 12:54:38 AM

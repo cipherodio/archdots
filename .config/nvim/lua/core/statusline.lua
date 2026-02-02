@@ -246,5 +246,3 @@ function _G.Statusline()
 end
 
 vim.o.statusline = "%!v:lua.Statusline()"
-
--- Last Modified: Fri, 23 Jan 2026 04:30:53 PM

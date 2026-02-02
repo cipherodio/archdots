@@ -20,5 +20,3 @@ track="$(
 mpc play "${track%% *}"
 
 printf '%s\n' "$track"
-
-# Last Modified: Mon, 26 Jan 2026 06:19:24 AM

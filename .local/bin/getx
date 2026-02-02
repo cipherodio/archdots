@@ -13,5 +13,3 @@ exec xprop -notype \
     -f WM_WINDOW_ROLE 8s ':\n  stringProperty "WM_WINDOW_ROLE" = $0\n' \
     WM_NAME WM_CLASS WM_WINDOW_ROLE \
     "$@"
-
-# Last Modified: Mon, 26 Jan 2026 04:02:42 PM

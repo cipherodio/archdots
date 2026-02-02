@@ -127,5 +127,3 @@ msg "Done ensuring SSH key"
 # Done
 msg "Bootstrap complete"
 msg "Reboot recommended"
-
-# Last Modified: Sat, 31 Jan 2026 09:21:46 PM

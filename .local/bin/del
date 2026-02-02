@@ -27,5 +27,3 @@ done
 ((${#args[@]})) || exit 0
 
 mv --backup=t -v "${args[@]}" "$td"
-
-# Last Modified: Mon, 26 Jan 2026 06:10:21 AM

@@ -33,5 +33,3 @@ dunstify \
     -r "$msg_id" \
     -h "int:value:$new_vol" \
     "󰕾 Volume: ${new_vol}%"
-
-# Last Modified: Mon, 26 Jan 2026 01:07:05 AM

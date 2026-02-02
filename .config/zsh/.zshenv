@@ -103,5 +103,3 @@ export MOZ_USE_XINPUT2=1
 
 # Shortcuts
 [ ! -f "$XDG_CONFIG_HOME/shell/shrc" ] && setsid -f shortcuts >/dev/null 2>&1
-
-# Last Modified: Sun, 01 Feb 2026 12:44:33 PM

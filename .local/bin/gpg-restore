@@ -47,5 +47,3 @@ printf '\n==> Verifying pass…\n'
 pass ls >/dev/null
 
 printf '\nRestore complete.\n'
-
-# Last Modified: Sat, 31 Jan 2026 07:30:21 PM

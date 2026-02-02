@@ -11,5 +11,3 @@ for cmd in "$@"; do
         exit 1
     fi
 done
-
-# Last Modified: Mon, 26 Jan 2026 04:14:29 AM

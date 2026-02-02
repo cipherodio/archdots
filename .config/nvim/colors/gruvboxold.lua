@@ -746,5 +746,3 @@ hi(0, "BlinkCmpDocSeparator", { bg = ui.c13 })
 hi(0, "BlinkCmpDocCursorLine", { bg = ui.c13 })
 hi(0, "BlinkCmpDocBorder", { bg = ui.c13 })
 hi(0, "TimestampHighlight", { fg = ui.c12 })
-
--- Last Modified: Wed, 07 Jan 2026 12:51:09 AM

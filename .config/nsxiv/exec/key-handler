@@ -67,5 +67,3 @@ while read -r file; do
         ;;
     esac
 done
-
-# Last Modified: Fri, 30 Jan 2026 02:44:16 PM

@@ -34,5 +34,3 @@ find . -maxdepth 1 -mindepth 1 -printf '%f\n' | awk -v BASE="$base" '
         }
     }
 '
-
-# Last Modified: Mon, 26 Jan 2026 04:46:55 PM

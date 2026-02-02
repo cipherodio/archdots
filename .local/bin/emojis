@@ -21,5 +21,3 @@ else
     printf '%s' "$chosen" | xclip -selection clipboard
     notify-send "Emoji" "'$chosen' copied to clipboard." &
 fi
-
-# Last Modified: Mon, 26 Jan 2026 03:59:52 AM

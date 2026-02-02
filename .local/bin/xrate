@@ -11,5 +11,3 @@ xset -dpms
 # Set keyboard repeat delay and rate
 # delay (ms) | rate (repeats/sec)
 xset r rate 300 50
-
-# Last Modified: Mon, 26 Jan 2026 05:59:18 AM

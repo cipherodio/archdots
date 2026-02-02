@@ -56,5 +56,3 @@ km.nmap("<leader>mt", function()
         }
     )
 end, { desc = "Generate Markdown TOC (async, 4-space bullets)" })
-
--- Last Modified: Thu, 29 Jan 2026 12:06:36 AM

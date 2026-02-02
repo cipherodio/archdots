@@ -47,5 +47,3 @@ local ACTIVE = "onedark"
 
 -- Export active palette as flat table
 return M[ACTIVE]
-
--- Last Modified: Thu, 08 Jan 2026 06:32:25 PM

@@ -166,5 +166,3 @@ mainbar = [
 ]
 
 screens = [Screen(top=bar.Bar(mainbar, size=34))]
-
-# Last Modified: Thu, 29 Jan 2026 03:59:47 AM

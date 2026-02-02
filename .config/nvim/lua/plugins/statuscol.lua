@@ -51,5 +51,3 @@ return {
         }
     end,
 }
-
--- Last Modified: Thu, 08 Jan 2026 12:56:14 PM

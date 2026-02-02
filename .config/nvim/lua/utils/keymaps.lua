@@ -36,5 +36,3 @@ function M.omap(lhs, rhs, opts)
 end
 
 return M
-
--- Last Modified: Thu, 08 Jan 2026 06:12:22 PM

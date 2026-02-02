@@ -918,5 +918,3 @@ g.terminal_color_12 = "#57a5e5"
 g.terminal_color_13 = "#bb70d2"
 g.terminal_color_14 = "#51a8b3"
 g.terminal_color_15 = "#a7aab0"
-
--- Last Modified: Thu, 08 Jan 2026 06:31:44 PM

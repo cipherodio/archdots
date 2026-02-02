@@ -26,5 +26,3 @@ floating_layout = layout.Floating(
         Match(wm_class="zenity"),
     ],
 )
-
-# Last Modified: Sat, 31 Jan 2026 12:42:10 AM

@@ -156,5 +156,3 @@ km.nmap("<leader>ad", scheduled.insert_deadline_checkbox, {
 km.nmap("<leader>aD", scheduled.insert_scheduled_and_deadline_checkbox, {
     desc = "Insert @scheduled + @deadline checkbox",
 })
-
--- Last Modified: Wed, 28 Jan 2026 01:45:18 AM

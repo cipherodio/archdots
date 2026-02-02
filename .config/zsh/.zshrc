@@ -138,5 +138,3 @@ source "$ZPLUG"/system-clipboard/zsh-system-clipboard.zsh
 
 # Source zsh-fast-syntax-highlighting
 source "$ZPLUG"/fasthl/fast-syntax-highlighting.plugin.zsh
-
-# Last Modified: Sat, 31 Jan 2026 07:13:40 AM

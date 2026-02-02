@@ -19,5 +19,3 @@ name="${choice%% *}"
 section="$(sed -n 's/.*(\(.*\)).*/\1/p' <<<"$choice")"
 
 "$TERMINAL" -e man "$section" "$name" &
-
-# Last Modified: Mon, 26 Jan 2026 04:24:12 PM

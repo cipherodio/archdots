@@ -92,5 +92,3 @@ function M.insert_deadline_checkbox()
 end
 
 return M
-
--- Last Modified: Thu, 08 Jan 2026 06:14:04 PM

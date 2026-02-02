@@ -34,5 +34,3 @@ RESET=$'\033[0m'
         printf '%sAgenda file not found:%s %s\n' "$GREEN" "$RESET" "$AGENDA_FILE"
     fi
 } | less -R
-
-# Last Modified: Mon, 26 Jan 2026 04:50:23 PM

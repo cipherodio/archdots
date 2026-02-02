@@ -17,5 +17,3 @@ if confirm "Reset Neovim (wipe cache & state)?"; then
 
     notify-send "Neovim" "State reset complete"
 fi
-
-# Last Modified: Mon, 26 Jan 2026 06:32:45 AM

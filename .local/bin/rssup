@@ -26,5 +26,3 @@ newsboat -x print-unread | cut -d ' ' -f 1 >"$CACHE"
 
 unread="$(cat "$CACHE" 2>/dev/null || echo 0)"
 notify-send "RSS" "Update complete\n$unread unread"
-
-# Last Modified: Mon, 26 Jan 2026 05:22:10 AM

@@ -57,5 +57,3 @@ M.icons = {
 }
 
 return M
-
--- Last Modified: Wed, 31 Dec 2025 01:19:12 AM

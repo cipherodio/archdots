@@ -25,5 +25,3 @@ else
         notify-send "Game Mode" "OFF"
     }
 fi
-
-# Last Modified: Mon, 26 Jan 2026 04:05:49 AM

@@ -37,5 +37,3 @@ return {
         show_keys = false,
     },
 }
-
--- Last Modified: Tue, 13 Jan 2026 02:03:07 AM

@@ -34,5 +34,3 @@ if command -v lf >/dev/null 2>&1 && pgrep -x lf >/dev/null 2>&1; then
 fi
 
 echo "All backups completed successfully."
-
-# Last Modified: Sat, 31 Jan 2026 08:35:53 PM

@@ -11,5 +11,3 @@ filesize="$(du -Hh -- "$file" | cut -f1)"
 geometry="$(identify -format '%wx%h' "${file}[0]")"
 
 printf "%s | %s | %s\n" "$filesize" "$geometry" "$filename"
-
-# Last Modified: Mon, 26 Jan 2026 04:17:15 AM

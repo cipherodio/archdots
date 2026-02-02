@@ -21,5 +21,3 @@ if [[ -z "${time:-}" ]]; then
 fi
 
 dunstify "Battery" "$percent · $time"
-
-# Last Modified: Mon, 26 Jan 2026 04:41:36 PM

@@ -81,5 +81,3 @@ function M.update(bufnr)
 end
 
 return M
-
--- Last Modified: Thu, 08 Jan 2026 06:15:17 PM

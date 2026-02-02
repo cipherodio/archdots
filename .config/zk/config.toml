@@ -50,5 +50,3 @@ j = "zk today"
 r = "zk new --title $argv reference"
 p = "zk edit --sort created- --interactive"
 t = "zk edit --interactive --tag $argv"
-
-# Last Modified: Wed, 28 Jan 2026 06:27:55 AM

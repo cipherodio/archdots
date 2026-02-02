@@ -31,5 +31,3 @@ return {
         signature = { enabled = true },
     },
 }
-
--- Last Modified: Thu, 08 Jan 2026 06:08:30 PM

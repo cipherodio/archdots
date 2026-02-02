@@ -5,5 +5,3 @@
 set -euo pipefail
 
 maim -sk "pic-selected-$(date '+%y%m%d-%H%M-%S').png"
-
-# Last Modified: Mon, 26 Jan 2026 04:18:59 AM

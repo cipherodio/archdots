@@ -43,5 +43,3 @@ case "$choice" in
     confirm "Logout?" && loginctl terminate-user "$USER"
     ;;
 esac
-
-# Last Modified: Mon, 26 Jan 2026 04:41:02 PM

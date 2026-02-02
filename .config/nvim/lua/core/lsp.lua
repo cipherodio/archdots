@@ -112,5 +112,3 @@ vim.lsp.enable({
     "yamlls",
     "jsonls",
 })
-
--- Last Modified: Wed, 31 Dec 2025 08:19:36 PM

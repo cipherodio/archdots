@@ -170,6 +170,3 @@ class Spotify(base.ThreadPoolText):
         if play == "":
             return False
         return True
-
-
-# Last Modified: Tue, 21 Jan 2025 09:23:15 AM

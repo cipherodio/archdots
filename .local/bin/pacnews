@@ -53,5 +53,3 @@ case "$answer" in
     exit 0
     ;;
 esac
-
-# Last Modified: Mon, 26 Jan 2026 04:43:04 AM

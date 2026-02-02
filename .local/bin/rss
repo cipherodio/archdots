@@ -9,5 +9,3 @@ CACHE="$HOME/.cache/news_unread"
 # Run newsboat quietly, then store unread count
 newsboat -q
 newsboat -x print-unread | awk '{print $1}' >"$CACHE"
-
-# Last Modified: Mon, 26 Jan 2026 05:19:52 AM

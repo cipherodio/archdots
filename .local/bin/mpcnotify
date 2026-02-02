@@ -16,5 +16,3 @@ dunstify \
     -u low \
     -r "$MSG_ID" \
     "Now Playing" "$song"
-
-# Last Modified: Mon, 26 Jan 2026 04:41:52 AM

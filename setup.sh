@@ -173,5 +173,3 @@ msg "Done fixing git remotes"
 
 # Done
 msg "setup.sh complete"
-
-# Last Modified: Sat, 31 Jan 2026 07:03:53 AM

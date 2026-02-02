@@ -9,5 +9,3 @@ dbus-send --print-reply \
     /org/mpris/MediaPlayer2 \
     org.mpris.MediaPlayer2.Player.PlayPause \
     >/dev/null 2>&1
-
-# Last Modified: Mon, 26 Jan 2026 04:55:35 PM

@@ -52,5 +52,3 @@ case "$file" in
     fi
     ;;
 esac 2>/dev/null || file "$file"
-
-# Last Modified: Mon, 26 Jan 2026 04:42:27 PM

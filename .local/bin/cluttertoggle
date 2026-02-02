@@ -23,5 +23,3 @@ else
         notify-send "Unclutter" "ON"
     fi
 fi
-
-# Last Modified: Mon, 26 Jan 2026 06:07:46 AM

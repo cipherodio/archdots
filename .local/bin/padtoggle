@@ -49,5 +49,3 @@ else
         notify-send "Touchpad" "ON"
     fi
 fi
-
-# Last Modified: Mon, 26 Jan 2026 04:32:31 PM

@@ -27,5 +27,3 @@ return {
         auto_show_console = false,
     },
 }
-
--- Last Modified: Sun, 04 Jan 2026 04:33:16 PM

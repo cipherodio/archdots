@@ -17,5 +17,3 @@ maim -q "$output"
 xclip -selection clipboard -t image/png "$output"
 
 notify-send "📸 Screenshot taken"
-
-# Last Modified: Mon, 26 Jan 2026 04:59:36 PM

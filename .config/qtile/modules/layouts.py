@@ -20,5 +20,3 @@ layouts = [
     # layout.Tile(**layout_theme),
     # layout.Bsp(**layout_theme),
 ]
-
-# Last Modified: Mon, 26 Jan 2026 05:31:52 PM

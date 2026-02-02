@@ -26,5 +26,3 @@ fi
 # Append full line (URL + optional tags)
 printf '%s\n' "$*" >>"$rssfile"
 notify-send "RSS add" "RSS feed added."
-
-# Last Modified: Mon, 26 Jan 2026 05:21:37 AM

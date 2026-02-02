@@ -1,5 +1,4 @@
 local lcd = require("utils.lcd")
-local timestamp = require("utils.timestamp")
 local autocmd = vim.api.nvim_create_autocmd
 
 local function augroup(name)
@@ -15,8 +14,6 @@ local groups = {
     closewith_q = augroup("closewith_q"),
     create_dir = augroup("create_dir"),
     md_local_links = augroup("md_local_links"),
-    modified_time = augroup("modified_time"),
-    timestamp_highlight = augroup("timestamp_highlight"),
     reload_shortcuts = augroup("reload_shortcuts"),
     reload_xdefaults = augroup("reload_xdefaults"),
     reload_dunst = augroup("reload_dunst"),
@@ -132,44 +129,6 @@ autocmd("FileType", {
     end,
 })
 
-autocmd("BufWritePre", {
-    desc = "Update Last Modified timestamp",
-    group = groups.modified_time,
-    callback = function(args)
-        if vim.bo[args.buf].buftype ~= "" then
-            return
-        end
-
-        if vim.bo[args.buf].filetype == "gitcommit" then
-            return
-        end
-
-        timestamp.update(args.buf)
-    end,
-})
-
-autocmd({ "BufEnter", "BufWinEnter", "ColorScheme" }, {
-    group = groups.timestamp_highlight,
-    callback = function()
-        -- Only apply to normal file buffers
-        if vim.bo.buftype ~= "" then
-            return
-        end
-
-        local win = vim.api.nvim_get_current_win()
-
-        -- Clear only this window’s matches
-        pcall(vim.fn.clearmatches, win)
-
-        -- Add timestamp highlight
-        vim.fn.matchadd(
-            "TimestampHighlight",
-            [[\v\w{3},\s\d{2}\s\w{3}\s\d{4}\s\d{2}:\d{2}:\d{2}\s(AM|PM)]],
-            10
-        )
-    end,
-})
-
 autocmd("BufWritePost", {
     desc = "Auto reload bin script shortcuts when configuration is updated",
     group = groups.reload_shortcuts,
@@ -205,5 +164,3 @@ autocmd("BufEnter", {
         lcd.maybe_lcd(args.buf)
     end,
 })
-
--- Last Modified: Thu, 29 Jan 2026 11:31:58 PM

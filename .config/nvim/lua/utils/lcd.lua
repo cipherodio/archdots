@@ -46,5 +46,3 @@ function M.maybe_lcd(bufnr)
 end
 
 return M
-
--- Last Modified: Thu, 29 Jan 2026 11:31:39 PM

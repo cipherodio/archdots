@@ -16,5 +16,3 @@ exec mpv \
     --profile=low-latency \
     --untimed \
     /dev/video0
-
-# Last Modified: Mon, 26 Jan 2026 04:59:26 PM

@@ -9,5 +9,3 @@ while IFS= read -r file; do
     lf -remote "send select \"$file\""
     lf -remote "send toggle"
 done
-
-# Last Modified: Mon, 26 Jan 2026 04:20:27 AM

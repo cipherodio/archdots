@@ -25,5 +25,3 @@ return {
     },
     opts = {},
 }
-
--- Last Modified: Sun, 04 Jan 2026 06:32:54 AM

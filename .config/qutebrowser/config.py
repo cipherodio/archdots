@@ -131,5 +131,3 @@ config.bind(
 config.bind(
     "<Alt-Shift-f>", "hint links spawn --detach mpv --profile=M60 {hint-url}"
 )
-
-# Last Modified: Fri, 02 Jan 2026 08:07:40 PM

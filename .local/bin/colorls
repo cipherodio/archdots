@@ -32,5 +32,3 @@ for entry in "${entries[@]}"; do
     name="${names[$key]:-$key}"
     printf '\e[%sm%s\e[m\n' "$color" "$name"
 done
-
-# Last Modified: Mon, 26 Jan 2026 04:21:32 AM

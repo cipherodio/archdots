@@ -133,5 +133,3 @@ kill) killrecording ;;
     fi
     ;;
 esac
-
-# Last Modified: Mon, 26 Jan 2026 04:51:34 PM

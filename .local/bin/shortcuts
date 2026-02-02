@@ -53,5 +53,3 @@ while IFS=$'\t' read -r key path; do
     printf "map E%s \\\$EDITOR \"%s\"\n" \
         "$key" "$expanded_path" >>"$lf_shortcuts"
 done < <(read_bookmarks "$bmfiles")
-
-# Last Modified: Mon, 26 Jan 2026 06:42:32 AM

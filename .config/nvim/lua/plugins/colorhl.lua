@@ -14,5 +14,3 @@ return {
     --     virtual_symbol = "■",
     -- },
 }
-
--- Last Modified: Wed, 31 Dec 2025 01:47:56 AM

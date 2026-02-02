@@ -18,5 +18,3 @@ yt-dlp \
     --restrict-filenames \
     -o "$HOME/.local/downloads/%(title)s.%(ext)s" \
     "$url"
-
-# Last Modified: Mon, 26 Jan 2026 05:59:42 AM

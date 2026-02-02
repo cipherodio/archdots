@@ -24,5 +24,3 @@ return {
         },
     },
 }
-
--- Last Modified: Tue, 30 Dec 2025 12:35:42 PM

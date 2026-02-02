@@ -21,5 +21,3 @@ return {
         },
     },
 }
-
--- Last Modified: Thu, 08 Jan 2026 11:56:55 AM

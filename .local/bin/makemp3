@@ -13,5 +13,3 @@ input="$1"
 output="$(date '+%m-%d-%y').mp3"
 
 ffmpeg -i "$input" "$output" >/dev/null 2>&1
-
-# Last Modified: Mon, 26 Jan 2026 04:22:21 AM

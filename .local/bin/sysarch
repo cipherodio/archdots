@@ -101,5 +101,3 @@ printf '%s [wm] %s        %s%s%s\n' "$c2" "$c0" "$c3" "$getwm" "$c0"
 printf '%s [packages] %s  %s%s%s\n' "$c7" "$c0" "$c3" "$pkg" "$c0"
 printf '%s [shell] %s     %s%s%s\n' "$c1" "$c0" "$c3" "${SHELL##*/}" "$c0"
 printf '%s [ram] %s       %s%s%s\n' "$c4" "$c0" "$c3" "$mem" "$c0"
-
-# Last Modified: Mon, 26 Jan 2026 06:45:56 AM

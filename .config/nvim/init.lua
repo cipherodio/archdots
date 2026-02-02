@@ -20,5 +20,3 @@ secured("core.statusline")
 secured("core.winbar")
 secured("core.lsp")
 secured("core.lazy")
-
--- Last Modified: Wed, 28 Jan 2026 05:32:59 PM

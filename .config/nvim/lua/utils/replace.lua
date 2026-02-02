@@ -51,5 +51,3 @@ function M.replace_word_confirm()
 end
 
 return M
-
--- Last Modified: Sun, 04 Jan 2026 08:10:23 AM

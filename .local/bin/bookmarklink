@@ -43,5 +43,3 @@ url=${bookmarks[$choice]-}
 [[ -n $url ]] || exit 0
 
 exec "$BROWSER" "$url"
-
-# Last Modified: Sat, 31 Jan 2026 07:58:57 AM

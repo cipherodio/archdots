@@ -31,5 +31,3 @@ case "$choice" in
         notify-send "📸 Screenshot taken" "$output"
     ;;
 esac
-
-# Last Modified: Mon, 26 Jan 2026 04:52:06 PM

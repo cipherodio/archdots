@@ -72,17 +72,13 @@ hi(0, "@markup", { link = "GruvboxFg1" })
 hi(0, "@markup.environment", { link = "Macro" })
 hi(0, "@markup.environment.name", { link = "Type" })
 hi(0, "@markup.heading", { link = "Title" })
-hi(
-    0,
-    "@markup.heading.1.delimiter.vimdoc",
-    {
-        bg = "#1d2021",
-        fg = "#1d2021",
-        nocombine = true,
-        sp = "#ebdbb2",
-        underdouble = true,
-    }
-)
+hi(0, "@markup.heading.1.delimiter.vimdoc", {
+    bg = "#1d2021",
+    fg = "#1d2021",
+    nocombine = true,
+    sp = "#ebdbb2",
+    underdouble = true,
+})
 hi(
     0,
     "@markup.heading.2.delimiter.vimdoc",
@@ -1107,5 +1103,3 @@ g.terminal_color_12 = "#83a598"
 g.terminal_color_13 = "#d3869b"
 g.terminal_color_14 = "#8ec07c"
 g.terminal_color_15 = "#ebdbb2"
-
--- Last Modified: Thu, 08 Jan 2026 06:30:14 PM

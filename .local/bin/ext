@@ -57,5 +57,3 @@ case "$archive" in
     exit 1
     ;;
 esac
-
-# Last Modified: Mon, 26 Jan 2026 04:05:17 AM

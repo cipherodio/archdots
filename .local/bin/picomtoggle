@@ -31,5 +31,3 @@ else
         notify-send "Picom" "ON"
     fi
 fi
-
-# Last Modified: Mon, 26 Jan 2026 04:33:08 PM

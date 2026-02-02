@@ -45,5 +45,3 @@ notify-send \
     -u "$CAL_URGENCY" \
     -t "$CAL_TIMEOUT" \
     "APPOINTMENTS" "$appointments"
-
-# Last Modified: Thu, 29 Jan 2026 04:02:33 AM

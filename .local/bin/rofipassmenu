@@ -45,5 +45,3 @@ selected=$(printf '%s\n' "${password_files[@]}" | rofi -dmenu -i -p "Password:")
 # Copy first line of password to clipboard
 secret=$(pass show "$selected" | head -n 1)
 printf '%s' "$secret" | xclip -selection clipboard
-
-# Last Modified: Sat, 31 Jan 2026 04:50:23 AM

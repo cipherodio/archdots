@@ -113,5 +113,3 @@ return {
         end,
     },
 }
-
--- Last Modified: Tue, 13 Jan 2026 02:02:34 AM

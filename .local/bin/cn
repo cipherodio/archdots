@@ -198,5 +198,3 @@ ii) pick_and_open "$INBOX_DIR" ;;
     usage
     ;;
 esac
-
-# Last Modified: Sun, 01 Feb 2026 01:47:05 PM

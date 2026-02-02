@@ -19,5 +19,3 @@ else
         notify-send "Transmission" "Daemon started"
     fi
 fi
-
-# Last Modified: Mon, 26 Jan 2026 05:58:11 AM

@@ -26,6 +26,3 @@ def runner():
     import subprocess
 
     subprocess.Popen(["xsetroot", "-cursor_name", "left_ptr"])
-
-
-# Last Modified: Sun, 18 Jan 2026 03:07:21 PM

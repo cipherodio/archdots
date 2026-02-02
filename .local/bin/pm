@@ -45,5 +45,3 @@ h | help | -h | --help)
     exec sudo pacman "$cmd" "$@"
     ;;
 esac
-
-# Last Modified: Mon, 26 Jan 2026 04:34:37 PM

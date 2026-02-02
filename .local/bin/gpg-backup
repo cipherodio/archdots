@@ -38,5 +38,3 @@ printf 'Files to store safely:\n'
 printf '  %s/private.asc.gpg\n' "$BACKUP_DIR"
 printf '  %s/public.asc\n' "$BACKUP_DIR"
 printf '  %s/ownertrust.txt\n' "$BACKUP_DIR"
-
-# Last Modified: Sat, 31 Jan 2026 08:41:58 PM

@@ -31,5 +31,3 @@ onedark = {
     "c11": "#c49060",
     "c12": "#2c485f",
 }
-
-# Last Modified: Wed, 14 Jan 2026 03:23:02 PM

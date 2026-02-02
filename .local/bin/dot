@@ -35,5 +35,3 @@ in)
     dotfiles "$@"
     ;;
 esac
-
-# Last Modified: Mon, 26 Jan 2026 03:58:55 AM

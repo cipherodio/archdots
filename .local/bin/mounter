@@ -74,5 +74,3 @@ case "$chosen" in
     notify-send "📱 Android mounted" "$mp"
     ;;
 esac
-
-# Last Modified: Mon, 26 Jan 2026 04:37:54 AM

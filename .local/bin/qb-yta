@@ -26,5 +26,3 @@ if yt-dlp \
 else
     notify-send --urgency critical " Youtube download" "Failed\n$url"
 fi
-
-# Last Modified: Mon, 26 Jan 2026 04:42:45 PM

@@ -53,5 +53,3 @@ if confirm "Connect $name?"; then
         notify-send "Bluetooth" "Failed to connect $name"
     fi
 fi
-
-# Last Modified: Mon, 26 Jan 2026 04:37:49 PM

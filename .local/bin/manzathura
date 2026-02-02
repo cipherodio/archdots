@@ -18,5 +18,3 @@ section="$(sed -n 's/.*(\(.*\)).*/\1/p' <<<"$choice")"
 
 # IMPORTANT: -Tpdf must come BEFORE section/name
 man -Tpdf "$section" "$name" 2>/dev/null | zathura - &
-
-# Last Modified: Mon, 26 Jan 2026 04:24:10 AM

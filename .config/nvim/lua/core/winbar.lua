@@ -110,5 +110,3 @@ vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
         end
     end,
 })
-
--- Last Modified: Wed, 07 Jan 2026 06:59:32 PM

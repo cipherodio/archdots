@@ -12,5 +12,3 @@ esac
 
 sound="$HOME/.local/share/audio/beep.wav"
 paplay "$sound"
-
-# Last Modified: Mon, 26 Jan 2026 01:03:51 AM
