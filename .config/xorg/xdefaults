@@ -1,6 +1,8 @@
 ! Xorg configuration
 /*Xft.dpi: 144*/
-*.font: xft:monospace:size=16
+xft:Monospace:size=16
+xterm*faceName: Monospace
+xterm*faceSize: 16
 Xcursor.size: 32
 Xcursor.theme: Adwaita
 
