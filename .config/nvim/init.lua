@@ -1,7 +1,5 @@
 vim.loader.enable()
--- vim.cmd.colorscheme("gruvbox")
 vim.cmd.colorscheme("onedark")
--- vim.cmd.colorscheme("gruvbox-material")
 
 local function secured(module)
     local success, err_msg = pcall(require, module)

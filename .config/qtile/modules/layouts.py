@@ -3,9 +3,9 @@ from utils.colors import onedark
 
 # Layouts
 layout_theme = {
-    "border_width": 3,
-    "border_focus": onedark["c12"],
-    "border_normal": onedark["c01"],
+    "border_width": 2,
+    "border_focus": onedark["c05"],
+    "border_normal": onedark["c00"],
 }
 
 layouts = [

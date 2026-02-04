@@ -3,15 +3,15 @@
 
 /* Colors */
 :root {
-	--tab-active-bg-color: #232326;
-	--tab-inactive-bg-color: #2c2d31;
-	--tab-active-fg-fallback-color: #dbb671;
+	--tab-active-bg-color: #282c34;
+	--tab-inactive-bg-color: #31353f;
+	--tab-active-fg-fallback-color: #e5c07b;
 	--tab-inactive-fg-fallback-color: #888;
-	--urlbar-focused-bg-color: #2c2d31;
-	--urlbar-not-focused-bg-color: #232326;
+	--urlbar-focused-bg-color: #31353f;
+	--urlbar-not-focused-bg-color: #282c34;
 	--toolbar-bgcolor: #2b2a33 !important;
-    --url-highlight-bg: #2b5d63;
-    --url-highlight-fg: #a7aab0;
+    --url-highlight-bg: #2c5372;
+    --url-highlight-fg: #abb2bf;
 	--tab-font: 'Iosevka Nerd Font';
 	--urlbar-font: 'Iosevka Nerd Font';
 

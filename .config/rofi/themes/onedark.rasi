@@ -1,7 +1,7 @@
 /*************************************************
-* OneDark Rofi Theme (FINAL FIXED)
+* OneDark Rofi Theme
 * Author: cipherodio
-* Description: Onedark inspired by navarasu neovim
+* Description: Onedark
  *************************************************/
 
 configuration {
@@ -15,11 +15,11 @@ configuration {
 * {
     background: transparent;
 
-    bg: #232326;
-    bg-alt: #2c2d31;
-    fg: #a7aab0;
-    fg-dim: #5a5b5e;
-    accent: #68aee8;
+    bg: #282c34;
+    bg-alt: #3e4452;
+    fg: #abb2bf;
+    fg-dim: #5c6370;
+    accent: #61afef;
 
     font: "Iosevka Nerd Font 16";
 }
@@ -105,7 +105,7 @@ element selected.normal {
     background-color: @accent;
 }
 
-/* 🔑 NOTE: selected text (both paths) */
+/* NOTE: selected text (both paths) */
 element selected.normal element-text,
 element-text selected {
     text-color: @bg;

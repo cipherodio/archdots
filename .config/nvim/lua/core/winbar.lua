@@ -3,7 +3,7 @@ local ui = require("utils.colors")
 -- Highlight definitions
 local highlights = {
     WinBarModified = { fg = ui.c02, bg = ui.c01, bold = true },
-    ModifiedTextMain = { fg = ui.c05, bg = ui.c01, bold = true },
+    ModifiedTextMain = { fg = ui.c05, bg = ui.c11, bold = true },
     BufferColor = { fg = ui.c03, bg = ui.c01, bold = true },
 }
 

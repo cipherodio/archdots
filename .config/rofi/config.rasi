@@ -1,4 +1,3 @@
-// vim: ft=rasi
 configuration {
     show-icons: true;
     terminal: "alacritty";
