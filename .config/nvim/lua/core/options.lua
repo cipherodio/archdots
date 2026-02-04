@@ -16,7 +16,7 @@ opt.splitright = true
 -- Spell
 opt.spelllang = { "en", "tl" }
 opt.spellsuggest = "best,9"
-opt.spelloptions = "camel"
+-- opt.spelloptions = "camel"
 -- Completion
 -- opt.complete = ".,o"
 opt.completeopt = "menuone,popup,noselect,noinsert,fuzzy"
