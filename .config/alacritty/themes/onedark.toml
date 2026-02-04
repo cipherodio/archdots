@@ -1,44 +1,26 @@
-# OneDark.nvim — style = "warmer"
-# Inspired by: navarasu/onedark.nvim
-
+# Default colors
 [colors.primary]
-background = "#232326"
-foreground = "#a7aab0"
+background = '#282c34'
+foreground = '#abb2bf'
 
-[colors.cursor]
-cursor = "#57a5e5"
-text   = "#232326"
-
-[colors.selection]
-background = "#35363b"
-text       = "#a7aab0"
-
+# Normal colors
 [colors.normal]
-black   = "#101012"
-red     = "#de5d68"
-green   = "#8fb573"
-yellow  = "#dbb671"
-blue    = "#57a5e5"
-magenta = "#bb70d2"
-cyan    = "#51a8b3"
-white   = "#a7aab0"
+black   = '#1e2127'
+red     = '#e06c75'
+green   = '#98c379'
+yellow  = '#d19a66'
+blue    = '#61afef'
+magenta = '#c678dd'
+cyan    = '#56b6c2'
+white   = '#abb2bf'
 
+# Bright colors
 [colors.bright]
-black   = "#5a5b5e"
-red     = "#de5d68"
-green   = "#8fb573"
-yellow  = "#e2c792"
-blue    = "#68aee8"
-magenta = "#bb70d2"
-cyan    = "#51a8b3"
-white   = "#818387"
-
-[colors.dim]
-black   = "#1b1c1e"
-red     = "#833b3b"
-green   = "#2b5d63"
-yellow  = "#7c5c20"
-blue    = "#1a2a37"
-magenta = "#79428a"
-cyan    = "#2b5d63"
-white   = "#5a5b5e"
+black   = '#5c6370'
+red     = '#e06c75'
+green   = '#98c379'
+yellow  = '#d19a66'
+blue    = '#61afef'
+magenta = '#c678dd'
+cyan    = '#56b6c2'
+white   = '#ffffff'
