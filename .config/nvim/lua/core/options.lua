@@ -13,9 +13,11 @@ opt.wrap = false
 -- Splits
 opt.splitbelow = true
 opt.splitright = true
--- Spell
+-- Spell, needs netrw, uncomment opt.spell to auto download spell file
+-- opt.spell = true
 opt.spelllang = { "en", "tl" }
 opt.spellsuggest = "best,9"
+opt.spellfile = vim.fn.stdpath("config") .. "/spell/words.utf-8.add"
 -- opt.spelloptions = "camel"
 -- Completion
 -- opt.complete = ".,o"
