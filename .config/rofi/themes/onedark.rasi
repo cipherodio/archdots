@@ -19,7 +19,7 @@ configuration {
     bg-alt: #3e4452;
     fg: #abb2bf;
     fg-dim: #5c6370;
-    accent: #61afef;
+    accent: #73b8f1;
 
     font: "Iosevka Nerd Font 16";
 }
@@ -31,7 +31,7 @@ window {
     width: 720px;
     border: 2px;
     border-color: @accent;
-    border-radius: 18px;
+    // border-radius: 18px;
     background-color: @bg;
 }
 
@@ -48,7 +48,7 @@ inputbar {
     height: 42px;
     padding: 0px 14px;
     spacing: 10px;
-    border-radius: 12px;
+    // border-radius: 12px;
     background-color: @bg-alt;
     children: [ prompt, entry ];
     vertical-align: 0.5;
@@ -84,7 +84,7 @@ listview {
 element {
     padding: 10px 14px;
     spacing: 10px;
-    border-radius: 12px;
+    // border-radius: 12px;
     background-color: transparent;
 }
 
