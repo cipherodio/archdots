@@ -22,7 +22,7 @@ onedark = {
     "c02": "#e06c75",
     "c03": "#98c379",
     "c04": "#abb2bf",
-    "c05": "#2c5372",  # none
+    "c05": "#73b8f1",  # none
 }
 
 # Onedark warmer
