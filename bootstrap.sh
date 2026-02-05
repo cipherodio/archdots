@@ -41,7 +41,7 @@ PKGS=(
     xorg-xdpyinfo xorg-xev xorg-xinit xorg-xinput xorg-xprop
     xorg-xset xorg-xsetroot xorg-xwininfo xterm
     # Drivers
-    lib32-vulkan-radeon mesa-utils vulkan-tools
+    lib32-vulkan-radeon mesa-utils vulkan-tools hip-runtime-amd
     # Audio
     pipewire pipewire-alsa pipewire-pulse pulsemixer
     # Fonts
