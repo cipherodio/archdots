@@ -29,6 +29,7 @@ declare -A bookmarks=(
     [youtube]="https://www.youtube.com"
     [primevideo]="https://www.primevideo.com/"
     [gmail]="https://gmail.com"
+    [zapsplat]="https://www.zapsplat.com/"
 )
 
 choice="$(
