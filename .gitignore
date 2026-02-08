@@ -107,6 +107,7 @@ __pycache__
 .local/share/spotify-launcher/
 .local/share/Steam/
 .local/share/task/
+.local/share/taskwarrior-tui/
 .local/share/Terraria/
 .local/share/tmux/
 .local/share/vulkan/
