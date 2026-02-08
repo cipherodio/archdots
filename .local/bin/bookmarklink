@@ -30,6 +30,7 @@ declare -A bookmarks=(
     [primevideo]="https://www.primevideo.com/"
     [gmail]="https://gmail.com"
     [zapsplat]="https://www.zapsplat.com/"
+    [lto]="https://portal.lto.gov.ph/ords/f?p=1200:HOME::::::"
 )
 
 choice="$(
