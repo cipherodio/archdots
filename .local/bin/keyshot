@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Take a screenshot with keyboard input disabled
+
+set -euo pipefail
+
+maim -sk "pic-selected-$(date '+%y%m%d-%H%M-%S').png"

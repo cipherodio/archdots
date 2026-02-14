@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Move a file to trash (needs GNU mv)
+
+set -euo pipefail
+
+td="$HOME/.local/trash"
+mkdir -p "$td"
+
+args=()
+
+for o in "$@"; do
+    case "$o" in
+    --)
+        shift
+        break
+        ;;
+    -*)
+        exec rm "$@"
+        ;;
+    *)
+        args+=("$o")
+        ;;
+    esac
+done
+
+((${#args[@]})) || exit 0
+
+mv --backup=t -v "${args[@]}" "$td"

@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Power menu via rofi
+
+set -euo pipefail
+
+for cmd in rofi systemctl notify-send loginctl; do
+    command -v "$cmd" >/dev/null 2>&1 || {
+        notify-send "power error" "$cmd not found"
+        exit 1
+    }
+done
+
+confirm() {
+    printf "Yes\nNo" | rofi -dmenu -i -p "$1" | grep -qx "Yes"
+}
+
+# Menu
+options=$(
+    cat <<EOF
+  Poweroff
+󰊳  Restart
+󱑚  Suspend
+  Logout
+EOF
+)
+
+choice="$(printf '%s\n' "$options" | rofi -dmenu -i -p "Bye $USER!")"
+[ -n "$choice" ] || exit 0
+
+# Action
+case "$choice" in
+"  Poweroff")
+    confirm "Power off?" && systemctl poweroff
+    ;;
+"󰊳  Restart")
+    confirm "Restart?" && systemctl reboot
+    ;;
+"󱑚  Suspend")
+    confirm "Suspend?" && systemctl suspend
+    ;;
+"  Logout")
+    confirm "Logout?" && loginctl terminate-user "$USER"
+    ;;
+esac

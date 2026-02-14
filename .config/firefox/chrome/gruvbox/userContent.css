@@ -1,0 +1,32 @@
+/* Tridactyle configuration */
+/* Remove hint border */
+:root {
+    --tridactyl-hint-active-outline: none !important;
+    --tridactyl-hint-outline: none !important;
+    --tridactyl-hint-active-bg: none !important;
+}
+
+span.TridactylHint {
+    font-family: monospace !important;
+    font-size: 17px !important;
+    background-color: #d79921 !important;
+    color: #1d2021 !important;
+    position: absolute !important;
+    text-transform: lowercase !important;
+    padding: 0 1pt !important;
+    text-align: center !important;
+}
+
+/* Personal UI customization */
+/* This is for background color on startup */
+@-moz-document url-prefix(about:blank),
+url-prefix(about:home),
+url-prefix(about:blank),
+url-prefix(about:privatebrowsing),
+url-prefix(about:newtab) {
+    html:not(#ublock0-epicker),
+    html:not(#ublock0-epicker) body,
+    #newtab-customize-overlay {
+        background: #1d2021 !important;
+    }
+}

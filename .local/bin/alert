@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Skip audio notification for specific senders
+
+set -euo pipefail
+
+case ${1:-} in
+audiobar | mpcnotify | Signal)
+    exit 0
+    ;;
+esac
+
+sound="$HOME/.local/share/audio/beep.wav"
+paplay "$sound"

@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Clone the firefox-tridactyl-native AUR
+# repo and install it, needs nim package installed.
+
+set -euo pipefail
+
+# Variables
+REPO_URL="https://aur.archlinux.org/firefox-tridactyl-native.git"
+TARGET_DIR="$HOME/hub/src"
+REPO_NAME=$(basename "$REPO_URL" .git)
+
+# Ensure target directory exists
+mkdir -p "$TARGET_DIR"
+
+# Move into target directory
+cd "$TARGET_DIR"
+
+# Clone or update the repository
+if [ -d "$REPO_NAME" ]; then
+    echo "Repository '$REPO_NAME' already exists. Pulling latest changes..."
+    cd "$REPO_NAME"
+    git pull
+else
+    git clone "$REPO_URL"
+    cd "$REPO_NAME"
+fi
+
+# Build and install the package
+echo "Building and installing $REPO_NAME..."
+makepkg -si --noconfirm

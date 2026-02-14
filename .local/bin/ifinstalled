@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Check if required commands/packages are installed
+
+set -euo pipefail
+
+for cmd in "$@"; do
+    if ! command -v "$cmd" >/dev/null 2>&1 &&
+        ! pacman -Qq "$cmd" >/dev/null 2>&1; then
+        notify-send "📦 $cmd" "must be installed for this function."
+        exit 1
+    fi
+done

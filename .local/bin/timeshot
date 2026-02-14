@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Timed screenshot with rofi selector
+
+set -euo pipefail
+
+timer="$(
+    printf "1\n5\n10" |
+        rofi -dmenu -i -p "Seconds to wait"
+)" || exit 1
+
+output="$HOME/hub/screenshot/$(date '+%G-%d-%b-%I:%M%p').png"
+
+sleep "$timer"
+
+maim -q "$output"
+xclip -selection clipboard -t image/png "$output"
+
+notify-send "📸 Screenshot taken"

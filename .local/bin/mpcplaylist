@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Select a track from MPD playlist via rofi and play it
+
+set -euo pipefail
+
+playlist="$(
+    mpc playlist -f "%position% - %title% - %artist% - %album%" || true
+)"
+
+[ -n "$playlist" ] || exit 0
+
+track="$(
+    printf '%s\n' "$playlist" |
+        rofi -dmenu -i -l 10 -p "Track"
+)"
+
+[ -n "$track" ] || exit 0
+
+mpc play "${track%% *}"
+
+printf '%s\n' "$track"

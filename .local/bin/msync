@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+COUNTRY="Singapore,Hong Kong"
+MIRRORLIST="/etc/pacman.d/mirrorlist"
+
+# Ensure sudo access early
+sudo -v
+
+# Backup current mirrorlist
+sudo cp "$MIRRORLIST" "${MIRRORLIST}.backup.$(date +%Y%m%d%H%M%S)"
+
+# Run reflector
+sudo reflector \
+    --country "$COUNTRY" \
+    --protocol https \
+    --latest 15 \
+    --sort rate \
+    --save "$MIRRORLIST"
+
+echo "Mirrorlist updated."

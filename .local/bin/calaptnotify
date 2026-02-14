@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Show calendar and appointments notification with today highlighted
+
+set -euo pipefail
+
+# Configurable options (env overrides)
+CAL_COLOR=${CAL_COLOR:-red}
+CAL_TIMEOUT=${CAL_TIMEOUT:-5000}
+CAL_URGENCY=${CAL_URGENCY:-low}
+CAL_WEEKNUMBERS=${CAL_WEEKNUMBERS:-0}
+CAL_MONDAY_FIRST=${CAL_MONDAY_FIRST:-0}
+APPT_DAYS=${APPT_DAYS:-3} # Number of days for calcurse
+
+# Get today's day number
+today=$(date +%e | sed 's/^ *//')
+
+# Build cal command
+cal_cmd=(cal)
+((CAL_WEEKNUMBERS)) && cal_cmd+=(-w)
+((CAL_MONDAY_FIRST)) && cal_cmd+=(-m)
+
+# Generate calendar with today highlighted
+calendar=$("${cal_cmd[@]}" | awk -v d="$today" -v c="$CAL_COLOR" '
+NR <= 2 { print; next }
+{
+    for (i = 1; i <= NF; i++) {
+        if ($i == d)
+            $i = "<b><span color=\"" c "\">" $i "</span></b>"
+    }
+    print
+}
+')
+
+# Generate calcurse appointments
+appointments=$(calcurse -d"$APPT_DAYS")
+
+# Send notifications
+notify-send \
+    -u "$CAL_URGENCY" \
+    -t "$CAL_TIMEOUT" \
+    "CALENDAR" "$calendar"
+
+notify-send \
+    -u "$CAL_URGENCY" \
+    -t "$CAL_TIMEOUT" \
+    "APPOINTMENTS" "$appointments"

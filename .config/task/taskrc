@@ -1,0 +1,56 @@
+include themes/cipherodio.theme
+
+news.version=3.4.2
+verbose=0
+allow.delete=yes
+allow.purge=yes
+confirmation=1
+
+weekstart=monday
+dateformat=Y-M-D a h:N
+
+report.list.labels=ID,Due,Sched,Description,Date,Date
+report.list.columns=id,due.relative,scheduled.relative,description,scheduled,due
+
+report.next.labels=ID,Due,Sched,Description,Date,Date
+report.next.columns=id,due.relative,scheduled.relative,description,scheduled,due
+
+report.deleted.description=Deleted tasks
+
+report.deleted.labels=ID,Status,Due,Description,Date & Time
+report.deleted.columns=id,status,due.relative,description,due
+report.deleted.filter=status:deleted
+
+uda.taskwarrior-tui.selection.indicator=◾
+uda.taskwarrior-tui.selection.bold=yes
+uda.taskwarrior-tui.selection.italic=no
+uda.taskwarrior-tui.selection.dim=no
+uda.taskwarrior-tui.selection.blink=no
+uda.taskwarrior-tui.selection.reverse=no
+# uda.taskwarrior-tui.mark.indicator=✔
+# uda.taskwarrior-tui.unmark.indicator=
+# uda.taskwarrior-tui.mark-selection.indicator=⦿
+# uda.taskwarrior-tui.unmark-selection.indicator=⦾
+# uda.taskwarrior-tui.calendar.months-per-row=4
+uda.taskwarrior-tui.task-report.show-info=false
+# uda.taskwarrior-tui.task-report.looping=true
+# uda.taskwarrior-tui.task-report.jump-on-task-add=true
+# uda.taskwarrior-tui.task-report.prompt-on-undo=false
+# uda.taskwarrior-tui.task-report.prompt-on-delete=false
+# uda.taskwarrior-tui.task-report.prompt-on-done=false
+# uda.taskwarrior-tui.style.report.selection=
+# uda.taskwarrior-tui.style.context.active=black on rgb444
+# uda.taskwarrior-tui.style.calendar.title=black on rgb444
+# uda.taskwarrior-tui.style.report.scrollbar=black
+# uda.taskwarrior-tui.scrollbar.indicator=█
+# uda.taskwarrior-tui.style.report.scrollbar.area=white
+# uda.taskwarrior-tui.scrollbar.area=║
+# uda.taskwarrior-tui.task-report.next.filter=$(task show report.next.filter)
+# uda.taskwarrior-tui.task-report.auto-insert-double-quotes-on-add=true
+# uda.taskwarrior-tui.task-report.auto-insert-double-quotes-on-annotate=true
+# uda.taskwarrior-tui.task-report.auto-insert-double-quotes-on-log=true
+# uda.taskwarrior-tui.task-report.reset-filter-on-esc=true
+# uda.taskwarrior-tui.context-menu.select-on-move=false
+# uda.taskwarrior-tui.tabs.change-focus-rotate=false
+
+# vim: ft=ini

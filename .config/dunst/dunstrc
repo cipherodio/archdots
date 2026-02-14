@@ -1,0 +1,86 @@
+# vim: ft=cfg
+[global]
+    monitor = 0
+    follow = none
+    width = 330
+    height = 350
+    origin = top-right
+    offset = 10x50
+    scale = 0
+    notification_limit = 0
+
+    progress_bar = true
+    progress_bar_height = 10
+    progress_bar_frame_width = 1
+    progress_bar_min_width = 150
+    progress_bar_max_width = 300
+
+    indicate_hidden = yes
+    transparency = 0
+    separator_height = 2
+    padding = 8
+    horizontal_padding = 8
+    text_icon_padding = 0
+    frame_width = 1
+    frame_color = "#73b8f1"
+    separator_color = frame
+    sort = yes
+
+    font = Monospace 16
+    line_height = 0
+    markup = full
+    format = "<b>%s</b>\n%b"
+    alignment = center
+    vertical_alignment = center
+    show_age_threshold = 60
+    ellipsize = middle
+    ignore_newline = no
+    stack_duplicates = true
+    hide_duplicate_count = false
+    show_indicators = false
+    sticky_history = yes
+    history_length = 20
+    dmenu = rofi -dmenu -p dunst
+    browser = /usr/bin/xdg-open
+    always_run_script = true
+    title = Dunst
+    class = Dunst
+    corner_radius = 0
+    ignore_dbusclose = false
+    force_xwayland = false
+    force_xinerama = false
+
+[experimental]
+    per_monitor_dpi = false
+
+[urgency_low]
+    background = "#282c34"
+    foreground = "#abb2bf"
+# NOTE: Need highlight for my audiobar script progress bar color
+    highlight = "#e5c07b"
+    timeout = 3
+
+[urgency_normal]
+    background = "#282c34"
+    foreground = "#abb2bf"
+    timeout = 5
+
+[urgency_critical]
+    background = "#282c34"
+    foreground = "#abb2bf"
+    frame_color = "#e06c75"
+    timeout = 10
+
+# use dunst -print to show appname and summary
+[history-ignore-audiobar]
+    appname = "audiobar"
+    history_ignore = yes
+    timeout = 1
+
+[history-ignore-mpcnotify]
+    appname = "mpcnotify"
+    history_ignore = yes
+
+[play_sound]
+    summary = "*"
+    script = "alert"

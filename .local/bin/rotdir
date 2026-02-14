@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Rotate directory listing so the chosen file appears first
+# Robust against non-alphanumeric filenames
+
+set -euo pipefail
+
+[ -z "${1:-}" ] && {
+    printf 'usage: rotdir <file>\n' >&2
+    exit 1
+}
+
+base="$(basename "$1")"
+
+# Use find to safely list directory entries (no path prefix)
+find . -maxdepth 1 -mindepth 1 -printf '%f\n' | awk -v BASE="$base" '
+    BEGIN {
+        seen = 0
+        tail = ""
+    }
+    {
+        if ($0 == BASE) {
+            seen = 1
+        }
+        if (seen) {
+            print $0
+        } else {
+            tail = (tail ? tail "\n" : "") $0
+        }
+    }
+    END {
+        if (tail) {
+            print tail
+        }
+    }
+'

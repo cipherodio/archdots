@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Preview script for shell utilities
+
+set -euo pipefail
+
+file="$1"
+
+# Guard
+[[ -e "$file" ]] || exit 0
+
+case "$file" in
+*.png | *.jpg | *.jpeg | *.mkv | *.mp4 | *.mp3)
+    mediainfo "$file"
+    ;;
+
+*.pdf)
+    pdftotext "$file" -
+    ;;
+
+*.zip)
+    zip -sf "$file"
+    ;;
+
+*.tar.gz | *.tgz)
+    tar -ztvf "$file"
+    ;;
+
+*.tar.bz2 | *.tbz2)
+    tar -jtvf "$file"
+    ;;
+
+*.tar)
+    tar -tvf "$file"
+    ;;
+
+*.rar)
+    unrar l "$file"
+    ;;
+
+*.7z)
+    7z l "$file"
+    ;;
+
+*)
+    if [[ -d "$file" ]]; then
+        tree -L 1 --dirsfirst "$file"
+    elif [[ -f "$file" ]] && file --mime "$file" | grep -qE 'text|json|xml'; then
+        cat "$file"
+    else
+        file "$file"
+    fi
+    ;;
+esac 2>/dev/null || file "$file"

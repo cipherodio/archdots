@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Pacman wrapper for common operations
+
+set -euo pipefail
+
+# Sanity checks
+if ! command -v pacman >/dev/null 2>&1; then
+    printf 'pm: pacman not found\n' >&2
+    exit 1
+fi
+
+# Usage
+usage() {
+    printf '%s\n' \
+        'pm — pacman wrapper' \
+        '' \
+        'Usage:' \
+        '  pm i <pkg>...     Install package(s)' \
+        '  pm u              System upgrade (pacman -Syu)' \
+        '  pm r <pkg>...     Remove package(s) with deps' \
+        '  pm c              Clean cache (unused packages)' \
+        '  pm s <query>      Search packages' \
+        '  pm q <pkg>        Query installed package' \
+        '  pm h              Show this help' \
+        '' \
+        'Anything else is passed directly to pacman.'
+}
+
+# Dispatch
+cmd="${1:-h}"
+shift || true
+
+case "$cmd" in
+i) exec sudo pacman -S "$@" ;;
+u) exec sudo pacman -Syu ;;
+r) exec sudo pacman -Rns "$@" ;;
+c) exec sudo pacman -Sc ;;
+s) exec pacman -Ss "$@" ;;
+q) exec pacman -Qi "$@" ;;
+h | help | -h | --help)
+    usage
+    ;;
+*)
+    exec sudo pacman "$cmd" "$@"
+    ;;
+esac

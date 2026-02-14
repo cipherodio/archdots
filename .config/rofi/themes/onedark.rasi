@@ -1,0 +1,118 @@
+/*************************************************
+* OneDark Rofi Theme
+* Author: cipherodio
+* Description: Onedark
+ *************************************************/
+
+configuration {
+    modi: "drun";
+    show-icons: true;
+    display-drun: " ";
+    drun-display-format: "{name}";
+}
+
+/* Globals */
+* {
+    background: transparent;
+
+    bg: #282c34;
+    bg-alt: #3e4452;
+    fg: #abb2bf;
+    fg-dim: #5c6370;
+    accent: #73b8f1;
+
+    font: "Iosevka Nerd Font 16";
+}
+
+/* Window */
+window {
+    location: center;
+    anchor: center;
+    width: 720px;
+    border: 1px;
+    border-color: @accent;
+    // border-radius: 18px;
+    background-color: @bg;
+}
+
+/* Layout */
+mainbox {
+    padding: 24px;
+    spacing: 18px;
+    background-color: @bg;
+    children: [ inputbar, listview ];
+}
+
+/* Search */
+inputbar {
+    height: 42px;
+    padding: 0px 14px;
+    spacing: 10px;
+    // border-radius: 12px;
+    background-color: @bg-alt;
+    children: [ prompt, entry ];
+    vertical-align: 0.5;
+}
+
+prompt {
+    enabled: true;
+    width: 26px;
+    vertical-align: 0.5;
+    text-color: @fg-dim;
+    font: "Iosevka Nerd Font 16";
+    background-color: transparent;
+}
+
+entry {
+    expand: true;
+    vertical-align: 0.5;
+    background-color: transparent;
+    text-color: @fg;
+    placeholder: " Search…";
+    placeholder-color: @fg-dim;
+}
+
+/* List */
+listview {
+    columns: 1;
+    lines: 7;
+    spacing: 8px;
+    background-color: @bg;
+}
+
+/* Elements */
+element {
+    padding: 10px 14px;
+    spacing: 10px;
+    // border-radius: 12px;
+    background-color: transparent;
+}
+
+element-icon {
+    size: 22px;
+    vertical-align: 0.5;
+    background-color: transparent;
+}
+
+element-text {
+    vertical-align: 0.5;
+    background-color: transparent;
+    text-color: @fg;
+}
+
+/* Selected background */
+element selected.normal {
+    background-color: @accent;
+}
+
+/* NOTE: selected text (both paths) */
+element selected.normal element-text,
+element-text selected {
+    text-color: @bg;
+}
+
+/* Scroll */
+scrollbar {
+    handle-width: 0px;
+    background-color: transparent;
+}

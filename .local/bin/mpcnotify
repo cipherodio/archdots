@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Show currently playing song from MPD via dunst
+
+set -euo pipefail
+
+MSG_ID="280307"
+
+song="$(mpc current)"
+
+# Exit quietly if nothing is playing
+[ -n "$song" ] || exit 0
+
+dunstify \
+    -a "mpcnotify" \
+    -u low \
+    -r "$MSG_ID" \
+    "Now Playing" "$song"

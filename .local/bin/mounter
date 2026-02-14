@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Mount USB drives and Android phones using rofi
+# Mount point: ~/.local/mnt/<device>
+
+set -euo pipefail
+
+MNT="$HOME/.local/mnt"
+mkdir -p "$MNT"
+
+USER_UID="$(id -u)"
+USER_GID="$(id -g)"
+
+# --- Android devices (simple-mtpfs) ---
+phones="$(
+    simple-mtpfs -l 2>/dev/null |
+        sed 's/^/📱 /' || true
+)"
+
+# --- USB partitions (unmounted only) ---
+usbparts="$(
+    lsblk -nrpo NAME,TYPE,MOUNTPOINT |
+        awk '$2=="part" && $3=="" { printf "💾 %s\n", $1 }' || true
+)"
+
+choices="$(printf "%s\n%s\n" "$phones" "$usbparts" | sed '/^$/d')"
+
+if [ -z "$choices" ]; then
+    notify-send "mounter" "No mountable devices found"
+    exit 0
+fi
+
+chosen="$(printf "%s\n" "$choices" | rofi -dmenu -i -p 'Mount which device?')"
+[ -n "$chosen" ] || exit 0
+
+case "$chosen" in
+💾*)
+    dev="${chosen#💾 }"
+    name="$(basename "$dev")"
+    mp="$MNT/$name"
+
+    mkdir -p "$mp"
+    fstype="$(lsblk -no FSTYPE "$dev")"
+
+    case "$fstype" in
+    vfat | exfat | fat | ntfs)
+        sudo -A mount "$dev" "$mp" \
+            -o uid="$USER_UID",gid="$USER_GID",rw,umask=0022
+        ;;
+    ext4 | btrfs | xfs)
+        sudo -A mount "$dev" "$mp"
+        sudo chown "$USER_UID:$USER_GID" "$mp"
+        ;;
+    *)
+        sudo -A mount "$dev" "$mp"
+        ;;
+    esac
+
+    notify-send "💾 Drive mounted" "$dev → $mp"
+    ;;
+
+📱*)
+    notify-send "📱 Android" "Allow file access on your phone"
+
+    num="${chosen#📱 }"
+    num="${num%%:*}"
+    mp="$MNT/android-$num"
+    mkdir -p "$mp"
+
+    sudo simple-mtpfs \
+        -o allow_other \
+        --device "$num" "$mp"
+
+    notify-send "📱 Android mounted" "$mp"
+    ;;
+esac

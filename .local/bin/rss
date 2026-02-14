@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Launch newsboat and cache unread article count
+
+set -euo pipefail
+
+CACHE="$HOME/.cache/news_unread"
+
+# Run newsboat quietly, then store unread count
+newsboat -q
+newsboat -x print-unread | awk '{print $1}' >"$CACHE"

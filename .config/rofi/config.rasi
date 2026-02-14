@@ -1,0 +1,20 @@
+configuration {
+    show-icons: true;
+    terminal: "alacritty";
+
+    kb-remove-to-eol: "Control+p";
+    kb-secondary-copy: "Control+c";
+    kb-accept-entry: "Return";
+    kb-row-up: "Up,Control+k";
+    kb-row-down: "Down,Control+j";
+}
+
+drun {
+    display-generic: false;
+    show-actions: false;
+    parse-user: true;
+    parse-system: true;
+    parse-dbus: false;
+}
+
+@theme "~/.config/rofi/themes/onedark.rasi"

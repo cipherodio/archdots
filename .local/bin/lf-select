@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Select files in lf from stdin
+
+set -euo pipefail
+
+while IFS= read -r file; do
+    [ -n "$file" ] || continue
+    lf -remote "send select \"$file\""
+    lf -remote "send toggle"
+done

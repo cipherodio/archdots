@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Show volume change as a dunst progress bar
+
+set -euo pipefail
+
+sink=${1:-0}
+delta=${2:-0}
+
+msg_id=991049
+max_vol=150
+min_vol=0
+
+# Get current volume (integer percent)
+current_vol=$(
+    pactl get-sink-volume "$sink" |
+        awk '{print $5}' |
+        tr -d '%'
+)
+
+# Calculate new volume
+new_vol=$((current_vol + delta))
+((new_vol > max_vol)) && new_vol=$max_vol
+((new_vol < min_vol)) && new_vol=$min_vol
+
+# Apply volume
+pactl set-sink-volume "$sink" "${new_vol}%"
+
+# Notify
+dunstify \
+    -a "audiobar" \
+    -u low \
+    -r "$msg_id" \
+    -h "int:value:$new_vol" \
+    "󰕾 Volume: ${new_vol}%"

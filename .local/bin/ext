@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: General-purpose archive extraction script
+
+set -euo pipefail
+
+extract_here=false
+
+usage() {
+    printf "Options:\n"
+    printf "  -c  Extract archive into current directory (default: new directory)\n"
+    exit 1
+}
+
+while getopts ":hc" opt; do
+    case "$opt" in
+    c) extract_here=true ;;
+    h | *) usage ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+[ $# -eq 1 ] || {
+    printf "Give archive to extract as argument.\n"
+    exit 1
+}
+
+archive="$(readlink -f -- "$1")"
+
+[ -f "$archive" ] || {
+    printf "File \"%s\" not found.\n" "$archive"
+    exit 1
+}
+
+if ! $extract_here; then
+    dir="${archive%.*}"
+    mkdir -p -- "$dir"
+    cd -- "$dir"
+fi
+
+case "$archive" in
+*.tar.bz2 | *.tbz2) tar xvjf "$archive" ;;
+*.tar.xz) tar -xJf "$archive" ;;
+*.tar.gz | *.tgz) tar xvzf "$archive" ;;
+*.tar) tar xvf "$archive" ;;
+*.bz2) bunzip2 "$archive" ;;
+*.gz) gunzip "$archive" ;;
+*.xz) unxz "$archive" ;;
+*.lzma) unlzma "$archive" ;;
+*.rar) unrar x -ad "$archive" ;;
+*.zip) unzip "$archive" ;;
+*.Z) uncompress "$archive" ;;
+*.7z) 7z x "$archive" ;;
+*.exe) cabextract "$archive" ;;
+*)
+    printf "extract: '%s' - unknown archive method\n" "$archive"
+    exit 1
+    ;;
+esac

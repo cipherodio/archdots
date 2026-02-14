@@ -1,0 +1,212 @@
+#+TITLE: Emacs Configuration
+#+AUTHOR: cipherodio
+#+DATE: [2026-02-03 Tue]
+#+PROPERTY: header-args :comments org
+
+* Overview
+This org document is a literate configuration for vanille GNU Emacs.
+~C-c C-v t~ to tangle this file and restart Emacs. This file will
+automatically tangle on save after the packages are downloaded.
+
+* Convent Header
+Auto-generate a header on top of ~early-init.el~ and ~init.el~ using
+[[https://orgmode.org/manual/Noweb-Reference-Syntax.html][noweb]] syntax.
+
+#+NAME: autogen-header
+#+BEGIN_SRC emacs-lisp
+;;; Auto-generated --- DO NOT EDIT -*- lexical-binding: t -*-
+
+;; Copyright (C) 2024 cipherodio
+;; Author: cipherodio
+;; URL: https://github.com/cipherodio
+
+;;; Commentary:
+
+;; This file is NOT part of GNU Emacs and it's auto generated from:
+;; `cipherodio.org' org configuration file.
+
+;;; Code:
+#+END_SRC
+
+* Early Init
+:PROPERTIES:
+:header-args: :tangle early-init.el
+:END:
+This is loaded before the package system and GUI is initialized.
+
+** Generate Early Header
+Generate header for ~early-init.el~.
+
+#+BEGIN_SRC emacs-lisp :noweb yes :comments no
+<<autogen-header>>
+#+END_SRC
+
+** Initial Startup
+
+#+BEGIN_SRC emacs-lisp
+(eval-after-load "startup"
+  '(fset 'display-startup-echo-area-message 'ignore))
+
+;; Delay garbage collection while Emacs is booting
+(setq gc-cons-threshold most-positive-fixnum
+      gc-cons-percentage 0.6)
+
+(add-hook 'after-init-hook
+          (lambda ()
+            (setq gc-cons-threshold (* 100 1024 1024)
+                  gc-cons-percentage 0.1)))
+
+;; Single VC backend inscreases booting speed
+(setq vc-handled-backends '(Git))
+
+(setq inhibit-compacting-font-caches t)
+
+(modify-all-frames-parameters '((font . "Iosevka Nerd Font-15")
+                                (alpha . 98)))
+
+;; Disables unused UI Elements
+(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(if (fboundp 'tooltip-mode) (tooltip-mode -1))
+(if (fboundp 'fringe-mode) (fringe-mode -1))
+
+
+;; Avoid raising the *Messages* buffer if anything is still without
+;; lexical bindings
+(setq warning-minimum-level :error)
+(setq warning-suppress-types '((lexical-binding)))
+
+(add-to-list 'custom-theme-load-path (expand-file-name "themes/" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "themes/" user-emacs-directory))
+(load-theme 'atom-one-dark t)
+
+;; This results in a more compact output that emphasizes performance
+;;(setq use-package-expand-minimally (not noninteractive))
+
+;; package.el
+(setq package-enable-at-startup nil)  ; Let the init.el file handle this
+(setq package-quickstart-file
+      (expand-file-name "package-quickstart.el" user-emacs-directory))
+#+END_SRC
+
+** Footer
+
+#+BEGIN_SRC emacs-lisp
+(provide 'early-init)
+;;; early-init.el ends here
+#+END_SRC
+
+* Init
+:PROPERTIES:
+:header-args: :tangle init.el
+:END:
+Main configuration file that will generate ~init.el~ on save.
+
+** Generate Init Header
+Generate header for ~init.el~.
+
+#+BEGIN_SRC emacs-lisp :noweb yes :comments no
+<<autogen-header>>
+#+END_SRC
+
+** Package
+
+#+BEGIN_SRC emacs-lisp
+(package-initialize)
+
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                         ("elpa" . "https://elpa.gnu.org/packages/")
+                         ("nongnu" . "https://elpa.nongnu.org/nongnu/")
+                         ("melpa-stable" . "https://stable.melpa.org/packages/")))
+(setq package-archive-priorities '(("gnu" . 99)
+                                   ("nongnu" . 80)
+                                   ("melpa" . 70)
+                                   ("melpa-stable" . 50)))
+#+END_SRC
+
+** Use package
+
+#+BEGIN_SRC emacs-lisp
+(use-package use-package
+  :ensure nil
+  :no-require
+  :custom
+  (use-package-always-defer t)
+  (use-package-always-ensure t)
+  (use-package-expand-minimally (not noninteractive)))
+#+END_SRC
+
+** Emacs config
+
+#+BEGIN_SRC emacs-lisp
+(use-package emacs
+  :ensure nil
+  :custom
+  (indent-tabs-mode nil)
+  (tab-width 4)
+  (ad-redefinition-action 'accept)
+  (column-number-mode t)
+  (line-number-mode t)
+  (inhibit-startup-message t)
+  (initial-scratch-message "")
+  (pixel-scroll-precision-mode t)
+  (pixel-scroll-precision-use-momentum nil)
+  (scroll-conservatively 8)
+  (scroll-margin 5)
+  (help-window-select t)
+  (window-combination-resize t)
+  (comment-multi-line t)
+  (sentence-end-double-space nil)
+  (fill-column 80)
+  (cursor-in-non-selected-windows nil)
+  :init
+  (with-current-buffer (get-buffer-create "*scratch*")
+    (insert (format ";;
+;; ███████╗███╗   ███╗ █████╗  ██████╗███████╗
+;; ██╔════╝████╗ ████║██╔══██╗██╔════╝██╔════╝
+;; █████╗  ██╔████╔██║███████║██║     ███████╗
+;; ██╔══╝  ██║╚██╔╝██║██╔══██║██║     ╚════██║
+;; ███████╗██║ ╚═╝ ██║██║  ██║╚██████╗███████║
+;; ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝╚══════╝
+;;
+;;   Loading time : %s
+;;   Packages     : %s
+;;
+"
+                    (emacs-init-time)
+                    (number-to-string (length package-activated-list)))))
+  (message (emacs-init-time)))
+#+END_SRC
+
+** Org config
+
+#+BEGIN_SRC emacs-lisp
+(use-package org
+  :ensure nil
+  :custom
+  (org-edit-src-content-indentation 0)
+  (org-src-preserve-indentation nil))
+#+END_SRC
+
+** Evil
+
+#+BEGIN_SRC emacs-lisp
+(use-package evil
+  :demand t
+  :custom
+  (evil-want-C-i-jump nil)
+  (evil-want-C-d-scroll nil)
+  (evil-want-keybinding nil)
+  :init
+  (setq evil-want-Y-yank-to-eol t)
+  :config
+  (evil-mode))
+#+END_SRC
+
+** Init Footer
+Auto-generated convent footer for ~init.el~.
+
+#+BEGIN_SRC emacs-lisp
+;;; init.el ends here
+#+END_SRC

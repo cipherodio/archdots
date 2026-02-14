@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Open bookmarked web pages via rofi
+
+set -euo pipefail
+
+: "${BROWSER:=/usr/bin/firefox}"
+
+declare -A bookmarks=(
+    [whatsapp]="https://web.whatsapp.com/"
+    [chatgpt]="https://chatgpt.com/"
+    [duckduckgo]="https://duckduckgo.com"
+    [github]="https://github.com"
+    [gitlab]="https://gitlab.com/"
+    [udemy]="https://www.udemy.com/join/login-popup/?passwordredirect=True"
+    [facebook]="https://www.facebook.com/"
+    [trinket]="https://trinket.io/"
+    [torrent]="https://1337x.to/home/"
+    [9901]="http://localhost:9091/transmission/web/"
+    [shopee]="https://shopee.ph/"
+    [foodpanda]="https://www.foodpanda.ph/"
+    [ludeon]="https://ludeon.com/forums/index.php"
+    [suckless]="https://suckless.org"
+    [arch]="https://bbs.archlinux.org/index.php"
+    [unsplash]="https://unsplash.com/"
+    [wallhaven]="https://wallhaven.cc"
+    [stackoverflow]="https://stackoverflow.com/"
+    [reddit]="https://www.reddit.com/"
+    [unixporn]="https://www.reddit.com/r/unixporn"
+    [mangafire]="https://mangafire.to/"
+    [youtube]="https://www.youtube.com"
+    [primevideo]="https://www.primevideo.com/"
+    [gmail]="https://gmail.com"
+    [zapsplat]="https://www.zapsplat.com/"
+    [capcut]="https://www.capcut.com/my-edit?enter_from=login&start_tab=video"
+    [canva]="https://www.canva.com/templates"
+    [lto]="https://portal.lto.gov.ph/ords/f?p=1200:HOME::::::"
+)
+
+choice="$(
+    printf '%s\n' "${!bookmarks[@]}" |
+        sort |
+        rofi -dmenu -i -p "web"
+)"
+
+[[ -n ${choice-} ]] || exit 0
+
+url=${bookmarks[$choice]-}
+[[ -n $url ]] || exit 0
+
+exec "$BROWSER" "$url"

@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Restore GPG keys, ownertrust, public key, and password-store (human-readable verification)
+
+set -euo pipefail
+
+BACKUP_DIR="${1:-}"
+PASS_DIR="${HOME}/.local/share/password-store"
+PASS_REPO="git@gitlab.com:cipherodio/passwordstore.git"
+
+if [[ -z "$BACKUP_DIR" ]]; then
+    printf 'Usage: gpg-restore <backup-directory>\n' >&2
+    exit 1
+fi
+
+cd "$BACKUP_DIR"
+
+# Check required files
+if [[ ! -f private.asc.gpg || ! -f public.asc || ! -f ownertrust.txt ]]; then
+    printf 'Missing private.asc.gpg, public.asc, or ownertrust.txt\n' >&2
+    exit 1
+fi
+
+printf '==> Verifying encrypted backup integrity…\n'
+gpg --batch --decrypt --dry-run private.asc.gpg >/dev/null
+
+# Import public key first (required for secret key)
+printf '==> Importing public key…\n'
+gpg --import public.asc
+
+# Decrypt and import secret key
+printf '==> Importing secret key…\n'
+gpg --batch --yes --decrypt private.asc.gpg | gpg --import
+
+# Restore ownertrust
+printf '==> Restoring ownertrust…\n'
+gpg --import-ownertrust ownertrust.txt
+
+# Human-readable verification
+printf '\n==> Verifying imported keys (human-readable)…\n'
+printf '\nPublic keys:\n'
+gpg --list-keys --fingerprint
+
+printf '\nSecret keys:\n'
+gpg --list-secret-keys --fingerprint
+
+# Restore password-store
+printf '\n==> Restoring password-store…\n'
+if [[ -d "$PASS_DIR" ]]; then
+    printf 'Password-store already exists, skipping clone.\n'
+else
+    git clone "$PASS_REPO" "$PASS_DIR"
+fi
+
+chmod 700 "$PASS_DIR"
+find "$PASS_DIR" -type f -name '*.gpg' -exec chmod 600 {} +
+
+# Verify pass works
+printf '\n==> Verifying pass…\n'
+pass ls >/dev/null
+
+printf '\nRestore complete.\n'

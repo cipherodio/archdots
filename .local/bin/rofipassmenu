@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Rofi-based password picker for pass
+# Copies selected password to clipboard
+# GTK pinentry will pop up if gpg-agent needs a passphrase
+
+set -euo pipefail
+
+# Sanity checks
+if ! command -v pass >/dev/null 2>&1; then
+    printf 'rofipassmenu: pass command not found\n' >&2
+    exit 1
+fi
+
+if ! command -v rofi >/dev/null 2>&1; then
+    printf 'rofipassmenu: rofi command not found\n' >&2
+    exit 1
+fi
+
+if ! command -v xclip >/dev/null 2>&1; then
+    printf 'rofipassmenu: xclip command not found\n' >&2
+    exit 1
+fi
+
+# Password store location
+PASS_DIR="${PASSWORD_STORE_DIR:-$HOME/.password-store}"
+
+# Build list of passwords
+password_files=()
+while IFS= read -r -d '' file; do
+    file="${file%.gpg}"
+    password_files+=("${file#"${PASS_DIR}/"}")
+done < <(find "$PASS_DIR" -type f -name '*.gpg' -print0)
+
+# Nothing to select?
+if [ "${#password_files[@]}" -eq 0 ]; then
+    printf 'rofipassmenu: no passwords found in %s\n' "$PASS_DIR" >&2
+    exit 1
+fi
+
+# Show rofi menu
+selected=$(printf '%s\n' "${password_files[@]}" | rofi -dmenu -i -p "Password:")
+[ -z "$selected" ] && exit 0
+
+# Copy first line of password to clipboard
+secret=$(pass show "$selected" | head -n 1)
+printf '%s' "$secret" | xclip -selection clipboard

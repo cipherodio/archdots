@@ -1,0 +1,135 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Rofi-based screen/audio/webcam recorder
+# Auto-detect running recording
+
+set -euo pipefail
+
+PIDFILE="/tmp/recordingpid"
+OUTDIR="$HOME/hub/screencapture"
+RECTYPE=""
+
+getdim() {
+    xdpyinfo | awk '/dimensions:/ {print $2}'
+}
+
+cleanup_pid() {
+    rm -f "$PIDFILE"
+}
+
+is_recording() {
+    if [[ -f "$PIDFILE" ]]; then
+        if kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
+            return 0
+        else
+            cleanup_pid
+        fi
+    fi
+    return 1
+}
+
+confirm() {
+    printf 'Yes\n' | rofi -dmenu -i -p "$1" >/dev/null
+}
+
+killrecording() {
+    local pid
+    pid="$(cat "$PIDFILE" 2>/dev/null)" || return 1
+    kill -15 "$pid" 2>/dev/null || true
+    cleanup_pid
+    notify-send "Recording" "Stopped (${RECTYPE:-unknown})"
+}
+
+record() {
+    RECTYPE="$1"
+    shift
+    "$@" >/dev/null 2>&1 &
+    printf '%s\n' "$!" >"$PIDFILE"
+    notify-send "Recording" "Started ($RECTYPE)"
+}
+
+trap 'is_recording && killrecording' INT TERM
+
+screencast() {
+    record screencast ffmpeg -y \
+        -f x11grab -framerate 30 -s "$(getdim)" -i "$DISPLAY" \
+        -f alsa -thread_queue_size 1024 -i default \
+        -c:v h264 -crf 0 -preset ultrafast -c:a aac \
+        "$OUTDIR/screencast-$(date '+%y%m%d-%H%M-%S').mp4"
+}
+
+video() {
+    record video ffmpeg \
+        -f x11grab -framerate 30 -s "$(getdim)" -i "$DISPLAY" \
+        -c:v libx264 -qp 0 \
+        "$OUTDIR/video-$(date '+%y%m%d-%H%M-%S').mkv"
+}
+
+videoselected() {
+    slop -f "%x %y %w %h" | {
+        read -r X Y W H
+        record "video selected" ffmpeg \
+            -f x11grab -framerate 30 \
+            -video_size "${W}x${H}" \
+            -i ":0.0+${X},${Y}" \
+            -c:v libx264 -qp 0 \
+            "$OUTDIR/box-$(date '+%y%m%d-%H%M-%S').mkv"
+    }
+}
+
+audio() {
+    record audio ffmpeg \
+        -f alsa -i default \
+        -c:a mp3 \
+        "$OUTDIR/audio-$(date '+%y%m%d-%H%M-%S').mp3"
+}
+
+webcam() {
+    record webcam ffmpeg \
+        -f v4l2 -video_size 640x480 -i /dev/video0 \
+        "$OUTDIR/webcam-$(date '+%y%m%d-%H%M-%S').mkv"
+}
+
+webcamhidef() {
+    record "webcam hi-def" ffmpeg \
+        -f v4l2 -video_size 1920x1080 -i /dev/video0 \
+        "$OUTDIR/webcam-$(date '+%y%m%d-%H%M-%S').mkv"
+}
+
+askrecording() {
+    local choice
+    choice="$(
+        printf '%s\n' \
+            screencast \
+            video \
+            "video selected" \
+            audio \
+            webcam \
+            "webcam (hi-def)" |
+            rofi -dmenu -i -p "Select recording"
+    )" || exit 0
+
+    case "$choice" in
+    screencast) screencast ;;
+    video) video ;;
+    "video selected") videoselected ;;
+    audio) audio ;;
+    webcam) webcam ;;
+    "webcam (hi-def)") webcamhidef ;;
+    esac
+}
+
+case "${1:-}" in
+screencast) screencast ;;
+video) video ;;
+audio) audio ;;
+*selected) videoselected ;;
+kill) killrecording ;;
+*)
+    if is_recording; then
+        confirm "Recording active. Stop?" && killrecording
+    else
+        askrecording
+    fi
+    ;;
+esac

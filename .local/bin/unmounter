@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Unmount USB drives and Android phones using rofi
+# Unmounts devices in ~/.local/mnt
+
+set -euo pipefail
+IFS=$'\n'
+
+MNT="$HOME/.local/mnt"
+
+# Android devices (simple-mtpfs)
+mounteddroids="$(
+    mount |
+        awk '/simple-mtpfs/ { print "📱 " $3 }' || true
+)"
+
+# USB mounts under ~/.local/mnt
+mountedusb="$(
+    lsblk -nrpo MOUNTPOINT,SIZE |
+        awk -v m="$MNT" '
+            $1 ~ "^"m"/" {
+                printf "💾 %s (%s)\n", $1, $2
+            }
+        ' || true
+)"
+
+choices="$(printf "%s\n%s\n" "$mounteddroids" "$mountedusb" | sed '/^$/d')"
+
+if [ -z "$choices" ]; then
+    notify-send "unmounter" "No mounted devices found"
+    exit 0
+fi
+
+chosen="$(printf "%s\n" "$choices" | rofi -dmenu -i -p 'Unmount which device?')"
+[ -n "$chosen" ] || exit 0
+
+# Extract mountpoint
+mp="$chosen"
+mp="${mp#📱 }"
+mp="${mp#💾 }"
+mp="${mp%% (*}"
+
+# Unmount
+sudo -A umount -l "$mp"
+
+rmdir "$mp" 2>/dev/null || true
+
+notify-send "Device unmounted" "$mp"

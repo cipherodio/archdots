@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: rofi-based askpass helper for sudo
+
+set -euo pipefail
+
+prompt=${1:-Password}
+
+pass=$(
+    rofi \
+        -dmenu \
+        -password \
+        -p "$prompt" \
+        </dev/null
+)
+
+[[ -n $pass ]] || exit 1
+
+printf '%s\n' "$pass"

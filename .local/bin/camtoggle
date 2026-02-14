@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Toggle webcam preview via mpv with rofi confirmation
+
+set -euo pipefail
+
+CAM_DEVICE=/dev/video0
+MPV_MATCH="mpv.* $CAM_DEVICE"
+
+confirm() {
+    printf 'Yes\n' | rofi -dmenu -i -p "$1" >/dev/null
+}
+
+camera_running() {
+    pgrep -f "$MPV_MATCH" >/dev/null
+}
+
+if camera_running; then
+    if confirm "[● CAM ON] Turn OFF camera?"; then
+        pkill -f "$MPV_MATCH"
+        notify-send "Camera" "OFF"
+    fi
+else
+    if confirm "[○ CAM OFF] Turn ON camera?"; then
+        mpv \
+            --no-osc \
+            --no-input-default-bindings \
+            --input-conf=/dev/null \
+            --geometry=-0-0 \
+            --autofit=30% \
+            --title="mpvfloat" \
+            --profile=low-latency \
+            --untimed \
+            "$CAM_DEVICE" &
+        notify-send "Camera" "ON"
+    fi
+fi

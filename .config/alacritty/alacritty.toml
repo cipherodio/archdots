@@ -1,0 +1,68 @@
+[general]
+import = ["~/.config/alacritty/themes/onedark.toml"]
+live_config_reload = true
+
+# [shell]
+# program = "/usr/bin/zsh"
+# args = ["--login", "-c", "tmux a -t main || tmux new -s main"]
+
+# [env]
+# TERM = "xterm-256color"
+
+[font]
+size = 10
+offset.x = 0
+offset.y = 0
+glyph_offset.x = 0
+glyph_offset.y = 0
+
+[font.normal]
+family = "monospace"
+style = "Regular"
+# style = "SemiBold"
+
+[font.bold]
+family = "monospace"
+style = "ExtraBold"
+
+[font.italic]
+family = "monospace"
+style = "SemiBold Italic"
+
+[font.bold_italic]
+family = "monospace"
+style = "ExtraBold Italic"
+
+[window]
+opacity = 1
+dynamic_padding = false
+padding.x = 12
+padding.y = 6
+decorations = "none"
+
+# [scrolling]
+# history = 10000
+# multiplier = 3
+
+[cursor]
+# vi_mode_style = { shape = "Block", blinking = "Never" }
+# style = { blinking = "Never" }
+# style = { shape = "Block", blinking = "Never" }
+unfocused_hollow = false
+thickness = 0.16
+
+[mouse]
+hide_when_typing = true
+
+[keyboard]
+bindings = [
+# { key = "p", mods = "Alt", action = "Paste" },
+# { key = "y", mods = "Alt", action = "Copy" },
+{ key = "i", mods = "Alt", action = "ToggleViMode" },
+{ key = "k", mods = "Control|Shift", action = "ScrollLineUp" },
+{ key = "j", mods = "Control|Shift", action = "ScrollLineDown" },
+{ key = "Up", mods = "Control|Alt", action = "ScrollPageUp" },
+{ key = "Down", mods = "Control|Alt", action = "ScrollPageDown" },
+{ key = "Up", mods = "Control|Shift", action = "ScrollToTop" },
+{ key = "Down", mods = "Control|Shift", action = "ScrollToBottom" },
+]

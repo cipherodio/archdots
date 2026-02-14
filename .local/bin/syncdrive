@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Sync personal data, music, and wallpapers using rsync + rofi
+
+set -euo pipefail
+
+# TODO: Need to update this directories
+# Personal data
+sourcefiledir="$HOME/.local/src/rsync/"
+targetfiledir="$HOME/.local/mnt/sda1/rsync/"
+
+# Music
+sourcemusicdir="/data/music/"
+targetmusicdir="$HOME/.local/mnt/sda1/music/"
+
+# Wallpapers
+sourcewalldir="/data/wallpapers/"
+targetwalldir="$HOME/.local/mnt/sda1/walls/"
+
+# Actions
+dpr() {
+    rsync -anPv "$sourcefiledir" "$targetfiledir"
+}
+
+pr() {
+    rsync -aPv "$sourcefiledir" "$targetfiledir"
+}
+
+dmusic() {
+    rsync -anPv "$sourcemusicdir" "$targetmusicdir"
+}
+
+music() {
+    rsync -aPv "$sourcemusicdir" "$targetmusicdir"
+}
+
+dwall() {
+    rsync -anPv "$sourcewalldir" "$targetwalldir"
+}
+
+wall() {
+    rsync -aPv "$sourcewalldir" "$targetwalldir"
+}
+
+# Rofi menu
+choice="$(
+    printf "%s\n" \
+        "📁 Dry run: personal data" \
+        "📁 Sync: personal data" \
+        "🎵 Dry run: music" \
+        "🎵 Sync: music" \
+        "🖼️  Dry run: wallpapers" \
+        "🖼️  Sync: wallpapers" |
+        rofi -dmenu -i -p "syncdrive"
+)"
+
+[ -z "$choice" ] && exit 0
+
+case "$choice" in
+"📁 Dry run: personal data") dpr ;;
+"📁 Sync: personal data") pr ;;
+"🎵 Dry run: music") dmusic ;;
+"🎵 Sync: music") music ;;
+"🖼️  Dry run: wallpapers") dwall ;;
+"🖼️  Sync: wallpapers") wall ;;
+esac

@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Open link in proper application
+
+set -euo pipefail
+
+url=${1-}
+[[ -n $url ]] || exit 0
+
+exec >/dev/null 2>&1
+
+case $url in
+*.mkv | *.webm | *.mp4 | *youtube.com/watch* | *youtube.com/playlist* | *youtu.be*)
+    setsid -f mpv -quiet "$url"
+    ;;
+
+*.png | *.jpg | *.jpe | *.jpeg | *.gif)
+    file=${url##*/}
+    tmp="/tmp/$file"
+    curl -sL "$url" >"$tmp" &&
+        nsxiv -ab "$tmp" &
+    ;;
+
+*.mp3 | *.flac | *.opus | *mp3?source*)
+    (
+        cd "$HOME/hub/downloads"
+        curl -LO "$url"
+    ) &
+    ;;
+
+*)
+    if [[ -f $url ]]; then
+        "${TERMINAL:-alacritty}" -e "${EDITOR:-nvim}" "$url"
+    else
+        setsid -f "${BROWSER:-firefox}" "$url"
+    fi
+    ;;
+esac

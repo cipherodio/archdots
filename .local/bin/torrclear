@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Remove completed & stopped torrents from Transmission
+
+set -euo pipefail
+IFS=$'\n'
+
+TORRENTLIST="$(
+    transmission-remote --list |
+        sed '1d;$d;s/^ *//' |
+        cut -d' ' -f1
+)"
+
+for TORRENTID in $TORRENTLIST; do
+    # Remove asterisk from errored torrents
+    TORRENTID="$(printf '%s\n' "$TORRENTID" | sed 's/\*//g')"
+
+    info="$(transmission-remote -t "$TORRENTID" -i)"
+
+    DL_COMPLETED="$(printf '%s\n' "$info" | grep 'Percent Done: 100%')"
+    STATE_STOPPED="$(printf '%s\n' "$info" | grep -E 'State: (Stopped|Finished|Idle)')"
+
+    if [[ -n "$DL_COMPLETED" && -n "$STATE_STOPPED" ]]; then
+        transmission-remote -t "$TORRENTID" -r
+        notify-send "Transmission" "Completed torrent $TORRENTID removed."
+    else
+        notify-send "Transmission" "Torrent $TORRENTID is not yet completed. Ignoring"
+    fi
+done

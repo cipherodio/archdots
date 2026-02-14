@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: nsxiv key-handler
+
+set -euo pipefail
+
+bm_dirs="$HOME/.config/shell/bm-dirs"
+
+choose_dir() {
+    sed "s/\s.*#.*$//;/^\s*$/d" "$bm_dirs" |
+        awk '{print $2}' |
+        rofi -dmenu -i -lines 20 -p "$1" |
+        sed "s|~|$HOME|g"
+}
+
+while read -r file; do
+    case "$1" in
+    w)
+        setwallpaper "$file" &
+        ;;
+
+    c)
+        destdir="$(choose_dir 'Copy file(s) to where?')"
+        [ -d "$destdir" ] || {
+            notify-send "Invalid directory, cancelled."
+            exit
+        }
+        cp "$file" "$destdir" &&
+            notify-send -i "$(readlink -f "$file")" "$file copied to $destdir." &
+        ;;
+
+    m)
+        destdir="$(choose_dir 'Move file(s) to where?')"
+        [ -d "$destdir" ] || {
+            notify-send "Invalid directory, cancelled."
+            exit
+        }
+        mv "$file" "$destdir" &&
+            notify-send -i "$(readlink -f "$file")" "$file moved to $destdir." &
+        ;;
+
+    y)
+        printf "%s" "$file" | tr -d '\n' | xclip -selection clipboard &&
+            notify-send "$file copied to clipboard" &
+        ;;
+
+    Y)
+        readlink -f "$file" | tr -d '\n' | xclip -selection clipboard &&
+            notify-send "$(readlink -f "$file") copied to clipboard" &
+        ;;
+
+    d)
+        choice="$(printf "No\nYes" | rofi -dmenu -i -p "Really delete $file?")"
+        [ "$choice" = "Yes" ] && rm "$file" && notify-send "$file deleted."
+        ;;
+
+    r) convert -rotate 90 "$file" "$file" ;;
+    R) convert -rotate -90 "$file" "$file" ;;
+    f) convert -flop "$file" "$file" ;;
+
+    g)
+        ifinstalled gimp && setsid -f gimp "$file"
+        ;;
+
+    i)
+        notify-send "File information" "$(mediainfo "$file")"
+        ;;
+    esac
+done
