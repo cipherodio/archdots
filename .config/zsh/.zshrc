@@ -29,11 +29,6 @@ if [ ! -d "$ZPLUG"/auto-suggestions ]; then
     git clone https://github.com/zsh-users/zsh-autosuggestions "$ZPLUG"/auto-suggestions
 fi
 
-# Install zsh-system-clipboard
-if [ ! -d "$ZPLUG"/system-clipboard ]; then
-    git clone https://github.com/kutsan/zsh-system-clipboard "$ZPLUG"/system-clipboard
-fi
-
 # Load aliases and shortcuts if it exist
 [ -f "$XDG_CONFIG_HOME/shell/shrc" ] && source "$XDG_CONFIG_HOME/shell/shrc"
 [ -f "$XDG_CONFIG_HOME/shell/aliasrc" ] && source "$XDG_CONFIG_HOME/shell/aliasrc"
@@ -63,6 +58,26 @@ zmodload zsh/complist
 # Vi mode
 bindkey -v
 export KEYTIMEOUT=1
+
+# X11 clipboard
+# Helper
+_clip()   { print -rn -- "$CUTBUFFER" | xclip -selection clipboard }
+_paste()  { xclip -selection clipboard -o 2>/dev/null }
+
+# Yank selection or line to clipboard
+for w in vi-yank vi-yank-whole-line vi-delete kill-word; do
+  eval "$w() { zle .$w; _clip }"
+  zle -N $w
+done
+
+# Map uppercase Y in visual mode to whole-line yank
+bindkey -M visual 'Y' vi-yank-whole-line
+
+# Paste from X11 clipboard (p / P)
+for w in vi-put-after vi-put-before; do
+  eval "$w() { CUTBUFFER=\$(_paste); zle .$w }"
+  zle -N $w
+done
 
 # Vim keys in tab completion
 bindkey -M menuselect 'h' vi-backward-char
@@ -132,9 +147,6 @@ bindkey -s "^[d" "^ujfzf\n"
 
 # Source zsh-auto-suggestions
 source "$ZPLUG"/auto-suggestions/zsh-autosuggestions.zsh
-
-# Source zsh-system-clipboard
-source "$ZPLUG"/system-clipboard/zsh-system-clipboard.zsh
 
 # Source zsh-fast-syntax-highlighting
 source "$ZPLUG"/fasthl/fast-syntax-highlighting.plugin.zsh
