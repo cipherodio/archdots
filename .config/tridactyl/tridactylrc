@@ -21,27 +21,14 @@ set hintstyles.outline none
 " Bindings
 unbind d
 unbind <C-f>
-unbind <C-b>
-unbind --mode=hint <Space>
 bind dd tabclose
 bind u undo
-bind = zoom 0.1 true
-bind - zoom -0.1 true
-bind zz zoom 1.5
-bind / fillcmdline find
-bind ? fillcmdline find -?
-bind n findnext 1
-bind N findnext 1 -?
-bind <A-Space> nohlsearch
-bind o fillcmdline open
-bind O fillcmdline tabopen
-bind s fillcmdline open search
-bind S fillcmdline tabopen search
-bind p clipboard open
-bind P clipboard tabopen
 bind <C-h> tabmove -1
 bind <C-l> tabmove +1
-bind <A-m> mute toggle
+bind = zoom 0.1 true
+bind - zoom -0.1 true
+bind 0 zoom 1.0
 bind p clipboard open
 bind P clipboard tabopen
-bind q qall
+bind <A-m> mute toggle
+bind qq qall
