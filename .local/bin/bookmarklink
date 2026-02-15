@@ -12,6 +12,7 @@ declare -A bookmarks=(
     [duckduckgo]="https://duckduckgo.com"
     [github]="https://github.com"
     [gitlab]="https://gitlab.com/"
+    [spotifycreators]="https://creators.spotify.com/pod/show/1HL4oQJ2kyfmv6Eslqtw9F/home"
     [udemy]="https://www.udemy.com/join/login-popup/?passwordredirect=True"
     [facebook]="https://www.facebook.com/"
     [trinket]="https://trinket.io/"
