@@ -2,6 +2,9 @@
 import = ["~/.config/alacritty/themes/onedark.toml"]
 live_config_reload = true
 
+# [terminal]
+# osc52 = "CopyPaste"
+
 # [shell]
 # program = "/usr/bin/zsh"
 # args = ["--login", "-c", "tmux a -t main || tmux new -s main"]
