@@ -1,118 +1,124 @@
-/*************************************************
-* OneDark Rofi Theme
-* Author: cipherodio
-* Description: Onedark
- *************************************************/
+* {
+    margin : 0;
+    padding : 0;
+    spacing : 0;
+    dark : #282c34;
+    red : #de5d68;
+    blue : #61afef;
+    white : #abb2bf;
+    highlight : bold #f65866;
+    font : "Iosevka Nerd Font 16";
+}
 
 configuration {
-    modi: "drun";
-    show-icons: true;
-    display-drun: " ";
-    drun-display-format: "{name}";
+    display-drun : "APPS";
+    display-run : "CMD";
+    display-window : "WIN";
 }
 
-/* Globals */
-* {
-    background: transparent;
-
-    bg: #282c34;
-    bg-alt: #3e4452;
-    fg: #abb2bf;
-    fg-dim: #5c6370;
-    accent: #73b8f1;
-
-    font: "Iosevka Nerd Font 16";
-}
-
-/* Window */
 window {
-    location: center;
-    anchor: center;
-    width: 720px;
-    border: 1px;
-    border-color: @accent;
-    // border-radius: 18px;
-    background-color: @bg;
+    width : 35%;
+    border : 2px;
+    border-color : @blue;
+    background-color : @dark;
+    location : center;
+    orientaion : horizontal;
+    children : [inputbar, message, listview];
 }
 
-/* Layout */
-mainbox {
-    padding: 24px;
-    spacing: 18px;
-    background-color: @bg;
-    children: [ inputbar, listview ];
-}
-
-/* Search */
 inputbar {
-    height: 42px;
-    padding: 0px 14px;
-    spacing: 10px;
-    // border-radius: 12px;
-    background-color: @bg-alt;
-    children: [ prompt, entry ];
-    vertical-align: 0.5;
+    background-color : @dark;
+    children : [prompt,entry];
 }
 
 prompt {
-    enabled: true;
-    width: 26px;
-    vertical-align: 0.5;
-    text-color: @fg-dim;
-    font: "Iosevka Nerd Font 16";
-    background-color: transparent;
+    margin : 6px 0 6px 6px;
+    padding : 3px 6px;
+    text-color : @dark;
+    border : 3px;
+    border-color : @blue;
+    background-color : @blue;
 }
 
 entry {
-    expand: true;
-    vertical-align: 0.5;
-    background-color: transparent;
-    text-color: @fg;
-    placeholder: " Search…";
-    placeholder-color: @fg-dim;
+    margin : 6px;
+    padding : 3px 6px;
+    text-color : @white;
+    border : 3px;
+    border-color : @blue;
+    background-color : @dark;
+    placeholder: " Type to search";
+    placeholder-color: @white;
 }
 
-/* List */
 listview {
-    columns: 1;
-    lines: 7;
-    spacing: 8px;
-    background-color: @bg;
+    lines : 8;
+    children : [element];
+    margin : 0 6px 6px 6px;
+    padding : 6px 6px 0px 6px;
+    border : 3px;
+    border-color : @blue;
+    background-color : @dark;
 }
 
-/* Elements */
 element {
-    padding: 10px 14px;
-    spacing: 10px;
-    // border-radius: 12px;
-    background-color: transparent;
+    margin : 0 0 6px 0 ;
+    background-color : @dark;
 }
 
-element-icon {
-    size: 22px;
-    vertical-align: 0.5;
-    background-color: transparent;
+element selected active {
+    text-color : @white;
+    background-color : @red;
 }
 
 element-text {
-    vertical-align: 0.5;
-    background-color: transparent;
-    text-color: @fg;
+    padding : 6px;
+    text-color : @white;
+    background-color : @dark;
 }
 
-/* Selected background */
-element selected.normal {
-    background-color: @accent;
-}
-
-/* NOTE: selected text (both paths) */
-element selected.normal element-text,
 element-text selected {
-    text-color: @bg;
+    text-color : @dark;
+    background-color : @blue;
 }
 
-/* Scroll */
-scrollbar {
-    handle-width: 0px;
-    background-color: transparent;
+element-text selected active {
+    text-color : @white;
+    background-color : @red;
+}
+
+element-icon{
+    size : 20px;
+    padding : 6px;
+    background-color : @dark;
+}
+
+element-icon selected {
+    text-color : @dark;
+    background-color : @blue;
+}
+
+element-icon selected active {
+    text-color : @white;
+    background-color : @red;
+}
+
+message {
+    margin : 0;
+    expand : true;
+    background-color : @dark;
+    children : [textbox];
+}
+
+textbox {
+    expand : true;
+    padding : 6px;
+    border-color : @red;
+    background-color : @dark;
+    text-color : @red;
+}
+
+error-message {
+    expand : true;
+    text-color : @dark;
 }
