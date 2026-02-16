@@ -1,6 +1,8 @@
 /* Tridactyle configuration */
 /* Remove hint border */
 :root {
+    --tridactyl-bg: black !important;
+    --tridactyl-fg: white !important;
     --tridactyl-hint-active-outline: none !important;
     --tridactyl-hint-outline: none !important;
     --tridactyl-hint-active-bg: none !important;
