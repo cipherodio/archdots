@@ -1,0 +1,103 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Fast, cached system info greeting (login fetch)
+
+### Colors
+reset=$'\033[0m'
+magenta=$'\033[1;35m'
+green=$'\033[1;32m'
+white=$'\033[1;4;37m'
+blue=$'\033[1;34m'
+red=$'\033[1;31m'
+yellow=$'\033[1;33m'
+cyan=$'\033[1;36m'
+
+c0=$reset
+c1=$magenta
+c2=$green
+c3=$white
+c4=$blue
+c5=$red
+c6=$yellow
+c7=$cyan
+
+### Cache
+cache="$HOME/.cache/sysarch.static"
+
+# Create cache if missing
+if [ ! -f "$cache" ]; then
+    cpu="$(
+        lscpu | awk -F: '
+        /Model name/ {
+            sub(/^ +AMD /,"",$2)
+            sub(/ with Radeon Graphics.*/,"",$2)
+            print $2
+        }'
+    )"
+
+    gpu="$(
+        lspci | awk '
+        /VGA|3D/ {
+            if (match($0, /RX [0-9]{4}/))
+                print substr($0, RSTART, RLENGTH)
+            exit
+        }'
+    )"
+
+    distro="$(awk -F= '/PRETTY_NAME/ {gsub(/"/,"",$2); print $2}' /etc/os-release)"
+    kernel="$(uname -r | cut -d- -f1)"
+    pkg="$(pacman -Qq | wc -l)"
+
+    mkdir -p "$(dirname "$cache")"
+
+    {
+        printf 'cpu="%s"\n' "$cpu"
+        printf 'gpu="%s"\n' "$gpu"
+        printf 'distro="%s"\n' "$distro"
+        printf 'kernel="%s"\n' "$kernel"
+        printf 'pkg="%s"\n' "$pkg"
+    } >"$cache"
+fi
+
+# Load cached values
+# shellcheck source=/dev/null
+. "$cache"
+
+### Live info
+name="$USER"
+host="$(cat /proc/sys/kernel/hostname)"
+
+uptime="$(
+    uptime -p | sed \
+        -e 's/^up //' \
+        -e 's/hours/hrs/' \
+        -e 's/hour/hr/' \
+        -e 's/minutes/mins/' \
+        -e 's/minute/min/'
+)"
+
+mem="$(free --mega | awk 'NR==2 {print $3 "|" $2 " MB"}')"
+
+getwm="$(
+    xprop -id "$(xprop -root -notype |
+        awk '$1=="_NET_SUPPORTING_WM_CHECK:"{print $5}')" \
+        -notype -f _NET_WM_NAME 8t |
+        awk -F\" '/WM_NAME/ {print $2}'
+)"
+
+### Output
+printf '\n'
+printf 'Hi %s%s%s, Welcome to %s%s%s\n' "$c5" "$name" "$c0" "$c2" "$host" "$c0"
+printf '    uptime %s%s%s\n' "$c6" "$uptime" "$c0"
+printf '      %s󰮯  %s%s󰊠  %s%s󰊠  %s%s󰊠  %s%s󰊠  %s\n' \
+    "$c6" "$c6" "$c2" "$c2" "$c4" "$c4" "$c5" "$c5" "$c7" "$c7"
+printf '\n'
+
+printf '%s [distro] %s    %s%s%s\n' "$c1" "$c0" "$c3" "$distro" "$c0"
+printf '%s [kernel] %s    %s%s%s\n' "$c2" "$c0" "$c3" "$kernel" "$c0"
+printf '%s [cpu] %s       %s%s%s\n' "$c4" "$c0" "$c3" "$cpu" "$c0"
+printf '%s [gpu] %s       %s%s%s\n' "$c6" "$c0" "$c3" "$gpu" "$c0"
+printf '%s [wm] %s        %s%s%s\n' "$c2" "$c0" "$c3" "$getwm" "$c0"
+printf '%s [packages] %s  %s%s%s\n' "$c7" "$c0" "$c3" "$pkg" "$c0"
+printf '%s [shell] %s     %s%s%s\n' "$c1" "$c0" "$c3" "${SHELL##*/}" "$c0"
+printf '%s [ram] %s       %s%s%s\n' "$c4" "$c0" "$c3" "$mem" "$c0"

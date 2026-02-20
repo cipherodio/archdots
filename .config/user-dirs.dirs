@@ -1,0 +1,9 @@
+# shellcheck disable=2034
+XDG_DESKTOP_DIR="$HOME/"
+XDG_DOWNLOAD_DIR="$HOME/hub/downloads/"
+XDG_PICTURES_DIR="$HOME/hub/downloads/"
+XDG_DOCUMENTS_DIR="$HOME/hub/downloads/"
+XDG_MUSIC_DIR="$HOME/hub/downloads/"
+XDG_VIDEOS_DIR="$HOME/hub/downloads/"
+XDG_TEMPLATES_DIR="$HOME/hub/downloads/"
+XDG_PUBLICSHARE_DIR="$HOME/hub/downloads/"

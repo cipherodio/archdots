@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Add an RSS feed to newsboat
+
+set -euo pipefail
+
+url="${1:-}"
+rssfile="$HOME/.config/newsboat/urls"
+
+# Validate URL
+if [[ -z "$url" || ! "$url" =~ ^https?://[^[:space:]]+\.[A-Za-z]+[^[:space:]]*$ ]]; then
+    notify-send "RSS add" "That doesn't look like a valid URL."
+    exit 1
+fi
+
+# Ensure file exists
+mkdir -p "$(dirname "$rssfile")"
+touch "$rssfile"
+
+# Check for duplicates (URL is first field)
+if awk '{print $1}' "$rssfile" | grep -Fxq "$url"; then
+    notify-send "RSS add" "You already have this RSS feed."
+    exit 0
+fi
+
+# Append full line (URL + optional tags)
+printf '%s\n' "$*" >>"$rssfile"
+notify-send "RSS add" "RSS feed added."

@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Set wallpaper using feh (copy-based, detached, boot-safe)
+
+set -euo pipefail
+
+BGDIR="${XDG_DATA_HOME:-$HOME/.local/share}"
+BGFILE="$BGDIR/bg"
+
+# Ensure directory exists
+mkdir -p "$BGDIR"
+
+# If a file is provided, copy it
+if [ -f "${1:-}" ]; then
+    cp -f "$1" "$BGFILE"
+
+    setsid -f notify-send -i "$BGFILE" \
+        " Wallpaper changed" >/dev/null 2>&1
+fi
+
+# Nothing to apply yet
+[ -f "$BGFILE" ] || exit 0
+
+# Apply wallpaper
+setsid -f feh --no-fehbg --bg-fill "$BGFILE" >/dev/null 2>&1

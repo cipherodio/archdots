@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# xrandr --dpi 144
+xrate
+setwallpaper &
+xrdb "${XDG_CONFIG_HOME:-$HOME/.config}"/xorg/xdefaults &
+xrdbpid=$!
+# /usr/bin/emacs --daemon &
+# emacs --daemon &
+
+autostart="mpd picom dunst unclutter"
+
+for program in $autostart; do
+    pidof -sx "$program" || "$program" &
+done >/dev/null 2>&1
+
+# Ensure that xrdb has finished running before moving on to start the WM/DE.
+[ -n "$xrdbpid" ] && wait "$xrdbpid"
+
+dbus-update-activation-environment --all
+dbus-launch ssh-agent qtile start

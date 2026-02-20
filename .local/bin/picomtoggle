@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Toggle picom compositor using rofi
+
+set -euo pipefail
+
+# Sanity checks
+for cmd in rofi notify-send pgrep pkill picom; do
+    command -v "$cmd" >/dev/null 2>&1 || {
+        notify-send "picomtoggle error" "$cmd not found"
+        exit 1
+    }
+done
+
+# Rofi confirmation
+confirm() {
+    local prompt="$1"
+    choice="$(printf "Yes\nNo\n" | rofi -dmenu -i -p "$prompt")"
+    [ "$choice" = "Yes" ]
+}
+
+# Toggle
+if pgrep -x picom >/dev/null; then
+    if confirm "[● ON] Turn OFF picom?"; then
+        pkill picom
+        notify-send "Picom" "OFF"
+    fi
+else
+    if confirm "[○ OFF] Turn ON picom?"; then
+        picom -b
+        notify-send "Picom" "ON"
+    fi
+fi

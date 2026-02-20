@@ -1,0 +1,45 @@
+[user]
+	email = cipherodio@gmail.com
+	name = cipherodio
+    useConfigOnly = true
+[pager]
+	branch = false
+[init]
+	defaultBranch = main
+	defaultRefFormat = files
+[core]
+	editor = nvim
+    pager = LESS='--raw-control-chars' less
+[log]
+    date = local
+    abbrevCommit = true
+[interactive]
+    diffFilter = less
+    singleKey = true
+[diff]
+    algorithm = histogram
+    colorMoved = default
+    mnemonicPrefix = true
+    renames = copies
+[grep]
+    lineNumber = true
+[help]
+    autoCorrect = immediate
+[feature]
+    experimental = true
+    manyFiles = true
+[alias]
+    st = status -sb
+    cl = clone
+    l = log --oneline
+    last = log -1 HEAD --stat
+    graph = log --decorate --oneline --graph
+    graphall = log --decorate --all --oneline --graph
+    a = add
+    c = commit
+    ca = commit -a
+    d = diff
+    ds = diff --staged
+    pm = push -u origin main
+    pl = pull
+    co = checkout

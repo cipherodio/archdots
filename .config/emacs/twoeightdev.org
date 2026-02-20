@@ -1,0 +1,980 @@
+#+TITLE: Emacs Configuration
+#+AUTHOR: twoeightdev
+#+DATE: [2024-08-26 Mon]
+#+PROPERTY: header-args :comments org
+
+* Overview
+This org document is a literate configuration for vanilla GNU Emacs.
+~C-c C-v t~ to tangle this file and restart emacs. This file will
+automatically tangle on save after the packages are downloaded.
+
+* TOC
+:PROPERTIES:
+:TOC: :include all :ignore this
+:END:
+
+:CONTENTS:
+- [[#overview][Overview]]
+- [[#convent-header][Convent Header]]
+- [[#early-init][Early Init]]
+  - [[#generate-early-header][Generate Early Header]]
+  - [[#initial-startup][Initial Startup]]
+  - [[#native-compile][Native Compile]]
+  - [[#suppress-warnings][Suppress Warnings]]
+  - [[#initial-frame][Initial Frame]]
+  - [[#theme][Theme]]
+  - [[#melpa][Melpa]]
+  - [[#footer][Footer]]
+- [[#init][Init]]
+  - [[#generate-init-header][Generate Init Header]]
+  - [[#use-package][Use-Package]]
+  - [[#better-defaults][Better Defaults]]
+  - [[#keybinds][Keybinds]]
+  - [[#organize][Organize]]
+  - [[#number-line][Number Line]]
+  - [[#evil][Evil]]
+    - [[#evil-integration][Evil Integration]]
+  - [[#general][General]]
+  - [[#org][Org]]
+    - [[#org-appear][Org-appear]]
+    - [[#org-bullets][Org-bullets]]
+    - [[#org-make-toc][Org-make-toc]]
+  - [[#eglot][Eglot]]
+  - [[#lua][Lua]]
+  - [[#completions][Completions]]
+    - [[#vertico][Vertico]]
+    - [[#marginalia][Marginalia]]
+  - [[#git][Git]]
+    - [[#magit][Magit]]
+  - [[#which-key][Which-key]]
+  - [[#modeline][Modeline]]
+  - [[#garbage-collect][Garbage Collect]]
+  - [[#dashboard][Dashboard]]
+  - [[#init-footer][Init Footer]]
+:END:
+
+* Convent Header
+Auto-generate a header on top of ~early-init.el~ and ~init.el~ using
+[[https://orgmode.org/manual/Noweb-Reference-Syntax.html][noweb]] syntax.
+
+#+NAME: autogen-header
+#+BEGIN_SRC emacs-lisp
+;;; Auto-generated --- DO NOT EDIT -*- lexical-binding: t -*-
+
+;; Copyright (C) 2024 twoeightdev
+;; Author: twoeightdev <twoeightdev@gmail.com>
+;; URL: https://github.com/twoeightdev
+
+;;; Commentary:
+
+;; This file is NOT part of GNU Emacs. This is `auto-generated' from my
+;; `twoeightdev.org' org configuration file.
+
+;;; Code:
+#+END_SRC
+
+* Early Init
+:PROPERTIES:
+:header-args: :tangle early-init.el
+:END:
+This is loaded before the package system and GUI is initialized.
+
+** Generate Early Header
+Generate header for ~early-init.el~.
+
+#+BEGIN_SRC emacs-lisp :noweb yes :comments no
+<<autogen-header>>
+#+END_SRC
+
+** Initial Startup
+
+#+BEGIN_SRC emacs-lisp
+(eval-after-load "startup"
+  '(fset 'display-startup-echo-area-message 'ignore))
+
+(defvar file-name-handler-alist-original file-name-handler-alist)
+
+(setq gc-cons-threshold most-positive-fixnum
+      file-name-handler-alist nil
+      package-enable-at-startup t
+      load-prefer-newer noninteractive
+      frame-inhibit-implied-resize t
+      initial-scratch-message nil
+      initial-major-mode 'fundamental-mode
+      inhibit-x-resources t
+      inhibit-compacting-font-caches t)
+
+(set-default-coding-systems 'utf-8)
+(blink-cursor-mode -1)
+(pixel-scroll-precision-mode 1)
+(column-number-mode t)
+(global-font-lock-mode 1)
+(tooltip-mode -1)
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
+#+END_SRC
+
+** Native Compile
+
+#+BEGIN_SRC emacs-lisp
+(when (featurep 'native-compile)
+  (let ((path (expand-file-name "var/eln-cache/" user-emacs-directory)))
+    (setq-default native-compile-target-directory path
+                  native-comp-eln-load-path (list path)
+                  native-comp-async-report-warnings-errors nil
+                  native-comp-deferred-compilation t
+                  native-comp-speed 2
+                  package-native-compile t)
+    (when (fboundp 'startup-redirect-eln-cache)
+      (startup-redirect-eln-cache path))))
+#+END_SRC
+
+** Suppress Warnings
+Silence byte compile warnings.
+
+#+BEGIN_SRC emacs-lisp
+(setq-default byte-compile-warnings '(not obsolete)
+              package-native-compile t
+              site-run-file nil
+              warning-suppress-log-types '((comp) (bytecomp)))
+#+END_SRC
+
+** Initial Frame
+
+#+BEGIN_SRC emacs-lisp
+(modify-all-frames-parameters '((font . "Iosevka Nerd Font-14")
+                                (alpha . 98)
+                                (menu-bar-lines . nil)
+                                (tool-bar-lines . nil)
+                                (vertical-scroll-bars . nil)
+                                (horizontal-scroll-bars . nil)))
+
+(set-face-attribute 'font-lock-comment-face nil :slant 'italic)
+(set-face-attribute 'font-lock-function-name-face nil :weight 'bold)
+(set-face-attribute 'font-lock-variable-name-face nil :slant 'italic)
+#+END_SRC
+
+** Theme
+
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'custom-theme-load-path (expand-file-name "themes/" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "themes/" user-emacs-directory))
+(load-theme 'catppuccin t)
+#+END_SRC
+
+** Melpa
+
+#+BEGIN_SRC emacs-lisp
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") 'append)
+#+END_SRC
+
+** Footer
+
+#+BEGIN_SRC emacs-lisp
+;;; early-init.el ends here
+#+END_SRC
+
+* Init
+:PROPERTIES:
+:header-args: :tangle init.el
+:END:
+Main configuration file that will generate ~init.el~ on save.
+
+** Generate Init Header
+Generate header for ~init.el~.
+
+#+BEGIN_SRC emacs-lisp :noweb yes :comments no
+<<autogen-header>>
+#+END_SRC
+
+** Use-Package
+Package.el with use-package.
+
+#+BEGIN_SRC emacs-lisp
+(use-package use-package
+  :ensure nil
+  :no-require
+  :custom
+  (use-package-always-defer t)
+  (use-package-always-ensure t))
+#+END_SRC
+
+** Better Defaults
+Preferred defaults.
+
+#+BEGIN_SRC emacs-lisp
+(use-package emacs
+  :ensure nil
+  :init
+  (setq-default read-process-output-max (* 1024 1024)
+                ad-redefinition-action 'accept
+                server-client-instructions nil
+                help-window-select t
+                window-combination-resize t
+                comment-multi-line t
+                truncate-lines t
+                sentence-end-double-space nil
+                fill-column 80
+                tab-width 4
+                cursor-in-non-selected-windows nil
+                mouse-yank-at-point t
+                scroll-step 1
+                scroll-margin 1
+                scroll-conservatively 101
+                indent-tabs-mode nil))
+#+END_SRC
+
+** Organize
+Keeps emacs directory clean.
+
+#+BEGIN_SRC emacs-lisp
+(use-package files
+  :ensure nil
+  :preface
+  (defvar backup-dir
+    (locate-user-emacs-file ".cache/backups")
+    "Directory to store backups.")
+
+  (defvar auto-save-dir
+    (locate-user-emacs-file ".cache/auto-save/")
+    "Directory to store auto-save files.")
+  :custom
+  (backup-by-copying t)
+  (create-lockfiles nil)
+  (version-control t)
+  (delete-old-versions t)
+  (kept-new-versions 2)
+  (kept-old-versions 2)
+  (large-file-warning-threshold nil)
+  (auto-save-list-file-prefix nil)
+  (backup-directory-alist
+   `(("." . ,backup-dir)))
+  (auto-save-file-name-transforms
+   `((".*" ,auto-save-dir t)))
+  (auto-save-no-message t)
+  (auto-save-interval 100)
+  (require-final-newline t)
+  :init
+  (unless (file-exists-p auto-save-dir)
+    (make-directory auto-save-dir t)))
+#+END_SRC
+
+** Number Line
+
+#+BEGIN_SRC emacs-lisp
+(use-package display-line-numbers
+  :ensure nil
+  :preface
+  (defun twoeightdev/prog-mode ()
+    "Initial configuration for `prog-mode'."
+    (display-line-numbers-mode))
+  :hook
+  (prog-mode . twoeightdev/prog-mode)
+  :custom
+  (display-line-numbers-width 4)
+  (display-line-numbers-grow-only t)
+  (display-line-numbers-width-start t))
+#+END_SRC
+
+** Evil
+Extensible vi layer Emacs.
+
+#+BEGIN_SRC emacs-lisp
+(use-package evil
+  :demand t
+  :functions evil-mode
+  :defines evil-insert-state-map
+  :custom
+  (evil-want-C-i-jump nil)
+  (evil-want-C-d-scroll nil)
+  (evil-want-keybinding nil)
+  (evil-auto-indent nil)
+  (evil-respect-visual-line-mode t)
+  :config
+  (evil-mode 1)
+  ;; Conflict with corfu
+  (define-key evil-insert-state-map (kbd "C-k") nil))
+#+END_SRC
+
+*** Evil Integration
+
+#+BEGIN_SRC emacs-lisp
+(use-package evil-collection
+  :after evil
+  :functions evil-collection-init
+  :init
+  (evil-collection-init))
+
+(use-package evil-org
+  :after (evil org)
+  :functions evil-org-set-key-theme evil-org-agenda-set-keys
+  :hook
+  ((org-mode . evil-org-mode)
+   (org-agenda-mode . evil-org-mode))
+  :config
+  (require 'evil-org-agenda)
+  (evil-org-set-key-theme
+   '(navigation todo insert textobjects additional))
+  (evil-org-agenda-set-keys))
+#+END_SRC
+
+** General
+More convenient key definitions.
+
+#+BEGIN_SRC emacs-lisp
+(use-package general
+  :demand t
+  :defines twoeightdev/leader-keys
+  :functions general-evil-setup general-create-definer general-unbind
+  :functions twoeightdev/leader-keys
+  :config
+  (general-evil-setup)
+  (general-create-definer twoeightdev/leader-keys
+    :states '(normal insert visual emacs)
+    :keymaps 'override
+    :prefix "SPC"
+    :global-prefix "M-SPC")
+
+  (general-unbind
+    "C-x C-r"
+    "C-x C-z"
+    "C-x C-d"
+    "<mouse-2>")
+
+  (twoeightdev/leader-keys
+    "SPC" '(execute-extended-command :wk "execute command")
+    "TAB" '(:keymap tab-prefix-map :wk "tab")
+    "s" '(:keymap evil-window-map :wk "window")
+    "w" '(save-buffer :wk "save file")
+    "q" '(evil-quit :wk "quit")
+    "'" '(comment-line :wk "comment line")
+    "c" '(:ignore t :wk "code")
+    "h" '(:ignore t :wk "help")
+    "f" '(:ignore t :wk "file")
+    "ff" '(find-file :wk "find file")
+    "b" '(:ignore t :wk "buffer")
+    "bb" '(switch-to-buffer :wk "switch buffer")
+    "bk" '(kill-this-buffer :wk "kill this buffer")
+    "br" '(revert-buffer :wk "revert buffer")))
+#+END_SRC
+
+** Keybinds
+
+#+BEGIN_SRC emacs-lisp
+(use-package face-remap
+  :ensure nil
+  :preface
+  (defun twoeightdev/reset-font-size ()
+    "Reset to default font size."
+    (interactive)
+    (text-scale-set 0))
+
+  (defun twoeightdev/increase-font-size ()
+    "Increase font size."
+    (interactive)
+    (text-scale-increase 1))
+
+  (defun twoeightdev/decrease-font-size ()
+    "Decrease font size."
+    (interactive)
+    (text-scale-decrease 1))
+  :general
+  ("C-=" 'twoeightdev/increase-font-size)
+  ("C--" 'twoeightdev/decrease-font-size)
+  ("C-0" 'twoeightdev/reset-font-size))
+
+(use-package simple
+  :ensure nil
+  :general
+  ("<escape>" 'keyboard-escape-quit))
+#+END_SRC
+
+** Org
+Manage schedules, notes and planning projects.
+
+#+BEGIN_SRC emacs-lisp
+(use-package org
+  :ensure nil
+  :preface
+  (defun twoeightdev/org-setup ()
+    (org-indent-mode 1)
+    (auto-fill-mode 0)
+    (prettify-symbols-mode 1)
+    (visual-line-mode 0))
+
+  (defconst twoeightdev/notes-path
+    (expand-file-name "notes.org" "~/.local/notes")
+    "Path to personal notes file.")
+
+  (defconst twoeightdev/org-path
+    (locate-user-emacs-file "twoeightdev.org")
+    "Path to my `org' configuration file.")
+
+  (defun twoeightdev/org-config ()
+    "Open my `org' configuraiton file."
+    (interactive)
+    (find-file twoeightdev/org-path))
+
+  (defun twoeightdev/org-tangle-config ()
+    "Auto tangle this org configuration file."
+    (when (string-equal (buffer-file-name)
+                        (expand-file-name "twoeightdev.org" user-emacs-directory))
+      (org-babel-tangle)))
+  :hook
+  (org-mode . twoeightdev/org-setup)
+  (after-save . twoeightdev/org-tangle-config)
+  :general
+  (twoeightdev/leader-keys
+    "fc" '(twoeightdev/org-config :wk "org configuration file")
+    "aa" '(org-agenda :wk "org agenda"))
+  :custom
+  (org-edit-src-content-indentation 0)
+  (org-src-preserve-indentation nil)
+  (org-directory "~/.local/src/orgnotes")
+  (org-default-notes-file twoeightdev/notes-path)
+  (org-src-window-setup 'current-window)
+  (org-return-follows-link t)
+  (org-image-actual-width nil)
+  (org-hide-emphasis-markers t)
+  (org-hide-leading-stars t)
+  (org-catch-invisible-edits 'show-and-error)
+  (org-ellipsis " 󱨉")
+  (org-src-fontify-natively t)
+  (org-fontify-quote-and-verse-blocks t)
+  (org-startup-folded 'content)
+  (org-pretty-entities t)
+  (prettify-symbols-unprettify-at-point 'right-edge)
+  (prettify-symbols-alist
+   '(("#+BEGIN_SRC" . "")
+     ("#+END_SRC" . "")
+     ("#+begin_src" . "")
+     ("#+end_src" . "")
+     ("#+TITLE:" . "")
+     ("#+title:" . "")
+     ("[ ]" . "")
+     ("[X]" . "")
+     ("[-]" . "")))
+     ;; ("[ ]" . "☐")
+     ;; ("[X]" . "☑")
+     ;; ("[-]" . "❍")))
+  (org-agenda-files
+   (directory-files-recursively "~/.local/src/orgnotes" "\\.org$"))
+  (org-agenda-start-on-weekday 1)
+  (org-agenda-timegrid-use-ampm 1)
+  (org-agenda-show-all-dates nil)
+  (org-agenda-window-setup 'current-window))
+#+END_SRC
+
+*** Org-appear
+Make /invisible/ parts of *Org elements* appear /visible/.
+
+#+BEGIN_SRC emacs-lisp
+(use-package org-appear
+  :hook
+  (org-mode . org-appear-mode)
+  :custom
+  (org-appear-autolinks t))
+#+END_SRC
+
+*** Org-bullets
+Show ~org-mode~ bullets as *UTF-8* characters.
+
+#+BEGIN_SRC emacs-lisp
+(use-package org-bullets
+  :defines org-bullets-bullet-list
+  :hook
+  (org-mode . org-bullets-mode)
+  :config
+  (setq org-bullets-bullet-list '("󰪥" "󰻃" "✿" "✱" "❖" "🞆" "✸")))
+#+END_SRC
+
+*** Org-make-toc
+Generate /table of contents/ for *Org* files.
+
+#+BEGIN_SRC emacs-lisp
+(use-package org-make-toc)
+#+END_SRC
+
+** Eglot
+
+#+BEGIN_SRC emacs-lisp
+(use-package eglot
+  :ensure nil
+  :hook
+  (python-mode . eglot-ensure)
+  (sh-mode . eglot-ensure)
+  :init
+  (setq eglot-stay-out-of '(flymake eldoc)))
+#+END_SRC
+
+** Languages
+
+*** Lua
+
+#+BEGIN_SRC emacs-lisp
+(use-package lua-mode
+  :hook
+  (lua-mode . eglot-ensure)
+  :mode "\\.lua$\\'"
+  :interpreter "lua"
+  :custom
+  (lua-indent-level 4))
+#+END_SRC
+
+*** Markdown
+
+#+BEGIN_SRC emacs-lisp
+(use-package markdown-mode
+  :mode (("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :custom
+  (markdown-fontify-code-blocks-natively t)
+  (markdown-hr-display-char nil)
+  (markdown-list-item-bullets '("-")))
+#+END_SRC
+
+*** CSS
+
+#+BEGIN_SRC emacs-lisp
+(use-package css-mode
+  :ensure nil
+  :defer t
+  :custom
+  (css-indent-offset 4))
+#+END_SRC
+
+*** Js
+
+#+BEGIN_SRC emacs-lisp
+(use-package js
+  :defer t
+  :custom
+  (js-indent-level 4))
+#+END_SRC
+
+*** Yaml
+
+#+BEGIN_SRC emacs-lisp
+(use-package yaml-mode
+  :defer t
+  :custom
+  (yaml-indent-offset 4))
+#+END_SRC
+
+*** Conf
+
+#+BEGIN_SRC emacs-lisp
+(use-package conf-mode
+  :ensure nil
+  :mode "\\.list\\'"
+  :mode "\\dunstrc\\'"
+  :mode "\\lfrc\\'"
+  :mode "\\tridactylrc\\'"
+  :mode "\\xdefaults\\'")
+#+END_SRC
+
+** Completions
+Completion setup wtih =vertico=, =consult=, =corfu=, =orderless= and =marginalia=.
+
+*** Vertico
+*Vertico* helps to rapidly complete file names, buffer names, or any other
+*Emacs* interactions.
+
+#+BEGIN_SRC emacs-lisp
+(use-package vertico
+  :demand t
+  :bind (:map vertico-map
+              ("C-j" . vertico-next)
+              ("C-k" . vertico-previous)
+              ("C-f" . vertico-exit-input)
+              :map minibuffer-local-map
+              ("M-h" . vertico-directory-up))
+  :custom
+  (vertico-cycle t)
+  :config
+  (require 'vertico-directory)
+  (vertico-mode))
+#+END_SRC
+
+*** Corfu
+Enhances in-buffer completion with a small completion popup.
+
+#+BEGIN_SRC emacs-lisp
+(use-package corfu
+  :demand t
+  :preface
+  (defun corfu-complete-and-quit ()
+    (interactive)
+    (corfu-complete)
+    (corfu-quit))
+  :bind
+  (:map corfu-map
+        ([remap completion-at-point] . corfu-complete))
+  :general
+  (general-def corfu-map
+    "TAB" 'corfu-next
+    "[tab]" 'corfu-next
+    "S-TAB" 'corfu-previous
+    "<backtab>" 'corfu-previous
+    ;; "[remap completion-at-point]" 'corfu-complete
+    "RET" 'corfu-complete-and-quit
+    "<return>" 'corfu-complete-and-quit)
+  :commands (corfu-quit)
+  :custom
+  (corfu-cycle t)
+  (corfu-preselect-first t)
+  (corfu-scroll-margin 4)
+  (corfu-quit-no-match t)
+  (corfu-quit-at-boundary t)
+  (corfu-count 9)
+  (corfu-popupinfo-delay 0.2)
+  (corfu-auto t)
+  (corfu-auto-prefix 2)
+  (corfu-auto-delay 0.2)
+  (tab-always-indent 'complete)
+  :config
+  (global-corfu-mode))
+#+END_SRC
+
+**** Corfu Popup
+
+#+BEGIN_SRC emacs-lisp
+(use-package corfu-popupinfo
+  :ensure nil
+  :hook
+  (corfu-mode . corfu-popupinfo-mode)
+  :general
+  (general-def corfu-popupinfo-map
+    "M-p" 'corfu-popupinfo-scroll-down
+    "M-n" 'corfu-popupinfo-scroll-up)
+  :custom-face
+  (corfu-popupinfo ((t :height 1.0))))
+#+END_SRC
+
+**** Cape
+
+#+BEGIN_SRC emacs-lisp
+(use-package cape
+  :after corfu
+  :config
+  (setq completion-at-point-functions '(cape-file)))
+#+END_SRC
+
+**** Kind
+
+#+BEGIN_SRC emacs-lisp
+(use-package kind-icon
+  :after corfu
+  :demand t
+  :custom (kind-icon-default-face 'corfu-default)
+  :config
+  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+#+END_SRC
+
+*** Marginalia
+Helpful colorful annotations in minibuffer.
+
+#+BEGIN_SRC emacs-lisp
+(use-package marginalia
+  :after vertico
+  :demand t
+  :custom
+  (marginalia-annotators '(marginalia-annotators-heavy
+                           marginalia-annotators-light
+                           nil))
+  :config
+  (marginalia-mode))
+#+END_SRC
+
+*** Orderless
+/Completion style/ that divides the pattern into space-separated
+components, and matches candidates that match all the components
+in any order.
+
+#+BEGIN_SRC emacs-lisp
+(use-package orderless
+  :demand t
+  :config
+  (orderless-define-completion-style orderless+initialism
+                                     (orderless-matching-styles '(orderless-initialism
+                                                                  orderless-literal
+                                                                  orderless-regexp)))
+  (setq completion-styles '(orderless)
+        completion-category-defaults nil
+        orderless-matching-styles '(orderless-literal orderless-regexp)
+        completion-category-overrides
+        '((file (styles partial-completion)))))
+#+END_SRC
+
+** Snippets
+
+#+BEGIN_SRC emacs-lisp
+(use-package yasnippet
+  :delight yas-minor-mode)
+#+END_SRC
+
+** Git
+Git tools
+
+*** Magit
+*Version control interface* for =Git=. The /function/
+=twoeightdev/magit-process-environment= detects and set =Git-bare= repo
+for managing my =dotfiles=. Source: [[https://github.com/magit/magit/issues/460]]
+
+#+BEGIN_SRC emacs-lisp
+(use-package magit
+  :preface
+  (defun twoeightdev/magit-process-environment (env)
+    "Detect and set git -bare repo env vars when in tracked dotfile directories."
+    (let* ((default (file-name-as-directory (expand-file-name default-directory)))
+           (git-dir (expand-file-name "~/.config/.dots/"))
+           (work-tree (expand-file-name "~/"))
+           (dotfile-dirs
+            (-map (apply-partially 'concat work-tree)
+                  (-uniq (-keep #'file-name-directory (split-string (shell-command-to-string
+                  (format "/usr/bin/git --git-dir=%s --work-tree=%s ls-tree --full-tree --name-only -r HEAD"
+                          git-dir work-tree))))))))
+      (push work-tree dotfile-dirs)
+      (when (member default dotfile-dirs)
+        (push (format "GIT_WORK_TREE=%s" work-tree) env)
+        (push (format "GIT_DIR=%s" git-dir) env)))
+    env)
+  :general
+  (twoeightdev/leader-keys
+    "gg" '(magit :wk "magit"))
+  :config
+  (advice-add 'magit-process-environment
+              :filter-return #'twoeightdev/magit-process-environment))
+#+END_SRC
+
+*** Diffs
+Highlights uncommited changed on the gutter.
+
+#+BEGIN_SRC emacs-lisp
+(use-package diff-hl)
+#+END_SRC
+
+** Which-key
+Display key bindings following your currently entered incomplete command.
+
+#+BEGIN_SRC emacs-lisp
+(use-package which-key
+  :demand t
+  :config
+  (which-key-mode)
+  (setq which-key-idle 0.3
+        which-key-idle-delay 50)
+  (which-key-setup-minibuffer))
+#+END_SRC
+
+** Modeline
+
+#+BEGIN_SRC emacs-lisp :tangle no
+(defun evil-state-symbol ()
+  "Return a symbol representing the current Evil state."
+  (cond
+   ((evil-normal-state-p)   "NORMAL")
+   ((evil-insert-state-p)   "INSERT")
+   ((evil-visual-state-p)   "VISUAL")
+   ((evil-replace-state-p)  "REPLACE")
+   (t                       "󰻃 ")))
+
+(defun evil-state-color ()
+  "Return the color of the current Evil state."
+  (cond
+   ((evil-normal-state-p)   "#f5c2e7")
+   ((evil-insert-state-p)   "#a6e3a1")
+   ((evil-visual-state-p)   "#f9e2af")
+   ((evil-replace-state-p)  "#f5c2e7")
+   (t                       "#cba6f7")))
+
+(defun custom-modified-status ()
+  "Return a string representing the buffer modification status."
+  (propertize
+   (if (buffer-modified-p)
+       ""
+     "")
+   'face `(:foreground ,(if (buffer-modified-p) "#f38ba8" "#a6e3a1"))))
+
+(defun filename-color ()
+  "Return a mode line component that shows the buffer name with appropriate color."
+  (let* ((file-name (buffer-file-name))
+         (modified (buffer-modified-p))
+         (color (if modified
+                    "#f38ba8"
+                  "#a6e3a1")))
+    (propertize (or (and file-name (file-name-nondirectory file-name))
+                    (buffer-name))
+                'face `(:foreground ,color))))
+
+(defun custom-mode-line ()
+  "Construct a custom mode line."
+  (list
+   " "
+   '(:eval (propertize ( evil-state-symbol)
+                       'face `(:foreground ,(evil-state-color) :weight bold)))
+   " "
+   ;; "%b "
+   '(:eval (filename-color))
+
+   " "
+
+   " %l:%c "
+
+   "["mode-name"]" ))
+
+   ;; " %m "))
+
+(setq-default mode-line-format
+              '((:eval (custom-mode-line))))
+#+END_SRC
+
+** Modes
+
+#+BEGIN_SRC emacs-lisp :tangle no
+(defun ntf/mode-line-format (left right)
+  "Return a string of `window-width' length.
+Containing LEFT, and RIGHT aligned respectively."
+  (let ((available-width (- (window-width) (length left) 1)))
+    (format (format "%%s %%%ds " available-width) left right)))
+
+(defface evil-mode-line-face '((t (:foreground  "black"
+                                                  :background "orange")))
+    "Face for evil mode-line colors.")
+
+(setq-default
+   mode-line-format
+   '((:eval (ntf/mode-line-format
+             ;; left portion
+             (format-mode-line
+              (quote ("%e"
+                      (:eval
+                       (when (bound-and-true-p evil-local-mode)
+                         (propertize
+                          (concat
+                           " "
+                           (upcase
+                            (substring (symbol-name evil-state) 0 1))
+                           (substring (symbol-name evil-state) 1)
+                           " ") 'face 'evil-mode-line-face)))
+                      " " (:eval (when (buffer-modified-p) "[+]"))
+                      " " mode-line-buffer-identification
+                      " %l:%c")))
+             ;; right portion
+             (format-mode-line (quote ("%m " (vc-mode vc-mode))))))))
+#+END_SRC
+
+** Mode2
+
+#+BEGIN_SRC emacs-lisp
+(defun twoeightdev/mode-line-format (left right)
+  "Return a string of `window-width' length.
+Containing LEFT, and RIGHT aligned respectively."
+  (let ((available-width (- (window-width) (length left) 1)))
+    (format (format "%%s %%%ds " available-width) left right)))
+
+(defun evil-state-symbol ()
+  "Return a symbol representing the current Evil state."
+  (cond
+   ((evil-normal-state-p)   "NORMAL")
+   ((evil-insert-state-p)   "INSERT")
+   ((evil-visual-state-p)   "VISUAL")
+   ((evil-replace-state-p)  "REPLACE")
+   (t                       "󰻃 ")))
+
+(defun evil-state-color ()
+  "Return the color of the current Evil state."
+  (cond
+   ((evil-normal-state-p)   "#f5c2e7")
+   ((evil-insert-state-p)   "#a6e3a1")
+   ((evil-visual-state-p)   "#f9e2af")
+   ((evil-replace-state-p)  "#f5c2e7")
+   (t                       "#cba6f7")))
+
+(defun filename-color ()
+  "Return a mode line component that shows the buffer
+name with appropriate color."
+  (let* ((file-name (buffer-file-name))
+         (modified (buffer-modified-p))
+         (color (if modified
+                    "#f38ba8"
+                  "#a6e3a1")))
+    (propertize (or (and file-name (file-name-nondirectory file-name))
+                    (buffer-name))
+                'face `(:foreground ,color))))
+
+(setq-default
+ mode-line-format
+ '((:eval (twoeightdev/mode-line-format
+           (format-mode-line
+            (quote ("%e"
+                    " "
+                    (:eval
+                     (propertize
+                      (evil-state-symbol)
+                      'face `(:foreground
+                              ,(evil-state-color)
+                              :weight bold)))
+                    " "
+                    (:eval (filename-color))
+                    " %l:%c")))
+           (format-mode-line
+            (quote ("%m " (vc-mode vc-mode))))))))
+#+END_SRC
+
+** Garbage Collect
+Emacs garbage collection. [[https://akrl.sdf.org/#orgc15a10d][reference]].
+
+#+BEGIN_SRC emacs-lisp
+(defmacro k-time (&rest body)
+  "Measure and return the time it takes evaluating BODY."
+  `(let ((time (current-time)))
+     ,@body
+     (float-time (time-since time))))
+
+(setq gc-cons-percentage .6)
+
+(defvar k-gc-timer
+  (run-with-idle-timer 15 t
+                       (lambda ()
+                         (message "Garbage Collector has run for %.06fsec"
+                                  (k-time (garbage-collect))))))
+#+END_SRC
+
+** Dashboard
+
+#+BEGIN_SRC emacs-lisp
+(use-package dashboard
+  :functions dashboard-setup-startup-hook
+  :init
+  (dashboard-setup-startup-hook)
+  :custom
+  (dashboard-banner-logo-title "Welcome Motherfucker!!!")
+  (dashboard-items '((recents . 5)
+                     (bookmarks . 5)
+                     (agenda . 5)))
+  (dashboard-startupify-list
+   '(dashboard-insert-items
+     dashboard-insert-newline
+     dashboard-insert-navigator
+     dashboard-insert-init-info
+     dashboard-insert-newline)))
+#+END_SRC
+
+** Init Footer
+Auto-generated convent footer for ~init.el~.
+
+#+BEGIN_SRC emacs-lisp
+;;; init.el ends here
+#+END_SRC
+
+
+
+
+
+
+
+
+
+

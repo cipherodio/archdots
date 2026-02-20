@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Backup GPG secret keys securely (symmetric encryption)
+
+set -euo pipefail
+
+BACKUP_DIR="${HOME}/hub/src/cipherkeys"
+KEY_EMAIL="${1:-}"
+
+if [[ -z "$KEY_EMAIL" ]]; then
+    printf 'Usage: gpg-backup <email|keyid>\n' >&2
+    exit 1
+fi
+
+mkdir -p "$BACKUP_DIR"
+cd "$BACKUP_DIR"
+
+printf '==> Exporting public key…\n'
+gpg --armor --export "$KEY_EMAIL" >public.asc
+
+printf '==> Exporting secret key…\n'
+gpg --armor --export-secret-keys "$KEY_EMAIL" >private.asc
+
+printf '==> Exporting ownertrust…\n'
+gpg --export-ownertrust >ownertrust.txt
+
+printf '==> Encrypting private key (symmetric)…\n'
+gpg -c private.asc
+
+printf '==> Verifying encrypted backup integrity…\n'
+gpg --decrypt --dry-run private.asc.gpg >/dev/null
+
+printf '==> Shredding plaintext private key…\n'
+shred -u private.asc
+
+printf '\nBackup complete.\n'
+printf 'Files to store safely:\n'
+printf '  %s/private.asc.gpg\n' "$BACKUP_DIR"
+printf '  %s/public.asc\n' "$BACKUP_DIR"
+printf '  %s/ownertrust.txt\n' "$BACKUP_DIR"

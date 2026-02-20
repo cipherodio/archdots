@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Update newsboat RSS feeds (cron-friendly)
+
+set -euo pipefail
+
+CACHE="$HOME/.cache/news_unread"
+
+# Abort if offline
+ping -q -c 1 1.1.1.1 >/dev/null 2>&1 || exit 0
+
+notify-send "RSS" "Updating feeds…"
+
+# If newsboat is already running, trigger reload inside it
+if pgrep -x newsboat >/dev/null 2>&1; then
+    win_id="$(xdotool search --class newsboat | head -n1 || true)"
+    if [ -n "$win_id" ]; then
+        xdotool windowactivate "$win_id" key R
+        exit 0
+    fi
+fi
+
+# Otherwise update silently
+newsboat -x reload
+newsboat -x print-unread | cut -d ' ' -f 1 >"$CACHE"
+
+unread="$(cat "$CACHE" 2>/dev/null || echo 0)"
+notify-send "RSS" "Update complete\n$unread unread"

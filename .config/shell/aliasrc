@@ -1,0 +1,64 @@
+# shell aliases (sourced by zsh)
+
+# Use neovim for vim if present
+[ -x "$(command -v nvim)" ] && alias vim="nvim" vimdiff="nvim -d"
+
+# ffmpeg="ffmpeg -hide_banner"
+# Verbosity and settings
+# shellcheck disable=SC2139,SC2304
+alias \
+    cp="cp -iv" \
+    mv="mv -iv" \
+    rm="rm -vI" \
+    bc="bc -ql" \
+    mkd="mkdir -pv" \
+    du="du -shc" \
+    mbsync="mbsync -c $HOME/.config/mbsync/mbsyncrc" \
+    ve="python -m venv" \
+    va="source $HOME/.venv/devtool/bin/activate" \
+    vd="deactivate"
+
+# Colorize commands when possible
+alias \
+    ls="ls -AhN --color=auto --group-directories-first" \
+    ll="ls -lch --color=auto" \
+    grep="grep --color=auto" \
+    diff="diff --color=auto" \
+    ccat="highlight --out-format=ansi"
+
+# These common commands are just too long! abbreviate them
+# shellcheck disable=SC2139
+alias \
+    pk="pkill" \
+    rg="\rg --ignore-file ~/.config/ripgrep/ignore" \
+    o="$FILE" \
+    v="$EDITOR" \
+    ec="emacsclient -c -n -a 'emacs'" \
+    z="zathura"
+
+# Make
+alias \
+    im="make && sudo make install" \
+    um="sudo make uninstall" \
+    cm="make clean && rm -f config.h && git reset --hard origin/main"
+
+# Miscellaneous
+# shellcheck disable=SC2139
+alias \
+    getpath="find -type f | fzf | sed 's/^..//' | tr -d '\n' | xclip -selection c" \
+    twp="task status:deleted purge" \
+    twc="task status:completed delete" \
+    fxp="chmod -R a=r,u+w,a+X" \
+    checkpath="echo $PATH | sed 's/:/\n/g' | sort | uniq -c" \
+    df="df -h" \
+    fn="fc-match -a | grep -i" \
+    fne="fc-list : family | grep -i" \
+    srm="shred -zvu -n 5" \
+    xtar="tar xfv" \
+    sysinfo="echo && sysarch" \
+    ifn="fc-cache -f -v" \
+    gip="curl ipinfo.io/ip" \
+    civ="convert +append" \
+    cih="convert -append" \
+    xdgf="xdg-mime query filetype" \
+    xdgd="xdg-mime query default"

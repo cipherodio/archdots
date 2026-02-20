@@ -1,0 +1,2 @@
+#!/bin/sh
+/data/drmfree/rimworld/./start_RimWorld.sh >/dev/null 2>&1 &

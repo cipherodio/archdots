@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Show latest Arch Linux news and optionally run system upgrade
+
+set -euo pipefail
+
+NEWS_FEED="https://archlinux.org/feeds/news/"
+NEWS_LIMIT=10
+
+# Colors
+ESC="$(printf '\033')"
+BOLD="${ESC}[1m"
+BLUE="${ESC}[34m"
+YELLOW="${ESC}[33m"
+RED="${ESC}[31m"
+RESET="${ESC}[0m"
+
+printf '%s%s🔔 Latest Arch Linux news:%s\n\n' "$BOLD" "$BLUE" "$RESET"
+
+if ! news="$(
+    curl -fs "$NEWS_FEED" |
+        sed -n '/<item>/,/<\/item>/ {
+            s/.*<title>\(.*\)<\/title>.*/\1/p
+        }' |
+        sed 's/&gt;/>/g' |
+        head -n "$NEWS_LIMIT"
+)"; then
+    printf '%sError: failed to fetch Arch Linux news.%s\n' "$RED" "$RESET"
+    exit 1
+fi
+
+while IFS= read -r title; do
+    case "$title" in
+    *[Mm]anual\ intervention*)
+        printf '%s- %s%s\n' "$RED" "$title" "$RESET"
+        ;;
+    *)
+        printf '%s- %s%s\n' "$YELLOW" "$title" "$RESET"
+        ;;
+    esac
+done <<<"$news"
+
+printf '\n%sContinue with system upgrade? [y/N] %s' "$BOLD" "$RESET"
+read -r answer
+
+case "$answer" in
+[yY])
+    printf '%s%s⏫ Running pacman -Syu...%s\n' "$BOLD" "$RED" "$RESET"
+    exec sudo pacman -Syu
+    ;;
+*)
+    printf '%s⏹️  Upgrade cancelled.%s\n' "$BOLD" "$RESET"
+    exit 0
+    ;;
+esac

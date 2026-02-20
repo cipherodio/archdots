@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Display LS_COLORS entries with human-readable names
+
+set -euo pipefail
+
+declare -A names=(
+    [no]="global default"
+    [fi]="normal file"
+    [di]="directory"
+    [ln]="symbolic link"
+    [pi]="named pipe"
+    [so]="socket"
+    [do]="door"
+    [bd]="block device"
+    [cd]="character device"
+    [or]="orphan symlink"
+    [mi]="missing file"
+    [su]="set uid"
+    [sg]="set gid"
+    [tw]="sticky other writable"
+    [ow]="other writable"
+    [st]="sticky"
+    [ex]="executable"
+)
+
+IFS=':' read -ra entries <<<"${LS_COLORS:-}"
+
+for entry in "${entries[@]}"; do
+    key="${entry%%=*}"
+    color="${entry#*=}"
+    name="${names[$key]:-$key}"
+    printf '\e[%sm%s\e[m\n' "$color" "$name"
+done

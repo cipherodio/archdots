@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Toggle unclutter on/off with rofi confirmation
+
+set -euo pipefail
+
+confirm() {
+    printf 'Yes\n' | rofi -dmenu -i -p "$1" >/dev/null
+}
+
+unclutter_running() {
+    pgrep -x unclutter >/dev/null
+}
+
+if unclutter_running; then
+    if confirm "[● ON] Turn OFF unclutter?"; then
+        pkill unclutter
+        notify-send "Unclutter" "OFF"
+    fi
+else
+    if confirm "[○ OFF] Turn ON unclutter?"; then
+        unclutter --timeout 3 -jitter 50 --ignore-scrolling &
+        notify-send "Unclutter" "ON"
+    fi
+fi

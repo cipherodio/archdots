@@ -1,0 +1,172 @@
+# Basic
+set shell bash
+set shellopts '-eu'
+set hidden true
+set drawbox true
+set icons
+set ifs "\n"
+set ignorecase true
+set scrolloff 10
+set period 1
+set dircounts true
+
+# New file always on top
+#set reverse true
+
+# Time format
+# https://www.golinuxcloud.com/golang-time-format/
+#set sortby time
+set sortby name
+set timefmt "2006-02-Jan Monday 03:04PM"
+set infotimefmtnew "2006-02-Jan Monday 03:04PM"
+set infotimefmtold "2006-02-Jan Monday 03:04PM"
+set info size:time
+
+# Single column mode
+set nopreview
+set ratios 1
+set statfmt "\033[36m%p\033[0m| %u| %g| %S| %t| -> %l"
+
+#cmd trash %set -f; mv $fx ~/.trash
+
+cmd open ${{
+    case $(file --mime-type "$(readlink -f $f)" -b) in
+        text/troff) man ./ $f ;;
+        text/*|application/javascript|inode/x-empty|application/json|application/octet-stream) $EDITOR $fx ;;
+        image/x-xcf|image/svg+xml) setsid -f gimp $f >/dev/null 2>&1 & ;;
+        image/*) rotdir $f | setsid nsxiv -oai 2>/dev/null | lf-select & ;;
+        audio/*) mpv --audio-display=no $f ;;
+        video/*) setsid -f mpv $f -quiet >/dev/null 2>&1 ;;
+        application/pdf) setsid zathura $fx >/dev/null 2>&1 & ;;
+        *) for f in $fx; do setsid $OPENER $f >/dev/null 2>&1 & done;;
+    esac
+}}
+
+cmd extract ${{
+    set -f
+
+    printf "%s\n" "$fx" | while IFS= read -r file; do
+        dir="${file%.*}"
+
+        case "$file" in
+            *.tar|*.tar.gz|*.tgz|*.tar.bz*|*.tbz*|*.tar.xz|*.txz)
+                tar -xf "$file" --one-top-level="$dir"
+                ;;
+            *.zip)
+                unzip "$file" -d "$dir"
+                ;;
+            *.rar)
+                unrar x "$file" "$dir"
+                ;;
+            *.7z)
+                7z x "$file" -o"$dir"
+                ;;
+        esac
+    done
+}}
+
+# Compress current file or selected files with tar and gunzip
+cmd tar ${{
+    set -f
+    mkdir $1
+    cp -r $fx $1
+    tar czf $1.tar.gz $1
+    rm -rf $1
+}}
+
+# Compress current file or selected files with zip
+cmd zip ${{
+    set -f
+    mkdir $1
+    cp -r $fx $1
+    zip -r $1.zip $1
+    rm -rf $1
+}}
+
+cmd moveto ${{
+    clear; tput cup $(($(tput lines)/3)); tput bold
+    set -f
+    clear; echo "Move to where?"
+    dest="$(sed -e 's/\s*#.*//' -e '/^$/d' -e 's/^\S*\s*//' $XDG_CONFIG_HOME/shell/bm-dirs | fzf | sed 's|~|$HOME|')" &&
+    for x in $fx; do
+        eval mv -iv \"$x\" \"$dest\"
+        done &&
+    notify-send "🚚 File(s) moved." "File(s) moved to $dest."
+}}
+
+cmd copyto ${{
+    clear; tput cup $(($(tput lines)/3)); tput bold
+    set -f
+    clear; echo "Copy to where?"
+    dest="$(sed -e 's/\s*#.*//' -e '/^$/d' -e 's/^\S*\s*//' $XDG_CONFIG_HOME/shell/bm-dirs | fzf | sed 's|~|$HOME|')" &&
+    for x in $fx; do
+        eval cp -ivr \"$x\" \"$dest\"
+        done &&
+    notify-send "📋 File(s) copied." "File(s) copies to $dest."
+}}
+
+cmd chmod ${{
+    if [ $# -gt 0 ]; then
+        for file in "$fx"
+        do
+            chmod $1 $file
+        done
+    fi
+    lf -remote 'send reload'
+}}
+
+#cmd chmod ${{
+#    printf "\nMode Bits: "
+#    read ans
+
+#    for file in "$fx"
+#    do
+#        chmod $ans $file
+#    done
+#    lf -remote 'send-reload'   # Throws out error needs fixing
+#}}
+
+cmd bulkrename $vidir
+cmd mkdir $mkdir -p "$(echo $* | tr ' ' '\ ')"
+cmd touch $touch "$(echo $* | tr ' ' '\ ')"
+
+#map o &mimeopen $f
+#map O &mimeopen --ask $f
+
+# Basic binds
+map D delete
+map p paste
+map t cut
+map y copy
+map r clear
+
+map gg top
+map G bottom
+map C copyto
+map M moveto
+map E extract
+map Z zip
+
+map O push :mkdir<space>
+map o push :touch<space>
+map x push :chmod<space>
+#map x push :%chmod<space>"$f"<home><a-f><space>
+map X !$f
+
+map R reload
+map <enter> shell
+
+map <c-f> $lf -remote "send $id select '$(fzf)'"
+map W $setsid -f $TERMINAL >/dev/null 2>&1
+
+# Renames
+map B bulkrename
+map A rename # at the very end
+map c push A<c-u> # new rename
+map I push A<c-a> # at the very beginning
+map i push A<a-b><a-b><a-f> # before extention
+map a push A<a-b> # after extention
+map bg &setwallpaper "$f"
+
+# Directories
+source "~/.config/lf/shrc"

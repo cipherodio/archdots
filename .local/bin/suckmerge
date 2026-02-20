@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Merge all local feature branches into main
+
+set -euo pipefail
+
+MAIN_BRANCH=main
+
+# Generate diffs first
+suckdiff
+
+# Ensure clean main
+git checkout "$MAIN_BRANCH"
+git fetch origin
+git reset --hard "origin/$MAIN_BRANCH"
+
+# Merge each local branch into main
+git for-each-ref --format='%(refname:short)' refs/heads/ |
+    sort |
+    while IFS= read -r branch; do
+        [[ "$branch" == "$MAIN_BRANCH" ]] && continue
+
+        printf 'Merging %s\n' "$branch"
+
+        if ! git merge "$branch" -m "$branch"; then
+            printf 'Merge failed on %s — resolve manually.\n' "$branch" >&2
+            exit 1
+        fi
+    done
+
+# Build & install
+make
+sudo make clean install

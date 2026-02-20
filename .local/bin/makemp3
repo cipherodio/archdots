@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Convert input media file to MP3 with date-based filename
+
+set -euo pipefail
+
+[ $# -eq 1 ] || {
+    printf "Usage: makemp3 <input-file>\n"
+    exit 1
+}
+
+input="$1"
+output="$(date '+%m-%d-%y').mp3"
+
+ffmpeg -i "$input" "$output" >/dev/null 2>&1

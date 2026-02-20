@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Search via rofi and open man pages in a terminal
+
+set -euo pipefail
+
+: "${TERMINAL:=alacritty}"
+
+choice=$(
+    apropos . |
+        awk '{ print $1 " " $2 }' |
+        sort -u |
+        rofi -dmenu -i -lines 10 -p man
+) || exit 0
+
+[ -n "$choice" ] || exit 0
+
+name="${choice%% *}"
+section="$(sed -n 's/.*(\(.*\)).*/\1/p' <<<"$choice")"
+
+"$TERMINAL" -e man "$section" "$name" &

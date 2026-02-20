@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# ===== CONFIG =====
+
+# Source → Destination pairs
+declare -A DIRS=(
+    ["$HOME/.local/share/calcurse"]="$HOME/.local/mnt/sda1/home/calcurse"
+    ["$HOME/.local/share/task"]="$HOME/.local/mnt/sda1/home/task"
+    ["$HOME/hub/src/cipherkeys"]="$HOME/.local/mnt/sda1/home/cipherkeys"
+)
+
+# ===== BACKUP =====
+
+for SRC in "${!DIRS[@]}"; do
+    DEST="${DIRS[$SRC]}"
+
+    echo "Syncing:"
+    echo "  $SRC  →  $DEST"
+
+    mkdir -p "$DEST"
+
+    rsync -a --delete "$SRC/" "$DEST/"
+
+    echo "Done."
+    echo
+done
+
+# ===== POST-SYNC: refresh lf =====
+
+if command -v lf >/dev/null 2>&1 && pgrep -x lf >/dev/null 2>&1; then
+    lf -remote "send reload" >/dev/null 2>&1 || true
+fi
+
+echo "All backups completed successfully."

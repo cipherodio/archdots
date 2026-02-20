@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Battery remaining time notification
+
+set -euo pipefail
+
+if ! command -v acpi >/dev/null 2>&1; then
+    dunstify "Battery" "acpi not installed"
+    exit 1
+fi
+
+info="$(acpi -b | head -n1)"
+
+# Extract fields safely
+percent="$(awk -F', ' '{print $2}' <<<"$info")"
+time="$(awk -F', ' '{print $3}' <<<"$info")"
+
+# If time is missing (e.g. Full or unknown)
+if [[ -z "${time:-}" ]]; then
+    time="No estimate"
+fi
+
+dunstify "Battery" "$percent · $time"

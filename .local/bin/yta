@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Download YouTube audio as MP3 using yt-dlp
+
+set -euo pipefail
+
+url="${1:-}"
+
+if [[ -z "$url" ]]; then
+    printf 'Usage: yta <youtube-url>\n' >&2
+    exit 1
+fi
+
+yt-dlp \
+    -x \
+    --audio-format mp3 \
+    --audio-quality 0 \
+    --restrict-filenames \
+    -o "$HOME/hub/downloads/%(title)s.%(ext)s" \
+    "$url"

@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Pick Bluetooth device via rofi
+# Pair if needed, then connect
+
+set -euo pipefail
+
+confirm() {
+    printf 'Yes\n' | rofi -dmenu -i -p "$1" >/dev/null
+}
+
+# Get paired devices
+paired_devices() {
+    bluetoothctl devices |
+        sed 's/^Device //' |
+        awk '{ mac=$1; $1=""; sub(/^ /,""); print mac "  " $0 }'
+}
+
+# Scan + list devices
+scan_devices() {
+    bluetoothctl scan on >/dev/null 2>&1
+    sleep 6
+    bluetoothctl scan off >/dev/null 2>&1
+
+    bluetoothctl devices |
+        sed 's/^Device //' |
+        awk '{ mac=$1; $1=""; sub(/^ /,""); print mac "  " $0 }'
+}
+
+devices="$(paired_devices)"
+
+# If none paired, scan
+[ -n "$devices" ] || devices="$(scan_devices)"
+[ -n "$devices" ] || exit 0
+
+choice="$(
+    printf '%s\n' "$devices" |
+        rofi -dmenu -i -l 10 -p "Bluetooth device"
+)"
+
+[ -n "$choice" ] || exit 0
+
+mac="${choice%% *}"
+name="${choice#*  }"
+
+if confirm "Connect $name?"; then
+    bluetoothctl pair "$mac" >/dev/null 2>&1 || true
+    bluetoothctl trust "$mac" >/dev/null 2>&1 || true
+
+    if bluetoothctl connect "$mac" >/dev/null 2>&1; then
+        notify-send "Bluetooth" "Connected to $name"
+    else
+        notify-send "Bluetooth" "Failed to connect $name"
+    fi
+fi

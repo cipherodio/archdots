@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+# Author: cipherodio (optimized)
+# Description: Print all 256 ANSI colours with readable contrast
+
+set -euo pipefail
+
+readonly COLOURS=256
+
+contrast_colour() {
+    local c=$1 g
+
+    # First 16 ANSI colours
+    if ((c < 16)); then
+        ((c == 0)) && printf 15 || printf 0
+        return
+    fi
+
+    # Greyscale ramp (232–255)
+    if ((c > 231)); then
+        ((c < 244)) && printf 15 || printf 0
+        return
+    fi
+
+    # 6×6×6 colour cube
+    g=$((((c - 16) % 36) / 6))
+    ((g > 2)) && printf 0 || printf 15
+}
+
+print_colour() {
+    local c=$1 fg
+    fg=$(contrast_colour "$c")
+
+    printf '\e[48;5;%sm\e[38;5;%sm%3d\e[0m ' "$c" "$fg" "$c"
+}
+
+print_run() {
+    local start=$1 count=$2 i
+
+    for ((i = start; i < start + count && i < COLOURS; i++)); do
+        print_colour "$i"
+    done
+    printf '  '
+}
+
+print_blocks() {
+    local start=$1 end=$2 cols=$3 rows=$4 per_line=$5
+    local block_len=$((cols * rows))
+    local i row block
+
+    for ((i = start; i <= end; i += block_len * per_line)); do
+        printf '\n'
+        for ((row = 0; row < rows; row++)); do
+            for ((block = 0; block < per_line; block++)); do
+                print_run $((i + block * block_len + row * cols)) "$cols"
+            done
+            printf '\n'
+        done
+    done
+}
+
+# --- Output ---
+
+print_run 0 16
+printf '\n'
+
+print_blocks 16 231 6 6 3
+print_blocks 232 255 12 2 1

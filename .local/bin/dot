@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Wrapper for bare-repo dotfiles management
+
+set -euo pipefail
+
+dotfiles() {
+    git --git-dir="$HOME/.config/.dots" --work-tree="$HOME" "$@"
+}
+
+cmd=${1-}
+
+case $cmd in
+out)
+    # Pull latest changes from remote
+    dotfiles pull
+
+    # Mark certain files as "assume-unchanged" so they are not touched
+    dotfiles update-index --assume-unchanged \
+        "$HOME/LICENSE" \
+        "$HOME/README.md"
+
+    # Remove files from the working directory
+    rm -rf "$HOME/LICENSE" "$HOME/README.md"
+    ;;
+
+in)
+    # Unmark files so Git will track them again
+    dotfiles update-index --no-assume-unchanged \
+        "$HOME/LICENSE" \
+        "$HOME/README.md"
+
+    # Force checkout to restore files
+    dotfiles checkout -f
+    ;;
+
+*)
+    dotfiles "$@"
+    ;;
+esac

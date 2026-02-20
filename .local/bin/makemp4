@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Remux input media file to MP4 with date-based filename
+
+set -euo pipefail
+
+[ $# -eq 1 ] || {
+    printf "Usage: makemp4 <input-file>\n"
+    exit 1
+}
+
+input="$1"
+output="$(date '+%m-%d-%y').mp4"
+
+ffmpeg -hide_banner -i "$input" -c copy "$output" >/dev/null 2>&1

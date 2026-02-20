@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Disable DPMS/screensaver and set keyboard repeat rate
+
+set -euo pipefail
+
+# Disable screen blanking and power management
+xset s off
+xset -dpms
+
+# Set keyboard repeat delay and rate
+# delay (ms) | rate (repeats/sec)
+xset r rate 300 50

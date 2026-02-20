@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Toggle game mode (disable/enable picom and unclutter)
+
+set -euo pipefail
+
+confirm() {
+    rofi -dmenu \
+        -i \
+        -p "$1" \
+        -no-custom \
+        -lines 1 <<<"Yes" >/dev/null
+}
+
+if pgrep -x picom >/dev/null || pgrep -x unclutter >/dev/null; then
+    confirm "[● GAME MODE] Disable picom & unclutter?" && {
+        notify-send "Game Mode" "ON"
+        pkill picom 2>/dev/null || true
+        pkill unclutter 2>/dev/null || true
+    }
+else
+    confirm "[○ NORMAL MODE] Enable picom & unclutter?" && {
+        unclutter --timeout 3 -jitter 50 --ignore-scrolling &
+        picom -b
+        notify-send "Game Mode" "OFF"
+    }
+fi

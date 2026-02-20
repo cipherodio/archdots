@@ -1,0 +1,187 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Notes script
+
+JOURNAL_DIR="$HOME/hub/src/mdnotes/journal"
+STORIES_DIR="$HOME/hub/src/mdnotes/stories"
+REFERENCE_DIR="$HOME/hub/src/mdnotes/reference"
+INBOX_DIR="$HOME/hub/src/mdnotes/inbox"
+
+META_DATE_FMT="%b %d, %Y %a"
+FILE_DATE_FMT="%b-%d-%Y-%a"
+TIME_FMT="%I:%M %p"
+
+set -e
+
+mode="$1"
+
+if [[ -z "$mode" ]]; then
+    printf "Usage: cn [j|s|r|i|jj|ss|rr|ii]\n"
+    exit 1
+fi
+
+current_date=$(date +"$META_DATE_FMT")
+current_time=$(date +"$TIME_FMT")
+
+prompt() {
+    local label="$1"
+    local value
+    read -rp "$label: " value
+    printf "%s\n" "$value"
+}
+
+slugify() {
+    printf "%s\n" "$1" |
+        tr '[:upper:]' '[:lower:]' |
+        sed -E 's/[^a-z0-9]+/_/g; s/^_+|_+$//g'
+}
+
+mkdir -p "$JOURNAL_DIR" "$STORIES_DIR" "$REFERENCE_DIR" "$INBOX_DIR"
+
+case "$mode" in
+j)
+    author="jeremy"
+    FILE_DATE=$(date +"$FILE_DATE_FMT" | tr '[:upper:]' '[:lower:]')
+    FILE_DATE=${FILE_DATE/thu/thurs}
+    filename="$FILE_DATE.md"
+    filepath="$JOURNAL_DIR/$filename"
+
+    if [[ ! -e "$filepath" ]]; then
+        cat >"$filepath" <<EOF
+---
+author: $author
+date created: "$current_date"
+time created: "$current_time"
+---
+
+EOF
+    fi
+
+    exec "$EDITOR" -c "lcd $(dirname "$filepath")" "$filepath"
+    ;;
+
+s)
+    title=$(prompt "Title")
+    author=$(prompt "Author")
+    description=$(prompt "Description")
+    filename_input=$(prompt "Filename (leave blank to use title)")
+
+    [[ -z "$filename_input" ]] && slug=$(slugify "$title") || slug=$(slugify "$filename_input")
+    filename="$slug.md"
+    filepath="$STORIES_DIR/$filename"
+    title_cased=$(printf "%s\n" "$title" | sed 's/.*/\u&/')
+
+    if [[ ! -e "$filepath" ]]; then
+        cat >"$filepath" <<EOF
+---
+title: $title_cased
+author: $author
+date created: "$current_date"
+time created: "$current_time"
+date completed: ""
+date uploaded: ""
+description: $description
+---
+
+EOF
+    fi
+
+    exec "$EDITOR" -c "lcd $(dirname "$filepath")" "$filepath"
+    ;;
+
+r)
+    title=$(prompt "Title")
+    author=$(prompt "Author")
+    description=$(prompt "Description")
+    filename_input=$(prompt "Filename (leave blank to use title)")
+
+    [[ -z "$filename_input" ]] && slug=$(slugify "$title") || slug=$(slugify "$filename_input")
+    filename="$slug.md"
+    filepath="$REFERENCE_DIR/$filename"
+    title_cased=$(printf "%s\n" "$title" | sed 's/.*/\u&/')
+
+    cat >"$filepath" <<EOF
+---
+title: $title_cased
+author: $author
+date created: "$current_date"
+time created: "$current_time"
+description: $description
+---
+
+EOF
+
+    exec "$EDITOR" -c "lcd $(dirname "$filepath")" "$filepath"
+    ;;
+
+i)
+    title=$(prompt "Title")
+    description=$(prompt "Description")
+    filename_input=$(prompt "Filename (leave blank to use title)")
+    author="jeremy"
+
+    [[ -z "$filename_input" ]] && slug=$(slugify "$title") || slug=$(slugify "$filename_input")
+    filename="$slug.md"
+    filepath="$INBOX_DIR/$filename"
+    title_cased=$(printf "%s\n" "$title" | sed 's/.*/\u&/')
+
+    cat >"$filepath" <<EOF
+---
+title: $title_cased
+author: $author
+date created: "$current_date"
+time created: "$current_time"
+description: $description
+---
+
+EOF
+
+    exec "$EDITOR" -c "lcd $(dirname "$filepath")" "$filepath"
+    ;;
+
+jj)
+    file=$(find "$JOURNAL_DIR" -maxdepth 1 -type f |
+        sed "s|$HOME/hub/src/mdnotes/||" | fzf)
+    if [[ -n "$file" ]]; then
+        exec "$EDITOR" \
+            -c "lcd $(dirname "$HOME/hub/src/mdnotes/$file")" \
+            "$HOME/hub/src/mdnotes/$file"
+    fi
+    ;;
+
+ss)
+    file=$(find "$STORIES_DIR" -maxdepth 1 -type f |
+        sed "s|$HOME/hub/src/mdnotes/||" | fzf)
+    if [[ -n "$file" ]]; then
+        exec "$EDITOR" \
+            -c "lcd $(dirname "$HOME/hub/src/mdnotes/$file")" \
+            "$HOME/hub/src/mdnotes/$file"
+    fi
+    ;;
+
+rr)
+    file=$(find "$REFERENCE_DIR" -maxdepth 1 -type f |
+        sed "s|$HOME/hub/src/mdnotes/||" | fzf)
+    if [[ -n "$file" ]]; then
+        exec "$EDITOR" \
+            -c "lcd $(dirname "$HOME/hub/src/mdnotes/$file")" \
+            "$HOME/hub/src/mdnotes/$file"
+    fi
+    ;;
+
+ii)
+    file=$(find "$INBOX_DIR" -maxdepth 1 -type f |
+        sed "s|$HOME/hub/src/mdnotes/||" | fzf)
+    if [[ -n "$file" ]]; then
+        exec "$EDITOR" \
+            -c "lcd $(dirname "$HOME/hub/src/mdnotes/$file")" \
+            "$HOME/hub/src/mdnotes/$file"
+    fi
+    ;;
+
+*)
+    printf "Unknown option: %s\n" "$mode"
+    printf "Usage: cn [j|s|r|i|jj|ss|rr|ii]\n"
+    exit 1
+    ;;
+esac

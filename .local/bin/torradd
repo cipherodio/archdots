@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Add torrent to transmission-daemon
+# Start daemon if needed
+
+set -euo pipefail
+
+if ! pidof transmission-daemon >/dev/null 2>&1; then
+    transmission-daemon
+    notify-send "Starting transmission daemon…"
+    sleep 1
+fi
+
+transmission-remote -a "$@" &&
+    notify-send "🔽 Torrent added."

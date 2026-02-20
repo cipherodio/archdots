@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Search man pages and open them as PDF in zathura
+
+set -euo pipefail
+
+choice=$(
+    apropos . |
+        awk '{ print $1 " " $2 }' |
+        sort -u |
+        rofi -dmenu -i -lines 10 -p man
+) || exit 0
+
+[ -n "$choice" ] || exit 0
+
+name="${choice%% *}"
+section="$(sed -n 's/.*(\(.*\)).*/\1/p' <<<"$choice")"
+
+# IMPORTANT: -Tpdf must come BEFORE section/name
+man -Tpdf "$section" "$name" 2>/dev/null | zathura - &

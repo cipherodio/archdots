@@ -1,0 +1,124 @@
+* {
+    margin : 0;
+    padding : 0;
+    spacing : 0;
+    dark : #282c34;
+    red : #de5d68;
+    blue : #61afef;
+    white : #abb2bf;
+    highlight : bold #f65866;
+    font : "Iosevka Nerd Font 16";
+}
+
+configuration {
+    display-drun : "APPS";
+    display-run : "CMD";
+    display-window : "WIN";
+}
+
+window {
+    width : 35%;
+    border : 2px;
+    border-color : @blue;
+    background-color : @dark;
+    location : center;
+    orientaion : horizontal;
+    children : [inputbar, message, listview];
+}
+
+inputbar {
+    background-color : @dark;
+    children : [prompt,entry];
+}
+
+prompt {
+    margin : 6px 0 6px 6px;
+    padding : 3px 6px;
+    text-color : @dark;
+    border : 3px;
+    border-color : @blue;
+    background-color : @blue;
+}
+
+entry {
+    margin : 6px;
+    padding : 3px 6px;
+    text-color : @white;
+    border : 3px;
+    border-color : @blue;
+    background-color : @dark;
+    placeholder: " Type to search";
+    placeholder-color: @white;
+}
+
+listview {
+    lines : 8;
+    children : [element];
+    margin : 0 6px 6px 6px;
+    padding : 6px 6px 0px 6px;
+    border : 3px;
+    border-color : @blue;
+    background-color : @dark;
+}
+
+element {
+    margin : 0 0 6px 0 ;
+    background-color : @dark;
+}
+
+element selected active {
+    text-color : @white;
+    background-color : @red;
+}
+
+element-text {
+    padding : 6px;
+    text-color : @white;
+    background-color : @dark;
+}
+
+element-text selected {
+    text-color : @dark;
+    background-color : @blue;
+}
+
+element-text selected active {
+    text-color : @white;
+    background-color : @red;
+}
+
+element-icon{
+    size : 20px;
+    padding : 6px;
+    background-color : @dark;
+}
+
+element-icon selected {
+    text-color : @dark;
+    background-color : @blue;
+}
+
+element-icon selected active {
+    text-color : @white;
+    background-color : @red;
+}
+
+message {
+    margin : 0;
+    expand : true;
+    background-color : @dark;
+    children : [textbox];
+}
+
+textbox {
+    expand : true;
+    padding : 6px;
+    border-color : @red;
+    background-color : @dark;
+    text-color : @red;
+}
+
+error-message {
+    expand : true;
+    text-color : @dark;
+}

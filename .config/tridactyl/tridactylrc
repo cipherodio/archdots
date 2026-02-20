@@ -1,0 +1,34 @@
+" vim: filetype=vim
+" Delete all settings except what's here
+sanitize tridactyllocal tridactylsync
+
+" Manage screen space
+guiset_quiet hoverlink right
+
+" General Settings
+set smoothscroll true
+" set hintfiltermode vimperator
+set findresults -1
+set hintfiltermode simple
+set hintshift false
+set hintnames uniform
+set tabsort mru
+
+set hintstyles.bg none
+set hintstyles.fg none
+set hintstyles.outline none
+
+" Bindings
+unbind d
+unbind <C-f>
+bind dd tabclose
+bind u undo
+bind <C-h> tabmove -1
+bind <C-l> tabmove +1
+bind = zoom 0.1 true
+bind - zoom -0.1 true
+bind 0 zoom 1.0
+bind p clipboard open
+bind P clipboard tabopen
+bind <A-m> mute toggle
+bind qq qall

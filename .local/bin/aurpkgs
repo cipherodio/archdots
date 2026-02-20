@@ -1,0 +1,129 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Minimal multi-AUR package manager
+
+set -euo pipefail
+
+# Colors
+if [ -t 1 ] && [ -z "${NO_COLOR:-}" ]; then
+    GREEN=$(printf '\033[32m')
+    YELLOW=$(printf '\033[33m')
+    BLUE=$(printf '\033[34m')
+    CYAN=$(printf '\033[36m')
+    RESET=$(printf '\033[0m')
+else
+    GREEN="" YELLOW="" BLUE="" CYAN="" RESET=""
+fi
+
+TARGET_DIR="$HOME/hub/src"
+
+AUR_REPOS=(
+    "https://aur.archlinux.org/firefox-tridactyl-native.git"
+    "https://aur.archlinux.org/simple-mtpfs.git"
+)
+
+usage() {
+    printf "Usage: aurpkgs [-i | -u | -l]\n"
+    printf "  -i   Install only if not installed\n"
+    printf "  -u   Update/rebuild if upstream changed\n"
+    printf "  -l   List managed AUR packages\n"
+    exit 1
+}
+
+ensure_target_dir() {
+    mkdir -p "$TARGET_DIR"
+    cd "$TARGET_DIR"
+}
+
+is_installed() {
+    pacman -Q "$1" >/dev/null 2>&1
+}
+
+print_header() {
+    printf "%s=========================================%s\n" "$BLUE" "$RESET"
+    printf "%s%s%s %s%s%s\n" "$BLUE" "$1" "$RESET" "$CYAN" "$2" "$RESET"
+    printf "%s=========================================%s\n" "$BLUE" "$RESET"
+}
+
+install_only() {
+    ensure_target_dir
+
+    for REPO_URL in "${AUR_REPOS[@]}"; do
+        REPO_NAME=$(basename "$REPO_URL" .git)
+
+        print_header "Checking install:" "$REPO_NAME"
+
+        if is_installed "$REPO_NAME"; then
+            printf "%sAlready installed.%s Skipping.\n" "$YELLOW" "$RESET"
+            continue
+        fi
+
+        if [ ! -d "$REPO_NAME" ]; then
+            printf "%sCloning repository...%s\n" "$CYAN" "$RESET"
+            git clone "$REPO_URL"
+        fi
+
+        cd "$REPO_NAME"
+        printf "%sBuilding and installing %s...%s\n" "$GREEN" "$REPO_NAME" "$RESET"
+        makepkg -si --noconfirm
+        cd "$TARGET_DIR"
+    done
+}
+
+update_if_changed() {
+    ensure_target_dir
+
+    for REPO_URL in "${AUR_REPOS[@]}"; do
+        REPO_NAME=$(basename "$REPO_URL" .git)
+
+        print_header "Checking updates:" "$REPO_NAME"
+
+        if [ ! -d "$REPO_NAME" ]; then
+            printf "%sRepository not cloned.%s Skipping.\n" "$YELLOW" "$RESET"
+            continue
+        fi
+
+        cd "$REPO_NAME"
+
+        # Ensure upstream exists
+        if ! git rev-parse --abbrev-ref --symbolic-full-name '@{u}' >/dev/null 2>&1; then
+            printf "%sNo upstream branch set.%s Skipping.\n" "$YELLOW" "$RESET"
+            cd "$TARGET_DIR"
+            continue
+        fi
+
+        git fetch --quiet
+
+        LOCAL=$(git rev-parse HEAD)
+        REMOTE=$(git rev-parse '@{u}')
+
+        if [ "$LOCAL" != "$REMOTE" ]; then
+            printf "%sUpstream changed.%s Rebuilding...\n" "$GREEN" "$RESET"
+            git pull --quiet
+            makepkg -si --noconfirm
+        else
+            printf "%sAlready up to date.%s\n" "$GREEN" "$RESET"
+        fi
+
+        cd "$TARGET_DIR"
+    done
+}
+
+list_packages() {
+    printf "%sManaged AUR packages:%s\n" "$BLUE" "$RESET"
+
+    for REPO_URL in "${AUR_REPOS[@]}"; do
+        REPO_NAME=$(basename "$REPO_URL" .git)
+        printf " %s- %s%s\n" "$CYAN" "$REPO_NAME" "$RESET"
+    done
+}
+
+# Argument handling
+[ $# -eq 1 ] || usage
+
+case "$1" in
+-i) install_only ;;
+-u) update_if_changed ;;
+-l) list_packages ;;
+*) usage ;;
+esac
