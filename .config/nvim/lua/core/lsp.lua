@@ -71,19 +71,20 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 vim.diagnostic.config({
-    virtual_text = {
-        prefix = "",
-        format = function(diagnostic)
-            local win = vim.api.nvim_get_current_win()
-            local cfg = vim.api.nvim_win_get_config(win)
-
-            if cfg.relative ~= "" then
-                return diagnostic.message
-            end
-
-            return "◾"
-        end,
-    },
+    virtual_lines = true,
+    -- virtual_text = {
+    --     prefix = "",
+    --     format = function(diagnostic)
+    --         local win = vim.api.nvim_get_current_win()
+    --         local cfg = vim.api.nvim_win_get_config(win)
+    --
+    --         if cfg.relative ~= "" then
+    --             return diagnostic.message
+    --         end
+    --
+    --         return "◾"
+    --     end,
+    -- },
     float = {
         border = "single",
         header = "",
