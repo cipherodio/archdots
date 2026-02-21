@@ -32,7 +32,7 @@ return {
             sh = { "shfmt", "shellcheck" },
             zsh = { "shellcheck" },
             python = { "ruff_fix", "ruff_organize_imports", "ruff_format" },
-            markdown = { "prettier", "markdown-toc" },
+            markdown = { "markdown-toc", "prettier" },
         },
         formatters = {
             prettier = {
