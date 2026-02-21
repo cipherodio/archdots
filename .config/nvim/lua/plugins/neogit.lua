@@ -22,5 +22,11 @@ return {
             fzf_lua = true,
             -- diffview = true,
         },
+        mappings = {
+            popup = {
+                ["p"] = "PushPopup",
+                ["P"] = "PullPopup",
+            },
+        },
     },
 }
