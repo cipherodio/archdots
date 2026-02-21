@@ -4,32 +4,43 @@
 
 set -euo pipefail
 
-# Sanity checks
-if ! command -v pacman >/dev/null 2>&1; then
-    printf 'pm: pacman not found\n' >&2
-    exit 1
+# Colors
+if [ -t 1 ] && [ -z "${NO_COLOR:-}" ]; then
+    BOLD=$(printf '\033[1m')
+    GREEN=$(printf '\033[32m')
+    CYAN=$(printf '\033[36m')
+    BLUE=$(printf '\033[34m')
+    RESET=$(printf '\033[0m')
+else
+    BOLD="" GREEN="" CYAN="" BLUE="" RESET=""
 fi
 
-# Usage
 usage() {
-    printf '%s\n' \
-        'pm — pacman wrapper' \
-        '' \
-        'Usage:' \
-        '  pm i <pkg>...     Install package(s)' \
-        '  pm u              System upgrade (pacman -Syu)' \
-        '  pm r <pkg>...     Remove package(s) with deps' \
-        '  pm c              Clean cache (unused packages)' \
-        '  pm s <query>      Search packages' \
-        '  pm q <pkg>        Query installed package' \
-        '  pm h              Show this help' \
-        '' \
-        'Anything else is passed directly to pacman.'
+    printf "%spm%s is a simple pacman wrapper.\n" "$BOLD" "$RESET"
+    printf "author: cipherodio\n\n"
+
+    printf "%sUsage:%s %s%s%s %s%s%s\n\n" \
+        "$BOLD" "$RESET" \
+        "$BOLD$GREEN" "pm" "$RESET" \
+        "$BOLD$BLUE" "[options]" "$RESET"
+
+    printf "%sCommands:%s\n" "$BOLD" "$RESET"
+    printf "  %su%s          System upgrade\n" "$CYAN" "$RESET"
+    printf "  %si%s <pkg>    Install package(s)\n" "$CYAN" "$RESET"
+    printf "  %sr%s <pkg>    Remove package(s)\n" "$CYAN" "$RESET"
+    printf "  %sc%s          Clean cache\n" "$CYAN" "$RESET"
+    printf "  %ss%s <pkg>    Search packages\n" "$CYAN" "$RESET"
+    printf "  %sq%s <pkg>    Query installed package\n" "$CYAN" "$RESET"
 }
 
-# Dispatch
-cmd="${1:-h}"
-shift || true
+# If no args, show help
+if [[ $# -eq 0 ]]; then
+    usage
+    exit 0
+fi
+
+cmd="$1"
+shift
 
 case "$cmd" in
 i) exec sudo pacman -S "$@" ;;
@@ -38,9 +49,6 @@ r) exec sudo pacman -Rns "$@" ;;
 c) exec sudo pacman -Sc ;;
 s) exec pacman -Ss "$@" ;;
 q) exec pacman -Qi "$@" ;;
-h | help | -h | --help)
-    usage
-    ;;
 *)
     exec sudo pacman "$cmd" "$@"
     ;;
