@@ -13,6 +13,7 @@ km.nmap("<leader>an", "<cmd>enew<cr>", { desc = "New file" })
 km.nmap("<leader>w", "<cmd>w<cr>", { desc = "Save file" })
 km.nmap("<leader>q", "<cmd>q!<cr>", { desc = "Force quit" })
 km.nmap("<leader>au", "<cmd>e!<cr>", { desc = "Undo all" })
+km.nmap("<leader>al", "<cmd>Lazy<cr>", { desc = "Open Lazy" })
 
 -- Splits
 km.nmap("<leader><tab>h", "<cmd>new<cr>", { desc = "Horizontal split" })
