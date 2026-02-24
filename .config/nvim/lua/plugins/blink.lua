@@ -3,7 +3,7 @@ return {
     event = "InsertEnter",
     dependencies = {
         { "rafamadriz/friendly-snippets" },
-        -- { "ribru17/blink-cmp-spell" },
+        { "ribru17/blink-cmp-spell" },
     },
     version = "1.*",
     opts = {
@@ -42,7 +42,7 @@ return {
                 "path",
                 "snippets",
                 "buffer",
-                -- "spell",
+                "spell",
             },
             providers = {
                 lazydev = {
@@ -50,13 +50,13 @@ return {
                     module = "lazydev.integrations.blink",
                     score_offset = 100,
                 },
-                -- spell = {
-                --     name = "Spell",
-                --     module = "blink-cmp-spell",
-                -- },
+                spell = {
+                    name = "Spell",
+                    module = "blink-cmp-spell",
+                },
             },
             per_filetype = {
-                markdown = { "lsp", "snippets", "buffer" },
+                markdown = { "spell", "lsp", "snippets", "buffer" },
             },
         },
     },
