@@ -1,4 +1,5 @@
 local autocmd = vim.api.nvim_create_autocmd
+local followlink = require("utils.followlink")
 local lcd = require("utils.lcd")
 
 local function augroup(name)
@@ -17,6 +18,7 @@ local groups = {
     reload_xdefaults = augroup("reload_xdefaults"),
     reload_dunst = augroup("reload_dunst"),
     lcd_notes = augroup("lcd_notes"),
+    markdown_gf = augroup("markdown_gf"),
 }
 
 autocmd({ "BufEnter", "WinEnter", "InsertLeave", "CmdlineLeave" }, {
@@ -152,5 +154,19 @@ autocmd("BufEnter", {
     group = groups.lcd_notes,
     callback = function(args)
         lcd.maybe_lcd(args.buf)
+    end,
+})
+
+autocmd("FileType", {
+    desc = "Follow Markdown links",
+    group = groups.markdown_gf,
+    pattern = "markdown",
+    callback = function()
+        vim.keymap.set(
+            "n",
+            "gf",
+            followlink.follow_markdown_link,
+            { buffer = true, silent = true, desc = "Follow Markdown link" }
+        )
     end,
 })
