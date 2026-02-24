@@ -11,6 +11,7 @@ return {
                 { "<leader>l", group = "lsp" },
                 { "<leader>m", group = "markdown" },
                 { "<leader>d", group = "debugger" },
+                { "<leader>s", group = "spelling" },
                 { "<leader>t", group = "treesitter" },
                 { "<leader><tab>", group = "buffers" },
             },
