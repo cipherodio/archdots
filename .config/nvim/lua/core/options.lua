@@ -14,7 +14,6 @@ opt.colorcolumn = "80"
 opt.laststatus = 3
 opt.showbreak = "↳"
 
--- NOTE:
 opt.showmode = false
 opt.showcmd = false
 
@@ -53,7 +52,10 @@ opt.splitright = true
 
 opt.spelllang = { "en", "tl" }
 opt.spellsuggest = "best,9"
-opt.spellfile = vim.fn.stdpath("config") .. "/spell/words.utf-8.add"
+opt.spellfile = {
+    vim.fn.stdpath("config") .. "/spell/tl.utf-8.add",
+    vim.fn.stdpath("config") .. "/spell/en.utf-8.add",
+}
 
 vim.lsp.set_log_level(vim.lsp.log_levels.OFF)
 
