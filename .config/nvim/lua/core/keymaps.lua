@@ -15,6 +15,16 @@ km.nmap("<leader>q", "<cmd>q!<cr>", { desc = "Force quit" })
 km.nmap("<leader>au", "<cmd>e!<cr>", { desc = "Undo all" })
 km.nmap("<leader>al", "<cmd>Lazy<cr>", { desc = "Open Lazy" })
 
+-- Spelling
+km.nmap("<leader>st", "zg", { desc = "Spell add Tagalog" })
+km.nmap("<leader>se", "2zg", { desc = "Spell add English" })
+km.nmap("<leader>sn", "]s", { desc = "Next spelling error" })
+km.nmap("<leader>sp", "[s", { desc = "Previous spelling error" })
+km.nmap("<leader>sw", "zw", { desc = "Mark word as wrong" })
+km.nmap("<leader>su", "zuw", { desc = "Undo mark wrong" })
+km.nmap("<leader>sr", "zug", { desc = "Revert add word" })
+km.nmap("<leader>ss", "z=", { desc = "Spell suggestions" })
+
 -- Splits
 km.nmap("<leader><tab>h", "<cmd>new<cr>", { desc = "Horizontal split" })
 km.nmap("<leader><tab>v", "<cmd>vnew<cr>", { desc = "Vertical split" })
@@ -111,7 +121,7 @@ end, { desc = "Next diagnostic" })
 
 -- Opens my agenda markdown file
 km.nmap("<leader>aq", function()
-    vim.cmd.edit(vim.fn.expand("~/.local/src/mdnotes/agenda.md"))
+    vim.cmd.edit(vim.fn.expand("~/hub/src/mdnotes/agenda.md"))
 end, {
     desc = "Open agenda.md",
 })
