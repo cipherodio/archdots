@@ -53,7 +53,7 @@ decorations = "none"
 
 [cursor]
 # vi_mode_style = { shape = "Block", blinking = "Never" }
-# style = { blinking = "Never" }
+style = { blinking = "Never" }
 # style = { shape = "Block", blinking = "Never" }
 unfocused_hollow = false
 thickness = 0.16
