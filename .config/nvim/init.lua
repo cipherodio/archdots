@@ -1,5 +1,5 @@
 vim.loader.enable()
-vim.cmd.colorscheme("onedark")
+-- vim.cmd.colorscheme("onedark")
 
 local function secure(module)
     local success, err_msg = pcall(require, module)
@@ -18,3 +18,5 @@ secure("core.statusline")
 secure("core.winbar")
 secure("core.lsp")
 secure("core.lazy")
+
+vim.cmd.colorscheme("onedark")
