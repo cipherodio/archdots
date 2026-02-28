@@ -56,6 +56,18 @@ keys = [
     ),
     Key([mod], "f", lazy.window.toggle_fullscreen(), desc="Fullscreen toggle"),
     # Media keys
+    Key(
+        [altmod, "shift"],
+        "equal",
+        lazy.spawn("audiobar 0 +5"),
+        desc="Volume up",
+    ),
+    Key(
+        [altmod, "shift"],
+        "minus",
+        lazy.spawn("audiobar 0 -5"),
+        desc="Volume down",
+    ),
     Key([], "XF86AudioMute", lazy.spawn(mvol), desc="Mute volume"),
     # Key([], "XF86AudioRaiseVolume", lazy.spawn(upvol), desc="Volume Up"),
     Key(
