@@ -13,7 +13,7 @@ layouts = [
         **layout_theme, shift_windows=True, margin=5, border_on_single=True
     ),
     layout.MonadTall(
-        **layout_theme, ratio=0.25, new_client_position="before_current"
+        **layout_theme, ratio=0.25, new_client_position="after_current"
     ),
     layout.MonadWide(**layout_theme),
     # layout.Max(**layout_theme),
