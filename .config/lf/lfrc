@@ -65,6 +65,30 @@ cmd extract ${{
     done
 }}
 
+# Copy image to clipboard
+cmd copyimg ${{
+    set -f
+    for file in $fx; do
+        mime=$(file --mime-type -b "$file")
+        case "$mime" in
+            image/png)
+                xclip -selection clipboard -t image/png -i "$file"
+                ;;
+            image/jpeg)
+                xclip -selection clipboard -t image/jpeg -i "$file"
+                ;;
+            image/*)
+                xclip -selection clipboard -t "$mime" -i "$file"
+                ;;
+            *)
+                notify-send "Not an image" "$file is not an image"
+                exit 1
+                ;;
+        esac
+    done
+    notify-send "📋 Image copied" "$fx copied to clipboard"
+}}
+
 # Compress current file or selected files with tar and gunzip
 cmd tar ${{
     set -f
@@ -115,17 +139,6 @@ cmd chmod ${{
     lf -remote 'send reload'
 }}
 
-#cmd chmod ${{
-#    printf "\nMode Bits: "
-#    read ans
-
-#    for file in "$fx"
-#    do
-#        chmod $ans $file
-#    done
-#    lf -remote 'send-reload'   # Throws out error needs fixing
-#}}
-
 cmd bulkrename $vidir
 cmd mkdir $mkdir -p "$(echo $* | tr ' ' '\ ')"
 cmd touch $touch "$(echo $* | tr ' ' '\ ')"
@@ -146,6 +159,7 @@ map C copyto
 map M moveto
 map E extract
 map Z zip
+map S copyimg
 
 map O push :mkdir<space>
 map o push :touch<space>
