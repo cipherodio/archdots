@@ -1,6 +1,8 @@
 -- Made with 'mini.colors' module of https://nvim-mini.org/mini.nvim
 
-if vim.g.colors_name ~= nil then vim.cmd('highlight clear') end
+if vim.g.colors_name ~= nil then
+    vim.cmd("highlight clear")
+end
 vim.g.colors_name = "onedark"
 
 -- Highlight groups
@@ -50,6 +52,7 @@ hi(0, "@label", { fg = "#e86671" })
 hi(0, "@lsp.mod.deprecated", { link = "DiagnosticDeprecated" })
 hi(0, "@lsp.type.builtinType", { fg = "#d19a66" })
 hi(0, "@lsp.type.class", { link = "@type" })
+-- hi(0, "@lsp.type.class.markdown", {link = "@type"})
 hi(0, "@lsp.type.comment", { fg = "#5c6370" })
 hi(0, "@lsp.type.decorator", { link = "@attribute" })
 hi(0, "@lsp.type.enum", { fg = "#e5c07b" })
@@ -81,9 +84,17 @@ hi(0, "@lsp.typemod.variable.injected", { fg = "#abb2bf" })
 hi(0, "@lsp.typemod.variable.static", { fg = "#d19a66" })
 hi(0, "@markup.heading", { bold = true, fg = "#d19a66" })
 hi(0, "@markup.heading.1", { bold = true, fg = "#e86671" })
-hi(0, "@markup.heading.1.delimiter.vimdoc", { nocombine = true, sp = "#abb2bf", underdouble = true })
+hi(
+    0,
+    "@markup.heading.1.delimiter.vimdoc",
+    { nocombine = true, sp = "#abb2bf", underdouble = true }
+)
 hi(0, "@markup.heading.2", { bold = true, fg = "#c678dd" })
-hi(0, "@markup.heading.2.delimiter.vimdoc", { nocombine = true, sp = "#abb2bf", underline = true })
+hi(
+    0,
+    "@markup.heading.2.delimiter.vimdoc",
+    { nocombine = true, sp = "#abb2bf", underline = true }
+)
 hi(0, "@markup.heading.3", { bold = true, fg = "#d19a66" })
 hi(0, "@markup.heading.4", { bold = true, fg = "#e86671" })
 hi(0, "@markup.heading.5", { bold = true, fg = "#c678dd" })
@@ -91,6 +102,7 @@ hi(0, "@markup.heading.6", { bold = true, fg = "#d19a66" })
 hi(0, "@markup.italic", { fg = "#abb2bf", italic = true })
 hi(0, "@markup.link", { fg = "#61afef" })
 hi(0, "@markup.link.label", { fg = "#56b6c2" })
+hi(0, "@markup.link.label.markdown_inline", { link = "@type" })
 hi(0, "@markup.link.url", { fg = "#56b6c2", underline = true })
 hi(0, "@markup.list", { fg = "#e86671" })
 hi(0, "@markup.list.checked", { fg = "#98c379" })
@@ -212,6 +224,11 @@ hi(0, "BlinkCmpKindVariable", { fg = "#c678dd" })
 hi(0, "BlinkCmpLabel", { fg = "#abb2bf" })
 hi(0, "BlinkCmpLabelDeprecated", { fg = "#848b98", strikethrough = true })
 hi(0, "BlinkCmpLabelMatch", { fg = "#56b6c2" })
+-- Blink related below were added if i want to use dark bg for completion and border
+-- hi(0, "BlinkCmpMenuBorder", { fg = "#abb2bf", bg = "none" })
+-- hi(0, "BlinkCmpDocBorder", { fg = "#abb2bf", bg = "none" })
+-- hi(0, "BlinkCmpSignatureBorder", { fg = "#abb2bf", bg = "none" })
+-- hi(0, "BlinkTransparent", { bg = "none", ctermbg = "none" })
 hi(0, "Boolean", { fg = "#d19a66" })
 hi(0, "BufferColor", { bg = "#2c2d31", bold = true, fg = "#8fb573" })
 hi(0, "BufferCurrent", { bold = true })
@@ -887,6 +904,8 @@ hi(0, "vimNotation", { fg = "#e86671" })
 hi(0, "vimOption", { fg = "#e86671" })
 hi(0, "vimSetEqual", { fg = "#e5c07b" })
 hi(0, "vimVar", { fg = "#abb2bf" })
+hi(0, "TreesitterContext", { bg = "none" })
+hi(0, "TreesitterContextLineNumber", { fg = "#e5c07b", bg = "none" })
 
 -- Terminal colors
 local g = vim.g
