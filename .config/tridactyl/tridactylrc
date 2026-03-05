@@ -32,3 +32,13 @@ bind p clipboard open
 bind P clipboard tabopen
 bind <A-m> mute toggle
 bind qq qall
+
+" Watch or download video and audio via yt-dlp current page
+bind ,v composite js tri.native.run("setsid -f /home/cipherodio/.local/bin/qb-ytv " + document.location.href) | exclaim_quiet true
+bind ,a composite js tri.native.run("setsid -f /home/cipherodio/.local/bin/qb-yta " + document.location.href) | exclaim_quiet true
+bind ,m composite js tri.native.run("setsid -f mpv --quiet --profile=M60 " + document.location.href) | exclaim_quiet true
+
+" Watch or download video and audio via yt-dlp hinted links
+bind ,V hint -W exclaim_quiet setsid -f /home/cipherodio/.local/bin/qb-ytv
+bind ,A hint -W exclaim_quiet setsid -f /home/cipherodio/.local/bin/qb-yta
+bind ,M hint -W exclaim_quiet setsid -f mpv --quiet --profile=M60
