@@ -1,164 +1,182 @@
 return {
     "ibhagwan/fzf-lua",
-    cmd = { "FzfLua" },
+    event = "VeryLazy",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     keys = {
         {
             "<leader>ff",
             function()
-                require("fzf-lua").files()
+                require("fzf-lua").files({ cwd = vim.fn.expand("%:p:h") })
             end,
-            desc = "Files",
+            desc = "Fzf: files",
         },
         {
             "<leader>gf",
             function()
-                require("fzf-lua").git_files()
+                require("utils.barehelper").smart_git("git_files")
             end,
-            desc = "Git files",
+            desc = "Fzf: Git files",
         },
         {
-            "<leader>gi",
+            "<leader>gs",
             function()
-                require("fzf-lua").git_status()
+                require("utils.barehelper").smart_git("git_status")
             end,
-            desc = "Info/status",
+            desc = "Fzf: status",
         },
         {
-            "<leader>gt",
+            "<leader>gc",
             function()
-                require("fzf-lua").git_commits()
+                require("utils.barehelper").smart_git("git_commits")
             end,
-            desc = "Check git commits",
+            desc = "Fzf: show Git commits",
+        },
+        {
+            "<leader>gC",
+            function()
+                require("utils.barehelper").smart_git("git_bcommits")
+            end,
+            desc = "Fzf: buffer commits",
         },
         {
             "<leader>gb",
             function()
-                require("fzf-lua").git_branches()
+                require("utils.barehelper").smart_git("git_branches")
             end,
-            desc = "Branches",
+            desc = "Fzf: branches",
         },
         {
             "<leader>fw",
             function()
-                require("fzf-lua").live_grep()
+                require("utils.barehelper").smart_git("live_grep")
             end,
-            desc = "Project live grep",
+            desc = "Fzf: project live grep",
         },
         {
             "<leader>fo",
             function()
                 require("fzf-lua").oldfiles()
             end,
-            desc = "Recent files",
+            desc = "Fzf: recent files",
         },
         {
-            "<leader><tab><tab>",
+            "<leader>fb",
             function()
                 require("fzf-lua").buffers()
             end,
-            desc = "Buffers",
+            desc = "Fzf: buffers",
         },
         {
             "<leader>fk",
             function()
                 require("fzf-lua").keymaps()
             end,
-            desc = "Keymaps",
+            desc = "Fzf: keymaps",
         },
         {
             "<leader>la",
             function()
                 require("fzf-lua").lsp_code_actions()
             end,
-            desc = "Actions",
+            desc = "Fzf: code actions",
         },
         {
             "<leader>ls",
             function()
                 require("fzf-lua").lsp_document_symbols()
             end,
-            desc = "Symbol lsp document",
+            desc = "Fzf: symbol LSP document",
         },
         {
             "<leader>ld",
             function()
                 require("fzf-lua").diagnostics_document()
             end,
-            desc = "Document diagnostics",
+            desc = "Fzf: document diagnostics",
         },
         {
             "<leader>lw",
             function()
                 require("fzf-lua").diagnostics_workspace()
             end,
-            desc = "Workspace diagnostics",
+            desc = "Fzf: workspace diagnostics",
         },
         {
             "<leader>fh",
             function()
                 require("fzf-lua").helptags()
             end,
-            desc = "Help",
+            desc = "Fzf: help",
         },
         {
             "<leader>fC",
             function()
                 require("fzf-lua").commands()
             end,
-            desc = "Commands",
+            desc = "Fzf: commands",
         },
         {
             "<leader>fc",
             function()
                 require("fzf-lua").command_history()
             end,
-            desc = "Command history",
+            desc = "Fzf: command history",
         },
         {
             "<leader>fr",
             function()
                 require("fzf-lua").registers()
             end,
-            desc = "Registers",
+            desc = "Fzf: registers",
         },
         {
             "<leader>fm",
             function()
                 require("fzf-lua").manpages()
             end,
-            desc = "Man pages",
+            desc = "Fzf: man pages",
         },
         {
             "<leader>fx",
             function()
                 require("fzf-lua").files({ cwd = "~/" })
             end,
-            desc = "Home search",
+            desc = "Fzf: home search",
         },
         {
             "<leader>fX",
             function()
-                require("fzf-lua").files({ cwd = "~/.local/" })
+                require("fzf-lua").files({
+                    cmd = "fd -tf -I -E .git . review src",
+                    cwd = "~/hub",
+                })
             end,
-            desc = "Local search",
+            desc = "Fzf: hub search",
         },
         {
             "<leader>fn",
             function()
                 require("fzf-lua").files({ cwd = "~/hub/src/mdnotes/" })
             end,
-            desc = "Notes in markdown",
+            desc = "Fzf: notes in markdown",
+        },
+        {
+            "<leader>fN",
+            function()
+                require("fzf-lua").live_grep({ cwd = "~/hub/src/mdnotes/" })
+            end,
+            desc = "Fzf: grep in notes",
         },
     },
     opts = {
+        register_ui_select = true,
         winopts = {
             border = "single",
             row = 0.55,
             col = 0.50,
             backdrop = 100,
             preview = {
-                hidden = false, -- disables/enables previewer
+                hidden = false,
                 scrollbar = false,
                 title_pos = "left",
                 layout = "vertical",
@@ -186,6 +204,11 @@ return {
         command = { prompt = "   Commands " },
         command_history = { prompt = "   Command History " },
         registers = { prompt = "   Registers " },
-        manpages = { rompt = "  Man Pages " },
+        manpages = { prompt = "  Man Pages " },
     },
+    config = function(_, opts)
+        local fzflua = require("fzf-lua")
+        fzflua.setup(opts)
+        fzflua.register_ui_select()
+    end,
 }
