@@ -1,9 +1,10 @@
 from libqtile import layout
 from libqtile.config import Match
+
 from utils.colors import onedark
 
 floating_theme = {
-    "border_width": 1,
+    "border_width": 0,
     "border_focus": onedark["c05"],
     "border_normal": onedark["c00"],
 }
