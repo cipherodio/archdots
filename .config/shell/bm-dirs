@@ -11,7 +11,7 @@ t   $HOME/hub/screenshot
 r   $HOME/hub/review
 n   $HOME/hub/src/mdnotes
 k   $HOME/hub/projects
-p   $HOME/.config/nvim/lua/plugins
+p   $HOME/.config/nvim
 m   $HOME/hub/data
 u   $NVD_DIR/
 f   $NVD_DIR/hub2
