@@ -17,7 +17,7 @@ and setup are guided by my [Archstrap repository][guide].
 
 ## 📸 Screenshots
 
-![screenshot01](.local/wallpapers/screenshot01.png)
+![screenshot01](.local/wallpapers/screenshot01.jpeg)
 
 ## 🚀 Dotfiles Installation
 
