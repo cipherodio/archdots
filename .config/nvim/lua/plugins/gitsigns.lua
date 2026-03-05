@@ -1,124 +1,123 @@
 return {
     "lewis6991/gitsigns.nvim",
+    lazy = true,
     init = function()
         vim.api.nvim_create_autocmd({ "BufRead" }, {
+            desc = "Workaround for Git bare and normal repository",
             group = vim.api.nvim_create_augroup("GitSignsLazyLoad", { clear = true }),
             callback = function()
-                vim.fn.system(
-                    "git -C " .. '"' .. vim.fn.expand("%:p:h") .. '"' .. " rev-parse"
-                )
-                if vim.v.shell_error == 0 then
+                local path = vim.api.nvim_buf_get_name(0)
+                if path == "" or vim.bo.buftype ~= "" then
+                    return
+                end
+
+                local bare_git_dir = vim.env.HOME .. "/.config/.dots"
+                local home_dir = vim.env.HOME
+
+                -- Check for standard local git repo
+                local is_git = vim.system({ "git", "rev-parse", "--is-inside-work-tree" })
+                    :wait().code == 0
+
+                -- Check bare repo
+                local is_dotfile = false
+                if not is_git then
+                    local obj = vim.system({
+                        "git",
+                        "--git-dir=" .. bare_git_dir,
+                        "--work-tree=" .. home_dir,
+                        "ls-files",
+                        "--error-unmatch",
+                        path,
+                    }):wait()
+                    is_dotfile = obj.code == 0
+                end
+
+                -- Load Gitsigns if it's a repo or a tracked dotfile
+                if is_git or is_dotfile then
+                    require("lazy").load({ plugins = { "gitsigns.nvim" } })
                     vim.api.nvim_del_augroup_by_name("GitSignsLazyLoad")
-                    vim.schedule(function()
-                        require("lazy").load({
-                            plugins = { "gitsigns.nvim" },
-                        })
-                    end)
                 end
             end,
         })
     end,
-    ft = "gitcommit",
     keys = {
         {
-            "<leade>gB",
+            "]c",
             function()
-                require("gitsigns").blame_line()
+                if vim.wo.diff then
+                    return "]c"
+                end
+                vim.schedule(function()
+                    ---@diagnostic disable-next-line: missing-fields
+                    require("gitsigns").nav_hunk("next", { wrap = false })
+                end)
+                return "<Ignore>"
             end,
-            desc = "Open git blame",
+            expr = true,
+            desc = "GS: next hunk",
+        },
+        {
+            "[c",
+            function()
+                if vim.wo.diff then
+                    return "[c"
+                end
+                vim.schedule(function()
+                    ---@diagnostic disable-next-line: missing-fields
+                    require("gitsigns").nav_hunk("prev", { wrap = false })
+                end)
+                return "<Ignore>"
+            end,
+            expr = true,
+            desc = "GS: previous hunk",
         },
         {
             "<leader>gp",
             function()
                 require("gitsigns").preview_hunk_inline()
             end,
-            desc = "Preview hunk",
+            desc = "GS: preview hunk",
         },
         {
             "<leader>gr",
             function()
-                require("gitsigns").reset_hunk()
+                local gs = require("gitsigns")
+                local mode = vim.api.nvim_get_mode().mode
+                if mode == "v" or mode == "V" then
+                    gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
+                else
+                    gs.reset_hunk()
+                end
             end,
             mode = { "n", "v" },
-            desc = "Reset hunk",
-        },
-        {
-            "<leader>gR",
-            function()
-                require("gitsigns").reset_buffer()
-            end,
-            desc = "Reset buffer",
-        },
-        {
-            "<leader>gs",
-            function()
-                require("gitsigns").stage_hunk()
-            end,
-            mode = { "n", "v" },
-            desc = "Stage hunk",
-        },
-        {
-            "<leader>gS",
-            function()
-                require("gitsigns").stage_buffer()
-            end,
-            desc = "Stage buffer",
-        },
-        {
-            "<leader>gu",
-            function()
-                require("gitsigns").stage_hunk()
-            end,
-            desc = "Unstage hunk",
-        },
-        {
-            "<leader>gd",
-            function()
-                require("gitsigns").diffthis()
-            end,
-            desc = "Open diff",
-        },
-        {
-            "<leader>gq",
-            function()
-                require("gitsigns").setqflist()
-            end,
-            desc = "Open quickfix list with hunks",
+            desc = "GS: reset hunk",
         },
         {
             "<leader>gl",
             function()
-                require("gitsigns").setloclist()
-            end,
-            desc = "Open location list with hunks",
-        },
-        {
-            "<leader>gL",
-            function()
                 require("gitsigns").toggle_current_line_blame()
             end,
-            desc = "Toggle line blame",
+            desc = "GS: toggle line blame",
         },
         {
-            "<leader>g]",
+            "<leader>gS",
             function()
-                ---@diagnostic disable-next-line: missing-fields
-                require("gitsigns").nav_hunk("next", { wrap = false })
+                local gs = require("gitsigns")
+                local mode = vim.api.nvim_get_mode().mode
+                if mode == "v" or mode == "V" then
+                    gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+                else
+                    gs.stage_hunk()
+                end
             end,
-            desc = "Next hunk",
-        },
-        {
-            "<leader>g[",
-            function()
-                ---@diagnostic disable-next-line: missing-fields
-                require("gitsigns").nav_hunk("prev", { wrap = false })
-            end,
-            desc = "Previous hunk",
+            mode = { "n", "v" },
+            desc = "GS: stage hunk",
         },
     },
     opts = {
         attach_to_untracked = true,
         numhl = false,
+        current_line_blame = false,
         signs = {
             add = { text = "┃" },
             change = { text = "┃" },
@@ -126,6 +125,13 @@ return {
             topdelete = { text = "┃" },
             changedelete = { text = "┃" },
             untracked = { text = "┃" },
+        },
+        -- NOTE: This tells Gitsigns the path of my Bare repo
+        worktrees = {
+            {
+                toplevel = vim.env.HOME,
+                gitdir = vim.env.HOME .. "/.config/.dots",
+            },
         },
     },
 }
