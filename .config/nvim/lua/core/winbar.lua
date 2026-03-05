@@ -1,112 +1,72 @@
 local ui = require("utils.colors")
 
--- Highlight definitions
-local highlights = {
-    WinBarModified = { fg = ui.c02, bg = ui.c01, bold = true },
-    ModifiedTextMain = { fg = ui.c05, bg = ui.c11, bold = true },
-    BufferColor = { fg = ui.c03, bg = ui.c01, bold = true },
-}
-
-local function apply_highlights()
-    for group, opts in pairs(highlights) do
-        vim.api.nvim_set_hl(0, group, opts)
-    end
+local function Spacer(n)
+    return "%#SpacerHL#" .. string.rep(" ", n or 1)
 end
 
-apply_highlights()
-
-vim.api.nvim_create_autocmd("ColorScheme", {
-    callback = apply_highlights,
-})
-
--- Helpers
-local function spacer(n)
-    return "%#ModifiedTextMain#" .. string.rep(" ", n)
-end
-
-local function align()
+local function Align()
     return "%="
 end
 
-local excluded_filetypes = {
-    help = true,
-    dashboard = true,
-    lazy = true,
-    neogitstatus = true,
-    NvimTree = true,
-    Trouble = true,
-    toggleterm = true,
-}
-
--- Winbar components
-local function buffer_number()
-    local bufnr = vim.api.nvim_get_current_buf()
-    return "%#BufferColor#[" .. bufnr .. "]" .. spacer(1)
+local function apply_winbar_hl()
+    local hl = vim.api.nvim_set_hl
+    hl(0, "SpacerHL", { fg = ui.c10, bg = ui.c11 })
+    hl(0, "WinbarFilename", { fg = ui.c05, bg = ui.c11 })
+    hl(0, "WinbarModified", { fg = ui.c02, bg = ui.c11 })
+    hl(0, "WinbarSearch", { fg = ui.c09, bg = ui.c11 })
 end
 
-local function file_path()
+apply_winbar_hl()
+vim.api.nvim_create_autocmd("ColorScheme", { callback = apply_winbar_hl })
+
+local Status = {}
+
+function Status.WinbarFile()
     local name = vim.api.nvim_buf_get_name(0)
-    if name == "" then
-        return ""
-    end
-
-    -- Use ~ for home, then replace leading ~ with $HOME
-    name = vim.fn.fnamemodify(name, ":~")
-    name = name:gsub("^~", "$HOME")
-
-    -- Pretty separators
-    name = name:gsub("/", " ")
-
-    return "%#ModifiedTextMain#" .. name
+    local full_path = (name == "") and "[No Name]" or vim.fn.fnamemodify(name, ":~")
+    local mod = vim.bo.modified and " %#WinbarModified#[+]" or ""
+    return Spacer(1) .. "%#WinbarFilename#  " .. full_path .. mod
 end
 
-local function search_match()
+function Status.SearchCount()
     if vim.v.hlsearch == 0 then
         return ""
     end
-
-    local pat = vim.fn.getreg("/")
-    if pat == "" then
+    local ok, s_count = pcall(vim.fn.searchcount, { recompute = 1, maxcount = 999 })
+    if not ok or not s_count or s_count.total == nil or s_count.total == 0 then
         return ""
     end
-
-    local ok, sc = pcall(vim.fn.searchcount, { maxcount = 9999 })
-    if not ok or sc.total == 0 then
-        return ""
-    end
-
-    return pat .. "[" .. sc.current .. "/" .. sc.total .. "]"
+    return "%#WinbarSearch#["
+        .. s_count.current
+        .. "/"
+        .. s_count.total
+        .. "]"
+        .. Spacer(1)
 end
 
--- Winbar renderer
-_G.WinBars = function()
-    if excluded_filetypes[vim.bo.filetype] then
+-- Render winbar
+_G.render_winbar = function()
+    local excluded = { oil = true, fzf = true, notify = true, lazy = true }
+    if excluded[vim.bo.filetype] or vim.bo.buftype ~= "" then
         return ""
     end
 
     return table.concat({
-        buffer_number(),
-        file_path(),
-        align(),
-        search_match(),
+        Status.WinbarFile(),
+        Align(),
+        Status.SearchCount(),
     })
 end
 
--- Autocommands
-vim.api.nvim_create_augroup("WinBars", { clear = true })
-
-vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
-    group = "WinBars",
-    callback = function(args)
-        local win = 0
-
-        if
-            not vim.api.nvim_win_get_config(win).zindex
-            and vim.bo[args.buf].buftype == ""
-            and vim.api.nvim_buf_get_name(args.buf) ~= ""
-            and not vim.wo[win].diff
-        then
-            vim.wo[win].winbar = "%{%v:lua.WinBars()%}"
+local group = vim.api.nvim_create_augroup("WinbarRefresh", { clear = true })
+vim.api.nvim_create_autocmd({ "CursorMoved", "CmdlineChanged" }, {
+    desc = "Refresh winbar",
+    group = group,
+    callback = function()
+        if vim.v.hlsearch == 1 then
+            vim.cmd.redrawstatus()
         end
     end,
 })
+
+vim.opt.winbar = "%!v:lua.render_winbar()"
