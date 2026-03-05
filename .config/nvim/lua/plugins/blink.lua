@@ -53,6 +53,7 @@ return {
                     module = "blink-cmp-spell",
                 },
                 snippets = {
+                    score_offset = 100,
                     opts = {
                         search_paths = { vim.fn.stdpath("config") .. "/snippets" },
                     },
