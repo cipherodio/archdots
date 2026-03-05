@@ -1,19 +1,15 @@
 local ui = require("utils.colors")
 
--- Helpers
 local function Spacer(n)
-    return "%#StatuslineTextMain#" .. string.rep(" ", n)
+    return "%#SpacerHL#" .. string.rep(" ", n or 1)
 end
-
 local function Align()
     return "%="
 end
-
 local function Truncate()
     return "%<"
 end
 
--- Highlight helper (colorscheme-safe)
 local function set_hl(group, opts)
     vim.api.nvim_set_hl(0, group, {
         fg = opts.fg,
@@ -22,40 +18,32 @@ local function set_hl(group, opts)
     })
 end
 
--- Highlight definitions / Palette agnostic
 local highlights = {
-    { "StatuslineModeCommand", { fg = ui.c00, bg = ui.c05 } },
-    { "StatuslineModeNormal", { fg = ui.c00, bg = ui.c06, gui = "bold" } },
-    { "StatuslineModeInsert", { fg = ui.c00, bg = ui.c03, gui = "bold" } },
-    { "StatuslineModeVisual", { fg = ui.c00, bg = ui.c04, gui = "bold" } },
-    { "StatuslineModeReplace", { fg = ui.c00, bg = ui.c06, gui = "bold" } },
-    { "StatuslineModeSelect", { fg = ui.c00, bg = ui.c09, gui = "bold" } },
-
-    { "StatuslineTextMain", { fg = ui.c10, bg = ui.c11, gui = "bold" } },
-    { "StatuslineFilename", { fg = ui.c10, bg = ui.c11, gui = "bold" } },
-
-    { "StatuslineSaved", { fg = ui.c03, bg = ui.c11, gui = "bold" } },
-    { "StatuslineNotSaved", { fg = ui.c02, bg = ui.c11, gui = "bold" } },
-    { "StatuslineReadOnly", { fg = ui.c09, bg = ui.c11, gui = "bold" } },
-
-    { "GsHeadSign", { fg = ui.c02, bg = ui.c11, gui = "bold" } },
-    { "GsAddSign", { fg = ui.c03, bg = ui.c11, gui = "bold" } },
-    { "GsChangeSign", { fg = ui.c04, bg = ui.c11, gui = "bold" } },
-    { "GsDeleteSign", { fg = ui.c02, bg = ui.c11, gui = "bold" } },
-
-    { "StatuslineLspOn", { fg = ui.c05, bg = ui.c11, gui = "bold" } },
-    { "StatuslineLspError", { fg = ui.c02, bg = ui.c11, gui = "bold" } },
-    { "StatuslineLspWarning", { fg = ui.c04, bg = ui.c11, gui = "bold" } },
-    { "StatuslineLspInfo", { fg = ui.c05, bg = ui.c11, gui = "bold" } },
-    { "StatuslineLspHint", { fg = ui.c07, bg = ui.c11, gui = "bold" } },
-
-    { "StatuslineCursorBegin", { fg = ui.c08, bg = ui.c11, gui = "bold" } },
-    { "StatuslineCursorEnd", { fg = ui.c08, bg = ui.c11, gui = "bold" } },
-    { "StatuslinePercent", { fg = ui.c10, bg = ui.c11, gui = "bold" } },
-    { "StatuslineFiletype", { fg = ui.c08, gui = "bold" } },
+    { "ModeCmd", { fg = ui.c00, bg = ui.c05 } },
+    { "ModeNormal", { fg = ui.c00, bg = ui.c06 } },
+    { "ModeInsert", { fg = ui.c00, bg = ui.c03 } },
+    { "ModeVisual", { fg = ui.c00, bg = ui.c04 } },
+    { "ModeReplace", { fg = ui.c00, bg = ui.c06 } },
+    { "GitDots", { fg = ui.c05, bg = ui.c11 } },
+    { "GitProj", { fg = ui.c04, bg = ui.c11 } },
+    { "GitLoose", { fg = ui.c02, bg = ui.c11 } },
+    { "LSPSingleBracket", { fg = ui.c02, bg = ui.c11 } },
+    { "LSPProjBracket", { fg = ui.c03, bg = ui.c11 } },
+    { "LSPSingle", { fg = ui.c02, bg = ui.c11 } },
+    { "LSPProj", { fg = ui.c03, bg = ui.c11 } },
+    { "SpacerHL", { fg = ui.c10, bg = ui.c11 } },
+    { "GitHeadSign", { fg = ui.c02, bg = ui.c11 } },
+    { "GitAddSign", { fg = ui.c03, bg = ui.c11 } },
+    { "GitChangeSign", { fg = ui.c04, bg = ui.c11 } },
+    { "GitDeleteSign", { fg = ui.c02, bg = ui.c11 } },
+    { "LSPStat", { fg = ui.c07, bg = ui.c11 } },
+    { "LSPError", { fg = ui.c02, bg = ui.c11 } },
+    { "LSPWarn", { fg = ui.c04, bg = ui.c11 } },
+    { "LSPInfo", { fg = ui.c05, bg = ui.c11 } },
+    { "LSPHint", { fg = ui.c07, bg = ui.c11 } },
+    { "CursorPos", { fg = ui.c08, bg = ui.c11 } },
 }
 
--- Apply highlights (fix for onedark.nvim reset)
 local function apply_highlights()
     for _, hl in ipairs(highlights) do
         set_hl(hl[1], hl[2])
@@ -63,221 +51,152 @@ local function apply_highlights()
 end
 
 apply_highlights()
+vim.api.nvim_create_autocmd("ColorScheme", { callback = apply_highlights })
 
-vim.api.nvim_create_autocmd("ColorScheme", {
-    callback = apply_highlights,
-})
+local Status = {}
 
--- Mode
-local mode_names = {
-    n = "NORMAL",
-    i = "INSERT",
-    v = "VISUAL",
-    V = "V-LINE",
-    [""] = "V-BLOCK",
-    R = "REPLACE",
-    c = "COMMAND",
-    t = "TERMINAL",
+local mode_map = {
+    n = "n",
+    i = "i",
+    v = "v",
+    V = "v",
+    ["\22"] = "v",
+    c = "c",
+    R = "r",
+    t = "t",
 }
 
-local function ModeColor()
+function Status.Mode()
     local m = vim.api.nvim_get_mode().mode
+    local hl = "%#ModeCmd#"
+
     if m == "n" then
-        return "%#StatuslineModeNormal#"
+        hl = "%#ModeNormal#"
     elseif m:find("i") then
-        return "%#StatuslineModeInsert#"
-    elseif m:find("v") or m == "" then
-        return "%#StatuslineModeVisual#"
+        hl = "%#ModeInsert#"
+    elseif m:find("v") or m == "\22" then
+        hl = "%#ModeVisual#"
     elseif m:find("R") then
-        return "%#StatuslineModeReplace#"
-    elseif m:find("s") then
-        return "%#StatuslineModeSelect#"
-    elseif m == "c" then
-        return "%#StatuslineModeCommand#"
+        hl = "%#ModeReplace#"
     end
-    return "%#StatuslineModeCommand#"
+    return hl .. " " .. (mode_map[m] or m:sub(1, 1)) .. " "
 end
 
-local function Mode()
-    local m = vim.api.nvim_get_mode().mode
-    return ModeColor() .. "  " .. (mode_names[m] or "UNKNOWN") .. " "
-end
-
--- Filename only
-local function Filename()
-    local name = vim.fn.expand("%:t")
-    if name == "" then
-        return Spacer(1) .. "%#StatuslineFilename#[No Name]"
+function Status.GitLspContext()
+    local g = vim.b.gitsigns_status_dict
+    local clients = vim.lsp.get_clients({ bufnr = 0 })
+    local is_lsp_project = false
+    for _, client in ipairs(clients) do
+        if client.root_dir then
+            is_lsp_project = true
+            break
+        end
     end
-    return Spacer(1) .. "%#StatuslineFilename#" .. name
-end
-
--- Path ORIGINAL
--- local function Path()
---     local path = vim.fn.expand("%:~:.:h")
---     if path == "" or path == "." then
---         return ""
---     end
---     if #path > 30 then
---         path = "…" .. path:sub(-28)
---     end
---     return Spacer(1) .. "%#StatuslineTextMain#" .. path .. "/"
--- end
-
--- Filename ORIGINAL
--- local function Filename()
---     local name = vim.fn.expand("%:t")
---     if name == "" then
---         return Spacer(1) .. "%#StatuslineFilename#[No Name]"
---     end
---     return Spacer(1) .. "%#StatuslineFilename#" .. name
--- end
-
---- TEST ---
--- local function Path()
---     local path = vim.fn.expand("%:~:.:h")
---     local max_width = 30
---     if path == "." or path == "" then
---         return ""
---     elseif #path > max_width then
---         path = "…" .. string.sub(path, -max_width + 2)
---     end
---     return Spacer(1) .. "%#StatuslineTextMain#" .. path .. "/"
--- end
-
--- local function Filename()
---     local filename = vim.fn.expand("%:~:t")
---     local path = vim.fn.expand("%:~:.:h")
---     if filename == "" then
---         return Spacer(1) .. "%#StatuslineFilename#" .. "[No Name]"
---     end
---     if path == "." then
---         return Spacer(1) .. "%#StatuslineFilename#" .. filename
---     end
---     return "%#StatuslineFilename#" .. filename
--- end
---- TEST ---
-
--- Modified / Readonly
-local function Modified()
-    if vim.bo.modified then
-        return Spacer(1) .. "%#StatuslineNotSaved# "
-    elseif not vim.bo.modifiable or vim.bo.readonly then
-        return Spacer(1) .. "%#StatuslineReadOnly#• "
+    local bracket_hl = is_lsp_project and "%#LSPProjBracket#" or "%#LSPSingleBracket#"
+    local letter, letter_hl = "", "%#GitLoose#"
+    if g and g.gitdir then
+        if g.gitdir:find(".dots") then
+            letter, letter_hl = "", "%#GitDots#"
+        else
+            letter, letter_hl = "", "%#GitProj#" -- 
+        end
     end
-    return Spacer(1) .. "%#StatuslineSaved# "
+    return Spacer(1) .. bracket_hl .. "[" .. letter_hl .. letter .. bracket_hl .. "]"
 end
 
--- GitSigns
-local function GitSigns()
-    if not vim.b.gitsigns_head or not vim.b.gitsigns_status_dict then
+function Status.GitSigns()
+    local g = vim.b.gitsigns_status_dict
+
+    if not g or not g.head then
         return ""
     end
-
-    local g = vim.b.gitsigns_status_dict
-    local out = { "%#GsHeadSign#  " .. vim.b.gitsigns_head }
-
-    if g.added and g.added > 0 then
-        table.insert(out, "%#GsAddSign#  " .. g.added)
+    local out = { "%#GitHeadSign#  " .. g.head }
+    if (g.added or 0) > 0 then
+        table.insert(out, "%#GitAddSign#  " .. g.added)
     end
-    if g.changed and g.changed > 0 then
-        table.insert(out, "%#GsChangeSign#  " .. g.changed)
+    if (g.changed or 0) > 0 then
+        table.insert(out, "%#GitChangeSign#  " .. g.changed)
     end
-    if g.removed and g.removed > 0 then
-        table.insert(out, "%#GsDeleteSign#  " .. g.removed)
+    if (g.removed or 0) > 0 then
+        table.insert(out, "%#GitDeleteSign#  " .. g.removed)
     end
-
     return table.concat(out)
 end
 
--- LSP / Diagnostics
-local function LspStatus()
-    if vim.bo.filetype == "lazy" or vim.bo.buftype == "nofile" then
+function Status.LspStatus()
+    local clients = vim.lsp.get_clients({ bufnr = 0 })
+
+    if #clients == 0 then
         return ""
     end
-    if #vim.lsp.get_clients({ bufnr = 0 }) > 0 then
-        return "%#StatuslineLspOn#LSP" .. Spacer(2)
+    local names = {}
+    for _, client in ipairs(clients) do
+        table.insert(names, client.name)
     end
-    return ""
+    return Spacer(1) .. "%#LSPStat#[" .. table.concat(names, ",") .. "]"
 end
 
-local function Diagnostics()
+function Status.Diagnostics()
     if vim.bo.filetype == "lazy" or vim.bo.buftype == "nofile" then
         return ""
     end
-
     local counts = vim.diagnostic.count(0)
-    if not counts then
-        return ""
-    end
-
-    local out = {}
-    local sev = vim.diagnostic.severity
-
+    local out, sev = {}, vim.diagnostic.severity
     if counts[sev.ERROR] then
-        table.insert(out, "%#StatuslineLspError# " .. counts[sev.ERROR] .. Spacer(1))
+        table.insert(out, "%#LSPError# " .. counts[sev.ERROR] .. Spacer(1))
     end
     if counts[sev.WARN] then
-        table.insert(out, "%#StatuslineLspWarning# " .. counts[sev.WARN] .. Spacer(1))
+        table.insert(out, "%#LSPWarn# " .. counts[sev.WARN] .. Spacer(1))
     end
     if counts[sev.INFO] then
-        table.insert(out, "%#StatuslineLspInfo# " .. counts[sev.INFO] .. Spacer(1))
+        table.insert(out, "%#LSPInfo# " .. counts[sev.INFO] .. Spacer(1))
     end
     if counts[sev.HINT] then
-        table.insert(out, "%#StatuslineLspHint# " .. counts[sev.HINT] .. Spacer(1))
+        table.insert(out, "%#LSPHint# " .. counts[sev.HINT] .. Spacer(1))
     end
-
     return table.concat(out)
 end
 
--- Cursor position / Percentage
-local function Percentage()
-    local l = vim.fn.line(".")
-    local t = vim.fn.line("$")
-
-    local label
-    if l == 1 then
-        label = "Top"
-    elseif l == t then
-        label = "End"
-    else
-        label = math.floor((l / t) * 100) .. "%%"
-    end
-
-    return "%#StatuslinePercent#󰉸 " .. label .. Spacer(2)
+function Status.CursorPos()
+    return " %#CursorPos#%l:%c 󰉸  %p%% "
 end
 
-local function CursorPosition()
-    return "%#StatuslineCursorBegin#"
-        .. vim.fn.line(".")
-        .. "%#StatuslineTextMain#:"
-        .. "%#StatuslineCursorEnd#"
-        .. vim.fn.line("$")
-        .. "%#StatuslineTextMain#  "
-        .. "%#StatuslineCursorBegin#"
-        .. vim.fn.virtcol(".")
-        .. "%#StatuslineTextMain#:"
-        .. "%#StatuslineCursorEnd#"
-        .. vim.fn.virtcol("$")
-        .. Spacer(2)
-end
-
--- Statusline
+-- Render statusline
 function _G.Statusline()
     return table.concat({
-        Mode(),
-        -- Path(),
-        Filename(),
-        Modified(),
-        GitSigns(),
+        Status.Mode(),
+        Status.GitLspContext(),
+        Status.GitSigns(),
         Spacer(2),
         Align(),
-        Diagnostics(),
-        LspStatus(),
-        Percentage(),
-        CursorPosition(),
+        Status.Diagnostics(),
+        Status.LspStatus(),
+        Status.CursorPos(),
         Truncate(),
     })
 end
 
 vim.o.statusline = "%!v:lua.Statusline()"
+
+local group = vim.api.nvim_create_augroup("StatusLineRefresh", { clear = true })
+
+vim.api.nvim_create_autocmd({ "LspAttach", "LspDetach", "DiagnosticChanged" }, {
+    desc = "Show bash lsp right after opening the file",
+    group = group,
+    callback = function()
+        vim.schedule(function()
+            vim.cmd.redrawstatus()
+        end)
+    end,
+})
+
+vim.api.nvim_create_autocmd("User", {
+    desc = "Show Gitsigns right after opening a file",
+    pattern = "GitSignsUpdate",
+    group = group,
+    callback = function()
+        vim.schedule(function()
+            vim.cmd.redrawstatus()
+        end)
+    end,
+})
