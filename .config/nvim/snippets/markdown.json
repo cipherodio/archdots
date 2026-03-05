@@ -1,0 +1,11 @@
+{
+    "Table of Contents Markers": {
+        "prefix": "toc",
+        "body": [
+            "<!-- toc -->",
+            "$0",
+            "<!-- tocstop -->"
+        ],
+        "description": "Insert TOC start and stop markers"
+    }
+}
