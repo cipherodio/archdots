@@ -1,12 +1,13 @@
 from libqtile import hook
 
-from bars.onedark import screens  # noqa: F401
-from modules.floating import floating_layout  # noqa: F401
-from modules.groups import groups  # noqa: F401
-from modules.keys import keys, mod  # noqa: F401
-from modules.layouts import layouts  # noqa: F401
-from modules.mouse import mouse  # noqa: F401
-from modules.rules import dgroups_app_rules  # noqa: F401
+from bars.onedark import screens as screens
+from modules.floating import floating_layout as floating_layout
+from modules.groups import groups as groups
+from modules.keys import keys as keys
+from modules.keys import mod as mod
+from modules.layouts import layouts as layouts
+from modules.mouse import mouse as mouse
+from modules.rules import dgroups_app_rules as dgroups_app_rules
 
 follow_mouse_focus = True
 bring_front_click = False
