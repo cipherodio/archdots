@@ -16,6 +16,7 @@ M.gruvbox = {
     c11 = "#32302f",
 }
 
+-- Onedark
 M.onedark = {
     c00 = "#282c34",
     c01 = "#3e4452",
