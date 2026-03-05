@@ -40,6 +40,7 @@
     ca = commit -a
     d = diff
     ds = diff --staged
+    p = push
     pm = push -u origin main
     pl = pull
     co = checkout
