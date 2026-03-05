@@ -2,21 +2,8 @@ return {
     "stevearc/conform.nvim",
     event = "BufWritePre",
     cmd = "ConformInfo",
-    keys = {
-        {
-            "<leader>af",
-            "<cmd>FormatToggle<cr>",
-            desc = "Format-on-save toggle",
-        },
-    },
-    init = function()
-        vim.api.nvim_create_user_command("FormatToggle", function(args)
-            local is_global = not args.bang
-            if is_global then
-                vim.g.disable_autoformat = not vim.g.disable_autoformat
-            end
-        end, { desc = "Toggle autoformat-on-save", bang = true })
-    end,
+    ---@module "conform"
+    ---@type conform.setupOpts
     opts = {
         format_on_save = function(bufnr)
             if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
@@ -36,11 +23,17 @@ return {
         },
         formatters = {
             prettier = {
+                -- NOTE: For prettier not working on some directories
+                cwd = function(_, ctx)
+                    local root = vim.fs.find(
+                        { ".git", "package.json", ".prettierrc" },
+                        { upward = true, path = ctx.dirname }
+                    )[1]
+                    return root and vim.fn.fnamemodify(root, ":h") or ctx.dirname
+                end,
                 prepend_args = {
                     "--config",
                     vim.fn.expand("~/.config/prettier/.prettierrc"),
-                    "--stdin-filepath",
-                    "$FILENAME",
                 },
             },
             ["markdown-toc"] = {
@@ -52,6 +45,7 @@ return {
                             return true
                         end
                     end
+                    return false
                 end,
                 args = {
                     "--indent",
@@ -60,12 +54,6 @@ return {
                     "$FILENAME",
                     "--bullets",
                     "-",
-                },
-            },
-            ["ruff_format"] = {
-                append_args = {
-                    "--line-length",
-                    "79",
                 },
             },
         },
