@@ -6,7 +6,9 @@ return {
             char = "│",
         },
         scope = {
+            enabled = false,
             char = "│",
+            underline = { enabled = false },
         },
         blocked = {
             filetypes = {
