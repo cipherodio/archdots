@@ -1,0 +1,8 @@
+[project]
+name = "qtile-config"
+version = "0.1.0"
+description = "My Qtile window manager configuration"
+
+[tool.ruff]
+# Optional: Add Ruff-specific rules here
+line-length = 79
