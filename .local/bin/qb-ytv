@@ -4,6 +4,9 @@
 
 set -euo pipefail
 
+YTDLP="/usr/bin/yt-dlp"
+OUTDIR="$HOME/hub/downloads"
+
 url="${1:-}"
 
 [ -z "$url" ] && {
@@ -11,16 +14,15 @@ url="${1:-}"
     exit 1
 }
 
-OUTDIR="$HOME/hub/downloads"
-
 notify-send --urgency low " Youtube download" "Started\n$url"
 
-if yt-dlp \
-    -f 'bestvideo+bestaudio' \
+if "$YTDLP" \
+    --force-generic-extractor \
+    -f 'bestvideo+bestaudio/best' \
     --merge-output-format mp4 \
     --restrict-filenames \
     -o "$OUTDIR/%(title)s.%(ext)s" \
-    "$url"; then
+    "$url" >/dev/null 2>&1; then
     notify-send --urgency normal " Youtube download" "Finished\n$url"
 else
     notify-send --urgency critical " Youtube download" "Failed\n$url"
