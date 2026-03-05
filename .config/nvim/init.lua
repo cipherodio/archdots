@@ -1,6 +1,8 @@
 vim.loader.enable()
--- vim.cmd.colorscheme("onedark")
+vim.cmd.colorscheme("onedark")
 
+-- Use pcall to load modules
+---@param module string
 local function secure(module)
     local success, err_msg = pcall(require, module)
     if not success then
@@ -14,9 +16,8 @@ end
 secure("core.options")
 secure("core.autocmds")
 secure("core.keymaps")
+secure("core.statuscolumn")
 secure("core.statusline")
 secure("core.winbar")
 secure("core.lsp")
 secure("core.lazy")
-
-vim.cmd.colorscheme("onedark")
