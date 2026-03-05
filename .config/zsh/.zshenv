@@ -84,6 +84,11 @@ export LESS_TERMCAP_se=$'\e[0m'
 export LESS_TERMCAP_us=$'\e[1;32m'
 export LESS_TERMCAP_ue=$'\e[0m'
 
+# Load local
+if [[ -f "$HOME/hub/src/cipherkeys/zshenv-local" ]]; then
+    source "$HOME/hub/src/cipherkeys/zshenv-local"
+fi
+
 # Fix for java applications in dwm
 export _JAVA_AWT_WM_NONREPARENTING=1
 
