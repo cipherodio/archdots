@@ -1,6 +1,6 @@
 local autocmd = vim.api.nvim_create_autocmd
-local followlink = require("utils.followlink")
-local lcd = require("utils.lcd")
+local f = require("utils.followlink")
+local h = require("utils.helper")
 
 local function augroup(name)
     return vim.api.nvim_create_augroup(name, { clear = true })
@@ -17,7 +17,6 @@ local groups = {
     reload_shortcuts = augroup("reload_shortcuts"),
     reload_xdefaults = augroup("reload_xdefaults"),
     reload_dunst = augroup("reload_dunst"),
-    lcd_notes = augroup("lcd_notes"),
     markdown_gf = augroup("markdown_gf"),
 }
 
@@ -25,11 +24,8 @@ autocmd({ "BufEnter", "WinEnter", "InsertLeave", "CmdlineLeave" }, {
     desc = "Enable relative number",
     group = groups.relnumbers,
     callback = function()
-        if vim.bo.buftype ~= "" then
-            return
-        end
-        if vim.wo.number and vim.api.nvim_get_mode().mode ~= "i" then
-            vim.wo.relativenumber = true
+        if vim.o.nu and vim.api.nvim_get_mode().mode ~= "i" then
+            vim.opt.relativenumber = true
         end
     end,
 })
@@ -38,11 +34,8 @@ autocmd({ "BufLeave", "WinLeave", "InsertEnter", "CmdlineEnter" }, {
     desc = "Disable relative number",
     group = groups.relnumbers,
     callback = function()
-        if vim.bo.buftype ~= "" then
-            return
-        end
-        if vim.wo.number then
-            vim.wo.relativenumber = false
+        if vim.o.nu then
+            vim.opt.relativenumber = false
         end
     end,
 })
@@ -78,6 +71,7 @@ autocmd("BufWinEnter", {
 })
 
 autocmd("BufReadPost", {
+    desc = "Save cursor position on quit",
     group = groups.cursor_pos,
     callback = function()
         vim.schedule(function()
@@ -93,18 +87,18 @@ autocmd("FileType", {
     desc = "Close with just letter q",
     group = groups.closewith_q,
     pattern = {
-        "",
         "help",
-        "lspinfo",
         "checkhealth",
         "qf",
         "query",
+        "man",
     },
     callback = function(event)
         vim.bo[event.buf].buflisted = false
-        vim.keymap.set("n", "q", vim.cmd.close, {
+        vim.keymap.set("n", "q", h.smart_quit, {
             buffer = event.buf,
             silent = true,
+            desc = "Smart quit",
         })
     end,
 })
@@ -116,8 +110,11 @@ autocmd("BufWritePre", {
         if event.match:match("^%w%w+://") then
             return
         end
-        local file = vim.loop.fs_realpath(event.match) or event.match
-        vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
+        local file = vim.uv.fs_realpath(event.match) or event.match
+        local dir = vim.fn.fnamemodify(file, ":p:h")
+        if vim.fn.isdirectory(dir) == 0 then
+            vim.fn.mkdir(dir, "p")
+        end
     end,
 })
 
@@ -149,14 +146,6 @@ autocmd("BufWritePost", {
     end,
 })
 
-autocmd("BufEnter", {
-    desc = "Set local cwd for notes",
-    group = groups.lcd_notes,
-    callback = function(args)
-        lcd.maybe_lcd(args.buf)
-    end,
-})
-
 autocmd("FileType", {
     desc = "Follow Markdown links",
     group = groups.markdown_gf,
@@ -165,7 +154,7 @@ autocmd("FileType", {
         vim.keymap.set(
             "n",
             "gf",
-            followlink.follow_markdown_link,
+            f.follow_markdown_link,
             { buffer = true, silent = true, desc = "Follow Markdown link" }
         )
     end,
