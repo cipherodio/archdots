@@ -6,6 +6,8 @@ return {
         { "ribru17/blink-cmp-spell" },
     },
     version = "1.*",
+    ---@module "blink.cmp"
+    ---@type blink.cmp.Config
     opts = {
         keymap = {
             ["<C-b>"] = { "scroll_documentation_up" },
@@ -28,12 +30,8 @@ return {
                 "hide_documentation",
             },
         },
-        appearance = {
-            nerd_font_variant = "mono",
-        },
-        -- completion = {
-        --     ghost_text = { enabled = true },
-        -- },
+        appearance = { nerd_font_variant = "mono" },
+        -- completion = { ghost_text = { enabled = true } },
         signature = { enabled = true },
         sources = {
             default = {
