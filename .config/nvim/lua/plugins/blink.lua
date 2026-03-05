@@ -52,6 +52,11 @@ return {
                     name = "Spell",
                     module = "blink-cmp-spell",
                 },
+                snippets = {
+                    opts = {
+                        search_paths = { vim.fn.stdpath("config") .. "/snippets" },
+                    },
+                },
             },
             per_filetype = {
                 markdown = { "spell", "lsp", "snippets", "buffer" },
