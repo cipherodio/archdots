@@ -1,6 +1,7 @@
 from libqtile import bar, qtile, widget
 from libqtile.config import Screen
 from libqtile.lazy import lazy
+
 from utils.colors import onedark
 
 # Widgets
@@ -133,7 +134,6 @@ mainbar = [
     widget.Image(
         filename="~/.config/qtile/assets/onedark/background/sloperight.png"
     ),
-    # original place of battery
     widget.PulseVolume(
         **widget_defaults,
         background=onedark["c01"],
@@ -145,7 +145,7 @@ mainbar = [
         background=onedark["c01"],
         foreground=onedark["c04"],
         mute_format="0%",
-        # BUG: Temporary fix: https://github.com/qtile/qtile/issues/5747#event-21819025605
+        # BUG: https://github.com/qtile/qtile/issues/5747#event-21819025605
         mouse_callbacks={
             "Button1": lazy.widget["pulsevolume"].mute(),
             "Button4": lazy.widget["pulsevolume"].increase_vol(),
@@ -155,7 +155,6 @@ mainbar = [
     widget.Image(
         filename="~/.config/qtile/assets/onedark/background/curveleft.png"
     ),
-    # original place of pulse
     widget.BatteryIcon(
         background=onedark["c00"],
         theme_path="~/.config/qtile/assets/onedark/battery/",
