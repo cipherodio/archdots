@@ -3,16 +3,15 @@ return {
         "nvim-treesitter/nvim-treesitter",
         lazy = false,
         branch = "main",
-        -- event = { "BufReadPre", "BufNewFile" },
-
         dependencies = {
             "andymass/vim-matchup",
+            "nvim-treesitter/nvim-treesitter-context",
         },
 
         config = function()
             local ts = require("nvim-treesitter")
 
-            -- Parsers (explicit, deterministic)
+            -- Parsers
             local parsers = {
                 "bash",
                 "commonlisp",
@@ -49,15 +48,15 @@ return {
             }
 
             -- Global message suppression (no ENTER prompts)
-            vim.opt.more = false
-            vim.opt.shortmess:append("F")
-
-            if vim.fn.has("nvim-0.11") == 1 then
-                vim.opt.messagesopt = {
-                    "wait:1000",
-                    "history:500",
-                }
-            end
+            -- vim.opt.more = false
+            -- vim.opt.shortmess:append("F")
+            --
+            -- if vim.fn.has("nvim-0.11") == 1 then
+            --     vim.opt.messagesopt = {
+            --         "wait:1000",
+            --         "history:500",
+            --     }
+            -- end
 
             -- One-time bootstrap (sync, silent, deterministic)
             local marker = vim.fn.stdpath("state") .. "/treesitter_bootstrap_done"
@@ -84,18 +83,34 @@ return {
             })
 
             -- vim-matchup globals
-            vim.g.matchup_matchparen_offscreen = { method = "popup" }
+            vim.g.matchup_matchparen_offscreen = {}
+            vim.g.matchup_matchline_statusline = 0
+            vim.g.matchup_matchparen_statusbar = 0
             vim.g.matchup_matchparen_deferred = 1
             vim.g.matchup_matchparen_timeout = 300
+            require("treesitter-context").setup({
+                enable = true,
+                max_lines = 1,
+                min_window_height = 0,
+                line_numbers = true,
+                multiline_threshold = 20,
+                trim_scope = "outer",
+                mode = "cursor",
+                separator = nil,
+                zindex = 20,
+            })
 
-            -- Safe Treesitter attach (with augroup)
+            -- Safe Treesitter start
             vim.api.nvim_create_autocmd("FileType", {
-                group = vim.api.nvim_create_augroup("TreesitterAttach", { clear = true }),
                 callback = function()
-                    pcall(vim.treesitter.start)
-                    vim.wo.foldmethod = "expr"
-                    vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-                    -- vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                    local lang = vim.treesitter.language.get_lang(vim.bo.filetype)
+                        or vim.bo.filetype
+                    local has_parser = pcall(vim.treesitter.get_parser, 0, lang)
+                    if
+                        has_parser and pcall(vim.treesitter.query.get, lang, "highlights")
+                    then
+                        pcall(vim.treesitter.start)
+                    end
                 end,
             })
 
