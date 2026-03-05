@@ -904,8 +904,11 @@ hi(0, "vimNotation", { fg = "#e86671" })
 hi(0, "vimOption", { fg = "#e86671" })
 hi(0, "vimSetEqual", { fg = "#e5c07b" })
 hi(0, "vimVar", { fg = "#abb2bf" })
-hi(0, "TreesitterContext", { bg = "none" })
-hi(0, "TreesitterContextLineNumber", { fg = "#e5c07b", bg = "none" })
+-- hi(0, "TreesitterContext", { bg = "none" })
+-- hi(0, "TreesitterContextLineNumber", { fg = "#e5c07b", bg = "none" })
+-- hi(0, "BlinkIndentOrange", { fg = "#d19a66" })
+-- hi(0, "BlinkIndentViolet", { fg = "#c678dd" })
+-- hi(0, "BlinkIndentBlue", { fg = "#61afef" })
 
 -- Terminal colors
 local g = vim.g
