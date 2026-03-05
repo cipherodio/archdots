@@ -13,6 +13,9 @@ set dircounts true
 # New file always on top
 #set reverse true
 
+# Top status
+set promptfmt "\033[34;1m  %d\033[0m\033[1m%f\033[0m"
+
 # Time format
 # https://www.golinuxcloud.com/golang-time-format/
 #set sortby time
@@ -32,7 +35,9 @@ set statfmt "\033[36m%p\033[0m| %u| %g| %S| %t| -> %l"
 cmd open ${{
     case $(file --mime-type "$(readlink -f $f)" -b) in
         text/troff) man ./ $f ;;
-        text/*|application/javascript|inode/x-empty|application/json|application/octet-stream) $EDITOR $fx ;;
+        text/*|application/javascript|inode/x-empty|application/json| \
+        application/octet-stream|application/x-wine-extension-ini) \
+        $EDITOR $fx ;;
         image/x-xcf|image/svg+xml) setsid -f gimp $f >/dev/null 2>&1 & ;;
         image/*) rotdir $f | setsid nsxiv -oai 2>/dev/null | lf-select & ;;
         audio/*) mpv --audio-display=no $f ;;
@@ -163,9 +168,12 @@ map S copyimg
 
 map O push :mkdir<space>
 map o push :touch<space>
-map x push :chmod<space>
-#map x push :%chmod<space>"$f"<home><a-f><space>
-map X !$f
+# Reset NTFS/Windows permissions: Read-all, Write-user, Recursively
+map - $chmod -R a=r,u+w,a+X $fx; lf -remote "send $id reload"
+# Set file to executable
+map + $chmod +x $fx; lf -remote "send $id reload"
+map x $$f # Run via shell, respects aliases/env  and wait
+map X !$f # Run as direct system command and wait
 
 map R reload
 map <enter> shell
@@ -175,12 +183,22 @@ map W $setsid -f $TERMINAL >/dev/null 2>&1
 
 # Renames
 map B bulkrename
-map A rename # at the very end
+map A :rename; cmd-end # at the very end
 map c push A<c-u> # new rename
-map I push A<c-a> # at the very beginning
-map i push A<a-b><a-b><a-f> # before extention
-map a push A<a-b> # after extention
+map I :rename; cmd-home # at the very beginning
+map i :rename # before extention
+map a :rename; cmd-right # after extention
 map bg &setwallpaper "$f"
+
+map V push :$nvim<space>
+
+# Clears all current file selected
+map <c-l> unselect
+
+# Copy full path of currently selected file(s)
+map U $printf "%s" "$fx" | xclip -selection clipboard
+# Copy only filename of currently selected file(s)
+map u $printf "%s" "$fx" | sed 's/.*\///' | xclip -selection clipboard
 
 # Directories
 source "~/.config/lf/shrc"
