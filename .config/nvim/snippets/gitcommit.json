@@ -1,0 +1,17 @@
+{
+    "Conventional Commit": {
+        "prefix": "gc",
+        "body": [
+            "${1:feat}(${2:scope}): ${3:subject}$0",
+            "# --- Commit Cheat Sheet ---",
+            "# feat:     New feature",
+            "# fix:      Bug fix",
+            "# chore:    Maintenance/Config",
+            "# refactor: Code cleanup/Move",
+            "# style:    Formatting/Aesthetics",
+            "# perf:     Performance boost",
+            "# docs:     Documentation/Comments"
+        ],
+        "description": "Professional commit with visible cheat sheet"
+    }
+}
