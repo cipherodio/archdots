@@ -39,6 +39,9 @@ if [[ -f $XDG_CONFIG_HOME/lscolors/onedark ]]; then
   source "$XDG_CONFIG_HOME/lscolors/onedark"
 fi
 
+# Sync tab-completion colors with your One Dark LS_COLORS
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+
 # Shell opts
 setopt glob_dots
 setopt extended_glob
