@@ -93,12 +93,12 @@ function Status.GitLspContext()
         end
     end
     local bracket_hl = is_lsp_project and "%#LSPProjBracket#" or "%#LSPSingleBracket#"
-    local letter, letter_hl = "", "%#GitLoose#"
+    local letter, letter_hl = "L", "%#GitLoose#" --   
     if g and g.gitdir then
         if g.gitdir:find(".dots") then
-            letter, letter_hl = "", "%#GitDots#"
+            letter, letter_hl = "D", "%#GitDots#" -- 
         else
-            letter, letter_hl = "", "%#GitProj#" -- 
+            letter, letter_hl = "P", "%#GitProj#" --   
         end
     end
     return Spacer(1) .. bracket_hl .. "[" .. letter_hl .. letter .. bracket_hl .. "]"
@@ -110,15 +110,15 @@ function Status.GitSigns()
     if not g or not g.head then
         return ""
     end
-    local out = { "%#GitHeadSign#  " .. g.head }
+    local out = { "%#GitHeadSign# " .. g.head } -- 
     if (g.added or 0) > 0 then
-        table.insert(out, "%#GitAddSign#  " .. g.added)
+        table.insert(out, "%#GitAddSign# +" .. g.added) -- 
     end
     if (g.changed or 0) > 0 then
-        table.insert(out, "%#GitChangeSign#  " .. g.changed)
+        table.insert(out, "%#GitChangeSign# ~" .. g.changed) -- 
     end
     if (g.removed or 0) > 0 then
-        table.insert(out, "%#GitDeleteSign#  " .. g.removed)
+        table.insert(out, "%#GitDeleteSign# -" .. g.removed) -- 
     end
     return table.concat(out)
 end
@@ -158,7 +158,7 @@ function Status.Diagnostics()
 end
 
 function Status.CursorPos()
-    return " %#CursorPos#%l:%c 󰉸  %p%% "
+    return " %#CursorPos#%l:%c|%p%% "
 end
 
 -- Render statusline
