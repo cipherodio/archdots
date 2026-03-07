@@ -3,9 +3,9 @@ return {
     lazy = true,
     keys = {
         {
-            "<leader>aa",
+            "<leader>ma",
             "<cmd>MarkdownAgenda<cr>",
-            desc = "Open agenda",
+            desc = "Markdown: agenda",
         },
     },
     ---@module "markdown-agenda"
