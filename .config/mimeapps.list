@@ -17,3 +17,5 @@ x-scheme-handler/lbry=lbry.desktop
 inode/directory=file.desktop
 inode/x-empty=text.desktop
 application/octet-stream=text.desktop
+x-scheme-handler/sgnl=signal.desktop
+x-scheme-handler/signalcaptcha=signal.desktop
