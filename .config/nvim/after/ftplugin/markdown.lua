@@ -8,26 +8,36 @@ opt.spell = true
 opt.textwidth = 72
 opt.linebreak = true
 
-km.nmap("<leader>tc", h.toggle_conceal, { buffer = true, desc = "Toggle conceal" })
+km.nmap(
+    "<leader>mc",
+    h.toggle_conceal,
+    { buffer = true, desc = "Markdown: toggle conceal" }
+)
 
 -- Markdown agenda scheduler
 km.nmap(
-    "<leader>as",
+    "<leader>ms",
     s.insert_scheduled,
-    { buffer = true, desc = "Markdown: Schedule task" }
+    { buffer = true, desc = "Markdown: schedule task" }
 )
 km.nmap(
-    "<leader>ad",
+    "<leader>md",
     s.insert_deadline,
-    { buffer = true, desc = "Markdown: Deadline task" }
+    { buffer = true, desc = "Markdown: deadline task" }
 )
 km.nmap(
-    "<leader>ab",
+    "<leader>mb",
     s.insert_scheduled_and_deadline,
-    { buffer = true, desc = "Markdown: Scheduled + Deadline" }
+    { buffer = true, desc = "Markdown: scheduled + deadline" }
 )
--- Markdown checkbox toggle
-km.nmap("<A-CR>", cb.toggle, { buffer = true, desc = "Markdown: Toggle Checkbox" })
--- Creates new checkbox line
-km.nmap("<S-CR>", cb.new_checkbox, { buffer = true, desc = "Markdown: New checkbox" })
-km.imap("<S-CR>", cb.new_checkbox, { buffer = true, desc = "Markdown: New checkbox" })
+km.nmap("<A-CR>", cb.toggle, { buffer = true, desc = "Markdown: toggle checkbox" })
+km.nmap(
+    "<S-CR>",
+    cb.new_checkbox,
+    { buffer = true, desc = "Markdown: new line checkbox" }
+)
+km.imap(
+    "<S-CR>",
+    cb.new_checkbox,
+    { buffer = true, desc = "Markdown: new line checkbox" }
+)
