@@ -1,47 +1,48 @@
 return {
     "stevearc/oil.nvim",
+    event = "VeryLazy",
     dependencies = { "nvim-tree/nvim-web-devicons" },
-
     keys = {
         {
             "<leader>ee",
             function()
                 require("oil").toggle_float()
             end,
-            desc = "Open oil in float in cwd",
+            desc = "Oil: open float in cwd",
         },
         {
             "<leader>eh",
             function()
                 require("oil").toggle_float("~")
             end,
-            desc = "Home directory",
+            desc = "Oil: home directory",
         },
         {
             "<leader>en",
             function()
                 require("oil").toggle_float("~/hub/src/mdnotes")
             end,
-            desc = "Notes directory",
+            desc = "Oil: notes directory",
         },
         {
             "<leader>ep",
             function()
                 require("oil").toggle_float("~/hub/src")
             end,
-            desc = "Project directory",
+            desc = "Oil: project directory",
         },
         {
             "<leader>er",
             function()
                 require("oil").toggle_float("~/hub/review")
             end,
-            desc = "Review directory",
+            desc = "Oil: review directory",
         },
     },
-
+    ---@module "oil"
+    ---@type oil.SetupOpts
     opts = {
-        default_file_explorer = false,
+        default_file_explorer = true,
         skip_confirm_for_simple_edits = true,
         prompt_save_on_select_new_entry = false,
         delete_to_trash = true,
@@ -51,14 +52,19 @@ return {
             "size",
             "mtime",
         },
+        win_options = {
+            wrap = false,
+            number = false,
+            relativenumber = false,
+        },
         view_options = {
             show_hidden = true,
             natural_order = true,
+            show_header = false,
             is_always_hidden = function(name, _)
                 return name == ".." or name == ".git"
             end,
         },
-
         float = {
             enabled = true,
             padding = 2,
@@ -81,18 +87,4 @@ return {
             ["q"] = "actions.close",
         },
     },
-
-    config = function(_, opts)
-        require("oil").setup(opts)
-
-        vim.api.nvim_create_autocmd("FileType", {
-            pattern = "oil",
-            callback = function()
-                vim.opt_local.winfixwidth = true
-                vim.opt_local.number = false
-                vim.opt_local.relativenumber = false
-                vim.opt_local.signcolumn = "no"
-            end,
-        })
-    end,
 }
