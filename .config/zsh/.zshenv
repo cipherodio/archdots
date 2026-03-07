@@ -9,7 +9,6 @@ unsetopt PROMPT_SP 2>/dev/null
 export EDITOR="nvim"
 export VISUAL="nvim"
 export TERMINAL="alacritty"
-export TERM="xterm-256color"
 export BROWSER="firefox"
 export READER="zathura"
 export FILE="lf"
@@ -25,8 +24,8 @@ export XDG_STATE_HOME="$HOME/.local/state"
 
 # Relocate variables
 #export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority"
-export TMUX_TMPDIR="$XDG_RUNTIME_DIR"
 # export GNUPGHOME="$XDG_DATA_HOME/gnupg"
+export TMUX_TMPDIR="$XDG_RUNTIME_DIR"
 export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store"
 export INPUTRC="$XDG_CONFIG_HOME/shell/inputrc"
 export MBSYNCRC="$HOME/.config/mbsync/mbsyncrc"
@@ -45,6 +44,7 @@ export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/rgrc"
 export NIMBLE_DIR="$HOME/.config/nimble"
 export TASKRC="$XDG_CONFIG_HOME/task/taskrc"
 export TASKDATA="$XDG_DATA_HOME/task"
+export RUMDL_CACHE_DIR="$XDG_CACHE_HOME/rumdl"
 
 # Npm path
 export PATH="$XDG_DATA_HOME/npm/bin:$PATH"
@@ -57,7 +57,6 @@ export HISTFILE="$ZDOTDIR/.history"
 export LESSHISTFILE="-"
 export SUDO_ASKPASS="$HOME/.local/bin/rofipass"
 export SUDO_PROMPT="[sudo] password for %p: "
-# export SPROMPT="%F{blue}[%fzsh%F{blue}]%f correct %F{red}%R%f to %F{blue}%r%f [nyae]: "
 
 # Fzf
 export FZF_DEFAULT_OPTS_FILE="$XDG_CONFIG_HOME/fzf/themes/onedark"
