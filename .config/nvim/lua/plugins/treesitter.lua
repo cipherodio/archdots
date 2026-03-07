@@ -123,7 +123,7 @@ return {
 
                 vim.cmd("TSUpdate")
             end, {
-                desc = "Update Treesitter parsers",
+                desc = "Treesitter: update parsers",
             })
         end,
     },
