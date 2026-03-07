@@ -22,10 +22,12 @@ vim.api.nvim_create_autocmd("ColorScheme", { callback = apply_winbar_hl })
 local Status = {}
 
 function Status.WinbarFile()
-    local name = vim.api.nvim_buf_get_name(0)
+    local winid = vim.g.statusline_winid or 0
+    local bufnr = vim.api.nvim_win_get_buf(winid)
+    local name = vim.api.nvim_buf_get_name(bufnr)
     local full_path = (name == "") and "[No Name]" or vim.fn.fnamemodify(name, ":~")
-    local mod = vim.bo.modified and " %#WinbarModified#[+]" or ""
-    return Spacer(1) .. "%#WinbarFilename#  " .. full_path .. mod
+    local mod = vim.bo[bufnr].modified and " %#WinbarModified#[+]" or ""
+    return Spacer(1) .. "%#WinbarFilename# " .. full_path .. mod
 end
 
 function Status.SearchCount()
@@ -46,8 +48,13 @@ end
 
 -- Render winbar
 _G.render_winbar = function()
+    local winid = vim.g.statusline_winid or 0
+    local bufnr = vim.api.nvim_win_get_buf(winid)
+    local ft = vim.bo[bufnr].filetype
+    local bt = vim.bo[bufnr].buftype
     local excluded = { oil = true, fzf = true, notify = true, lazy = true }
-    if excluded[vim.bo.filetype] or vim.bo.buftype ~= "" then
+
+    if excluded[ft] or bt ~= "" then
         return ""
     end
 
