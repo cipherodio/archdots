@@ -13,7 +13,10 @@ return {
             ["<C-b>"] = { "scroll_documentation_up" },
             ["<C-f>"] = { "scroll_documentation_down" },
             ["<C-e>"] = { "hide" },
-            ["<CR>"] = { "accept", "fallback" },
+            ["<CR>"] = {
+                "accept",
+                "fallback",
+            },
             ["<Tab>"] = {
                 "select_next",
                 "snippet_forward",
@@ -31,9 +34,25 @@ return {
             },
         },
         appearance = { nerd_font_variant = "mono" },
-        -- completion = { ghost_text = { enabled = true } },
         signature = { enabled = true },
         sources = {
+            transform_items = function(_, items)
+                if vim.bo.filetype == "gitcommit" then
+                    return vim.tbl_filter(function(item)
+                        local label = item.label:lower()
+                        return not (
+                            label:match("^feat")
+                            or label:match("^fix")
+                            or label:match("^chore")
+                            or label:match("^refactor")
+                            or label:match("^style")
+                            or label:match("^perf")
+                            or label:match("^docs")
+                        )
+                    end, items)
+                end
+                return items
+            end,
             default = {
                 "lazydev",
                 "lsp",
@@ -48,19 +67,38 @@ return {
                     module = "lazydev.integrations.blink",
                     score_offset = 100,
                 },
-                spell = {
-                    name = "Spell",
-                    module = "blink-cmp-spell",
-                },
                 snippets = {
-                    score_offset = 100,
-                    opts = {
-                        search_paths = { vim.fn.stdpath("config") .. "/snippets" },
-                    },
+                    name = "snippets",
+                    module = "blink.cmp.sources.snippets",
+                    score_offset = function()
+                        local ft = vim.bo.filetype
+                        if ft == "gitcommit" then
+                            return 100
+                        end
+                        if ft == "markdown" then
+                            return -100
+                        end
+                        return -20
+                    end,
+                },
+                spell = {
+                    name = "spell",
+                    module = "blink-cmp-spell",
+                    score_offset = function()
+                        local ft = vim.bo.filetype
+                        if ft == "markdown" then
+                            return 50
+                        end
+                        if ft == "gitcommit" then
+                            return 20
+                        end
+                        return 50
+                    end,
                 },
             },
             per_filetype = {
                 markdown = { "spell", "lsp", "snippets", "buffer" },
+                gitcommit = { "snippets", "spell", "buffer" },
             },
         },
     },
