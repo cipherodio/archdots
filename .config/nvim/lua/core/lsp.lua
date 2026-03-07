@@ -1,13 +1,14 @@
 vim.diagnostic.config({
     -- virtual_lines = true,
-    virtual_text = {
-        prefix = "",
-        format = function(diagnostic)
-            local win = vim.api.nvim_get_current_win()
-            local cfg = vim.api.nvim_win_get_config(win)
-            return (cfg.relative ~= "") and diagnostic.message or "◾"
-        end,
-    },
+    -- virtual_text = {
+    --     prefix = "",
+    --     format = function(diagnostic)
+    --         local win = vim.api.nvim_get_current_win()
+    --         local cfg = vim.api.nvim_win_get_config(win)
+    --         -- ◾
+    --         return (cfg.relative ~= "") and diagnostic.message or "*"
+    --     end,
+    -- },
     float = {
         border = "single",
         header = "",
@@ -16,7 +17,7 @@ vim.diagnostic.config({
     },
     underline = false,
     severity_sort = true,
-    signs = false,
+    signs = true,
 })
 
 -- Enable LSP
@@ -24,7 +25,7 @@ vim.lsp.enable({
     "lua_ls",
     "pylsp",
     "ruff",
-    "marksman",
+    "rumdl",
     "bashls",
     "yamlls",
     "jsonls",
