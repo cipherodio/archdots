@@ -9,92 +9,91 @@ vim.g.maplocalleader = " "
 
 -- Basic
 km.nmap("q", "<nop>", { desc = "Disable q" })
-km.nmap("<leader>ww", "<cmd>w<cr>", { desc = "Save file" })
-km.nmap("<leader>wa", "<cmd>wa<cr>", { desc = "Save all buffer" })
-km.nmap("<leader>wr", "<cmd>e!<cr>", { desc = "Revert all changes" })
-km.nmap("<leader>qq", "<cmd>q!<cr>", { desc = "Force quit" })
-km.nmap("<leader>qa", "<cmd>qa<cr>", { desc = "Quit all/Exit Neovim" })
-km.nmap("<leader>qd", "<cmd>q<cr>", { desc = "Quit current buffer" })
-km.rmap("<leader>yd", 'yi"', { desc = "Yank inside double quotes" })
-km.rmap("<leader>ys", "yi'", { desc = "Yank inside single quotes" })
-km.nmap("<leader>i", "<cmd>Inspect<cr>", { desc = "Inspect" })
-km.emap("<esc>", h.smart_esc, { desc = "Editor: Clear Search on Escape" })
-km.nmap("<leader>aD", "<cmd>%d<cr>", { desc = "DELETE ALL" })
+km.nmap("<leader>ww", "<cmd>w<cr>", { desc = "Write: save file" })
+km.nmap("<leader>wa", "<cmd>wa<cr>", { desc = "Write: save all buffer" })
+km.nmap("<leader>wr", "<cmd>e!<cr>", { desc = "Write: undo all changes" })
+km.nmap("<leader>qq", "<cmd>q!<cr>", { desc = "Quit: force" })
+km.nmap("<leader>qa", "<cmd>qa<cr>", { desc = "Quit: all/exit neovim" })
+km.nmap("<leader>qd", "<cmd>q<cr>", { desc = "Quit: current buffer" })
+km.rmap("<leader>yd", 'yi"', { desc = "Yank: inside double quotes" })
+km.rmap("<leader>ys", "yi'", { desc = "Yank: inside single quotes" })
+km.nmap("<leader>i", "<cmd>Inspect<cr>", { desc = "Editor: inspect" })
+km.emap("<esc>", h.smart_esc, { desc = "Editor: clear search on escape" })
+km.nmap("<leader>wd", "<cmd>%d<cr>", { desc = "Write: delete all text in file" })
 
--- Opens my agenda markdown file
-km.nmap("<leader>aq", h.open_agenda, { desc = "Editor: Open Agenda" })
-
--- DeepSeek Balance check
-km.nmap("<leader>aB", cur.check_deepseek_balance, { desc = "AI: Check Balance" })
+-- Personal
+km.nmap("<leader>mf", h.open_agenda, { desc = "Markdown: open agenda" })
+km.nmap("<leader>ab", cur.check_deepseek_balance, { desc = "AI: check balance" })
 
 -- LSP's
-km.nmap("<leader>lo", lsph.show_root_dir, { desc = "LSP: Show Root Directory" })
-km.nmap("<leader>lc", lsph.toggle_codelens, { desc = "LSP: Toggle CodeLens" })
-km.nmap("<leader>li", lsph.toggle_inlay_hints, { desc = "LSP: Toggle Inlay Hints" })
-km.nmap("<leader>lr", lsph.rename, { desc = "LSP: Rename Symbol" })
-km.nmap("<leader>lf", lsph.toggle_autoformat, { desc = "Toggle Autoformat" })
-km.nmap("[d", lsph.diag_prev, { desc = "LSP: Previous Diagnostic" })
-km.nmap("]d", lsph.diag_next, { desc = "LSP: Next Diagnostic" })
+km.nmap("<leader>lo", lsph.show_root_dir, { desc = "LSP: show root directory" })
+km.nmap("<leader>lc", lsph.toggle_codelens, { desc = "LSP: toggle codelens" })
+km.nmap("<leader>li", lsph.toggle_inlay_hints, { desc = "LSP: toggle inlay hints" })
+km.nmap("<leader>lr", lsph.rename, { desc = "LSP: rename symbol" })
+km.nmap("<leader>lf", lsph.toggle_autoformat, { desc = "Format: toggle" })
+km.nmap("[d", lsph.diag_prev, { desc = "LSP: previous diagnostic" })
+km.nmap("]d", lsph.diag_next, { desc = "LSP: next diagnostic" })
 
 -- Spelling
-km.nmap("<leader>st", "zg", { desc = "Spell add Tagalog" })
-km.nmap("<leader>se", "2zg", { desc = "Spell add English" })
-km.nmap("<leader>sn", "]s", { desc = "Next spelling error" })
-km.nmap("<leader>sp", "[s", { desc = "Previous spelling error" })
-km.nmap("<leader>sw", "zw", { desc = "Mark word as wrong" })
-km.nmap("<leader>su", "zuw", { desc = "Undo mark wrong" })
-km.nmap("<leader>sr", "zug", { desc = "Revert add word" })
-km.nmap("<leader>ss", "z=", { desc = "Spell suggestions" })
+km.nmap("<leader>st", "zg", { desc = "Spell: add tagalog" })
+km.nmap("<leader>se", "2zg", { desc = "Spell: add english" })
+km.nmap("<leader>sT", h.smart_spell("undo", 1), { desc = "Spell: undo spell tagalog" })
+km.nmap("<leader>sE", h.smart_spell("undo", 2), { desc = "Spell: undo spell english" })
+km.nmap("<leader>sc", h.clean_spell_files, { desc = "Spell: clean spell file" })
+km.nmap("<leader>sr", h.report_stats, { desc = "Spell: report writing stats" })
+km.nmap("<leader>sn", "]s", { desc = "Spell: next spelling error" })
+km.nmap("<leader>sp", "[s", { desc = "Spell: previous spelling error" })
+km.nmap("<leader>ss", "z=", { desc = "Spell: suggestions" })
 
 -- Buffers
-km.nmap("L", "<cmd>bnext<cr>", { desc = "Next buffer" })
-km.nmap("H", "<cmd>bprevious<cr>", { desc = "Previous buffer" })
-km.nmap("<leader>bv", "<cmd>vnew<cr>", { desc = "New vertical split" })
-km.nmap("<leader>bh", "<cmd>new<cr>", { desc = "New Horizontal split" })
-km.nmap("<leader>bV", "<cmd>vsplit<cr>", { desc = "Vertical split" })
-km.nmap("<leader>bH", "<cmd>split<cr>", { desc = "Horizontal split" })
+km.nmap("L", "<cmd>bnext<cr>", { desc = "Buffer: next" })
+km.nmap("H", "<cmd>bprevious<cr>", { desc = "Buffer: previous" })
+km.nmap("<leader>bv", "<cmd>vnew<cr>", { desc = "Split: new vertical" })
+km.nmap("<leader>bh", "<cmd>new<cr>", { desc = "Split: new horizontal" })
+km.nmap("<leader>bV", "<cmd>vsplit<cr>", { desc = "Split: vertical" })
+km.nmap("<leader>bH", "<cmd>split<cr>", { desc = "Split: horizontal" })
 -- km.nmap("<leader>bd", "<cmd>enew | bd #<cr>", { desc = "Close buffer, keep split" })
-km.nmap("<leader>bd", "<cmd>bd<cr>", { desc = "Close buffer" })
+km.nmap("<leader>bd", "<cmd>bd<cr>", { desc = "Split: close buffer" })
 
 -- Window navigation
-km.nmap("<C-h>", "<C-w>h", { desc = "Move to left window" })
-km.nmap("<C-j>", "<C-w>j", { desc = "Move to lower window" })
-km.nmap("<C-k>", "<C-w>k", { desc = "Move to upper window" })
-km.nmap("<C-l>", "<C-w>l", { desc = "Move to right window" })
+km.nmap("<C-h>", "<C-w>h", { desc = "move to left window" })
+km.nmap("<C-j>", "<C-w>j", { desc = "move to lower window" })
+km.nmap("<C-k>", "<C-w>k", { desc = "move to upper window" })
+km.nmap("<C-l>", "<C-w>l", { desc = "move to right window" })
 
 -- Resize windows
-km.nmap("<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase window height" })
-km.nmap("<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease window height" })
-km.nmap("<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease window width" })
-km.nmap("<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase window width" })
+km.nmap("<C-Up>", "<cmd>resize +2<cr>", { desc = "increase window height" })
+km.nmap("<C-Down>", "<cmd>resize -2<cr>", { desc = "decrease window height" })
+km.nmap("<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "decrease window width" })
+km.nmap("<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "increase window width" })
 
 -- Move lines / selections
-km.nmap("<A-j>", "<cmd>m .+1<cr>==", { desc = "Move line down" })
-km.nmap("<A-k>", "<cmd>m .-2<cr>==", { desc = "Move line up" })
-km.imap("<A-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move line down" })
-km.imap("<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move line up" })
-km.vmap("<A-j>", ":m '>+1<cr>gv=gv", { desc = "Move selection down" })
-km.vmap("<A-k>", ":m '<-2<cr>gv=gv", { desc = "Move selection up" })
+km.nmap("<A-j>", "<cmd>m .+1<cr>==", { desc = "move line down" })
+km.nmap("<A-k>", "<cmd>m .-2<cr>==", { desc = "move line up" })
+km.imap("<A-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "move line down" })
+km.imap("<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "move line up" })
+km.vmap("<A-j>", ":m '>+1<cr>gv=gv", { desc = "move selection down" })
+km.vmap("<A-k>", ":m '<-2<cr>gv=gv", { desc = "move selection up" })
 
 -- Smart navigation
-km.emap("j", h.smart_j, { desc = "Editor: Move down (visual if no count)" })
-km.emap("k", h.smart_k, { desc = "Editor: Move up (visual if no count)" })
+km.emap("j", h.smart_j, { desc = "move down (visual if no count)" })
+km.emap("k", h.smart_k, { desc = "move up (visual if no count)" })
 
 -- Smart Search (Always forward with n, backward with N)
-km.emap("n", h.smart_n, { desc = "Editor: Next search result" })
-km.emap("N", h.smart_N, { desc = "Editor: Previous search result" })
+km.emap("n", h.smart_n, { desc = "next search result" })
+km.emap("N", h.smart_N, { desc = "previous search result" })
 
 -- Better indenting
-km.vmap("<", "<gv", { desc = "Indent left and stay in visual mode" })
-km.vmap(">", ">gv", { desc = "Indent right and stay in visual mode" })
+km.vmap("<", "<gv", { desc = "indent left and stay in visual mode" })
+km.vmap(">", ">gv", { desc = "indent right and stay in visual mode" })
 
 -- Do not yank on x / c
-km.map({ "n", "v" }, "x", '"_x', { desc = "Delete without yanking" })
-km.map({ "n", "v" }, "c", '"_c', { desc = "Change without yanking" })
+km.map({ "n", "v" }, "x", '"_x', { desc = "delete without yanking" })
+km.map({ "n", "v" }, "c", '"_c', { desc = "change without yanking" })
 
 -- Better deletion
-km.emap("dd", h.smart_dd, { desc = "Editor: Smart Delete (No yank on empty)" })
+km.emap("dd", h.smart_dd, { desc = "no yank on empty" })
 
 -- Word replacer
-km.nmap("<leader>ar", r.replace_word_fast, { desc = "Replace all word under cursor" })
-km.nmap("<leader>aR", r.replace_word_confirm, { desc = "Select with tab to replace" })
+km.nmap("<leader>ar", r.replace_word_fast, { desc = "Replacer: all word" })
+km.nmap("<leader>aR", r.replace_word_confirm, { desc = "Replacer: tab to select word" })
