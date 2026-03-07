@@ -7,7 +7,7 @@
     blue : #61afef;
     white : #abb2bf;
     highlight : bold #f65866;
-    font : "Iosevka Nerd Font 16";
+    font: "monospace 14";
 }
 
 configuration {
