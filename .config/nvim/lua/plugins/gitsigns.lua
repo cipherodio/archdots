@@ -7,15 +7,18 @@ return {
             group = vim.api.nvim_create_augroup("GitSignsLazyLoad", { clear = true }),
             callback = function()
                 local path = vim.api.nvim_buf_get_name(0)
+
                 if path == "" or vim.bo.buftype ~= "" then
                     return
                 end
 
+                local file_dir = vim.fn.fnamemodify(path, ":h")
                 local bare_git_dir = vim.env.HOME .. "/.config/.dots"
                 local home_dir = vim.env.HOME
-
-                -- Check for standard local git repo
-                local is_git = vim.system({ "git", "rev-parse", "--is-inside-work-tree" })
+                local is_git = vim.system(
+                    { "git", "rev-parse", "--is-inside-work-tree" },
+                    { cwd = file_dir }
+                )
                     :wait().code == 0
 
                 -- Check bare repo
@@ -32,7 +35,6 @@ return {
                     is_dotfile = obj.code == 0
                 end
 
-                -- Load Gitsigns if it's a repo or a tracked dotfile
                 if is_git or is_dotfile then
                     require("lazy").load({ plugins = { "gitsigns.nvim" } })
                     vim.api.nvim_del_augroup_by_name("GitSignsLazyLoad")
@@ -119,15 +121,15 @@ return {
         numhl = false,
         current_line_blame = false,
         signs = {
-            add = { text = "┃" },
-            change = { text = "┃" },
-            delete = { text = "┃" },
-            topdelete = { text = "┃" },
-            changedelete = { text = "┃" },
-            untracked = { text = "┃" },
+            add = { text = "▕" },
+            change = { text = "▕" },
+            delete = { text = "▕" },
+            topdelete = { text = "▕" },
+            changedelete = { text = "▕" },
+            untracked = { text = "▕" },
         },
         -- NOTE: This tells Gitsigns the path of my Bare repo
-        worktrees = {
+        worktrees = { --FIX:
             {
                 toplevel = vim.env.HOME,
                 gitdir = vim.env.HOME .. "/.config/.dots",
