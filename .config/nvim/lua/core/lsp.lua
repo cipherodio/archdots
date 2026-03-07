@@ -5,8 +5,7 @@ vim.diagnostic.config({
     --     format = function(diagnostic)
     --         local win = vim.api.nvim_get_current_win()
     --         local cfg = vim.api.nvim_win_get_config(win)
-    --         -- ◾
-    --         return (cfg.relative ~= "") and diagnostic.message or "*"
+    --         return (cfg.relative ~= "") and diagnostic.message or "◾"
     --     end,
     -- },
     float = {
