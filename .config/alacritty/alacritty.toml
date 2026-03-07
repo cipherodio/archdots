@@ -27,6 +27,7 @@ glyph_offset.y = 0
 family = "monospace"
 style = "Regular"
 # style = "SemiBold"
+# style = "Bold"
 
 [font.bold]
 family = "monospace"
