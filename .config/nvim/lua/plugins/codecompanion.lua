@@ -44,7 +44,7 @@ return {
         {
             "<leader>aw",
             "<cmd>CodeCompanionChat Toggle<cr>",
-            desc = "AI Chat",
+            desc = "AI: Chat",
             mode = { "n", "v" },
         },
     },
