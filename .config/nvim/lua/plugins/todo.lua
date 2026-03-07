@@ -20,7 +20,7 @@ return {
         {
             "<leader>fT",
             "<cmd>TodoFzfLua<cr>",
-            desc = "TODO comments",
+            desc = "Todo: comments",
         },
     },
     opts = {},
