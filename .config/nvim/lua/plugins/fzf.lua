@@ -13,44 +13,44 @@ return {
         {
             "<leader>gf",
             function()
-                require("utils.barehelper").smart_git("git_files")
+                require("utils.fzfgithelper").smart_git("git_files")
             end,
             desc = "Fzf: Git files",
         },
         {
             "<leader>gs",
             function()
-                require("utils.barehelper").smart_git("git_status")
+                require("utils.fzfgithelper").smart_git("git_status")
             end,
             desc = "Fzf: status",
         },
         {
             "<leader>gc",
             function()
-                require("utils.barehelper").smart_git("git_commits")
+                require("utils.fzfgithelper").smart_git("git_commits")
             end,
             desc = "Fzf: show Git commits",
         },
         {
             "<leader>gC",
             function()
-                require("utils.barehelper").smart_git("git_bcommits")
+                require("utils.fzfgithelper").smart_git("git_bcommits")
             end,
             desc = "Fzf: buffer commits",
         },
         {
             "<leader>gb",
             function()
-                require("utils.barehelper").smart_git("git_branches")
+                require("utils.fzfgithelper").smart_git("git_branches")
             end,
             desc = "Fzf: branches",
         },
         {
             "<leader>fw",
             function()
-                require("utils.barehelper").smart_git("live_grep")
+                require("utils.fzfgithelper").smart_git("live_grep")
             end,
-            desc = "Fzf: project live grep",
+            desc = "Fzf: project smart live grep",
         },
         {
             "<leader>fo",
@@ -191,7 +191,12 @@ return {
             commits = { prompt = "   Git Commits" },
             branches = { prompt = "   Git Branch" },
         },
-        grep = { prompt = "   Grep Word " },
+        grep = {
+            prompt = "   Grep Word ",
+            multiprocess = true,
+            rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 -e",
+        },
+        -- grep = { prompt = "   Grep Word " },
         oldfiles = { prompt = "   Recent Files " },
         buffers = { prompt = "   Buffers " },
         keymaps = { prompt = "   Keymaps " },
