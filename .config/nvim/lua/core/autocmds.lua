@@ -74,12 +74,7 @@ autocmd("BufReadPost", {
     desc = "Save cursor position on quit",
     group = groups.cursor_pos,
     callback = function()
-        vim.schedule(function()
-            local mark = vim.api.nvim_buf_get_mark(0, '"')
-            if mark[1] > 1 then
-                pcall(vim.api.nvim_win_set_cursor, 0, mark)
-            end
-        end)
+        h.restore_cursor()
     end,
 })
 
