@@ -909,6 +909,7 @@ hi(0, "vimVar", { fg = "#abb2bf" })
 -- hi(0, "BlinkIndentOrange", { fg = "#d19a66" })
 -- hi(0, "BlinkIndentViolet", { fg = "#c678dd" })
 -- hi(0, "BlinkIndentBlue", { fg = "#61afef" })
+hi(0, "FloatTitle", { bg = "#31353f" }) -- for oil path directory
 
 -- Terminal colors
 local g = vim.g
