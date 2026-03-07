@@ -14,7 +14,7 @@ return {
                 vim.env.GIT_WORK_TREE = nil
                 require("neogit").open({ cwd = vim.fn.expand("%:p:h") })
             end,
-            desc = "Open neogit (Project)",
+            desc = "Neogit: project",
         },
         {
             "<leader>gd",
@@ -29,7 +29,7 @@ return {
                 --     vim.env.GIT_WORK_TREE = nil
                 -- end, 1000)
             end,
-            desc = "Open neogit (Dotfiles)",
+            desc = "Neogit: dotfiles",
         },
     },
     config = function(_, opts)
