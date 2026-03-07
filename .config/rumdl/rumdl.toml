@@ -1,0 +1,10 @@
+[MD013]
+line-length = 72
+code-blocks = false
+
+[MD007]
+indent = 4
+
+[MD073]
+enabled = true
+anchor-style = "github"
