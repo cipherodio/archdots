@@ -1,5 +1,20 @@
 local M = {}
 
+-- Save and restore cursor position
+function M.restore_cursor()
+    if vim.bo.buftype ~= "" or vim.wo.diff then
+        return
+    end
+    local mark = vim.api.nvim_buf_get_mark(0, '"')
+    local line_count = vim.api.nvim_buf_line_count(0)
+    if mark[1] > 1 and mark[1] <= line_count then
+        if vim.api.nvim_win_get_cursor(0)[1] == 1 then
+            vim.api.nvim_win_set_cursor(0, mark)
+            vim.cmd("normal! zz")
+        end
+    end
+end
+
 -- Clear highlight search with Escape
 function M.smart_esc()
     if vim.v.hlsearch == 1 then
