@@ -6,7 +6,7 @@ return {
             function()
                 require("nvim-highlight-colors").toggle()
             end,
-            desc = "Color highlight toggle",
+            desc = "Toggle: color highlight",
         },
     },
     -- opts = {
