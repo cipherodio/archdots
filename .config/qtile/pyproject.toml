@@ -6,3 +6,6 @@ description = "My Qtile window manager configuration"
 [tool.ruff]
 # Optional: Add Ruff-specific rules here
 line-length = 79
+
+[tool.ruff.lint.per-file-ignores]
+"config.py" = ["F401"]
