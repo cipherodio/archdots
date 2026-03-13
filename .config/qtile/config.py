@@ -1,13 +1,12 @@
 from libqtile import hook
 
-from bars.onedark import screens as screens
-from modules.floating import floating_layout as floating_layout
-from modules.groups import groups as groups
-from modules.keys import keys as keys
-from modules.keys import mod as mod
-from modules.layouts import layouts as layouts
-from modules.mouse import mouse as mouse
-from modules.rules import dgroups_app_rules as dgroups_app_rules
+from bars.onedark import screens
+from modules.floating import floating_layout
+from modules.groups import groups
+from modules.keys import keys, mod
+from modules.layouts import layouts
+from modules.mouse import mouse
+from modules.rules import dgroups_app_rules
 
 follow_mouse_focus = True
 bring_front_click = False
@@ -22,7 +21,7 @@ wmname = "Qtile"
 
 # This will change your pointer cursor to the standard cursor
 # you chose in your .Xresources file on Qtile.
-@hook.subscribe.startup
+@hook.subscribe.startup_once
 def runner():
     import subprocess
 
