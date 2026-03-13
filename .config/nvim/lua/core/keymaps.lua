@@ -3,6 +3,7 @@ local h = require("utils.helper")
 local km = require("utils.keyhelper")
 local lsph = require("utils.lsphelper")
 local r = require("utils.replacer")
+local s = require("utils.spellhelper")
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
@@ -11,7 +12,10 @@ vim.g.maplocalleader = " "
 km.nmap("q", "<nop>", { desc = "Disable q" })
 km.nmap("<leader>ww", "<cmd>w<cr>", { desc = "Write: save file" })
 km.nmap("<leader>wa", "<cmd>wa<cr>", { desc = "Write: save all buffer" })
+km.nmap("<leader>wq", "<cmd>wq<cr>", { desc = "Write: save and quit" })
 km.nmap("<leader>wr", "<cmd>e!<cr>", { desc = "Write: undo all changes" })
+km.nmap("<leader>wn", h.create_and_open, { desc = "Write: new file in current dir" })
+km.nmap("<leader>wt", h.create_on_disk, { desc = "Write: touch in current dir" })
 km.nmap("<leader>qq", "<cmd>q!<cr>", { desc = "Quit: force" })
 km.nmap("<leader>qa", "<cmd>qa<cr>", { desc = "Quit: all/exit neovim" })
 km.nmap("<leader>qd", "<cmd>q<cr>", { desc = "Quit: current buffer" })
@@ -35,15 +39,16 @@ km.nmap("[d", lsph.diag_prev, { desc = "LSP: previous diagnostic" })
 km.nmap("]d", lsph.diag_next, { desc = "LSP: next diagnostic" })
 
 -- Spelling
-km.nmap("<leader>st", "zg", { desc = "Spell: add tagalog" })
-km.nmap("<leader>se", "2zg", { desc = "Spell: add english" })
-km.nmap("<leader>sT", h.smart_spell("undo", 1), { desc = "Spell: undo spell tagalog" })
-km.nmap("<leader>sE", h.smart_spell("undo", 2), { desc = "Spell: undo spell english" })
-km.nmap("<leader>sc", h.clean_spell_files, { desc = "Spell: clean spell file" })
-km.nmap("<leader>sr", h.report_stats, { desc = "Spell: report writing stats" })
+km.nvmap("zg", s.spell_add_lower(1), { desc = "Spell: add tagalog" })
+km.nvmap("<leader>st", s.spell_add_lower(1), { desc = "Spell: add tagalog" })
+km.nvmap("<leader>se", s.spell_add_lower(2), { desc = "Spell: add english" })
+km.nvmap("<leader>sT", s.smart_spell(1), { desc = "Spell: undo spell tagalog" })
+km.nvmap("<leader>sE", s.smart_spell(2), { desc = "Spell: undo spell english" })
+km.nmap("<leader>sc", s.clean_spell_files, { desc = "Spell: clean spell file" })
+km.nmap("<leader>sr", s.report_stats, { desc = "Spell: report writing stats" })
 km.nmap("<leader>sn", "]s", { desc = "Spell: next spelling error" })
 km.nmap("<leader>sp", "[s", { desc = "Spell: previous spelling error" })
-km.nmap("<leader>ss", "z=", { desc = "Spell: suggestions" })
+km.nmap("<leader>sl", s.fzf_spell_all, { desc = "Fzf: list all spell errors" })
 
 -- Buffers
 km.nmap("L", "<cmd>bnext<cr>", { desc = "Buffer: next" })
@@ -52,7 +57,6 @@ km.nmap("<leader>bv", "<cmd>vnew<cr>", { desc = "Split: new vertical" })
 km.nmap("<leader>bh", "<cmd>new<cr>", { desc = "Split: new horizontal" })
 km.nmap("<leader>bV", "<cmd>vsplit<cr>", { desc = "Split: vertical" })
 km.nmap("<leader>bH", "<cmd>split<cr>", { desc = "Split: horizontal" })
--- km.nmap("<leader>bd", "<cmd>enew | bd #<cr>", { desc = "Close buffer, keep split" })
 km.nmap("<leader>bd", "<cmd>bd<cr>", { desc = "Split: close buffer" })
 
 -- Window navigation
