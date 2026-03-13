@@ -15,18 +15,30 @@ YELLOW="${ESC}[33m"
 RED="${ESC}[31m"
 RESET="${ESC}[0m"
 
+# Check required commands
+for cmd in curl sudo; do
+    if ! command -v "$cmd" &>/dev/null; then
+        printf '%sError: %s is not installed.%s\n' "$RED" "$cmd" "$RESET"
+        exit 1
+    fi
+done
+
 printf '%s%s🔔 Latest Arch Linux news:%s\n\n' "$BOLD" "$BLUE" "$RESET"
 
 if ! news="$(
-    curl -fs "$NEWS_FEED" |
+    curl -fs --max-time 10 --connect-timeout 5 "$NEWS_FEED" |
         sed -n '/<item>/,/<\/item>/ {
             s/.*<title>\(.*\)<\/title>.*/\1/p
         }' |
-        sed 's/&gt;/>/g' |
+        sed -e 's/&gt;/>/g' -e 's/&lt;/</g' -e 's/&amp;/\&/g' -e 's/&quot;/"/g' -e "s/&apos;/'/g" |
         head -n "$NEWS_LIMIT"
 )"; then
     printf '%sError: failed to fetch Arch Linux news.%s\n' "$RED" "$RESET"
     exit 1
+fi
+
+if [[ -z "$news" ]]; then
+    printf '%sWarning: No news items found.%s\n' "$YELLOW" "$RESET"
 fi
 
 while IFS= read -r title; do
@@ -41,10 +53,21 @@ while IFS= read -r title; do
 done <<<"$news"
 
 printf '\n%sContinue with system upgrade? [y/N] %s' "$BOLD" "$RESET"
-read -r answer
+read -r -t 30 answer
+
+if [[ -z "$answer" ]]; then
+    printf '\n%s⏹️  No response - upgrade cancelled.%s\n' "$BOLD" "$RESET"
+    exit 0
+fi
 
 case "$answer" in
 [yY])
+    # Check if pacman is already running
+    if [[ -f /var/lib/pacman/db.lck ]]; then
+        printf '%s%s⚠️  Pacman is already running (lock file exists).%s\n' "$BOLD" "$RED" "$RESET"
+        exit 1
+    fi
+
     printf '%s%s⏫ Running pacman -Syu...%s\n' "$BOLD" "$RED" "$RESET"
     exec sudo pacman -Syu
     ;;
