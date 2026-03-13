@@ -44,4 +44,8 @@ function M.omap(lhs, rhs, opts)
     M.map("o", lhs, rhs, opts)
 end
 
+function M.nvmap(lhs, rhs, opts)
+    M.map({ "n", "v" }, lhs, rhs, opts)
+end
+
 return M
