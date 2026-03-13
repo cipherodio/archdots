@@ -1,10 +1,24 @@
+[global]
+disable = ["MD036"]
+
 [MD013]
 line-length = 72
 code-blocks = false
+reflow = true
+# reflow-mode = "normalize"
+reflow-mode = "default"
+tables = false
+
+[MD060]
+enabled = true
+style = "aligned"
+
+# Generate toc
+[MD073]
+enabled = true
 
 [MD007]
 indent = 4
 
-[MD073]
-enabled = true
+[MD051]
 anchor-style = "github"
