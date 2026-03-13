@@ -1,4 +1,11 @@
 {
+    "Surround Bold Quotes": {
+        "prefix": "italicS",
+        "body": [
+            "\"*$1*\""
+        ],
+        "description": "Output bold quotes with cursor in middle"
+    },
     "Table of Contents Markers": {
         "prefix": "toc",
         "body": [
@@ -7,5 +14,12 @@
             "<!-- tocstop -->"
         ],
         "description": "Insert TOC start and stop markers"
+    },
+    "Em Dash Word Connector": {
+        "prefix": "mdash",
+        "body": [
+            "${1:salita}—${2:paliwanag}$0"
+        ],
+        "description": "Insert a formal em dash"
     }
 }
