@@ -86,7 +86,6 @@ return {
         },
         prompt_library = {
             ["New Story"] = require("utils.prompts.new_story"),
-            ["Continue Story"] = require("utils.prompts.continue_story"),
             ["Generate Commit"] = require("utils.prompts.commit"),
         },
     },
