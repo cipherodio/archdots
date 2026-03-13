@@ -4,28 +4,11 @@ local gears = require("gears")
 
 local M = {}
 
--- WiFi SSID Widget | Updates every 10s
-M.wifi_widget = wibox.widget.textbox()
-gears.timer({
-	timeout = 10,
-	call_now = true,
-	autostart = true,
-	callback = function()
-		awful.spawn.easy_async_with_shell(
-			"nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -d: -f2",
-			function(stdout)
-				local ssid = stdout:gsub("\n", "")
-				if ssid == "" then
-					M.wifi_widget.text = " 󰖪 Disconnected"
-				else
-					M.wifi_widget.text = " 󰖩 " .. ssid
-				end
-			end
-		)
-	end,
-})
+M.wifi_widget = awful.widget.watch("nmcli -t -f active,ssid dev wifi", 10, function(widget, stdout)
+	local ssid = stdout:match("yes:(.-)\n")
+	widget:set_text(ssid and (" 󰖩 " .. ssid) or " 󰖪 Disconnected")
+end)
 
--- RAM Percentage Widget | Updates every 5s
 M.ram_widget = wibox.widget.textbox()
 gears.timer({
 	timeout = 5,
@@ -47,48 +30,57 @@ gears.timer({
 	end,
 })
 
--- Brightness Widget | Updates every 10s
 M.brightness_widget = wibox.widget.textbox()
 gears.timer({
 	timeout = 10,
-	call_now = true,
 	autostart = true,
 	callback = function()
 		local path = "/sys/class/backlight/amdgpu_bl2/"
 		local f_max = io.open(path .. "max_brightness", "r")
 		local f_cur = io.open(path .. "brightness", "r")
-
 		if f_max and f_cur then
 			local max = tonumber(f_max:read("*all"))
 			local cur = tonumber(f_cur:read("*all"))
 			f_max:close()
 			f_cur:close()
 			if max and cur then
-				local percent = (cur / max) * 100
-				M.brightness_widget.text = string.format("󰃟 %.0f%%", percent)
+				M.brightness_widget.text = string.format("󰃟 %.0f%%", (cur / max) * 100)
 			end
 		else
+			if f_max then
+				f_max:close()
+			end
+			if f_cur then
+				f_cur:close()
+			end
 			M.brightness_widget.text = " ?%"
 		end
 	end,
 })
 
--- Volume Widget | Updates every 0.1s
-M.volume_widget = awful.widget.watch("wpctl get-volume @DEFAULT_AUDIO_SINK@", 0.1, function(widget, stdout)
-	local volume_num = stdout:match("(%d%.%d%d)")
-	local is_muted = stdout:match("%[MUTED%]")
+M.volume_widget = wibox.widget.textbox()
+local function update_vol_widget()
+	awful.spawn.easy_async("wpctl get-volume @DEFAULT_AUDIO_SINK@", function(stdout)
+		local volume_num = stdout:match("(%d%.%d%d)")
+		local is_muted = stdout:match("%[MUTED%]")
+		if is_muted then
+			M.volume_widget.text = "   Muted"
+		elseif volume_num then
+			local percent = tonumber(volume_num) * 100
+			M.volume_widget.text = string.format("󰕾 %.0f%%", percent)
+		else
+			M.volume_widget.text = " ?%"
+		end
+	end)
+end
+awesome.connect_signal("volume_refresh", update_vol_widget)
+gears.timer.delayed_call(update_vol_widget)
+gears.timer({
+	timeout = 30,
+	autostart = true,
+	callback = update_vol_widget,
+})
 
-	if is_muted then
-		widget:set_text("   Muted")
-	elseif volume_num then
-		local percent = tonumber(volume_num) * 100
-		widget:set_text(string.format("󰕾 %.0f%%", percent))
-	else
-		widget:set_text(" ?%")
-	end
-end)
-
--- Battery Widget | Updates every 30s
 M.bat_widget = wibox.widget.textbox()
 gears.timer({
 	timeout = 30,
