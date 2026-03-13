@@ -2,7 +2,7 @@ return {
     "brenoprata10/nvim-highlight-colors",
     keys = {
         {
-            "<leader>ac",
+            "<leader>ah",
             function()
                 require("nvim-highlight-colors").toggle()
             end,
