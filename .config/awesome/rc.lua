@@ -9,7 +9,7 @@ local beautiful = require("beautiful")
 -- Global
 beautiful.init(gears.filesystem.get_configuration_dir() .. "themes/onedark.lua")
 beautiful.font = "monospace 14"
-beautiful.useless_gap = 5
+beautiful.useless_gap = 2
 beautiful.border_width = 1
 
 -- Modules
