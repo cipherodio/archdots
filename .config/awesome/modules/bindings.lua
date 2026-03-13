@@ -102,19 +102,19 @@ M.globalkeys = gears.table.join(
 	end, { description = "unclutter" }),
 	-- Media
 	awful.key({ env.altkey, "Shift" }, "equal", function()
-		awful.spawn("audiobar 0 +5")
+		awful.spawn("volupdate 0 +5")
 	end, { description = "Volume up with dunst notification" }),
 	awful.key({ env.altkey, "Shift" }, "minus", function()
-		awful.spawn("audiobar 0 -5")
+		awful.spawn("volupdate 0 -5")
 	end, { description = "Volume down with dunst notification" }),
 	awful.key({}, "XF86AudioMute", function()
 		awful.spawn.with_shell("pactl set-sink-mute @DEFAULT_SINK@ toggle")
 	end, { description = "mute" }),
 	awful.key({}, "XF86AudioRaiseVolume", function()
-		awful.spawn.with_shell("audiobar 0 +5")
+		awful.spawn.with_shell("volupdate 0 +5")
 	end, { description = "volume up" }),
 	awful.key({}, "XF86AudioLowerVolume", function()
-		awful.spawn.with_shell("audiobar 0 -5")
+		awful.spawn.with_shell("volupdate 0 -5")
 	end, { description = "volume down" }),
 	awful.key({ env.modkey }, "s", function()
 		awful.spawn.with_shell("spotify-toggle")
