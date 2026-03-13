@@ -12,19 +12,19 @@ for i in groups:
                 [mod],
                 i.name,
                 lazy.group[i.name].toscreen(),
-                desc="Switch to group {}".format(i.name),
+                desc=f"Switch to group {i.name}",
             ),
             Key(
                 [mod, "shift"],
                 i.name,
                 lazy.window.togroup(i.name, switch_group=True),
-                desc="Switch & move focused window to group {}".format(i.name),
+                desc=f"Switch & move focused window to group {i.name}",
             ),
             Key(
                 [mod, "control"],
                 i.name,
                 lazy.window.togroup(i.name),
-                desc="move focused window to group {}".format(i.name),
+                desc=f"move focused window to group {i.name}",
             ),
         ]
     )
@@ -47,7 +47,7 @@ groups.append(
             ),
             DropDown(
                 "nmtui",
-                terminal + " -e nmtui",
+                f"{terminal} -e nmtui",
                 on_focus_lost_hide=False,
                 warp_pointer=False,
                 opacity=1.00,
@@ -70,7 +70,7 @@ groups.append(
             ),
             DropDown(
                 "btop",
-                "alacritty --class sysmon -e btop",
+                f"{terminal} --class sysmon -e btop",
                 match=Match(wm_class="sysmon"),
                 on_focus_lost_hide=False,
                 warp_pointer=False,
@@ -82,7 +82,7 @@ groups.append(
             ),
             DropDown(
                 "htop",
-                "alacritty --class sysmon -e htop",
+                f"{terminal} --class sysmon -e htop",
                 match=Match(wm_class="sysmon"),
                 on_focus_lost_hide=False,
                 warp_pointer=False,
@@ -94,7 +94,7 @@ groups.append(
             ),
             DropDown(
                 "nvtop",
-                "alacritty --class sysmon -e nvtop",
+                f"{terminal} --class sysmon -e nvtop",
                 match=Match(wm_class="sysmon"),
                 on_focus_lost_hide=False,
                 warp_pointer=False,
@@ -106,7 +106,7 @@ groups.append(
             ),
             DropDown(
                 "pulsemixer",
-                "alacritty --class sysmon -e pulsemixer",
+                f"{terminal} --class sysmon -e pulsemixer",
                 match=Match(wm_class="sysmon"),
                 on_focus_lost_hide=False,
                 warp_pointer=False,
@@ -118,7 +118,7 @@ groups.append(
             ),
             DropDown(
                 "ncmpcpp",
-                terminal + " -e ncmpcpp",
+                f"{terminal} -e ncmpcpp",
                 on_focus_lost_hide=False,
                 warp_pointer=False,
                 opacity=1.00,
@@ -129,7 +129,7 @@ groups.append(
             ),
             DropDown(
                 "tremc",
-                terminal + " -e tremc",
+                f"{terminal} -e tremc",
                 on_focus_lost_hide=False,
                 warp_pointer=False,
                 opacity=1.00,
