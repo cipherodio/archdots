@@ -33,6 +33,19 @@ return {
                 "hide_documentation",
             },
         },
+        completion = {
+            ghost_text = { enabled = false },
+            documentation = {
+                auto_show = false,
+                auto_show_delay_ms = 500,
+            },
+            list = {
+                selection = {
+                    preselect = false,
+                    auto_insert = false,
+                },
+            },
+        },
         appearance = { nerd_font_variant = "mono" },
         signature = { enabled = true },
         sources = {
