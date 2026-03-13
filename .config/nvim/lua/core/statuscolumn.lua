@@ -79,10 +79,12 @@ function Status.LineNumber()
 end
 
 _G.MyStatusColumn = function()
+    local winid = vim.g["statusline_winid"] or 0
+    local bufnr = vim.api.nvim_win_get_buf(winid)
+
     if vim.v.virtnum ~= 0 then
         return ""
     end
-    local bufnr = vim.api.nvim_get_current_buf()
     local lnum = vim.v.lnum - 1
     return table.concat({
         Status.LspDiagnostics(bufnr, lnum),
