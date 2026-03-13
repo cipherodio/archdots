@@ -1,3 +1,4 @@
+local gfs = require("gears.filesystem")
 local M = {}
 
 -- Palette
@@ -16,12 +17,33 @@ M.border_normal = M.black
 M.border_focus = M.blue
 
 -- Layout icons
-local icon_path = "/usr/share/awesome/themes/default/layouts/"
+local icon_path = gfs.get_themes_dir() .. "default/layouts/"
+
+-- Standard Tiling
 M.layout_tile = icon_path .. "tilew.png"
 M.layout_tileleft = icon_path .. "tileleftw.png"
-M.layout_floating = icon_path .. "floatingw.png"
+M.layout_tilebottom = icon_path .. "tilebottomw.png"
+M.layout_tiletop = icon_path .. "tiletopw.png"
+
+-- Fair / Grid
+M.layout_fairh = icon_path .. "fairhw.png"
+M.layout_fairv = icon_path .. "fairvw.png"
+
+-- Spiral / Dwindle
+M.layout_spiral = icon_path .. "spiralw.png"
+M.layout_dwindle = icon_path .. "dwindlew.png"
+
+-- Max / Floating / Magnifier
 M.layout_max = icon_path .. "maxw.png"
 M.layout_fullscreen = icon_path .. "fullscreenw.png"
+M.layout_floating = icon_path .. "floatingw.png"
+M.layout_magnifier = icon_path .. "magnifierw.png"
+
+-- Corners (for awful.layout.suit.corner.nw/ne/sw/se)
+M.layout_cornernw = icon_path .. "cornernww.png"
+M.layout_cornerne = icon_path .. "cornernew.png"
+M.layout_cornersw = icon_path .. "cornersww.png"
+M.layout_cornerse = icon_path .. "cornersew.png"
 
 -- Taglist
 M.taglist_fg_focus = M.green
