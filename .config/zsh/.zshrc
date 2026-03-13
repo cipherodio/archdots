@@ -7,7 +7,7 @@ autoload -U add-zsh-hook
 add-zsh-hook precmd vcs_info
 
 zstyle ':vcs_info:*' check-for-changes true
-zstyle ':vcs_info:git:*' formats '%F{magenta} %f %F{yellow}%b%f%F{red}%u%f%F{green}%c%f '
+zstyle ':vcs_info:git:*' formats '%F{white}%f %F{yellow}%b%f%F{red}%u%f%F{green}%c%f '
 zstyle ':vcs_info:*' unstagedstr ' [!]'
 zstyle ':vcs_info:*' stagedstr ' [+]'
 
