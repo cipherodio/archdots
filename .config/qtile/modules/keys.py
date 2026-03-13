@@ -88,7 +88,7 @@ keys = [
         [],
         "XF86MonBrightnessDown",
         lazy.spawn(brightdown),
-        desc="Brightness up",
+        desc="Brightness down",
     ),
     Key(
         [],
