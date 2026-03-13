@@ -8,7 +8,6 @@ opt.number = true
 opt.numberwidth = 4
 opt.signcolumn = "no"
 opt.laststatus = 3
-opt.winbar = nil
 opt.scrolloff = 8
 opt.colorcolumn = "80"
 opt.fillchars = {
@@ -16,6 +15,9 @@ opt.fillchars = {
     diff = " ",
     vert = "│",
     horiz = "─",
+    stl = " ",
+    stlnc = " ",
+    wbr = " ",
 }
 
 -- Editor Behavior
@@ -34,10 +36,15 @@ opt.wrap = false
 opt.updatetime = 250
 opt.timeoutlen = 300
 opt.pumheight = 10
+-- opt.completeopt = {
+--     "menuone",
+--     "noselect",
+--     "noinsert",
+-- }
 opt.completeopt = {
+    "menu",
     "menuone",
     "noselect",
-    "noinsert",
 }
 
 -- Command line
@@ -50,6 +57,7 @@ opt.shortmess:append({
     C = true,
     I = true,
     c = true,
+    s = true,
 })
 
 -- Tabs & Indentation
