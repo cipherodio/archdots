@@ -1,5 +1,6 @@
 local awful = require("awful")
 local gears = require("gears")
+local scratch = require("utils.scratchpad")
 
 local env = require("modules.uservar")
 
@@ -191,7 +192,20 @@ M.globalkeys = gears.table.join(
         "u",
         awful.client.urgent.jumpto,
         { description = "jump to urgent client" }
-    )
+    ),
+    -- Scratchpad
+    awful.key({ env.altkey, "Shift" }, "p", function()
+        scratch.toggle("pulsemixer", "scratch_mixer")
+    end, { description = "audio mixer" }),
+    awful.key({ env.altkey, "Shift" }, "h", function()
+        scratch.toggle("htop", "scratch_htop")
+    end, { description = "htop system monitor" }),
+    awful.key({ env.altkey, "Shift" }, "m", function()
+        scratch.toggle("ncmpcpp", "scratch_ncmpcpp")
+    end, { description = "ncmpcpp music player" }),
+    awful.key({ env.modkey, "Shift" }, "Return", function()
+        scratch.toggle("zsh", "scratch_term")
+    end, { description = "term scratchpad" })
 )
 
 M.clientkeys = gears.table.join(
