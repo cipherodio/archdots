@@ -1,8 +1,8 @@
 pcall(require, "luarocks.loader")
 require("modules.errorhandler")
 
-local gears = require("gears")
 local awful = require("awful")
+local gears = require("gears")
 require("awful.autofocus")
 local beautiful = require("beautiful")
 
@@ -24,8 +24,8 @@ root.keys(bindings.globalkeys)
 -- Layouts
 awful.layout.layouts = require("modules.layouts")
 awful.screen.connect_for_each_screen(function(s)
-	awful.tag({ "1", "2", "3", "4", "5" }, s, awful.layout.layouts[1])
-	wibar.setup(s)
+    awful.tag({ "1", "2", "3", "4", "5" }, s, awful.layout.layouts[1])
+    wibar.setup(s)
 end)
 
 -- Signals
