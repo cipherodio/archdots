@@ -55,6 +55,7 @@ M.setup = function(s)
             },
             id = "background_role",
             widget = wibox.container.background,
+            forced_width = 800,
         },
     })
 
