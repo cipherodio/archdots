@@ -1,4 +1,9 @@
 pcall(require, "luarocks.loader")
+
+-- GC tuning
+collectgarbage("setpause", 110)
+collectgarbage("setstepmul", 400)
+
 require("modules.errorhandler")
 
 local awful = require("awful")
