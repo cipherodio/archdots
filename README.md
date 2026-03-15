@@ -17,7 +17,7 @@ and setup are guided by my [Archstrap repository][guide].
 
 ## 📸 Screenshots
 
-![screenshot01](.local/wallpapers/screenshot01.jpeg)
+![screenshot_01](.local/wallpapers/screenshot01.jpeg)
 
 ## 🚀 Dotfiles Installation
 
@@ -30,7 +30,7 @@ follow these steps:
 curl -fsSL https://gitlab.com/cipherodio/archdots/-/raw/main/bootstrap.sh | bash
 reboot
 
-# Copy your SSH key to GitLab before running the setup.sh
+# Copy your SSH key to Gitlab before running the setup.sh
 cat ~/.ssh/gitlabkey.pub | xclip -selection clipboard
 
 # Finalize setup and clone additional repositories
