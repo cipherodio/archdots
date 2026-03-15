@@ -26,6 +26,10 @@ M.rules = {
                 "DTA",
                 "copyq",
                 "pinentry",
+                "scratch_mixer",
+                "scratch_htop",
+                "scratch_ncmpcpp",
+                "scratch_term",
             },
             class = {
                 "Arandr",
