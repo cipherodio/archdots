@@ -18,5 +18,4 @@ done >/dev/null 2>&1
 [ -n "$xrdbpid" ] && wait "$xrdbpid"
 
 dbus-update-activation-environment --all
-# dbus-launch --exit-with-session ssh-agent qtile start
 dbus-launch --exit-with-session ssh-agent awesome
