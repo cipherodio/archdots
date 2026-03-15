@@ -1,12 +1,8 @@
 return {
     {
         "ibhagwan/fzf-lua",
-        -- event = "VeryLazy",
         lazy = vim.fn.argc(-1) == 0,
-        dependencies = {
-            "nvim-tree/nvim-web-devicons",
-            "michel-garcia/fzf-lua-file-browser.nvim",
-        },
+        dependencies = { "nvim-tree/nvim-web-devicons" },
         keys = {
             {
                 "<leader>ff",
@@ -179,13 +175,6 @@ return {
                 end,
                 desc = "Fzf: spell suggest",
             },
-            {
-                "<leader>ee",
-                function()
-                    require("fzf-lua-file-browser").browse()
-                end,
-                desc = "Fzf: browser",
-            },
         },
         opts = {
             defaults = {
@@ -208,16 +197,31 @@ return {
         },
         config = function(_, opts)
             local fzflua = require("fzf-lua")
-            local fzfbrowser = require("fzf-lua-file-browser")
-            local fbactions = require("fzf-lua-file-browser.actions")
 
             fzflua.setup(opts)
             fzflua.register_ui_select()
+        end,
+    },
+    {
+        "michel-garcia/fzf-lua-file-browser.nvim",
+        dependencies = { "ibhagwan/fzf-lua" },
+        lazy = vim.fn.argc(-1) == 0,
+        keys = {
+            {
+                "<leader>ee",
+                function()
+                    require("fzf-lua-file-browser").browse()
+                end,
+                desc = "Fzf: browser",
+            },
+        },
+        config = function()
+            local fzfbrowser = require("fzf-lua-file-browser")
+            local fbactions = require("fzf-lua-file-browser.actions")
 
             fzfbrowser.setup({
                 actions = {
                     ["default"] = fbactions.open,
-                    -- ["ctrl-g"] = fbactions.parent,
                     ["ctrl-p"] = fbactions.parent,
                     ["ctrl-w"] = fbactions.cwd,
                     ["ctrl-e"] = fbactions.home,
@@ -226,11 +230,11 @@ return {
                     ["ctrl-r"] = fbactions.rename,
                     ["ctrl-d"] = fbactions.delete,
                 },
+                hijack_netrw = true,
                 color_icons = true,
                 cwd_header = false,
                 dir_icon_hl = "Directory",
                 file_icons = true,
-                hijack_netrw = true,
             })
         end,
     },
