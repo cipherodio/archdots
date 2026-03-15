@@ -14,6 +14,7 @@ declare -A bookmarks=(
     [gitlab]="https://gitlab.com/"
     [spotifycreators]="https://creators.spotify.com/pod/show/1HL4oQJ2kyfmv6Eslqtw9F/home"
     [deepseek]="https://platform.deepseek.com/usage"
+    [deepseekchat]="https://chat.deepseek.com/"
     [udemy]="https://www.udemy.com/join/login-popup/?passwordredirect=True"
     [facebook]="https://www.facebook.com/"
     [trinket]="https://trinket.io/"
