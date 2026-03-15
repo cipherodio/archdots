@@ -2,6 +2,8 @@ local autocmd = vim.api.nvim_create_autocmd
 local f = require("utils.followlink")
 local h = require("utils.helper")
 
+---@param name string
+---@return integer
 local function augroup(name)
     return vim.api.nvim_create_augroup(name, { clear = true })
 end

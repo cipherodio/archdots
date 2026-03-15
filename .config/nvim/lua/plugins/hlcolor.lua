@@ -1,5 +1,6 @@
 return {
     "brenoprata10/nvim-highlight-colors",
+    ---@module "nvim-highlight-colors"
     keys = {
         {
             "<leader>ah",

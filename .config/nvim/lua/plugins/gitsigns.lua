@@ -116,6 +116,7 @@ return {
             desc = "GS: stage hunk",
         },
     },
+    ---@module "gitsigns"
     opts = {
         attach_to_untracked = true,
         numhl = false,

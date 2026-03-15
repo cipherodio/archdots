@@ -1,6 +1,9 @@
 return {
     "folke/which-key.nvim",
     event = "VeryLazy",
+    ---@module "which-key"
+    ---@type wk.Config
+    ---@diagnostic disable-next-line: missing-fields
     opts = {
         preset = "classic",
         spec = {

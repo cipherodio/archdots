@@ -176,6 +176,7 @@ return {
                 desc = "Fzf: spell suggest",
             },
         },
+        ---@module "fzf-lua"
         opts = {
             defaults = {
                 file_icons = true,

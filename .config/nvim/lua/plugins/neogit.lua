@@ -50,6 +50,7 @@ return {
             end,
         })
     end,
+    ---@module "neogit"
     opts = {
         console_timeout = 60000,
         auto_show_console = false,

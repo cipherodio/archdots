@@ -25,6 +25,7 @@ return {
             mode = "n",
         },
     },
+    ---@module "codecompanion"
     opts = {
         opts = { log_level = "DEBUG" },
         adapters = {
