@@ -5,7 +5,6 @@ return {
         ignore_system_prompt = true,
         adapter = {
             name = "deepseek",
-            -- model = "deepseek-reasoner",
             model = "deepseek-chat",
         },
     },

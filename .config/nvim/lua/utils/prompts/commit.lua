@@ -1,5 +1,5 @@
 return {
-    strategy = "inline", -- Using 'chat' is often better for reviewing the message before applying
+    strategy = "inline",
     description = "Generate Commit",
     opts = {
         index = 10,
@@ -16,13 +16,15 @@ return {
     prompts = {
         {
             role = "system",
-            content = [[You are an expert at writing Conventional Commits.
-      Guidelines:
-      1. Use the format: <type>(<scope>): <subject>
-      2. Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert.
-      3. Use the imperative, present tense: "change" not "changed" nor "changes".
-      4. Don't capitalize the first letter.
-      5. No dot (.) at the end.]],
+            content = [[
+# You are an expert at writing Conventional Commits.
+
+## Guidelines:
+1. Use the format: <type>(<scope>): <subject>
+2. Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert.
+3. Use the imperative, present tense: "change" not "changed" nor "changes".
+4. Don't capitalize the first letter.
+5. No dot (.) at the end.]],
         },
         {
             role = "user",
