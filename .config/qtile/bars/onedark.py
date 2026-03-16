@@ -8,7 +8,7 @@ from utils.colors import onedark
 
 # Helper
 home = os.path.expanduser("~")
-assets = os.path.join(home, ".config/qtile/assets/onedark")
+assets = os.path.join(home, ".config/assets/onedark")
 
 # Widgets
 widget_defaults = dict(
@@ -118,13 +118,6 @@ mainbar = [
         backlight_name="amdgpu_bl2",
     ),
     widget.Image(filename=f"{assets}/background/sloperight.png"),
-    # widget.PulseVolume(
-    #     # name="volume_icon",
-    #     # **widget_defaults,
-    #     background=onedark["c01"],
-    #     theme_path=f"{assets}/volume/",
-    #     # emoji=True,
-    # ),
     widget.Volume(
         **widget_defaults,
         background=onedark["c01"],
@@ -134,11 +127,16 @@ mainbar = [
         **widget_defaults,
         # fmt="  {}",
         update_interval=0.1,
-        background="#31353f",
-        foreground="#abb2bf",
-        # background=onedark["c01"],
-        # foreground=onedark["c04"],
+        background=onedark["c01"],
+        foreground=onedark["c04"],
     ),
+    # widget.PulseVolume(
+    #     # name="volume_icon",
+    #     # **widget_defaults,
+    #     background=onedark["c01"],
+    #     theme_path=f"{assets}/volume/",
+    #     # emoji=True,
+    # ),
     # widget.PulseVolume(
     #     # **widget_defaults,
     #     background=onedark["c01"],
