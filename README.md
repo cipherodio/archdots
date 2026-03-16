@@ -10,7 +10,7 @@ and setup are guided by my [Archstrap repository][guide].
 
 | **Dependencies**  | **Description**         |
 | ----------------- | ----------------------- |
-| Qtile             | Window manager          |
+| Qtile/Awesome     | Window manager          |
 | Neovim            | Text editor             |
 | Alacritty         | Terminal emulator       |
 | Iosevka Nerd Font | Programming and UI font |
