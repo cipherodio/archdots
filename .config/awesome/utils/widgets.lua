@@ -1,5 +1,6 @@
 local awful = require("awful")
 local gears = require("gears")
+local h = require("utils.helper")
 local wibox = require("wibox")
 
 local M = {}
@@ -9,7 +10,7 @@ M.wifi_widget = awful.widget.watch(
     10,
     function(widget, stdout)
         local ssid = stdout:match("yes:(.-)\n")
-        widget:set_text(ssid and (" 󰖩 " .. ssid) or " 󰖪 Disconnected")
+        widget:set_text(ssid or "Disconnected")
     end
 )
 
@@ -28,53 +29,52 @@ gears.timer({
             if total and avail then
                 local used = total - avail
                 local percent = (used / total) * 100
-                M.ram_widget.text = string.format(" %.0f%%", percent)
+                M.ram_widget.text = string.format("%.0f%%", percent)
             end
         end
     end,
 })
 
 M.brightness_widget = wibox.widget.textbox()
-gears.timer({
-    timeout = 10,
-    autostart = true,
-    callback = function()
-        local path = "/sys/class/backlight/amdgpu_bl2/"
-        local f_max = io.open(path .. "max_brightness", "r")
-        local f_cur = io.open(path .. "brightness", "r")
-        if f_max and f_cur then
-            local max = tonumber(f_max:read("*all"))
-            local cur = tonumber(f_cur:read("*all"))
-            f_max:close()
-            f_cur:close()
-            if max and cur then
-                M.brightness_widget.text = string.format("󰃟 %.0f%%", (cur / max) * 100)
-            end
+local function update_bright_widget()
+    awful.spawn.easy_async("brightnessctl -m", function(stdout)
+        local percentage = stdout:match(",(%d+)%%")
+        if percentage then
+            M.brightness_widget.text = string.format("%.0f%%", tonumber(percentage))
         else
-            if f_max then
-                f_max:close()
-            end
-            if f_cur then
-                f_cur:close()
-            end
             M.brightness_widget.text = " ?%"
         end
-    end,
+    end)
+end
+awesome.connect_signal("brightness_refresh", update_bright_widget)
+gears.timer.delayed_call(update_bright_widget)
+gears.timer({
+    timeout = 30,
+    autostart = true,
+    callback = update_bright_widget,
 })
 
+local vol_container, vol_icon_handle = h.create_vol_icon()
+M.vol_icon_widget = vol_container
 M.volume_widget = wibox.widget.textbox()
 local function update_vol_widget()
     awful.spawn.easy_async("wpctl get-volume @DEFAULT_AUDIO_SINK@", function(stdout)
-        local volume_num = stdout:match("(%d%.%d%d)")
+        local volume_num = stdout:match("(%d%.?%d?%d?)")
         local is_muted = stdout:match("%[MUTED%]")
+        local percent = (tonumber(volume_num) or 0) * 100
+
         if is_muted then
-            M.volume_widget.text = "   Muted"
-        elseif volume_num then
-            local percent = tonumber(volume_num) * 100
-            M.volume_widget.text = string.format("󰕾 %.0f%%", percent)
+            vol_icon_handle:set_image(h.vol_mute)
+        elseif percent < 33 then
+            vol_icon_handle:set_image(h.vol_low)
+        elseif percent < 66 then
+            vol_icon_handle:set_image(h.vol_med)
         else
-            M.volume_widget.text = " ?%"
+            vol_icon_handle:set_image(h.vol_high)
         end
+        vol_icon_handle.forced_height = 33
+        vol_icon_handle.forced_width = 33
+        M.volume_widget.text = is_muted and "Muted" or string.format("%.0f%%", percent)
     end)
 end
 awesome.connect_signal("volume_refresh", update_vol_widget)
@@ -85,7 +85,10 @@ gears.timer({
     callback = update_vol_widget,
 })
 
-M.bat_widget = wibox.widget.textbox()
+local bat_container, bat_icon_handle = h.create_bat_icon()
+M.bat_icon_widget = bat_container
+M.bat_text_widget = wibox.widget.textbox()
+
 gears.timer({
     timeout = 30,
     call_now = true,
@@ -96,15 +99,29 @@ gears.timer({
         local f_sta = io.open(path .. "status", "r")
 
         if f_cap and f_sta then
-            local cap_str = f_cap:read("*all"):gsub("\n", "")
+            local cap = tonumber(f_cap:read("*all"))
             local sta = f_sta:read("*all"):gsub("\n", "")
             f_cap:close()
             f_sta:close()
-            local cap = tonumber(cap_str)
-            local icon = (sta == "Charging") and "󱐋 " or " "
-            M.bat_widget.text = string.format("%s%d%%", icon, cap)
+
+            -- Icon Logic
+            if sta == "Charging" then
+                bat_icon_handle:set_image(h.bat_charging)
+            elseif cap < 25 then
+                bat_icon_handle:set_image(h.bat_low)
+            elseif cap < 80 then
+                bat_icon_handle:set_image(h.bat_good)
+            else
+                bat_icon_handle:set_image(h.bat_full)
+            end
+
+            -- Maintain sizing
+            bat_icon_handle.forced_height = 33
+            bat_icon_handle.forced_width = 33
+
+            M.bat_text_widget.text = string.format("%d%%", cap)
         else
-            M.bat_widget.text = "?%"
+            M.bat_text_widget.text = "?%"
         end
     end,
 })
