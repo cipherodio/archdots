@@ -12,7 +12,6 @@ export TERMINAL="alacritty"
 export BROWSER="firefox"
 export READER="zathura"
 export FILE="lf"
-export WM="Qtile"
 export NVD_DIR="/data"
 
 # XDG Base Directory
