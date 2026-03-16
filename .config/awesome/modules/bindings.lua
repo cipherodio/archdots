@@ -69,10 +69,10 @@ M.globalkeys = gears.table.join(
         awful.spawn.with_shell("power")
     end, { description = "power menu" }),
     awful.key({}, "XF86MonBrightnessUp", function()
-        awful.spawn.with_shell("brightnessctl set +5%")
+        awful.spawn.with_shell("brightupdate +5%")
     end, { description = "bright up" }),
     awful.key({}, "XF86MonBrightnessDown", function()
-        awful.spawn.with_shell("brightnessctl set 5%-")
+        awful.spawn.with_shell("brightupdate 5%-")
     end, { description = "bright down" }),
     awful.key({}, "XF86TouchpadToggle", function()
         awful.spawn.with_shell("padtoggle")
