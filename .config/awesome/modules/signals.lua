@@ -25,13 +25,14 @@ client.connect_signal("unfocus", function(c)
     c.border_color = beautiful.border_normal or "#282c34"
 end)
 
--- Tags urgency color when in another tags
+-- Tags urgency color
 client.connect_signal("request::activate", function(c, _, _)
-    if c.first_tag and not c.first_tag.selected then
-        c.urgent = true
+    if not awesome.startup then
+        if c.first_tag and not c.first_tag.selected then
+            c.urgent = true
+        end
     end
 end)
-
 client.connect_signal("focus", function(c)
     if c.urgent then
         c.urgent = false
