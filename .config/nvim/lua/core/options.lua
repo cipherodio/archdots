@@ -8,7 +8,7 @@ opt.number = true
 opt.numberwidth = 4
 opt.signcolumn = "no"
 opt.laststatus = 3
-opt.scrolloff = 8
+opt.scrolloff = 2
 opt.colorcolumn = "80"
 opt.fillchars = {
     eob = " ",
@@ -36,15 +36,10 @@ opt.wrap = false
 opt.updatetime = 250
 opt.timeoutlen = 300
 opt.pumheight = 10
--- opt.completeopt = {
---     "menuone",
---     "noselect",
---     "noinsert",
--- }
 opt.completeopt = {
-    "menu",
     "menuone",
     "noselect",
+    "noinsert",
 }
 
 -- Command line
