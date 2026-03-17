@@ -17,6 +17,7 @@ M.rules = {
             buttons = bindings.clientbuttons,
             screen = awful.screen.preferred,
             placement = awful.placement.no_overlap + awful.placement.no_offscreen,
+            size_hints_honor = false,
         },
     },
     -- Floating rules | Force float in center
@@ -57,7 +58,7 @@ M.rules = {
                 "branchdialog",
                 "Steam Settings",
                 "Downloading spotify",
-                "Blender Render",
+                -- "Blender Render",
             },
             role = {
                 "AlarmWindow",

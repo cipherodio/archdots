@@ -32,6 +32,8 @@ hub/
 .config/dconf/
 .config/emacs/.org-id-locations
 .config/emacs/auto-saves/
+.config/emacs/auto-save-list/
+.config/emacs/eln-cache/
 .config/emacs/backups/
 .config/emacs/abbrev_defs
 .config/emacs/custom.el
