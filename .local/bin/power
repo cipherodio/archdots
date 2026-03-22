@@ -4,6 +4,9 @@
 
 set -euo pipefail
 
+ROFI_STYLE='window { width: 450px; } listview { lines: 4; }'
+CONFIRM_SIZE='window { width: 350px; } listview { lines: 2; }'
+
 for cmd in rofi systemctl notify-send loginctl; do
     command -v "$cmd" >/dev/null 2>&1 || {
         notify-send "power error" "$cmd not found"
@@ -12,7 +15,7 @@ for cmd in rofi systemctl notify-send loginctl; do
 done
 
 confirm() {
-    printf "Yes\nNo" | rofi -dmenu -i -p "$1" | grep -qx "Yes"
+    printf "Yes\nNo" | rofi -dmenu -i -p "$1" -theme-str "$CONFIRM_SIZE" | grep -qx "Yes"
 }
 
 # Menu
@@ -25,7 +28,7 @@ options=$(
 EOF
 )
 
-choice="$(printf '%s\n' "$options" | rofi -dmenu -i -p "Bye $USER!")"
+choice="$(printf '%s\n' "$options" | rofi -dmenu -i -p "Bye $USER!" -theme-str "$ROFI_STYLE")"
 [ -n "$choice" ] || exit 0
 
 # Action
