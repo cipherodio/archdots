@@ -7,7 +7,7 @@ Xcursor.size: 32
 Xcursor.theme: Adwaita
 Nsxiv.bar.font: monospace:size=16
 
-#include "colorschemes/onedark"
+#include "colorschemes/nord"
 
 ! special
 #define accent c04
