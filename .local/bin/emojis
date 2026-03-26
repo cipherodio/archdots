@@ -8,13 +8,12 @@ EMOJI_FILE="$HOME/.local/share/misc/emoji"
 
 chosen=$(
     cut -d ';' -f1 "$EMOJI_FILE" |
-        rofi -dmenu -i -l 10 -p emoji |
+        rofi -dmenu -i -l 10 -p " emojis " |
         sed 's/ .*//'
 )
 
 [[ -n ${chosen-} ]] || exit 0
 
-# If called with an argument, type the emoji; otherwise copy to clipboard
 if [[ -n ${1-} ]]; then
     xdotool type "$chosen"
 else

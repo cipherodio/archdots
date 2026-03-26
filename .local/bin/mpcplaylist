@@ -13,7 +13,7 @@ playlist="$(
 
 track="$(
     printf '%s\n' "$playlist" |
-        rofi -dmenu -i -l 10 -p "Track"
+        rofi -dmenu -i -l 10 -p " track "
 )"
 
 [ -n "$track" ] || exit 0
