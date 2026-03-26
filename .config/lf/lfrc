@@ -1,33 +1,34 @@
-# Basic
+# Options
 set shell bash
 set shellopts '-eu'
 set hidden true
-set drawbox true
+#set drawbox true
 set icons
 set ifs "\n"
 set ignorecase true
 set scrolloff 10
 set period 1
 set dircounts true
-
-# New file always on top
-#set reverse true
+set cursorpreviewfmt "\033[7m"
 
 # Top status
 set promptfmt "\033[34;1m  %d\033[0m\033[1m%f\033[0m"
 
 # Time format
 # https://www.golinuxcloud.com/golang-time-format/
-#set sortby time
 set sortby name
 set timefmt "2006-02-Jan Monday 03:04PM"
 set infotimefmtnew "2006-02-Jan Monday 03:04PM"
 set infotimefmtold "2006-02-Jan Monday 03:04PM"
 set info size:time
 
-# Single column mode
-set nopreview
-set ratios 1
+# Single column mode without preview
+#set nopreview
+#set ratios 1
+
+# Preview mode
+set cleaner '~/.config/lf/cleaner'
+set previewer '~/.config/lf/scope'
 set statfmt "\033[36m%p\033[0m| %u| %g| %S| %t| -> %l"
 
 #cmd trash %set -f; mv $fx ~/.trash
@@ -91,7 +92,7 @@ cmd copyimg ${{
                 ;;
         esac
     done
-    notify-send "📋 Image copied" "$fx copied to clipboard"
+    notify-send "󱓦 Image copied" "$fx copied to clipboard"
 }}
 
 # Compress current file or selected files with tar and gunzip
@@ -120,7 +121,7 @@ cmd moveto ${{
     for x in $fx; do
         eval mv -iv \"$x\" \"$dest\"
         done &&
-    notify-send "🚚 File(s) moved." "File(s) moved to $dest."
+    notify-send "󰈔 File(s) moved." "File(s) moved to $dest."
 }}
 
 cmd copyto ${{
@@ -131,7 +132,7 @@ cmd copyto ${{
     for x in $fx; do
         eval cp -ivr \"$x\" \"$dest\"
         done &&
-    notify-send "📋 File(s) copied." "File(s) copies to $dest."
+    notify-send "󱓦 File(s) copied." "File(s) copies to $dest."
 }}
 
 cmd chmod ${{
@@ -147,9 +148,7 @@ cmd chmod ${{
 cmd bulkrename $vidir
 cmd mkdir $mkdir -p "$(echo $* | tr ' ' '\ ')"
 cmd touch $touch "$(echo $* | tr ' ' '\ ')"
-
-#map o &mimeopen $f
-#map O &mimeopen --ask $f
+cmd setwallpaper "$1"
 
 # Basic binds
 map D delete
@@ -188,7 +187,7 @@ map c push A<c-u> # new rename
 map I :rename; cmd-home # at the very beginning
 map i :rename # before extention
 map a :rename; cmd-right # after extention
-map bg &setwallpaper "$f"
+map bg &setwallpaper $f
 
 map V push :$nvim<space>
 

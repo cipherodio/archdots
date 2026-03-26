@@ -1,0 +1,95 @@
+#!/bin/sh
+
+# File preview handler for lf.
+set -C -f
+IFS="$(printf '%b_' '\n')"
+IFS="${IFS%_}"
+
+# --- Helper Functions ---
+
+image() {
+    if command -v ueberzugpp >/dev/null 2>&1; then UB="ueberzugpp"; else UB="ueberzug"; fi
+    if [ -f "$1" ] && [ -n "$DISPLAY" ] && [ -z "$WAYLAND_DISPLAY" ] && command -v "$UB" >/dev/null 2>&1; then
+        printf '{"action": "add", "identifier": "PREVIEW", "x": %d, "y": %d, "width": %d, "height": %d, "scaler": "contain", "path": "%s"}\n' \
+            "$4" "$5" "$(($2 - 1))" "$(($3 - 1))" "$1" >"$FIFO_UEBERZUG"
+    else
+        mediainfo "$6"
+    fi
+}
+
+get_cache() {
+    echo "${XDG_CACHE_HOME:-$HOME/.cache}/lf/thumb.$(stat --printf '%n\0%i\0%F\0%s\0%W\0%Y' -- "$(readlink -f "$1")" | sha256sum | awk '{print $1}')"
+}
+
+# --- 1. PRIORITY EXTENSION CHECK (Fastest) ---
+case "$(printf "%s" "$1" | tr '[:upper:]' '[:lower:]')" in
+*.md | *.markdown | *.txt | *.py | *.toml | *.sh | *.zsh | *.bash | *.lua | \
+    *.json | *.js | *.css | *.html | *rc | *config | *.conf | *profile | \
+    *.cpp | *.h | *.rs | *.go | *.java | *.yaml | *.yml | *dockerfile*)
+    highlight --out-format=ansi --width "$(($4 - 2))" --force "$1" | head -n 200
+    exit 0
+    ;;
+esac
+
+# --- 2. MIME TYPE CHECK (Fallback) ---
+case "$(file --dereference --brief --mime-type -- "$1")" in
+# Images
+image/avif)
+    CACHE=$(get_cache "$1")
+    [ ! -f "$CACHE.jpg" ] && magick "$1" "$CACHE.jpg"
+    image "$CACHE.jpg" "$2" "$3" "$4" "$5" "$1"
+    ;;
+image/svg+xml)
+    CACHE=$(get_cache "$1")
+    [ ! -f "$CACHE.png" ] && inkscape --convert-dpi-method=none -o "$CACHE.png" --export-overwrite -D "$1"
+    image "$CACHE.png" "$2" "$3" "$4" "$5" "$1"
+    ;;
+image/x-xcf)
+    CACHE=$(get_cache "$1")
+    [ ! -f "$CACHE.jpg" ] && magick "$1" "$CACHE.jpg"
+    image "$CACHE.jpg" "$2" "$3" "$4" "$5" "$1"
+    ;;
+image/*)
+    image "$1" "$2" "$3" "$4" "$5" "$1"
+    ;;
+
+# Text / Code Fallback (for files that didn't match extensions above)
+text/* | */xml | application/json | application/x-ndjson | application/javascript)
+    highlight --out-format=ansi --width "$(($4 - 2))" --force "$1" | head -n 200
+    ;;
+
+# Multimedia
+audio/* | application/octet-stream)
+    mediainfo "$1" || exit 1
+    ;;
+video/*)
+    CACHE=$(get_cache "$1")
+    [ ! -f "$CACHE" ] && ffmpegthumbnailer -i "$1" -o "$CACHE" -s 0
+    image "$CACHE" "$2" "$3" "$4" "$5" "$1"
+    ;;
+
+# Documents
+*/pdf)
+    CACHE=$(get_cache "$1")
+    [ ! -f "$CACHE.jpg" ] && pdftoppm -jpeg -f 1 -singlefile "$1" "$CACHE"
+    image "$CACHE.jpg" "$2" "$3" "$4" "$5" "$1"
+    ;;
+*/epub+zip | */mobi*)
+    CACHE=$(get_cache "$1")
+    [ ! -f "$CACHE.jpg" ] && gnome-epub-thumbnailer "$1" "$CACHE.jpg"
+    image "$CACHE.jpg" "$2" "$3" "$4" "$5" "$1"
+    ;;
+
+# Archives & Others
+application/*zip | application/x-tar | application/x-7z-compressed)
+    atool --list -- "$1"
+    ;;
+*opendocument*)
+    odt2txt "$1"
+    ;;
+application/pgp-encrypted)
+    gpg -d -- "$1"
+    ;;
+esac
+
+exit 1
