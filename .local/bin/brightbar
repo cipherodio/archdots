@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Show brightness change as a dunst progress bar
+
+set -euo pipefail
+
+action=${1:-0}
+msg_id=991050
+
+if [[ "$action" =~ ^- ]]; then
+    brightnessctl set "${action#-}%-" >/dev/null
+elif [[ "$action" =~ ^\+ ]]; then
+    brightnessctl set "${action#+}%+" >/dev/null
+else
+    brightnessctl set "${action}%" >/dev/null
+fi
+
+current_bright=$(brightnessctl -m | awk -F, '{print $4}' | tr -d '%')
+
+dunstify -a "brightbar" -u low -r "$msg_id" \
+    -h "int:value:$current_bright" \
+    "Brightness: ${current_bright}%"
