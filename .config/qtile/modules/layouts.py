@@ -1,10 +1,11 @@
 from libqtile import layout
+
 from utils.colors import onedark
 
 # Layouts
 layout_theme = {
-    "border_width": 2,
-    "border_focus": onedark["c05"],
+    "border_width": 0,
+    "border_focus": onedark["c03"],
     "border_normal": onedark["c00"],
 }
 

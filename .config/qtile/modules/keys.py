@@ -4,12 +4,8 @@ from libqtile.lazy import lazy
 mod = "mod4"
 altmod = "mod1"
 terminal = "alacritty"
-mvol = "pulsemixer --toggle-mute"
-brightup = "brightnessctl set +10%"
-brightdown = "brightnessctl set 10%-"
-powermenu = "power"
 rofi = "rofi -show drun"
-filemanager = "alacritty -e lf"
+filemanager = "alacritty -e lfprev"
 browser = "firefox"
 qbrowser = "qutebrowser"
 emacs = "emacsclient -c -a 'emacs' "
@@ -58,36 +54,60 @@ keys = [
     # Media keys
     Key(
         [altmod, "shift"],
+        "Up",
+        lazy.spawn("backlightkey"),
+        desc="toggle laptop keyboard backlight",
+    ),
+    Key(
+        [altmod, "shift"],
         "equal",
-        lazy.spawn("audiobar 0 +5"),
+        lazy.spawn("audiobar +5"),
         desc="Volume up",
     ),
     Key(
         [altmod, "shift"],
         "minus",
-        lazy.spawn("audiobar 0 -5"),
+        lazy.spawn("audiobar -5"),
         desc="Volume down",
     ),
-    Key([], "XF86AudioMute", lazy.spawn(mvol), desc="Mute volume"),
-    # Key([], "XF86AudioRaiseVolume", lazy.spawn(upvol), desc="Volume Up"),
+    Key([altmod, "shift"], "0", lazy.spawn("audiobar toggle")),
+    Key(
+        [], "XF86AudioMute", lazy.spawn("audiobar toggle"), desc="Mute volume"
+    ),
     Key(
         [],
         "XF86AudioRaiseVolume",
-        lazy.spawn("audiobar 0 +5"),
+        lazy.spawn("audiobar +5"),
         desc="Volume Up",
     ),
-    # Key([], "XF86AudioLowerVolume", lazy.spawn(downvol), desc="volume down"),
     Key(
         [],
         "XF86AudioLowerVolume",
-        lazy.spawn("audiobar 0 -5"),
+        lazy.spawn("audiobar -5"),
         desc="volume down",
     ),
-    Key([], "XF86MonBrightnessUp", lazy.spawn(brightup), desc="Brightness up"),
+    Key(
+        [altmod, "control"],
+        "equal",
+        lazy.spawn("brightbar +5"),
+        desc="brightness up",
+    ),
+    Key(
+        [altmod, "control"],
+        "minus",
+        lazy.spawn("brightbar -5"),
+        desc="brightness down",
+    ),
+    Key(
+        [],
+        "XF86MonBrightnessUp",
+        lazy.spawn("brightbar +5"),
+        desc="Brightness up",
+    ),
     Key(
         [],
         "XF86MonBrightnessDown",
-        lazy.spawn(brightdown),
+        lazy.spawn("brightbar -5"),
         desc="Brightness down",
     ),
     Key(
@@ -97,7 +117,11 @@ keys = [
         desc="Toggle touchpad",
     ),
     # System
-    Key([altmod], "b", lazy.hide_show_bar(), desc="Toggle qtile bar"),
+    # NOTE: This just hides the bar behind the spawned window
+    # TODO: Make it toggle on and off instead of just hiding it behind
+    #
+    # Key([altmod], "b", lazy.hide_show_bar("all"), desc="Toggle qtile bar"),
+    #
     Key([mod], "q", lazy.window.kill(), desc="Kill focus window"),
     Key(
         [mod, "control"],
@@ -105,7 +129,7 @@ keys = [
         lazy.reload_config(),
         desc="Reload configuration",
     ),
-    Key([mod], "escape", lazy.spawn(powermenu), desc="Power menu"),
+    Key([mod], "escape", lazy.spawn("power"), desc="Power menu"),
     Key([mod], "i", lazy.next_layout(), desc="Toggle layouts"),
     Key([mod, "control"], "x", lazy.shutdown(), desc="Shutdown qtile"),
     # Programs

@@ -5,7 +5,7 @@ from utils.colors import onedark
 
 floating_theme = {
     "border_width": 0,
-    "border_focus": onedark["c05"],
+    "border_focus": onedark["c03"],
     "border_normal": onedark["c00"],
 }
 
