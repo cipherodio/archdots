@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # Author: cipherodio
-# Description: Show calendar with today highlighted
-# print agenda via less
+# Description: Show calendar with today highlighted & print agenda via less
 
 set -euo pipefail
 
@@ -13,7 +12,6 @@ GREEN=$'\033[1;32m'
 RESET=$'\033[0m'
 
 {
-    # Calendar
     cal | awk -v today="$today" -v green="$GREEN" -v reset="$RESET" '
     NR <= 2 { print; next }
     {
@@ -24,10 +22,8 @@ RESET=$'\033[0m'
         print
     }
     '
-
     printf '\n'
 
-    # Agenda
     if [[ -f $AGENDA_FILE ]]; then
         highlight --out-format=ansi "$AGENDA_FILE"
     else
