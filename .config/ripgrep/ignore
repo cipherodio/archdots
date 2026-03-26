@@ -1,6 +1,10 @@
 .cache
 .mono
 .dots
+pubring.kbx
+pubring.kbx~
+trustdb.gpg
+private-keys-v1.d
 .pulse-cookie
 hub
 cef_user_data
