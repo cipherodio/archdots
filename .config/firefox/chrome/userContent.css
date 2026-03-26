@@ -11,8 +11,8 @@
 span.TridactylHint {
     font-family: monospace !important;
     font-size: 17px !important;
-    background-color: #e5c07b !important;
-    color: #282c34 !important;
+    background-color: #81a1c1 !important;
+    color: #2e3440 !important;
     position: absolute !important;
     text-transform: lowercase !important;
     padding: 0 1pt !important;
@@ -29,6 +29,6 @@ url-prefix(about:newtab) {
     html:not(#ublock0-epicker),
     html:not(#ublock0-epicker) body,
     #newtab-customize-overlay {
-        background: #282c34 !important;
+        background: #2e3440 !important;
     }
 }

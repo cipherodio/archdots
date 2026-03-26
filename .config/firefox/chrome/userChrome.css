@@ -3,17 +3,17 @@
 
 /* Colors */
 :root {
-	--tab-active-bg-color: #282c34;
-	--tab-inactive-bg-color: #31353f;
-	--tab-active-fg-fallback-color: #e5c07b;
-	--tab-inactive-fg-fallback-color: #888;
-	--urlbar-focused-bg-color: #31353f;
-	--urlbar-not-focused-bg-color: #282c34;
+	--tab-active-bg-color: #2e3440;
+	--tab-inactive-bg-color: #2e3440;
+	--tab-active-fg-fallback-color: #81a1c1;
+	--tab-inactive-fg-fallback-color: #616e88;
+	--urlbar-focused-bg-color: #3b4252;
+	--urlbar-not-focused-bg-color: #2e3440;
 	--toolbar-bgcolor: #2b2a33 !important;
-    --url-highlight-bg: #2c5372;
-    --url-highlight-fg: #abb2bf;
-	--tab-font: 'Iosevka Nerd Font';
-	--urlbar-font: 'Iosevka Nerd Font';
+    --url-highlight-bg: #88c0d0;
+    --url-highlight-fg: #d8dee9;
+	--tab-font: 'monospace';
+	--urlbar-font: 'monospace';
 
 	/* Try increasing if you encounter problems */
 	--urlbar-height-setting: 22px;
@@ -81,7 +81,7 @@ toolbar .toolbarbutton-1 { padding: 0 0 !important; }
 	padding-top: 0 !important;
 	padding-bottom: 0 !important;
 	font-family: var(--urlbar-font, 'monospace');
-	font-size: 16px;
+	font-size: 14px;
 }
 
 #urlbar {
@@ -181,7 +181,7 @@ toolbar .toolbarbutton-1 { padding: 0 0 !important; }
 
 #TabsToolbar, .tabbrowser-tab {
 	max-height: var(--tab-min-height) !important;
-	font-size: 16px !important;
+	font-size: 14px !important;
 }
 
 /* Change color of normal tabs */
