@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
 # Author: cipherodio
-# Description: Reset Neovim state (cache, data, config lock)
+# Description: Reset Neovim state
 
 set -euo pipefail
 
+ROFI_STYLE='window { width: 210px; } listview { lines: 2; }'
+
 confirm() {
-    printf 'Yes\n' | rofi -dmenu -i -p "$1" >/dev/null
+    printf 'Yes\n' | rofi -dmenu -i -p "$1" -theme-str "$ROFI_STYLE" >/dev/null
 }
 
-if confirm "Reset Neovim (wipe cache & state)?"; then
+if confirm "Reset Neovim state?"; then
     rm -rf \
         "$HOME/.config/nvim/lazy-lock.json" \
         "$HOME/.local/share/nvim" \

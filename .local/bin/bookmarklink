@@ -4,6 +4,8 @@
 
 set -euo pipefail
 
+ROFI_STYLE='window { width: 260px; } listview { lines: 5; }'
+
 : "${BROWSER:=/usr/bin/firefox}"
 
 declare -A bookmarks=(
@@ -24,7 +26,7 @@ declare -A bookmarks=(
     [foodpanda]="https://www.foodpanda.ph/"
     [ludeon]="https://ludeon.com/forums/index.php"
     [suckless]="https://suckless.org"
-    [arch]="https://bbs.archlinux.org/index.php"
+    [archlinux]="https://bbs.archlinux.org/index.php"
     [unsplash]="https://unsplash.com/"
     [wallhaven]="https://wallhaven.cc"
     [stackoverflow]="https://stackoverflow.com/"
@@ -43,7 +45,7 @@ declare -A bookmarks=(
 choice="$(
     printf '%s\n' "${!bookmarks[@]}" |
         sort |
-        rofi -dmenu -i -p "web"
+        rofi -dmenu -i -p " website " -theme-str "$ROFI_STYLE"
 )"
 
 [[ -n ${choice-} ]] || exit 0

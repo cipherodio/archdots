@@ -4,8 +4,8 @@
 
 set -euo pipefail
 
-ROFI_STYLE='window { width: 450px; } listview { lines: 4; }'
-CONFIRM_SIZE='window { width: 350px; } listview { lines: 2; }'
+ROFI_STYLE='window { width: 250px; } listview { lines: 4; }'
+CONFIRM_SIZE='window { width: 145px; } listview { lines: 2; }'
 
 for cmd in rofi systemctl notify-send loginctl; do
     command -v "$cmd" >/dev/null 2>&1 || {
@@ -18,7 +18,6 @@ confirm() {
     printf "Yes\nNo" | rofi -dmenu -i -p "$1" -theme-str "$CONFIRM_SIZE" | grep -qx "Yes"
 }
 
-# Menu
 options=$(
     cat <<EOF
   Poweroff
@@ -31,7 +30,6 @@ EOF
 choice="$(printf '%s\n' "$options" | rofi -dmenu -i -p "Bye $USER!" -theme-str "$ROFI_STYLE")"
 [ -n "$choice" ] || exit 0
 
-# Action
 case "$choice" in
 "  Poweroff")
     confirm "Power off?" && systemctl poweroff
