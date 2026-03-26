@@ -5,7 +5,7 @@
 set -euo pipefail
 
 case ${1:-} in
-audiobar | mpcnotify | Signal)
+audiobar | brightbar | backlightkey | mpcnotify | Signal)
     exit 0
     ;;
 esac
