@@ -7,6 +7,7 @@ local opt = vim.opt_local
 opt.spell = true
 opt.textwidth = 72
 opt.linebreak = true
+opt.wrap = true
 
 km.nmap(
     "<leader>mc",

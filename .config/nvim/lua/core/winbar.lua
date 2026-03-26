@@ -10,10 +10,10 @@ end
 
 local function apply_winbar_hl()
     local hl = vim.api.nvim_set_hl
-    hl(0, "SpacerHL", { fg = ui.c10, bg = ui.c11 })
-    hl(0, "WinbarFilename", { fg = ui.c05, bg = ui.c11 })
-    hl(0, "WinbarModified", { fg = ui.c02, bg = ui.c11 })
-    hl(0, "WinbarSearch", { fg = ui.c09, bg = ui.c11 })
+    hl(0, "SpacerHL", { bg = ui.c00 })
+    hl(0, "WinbarFilename", { fg = ui.c08, bg = ui.c00 })
+    hl(0, "WinbarModified", { fg = ui.c01, bg = ui.c00 })
+    hl(0, "WinbarSearch", { fg = ui.c08, bg = ui.c00 })
 end
 
 apply_winbar_hl()

@@ -28,7 +28,7 @@ require("lazy").setup({
     rocks = { enabled = false },
     -- concurrency = 1,
     git = { log = { "--since=3 days ago" }, timeout = 300 },
-    install = { colorscheme = { "onedark" } },
+    install = { colorscheme = { "nord" } },
     checker = { enabled = true, notify = false },
     change_detection = { notify = false },
     diff = { cmd = "terminal_git" },

@@ -21,5 +21,19 @@
             "${1:salita}—${2:paliwanag}$0"
         ],
         "description": "Insert a formal em dash"
+    },
+    "No wrap": {
+        "prefix": "nowrap",
+        "body": [
+            "<!-- vim: set nowrap: -->"
+        ],
+        "description": "Disable line wrap for this file"
+    },
+    "Wrap": {
+        "prefix": "wrap",
+        "body": [
+            "<!-- vim: set wrap: -->"
+        ],
+        "description": "Enable line wrap for this file"
     }
 }

@@ -1,5 +1,5 @@
 vim.loader.enable()
-vim.cmd.colorscheme("onedark")
+vim.cmd.colorscheme("nord")
 
 -- Use pcall to load modules
 ---@param module string
