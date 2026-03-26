@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # Author: cipherodio
-# Description: Add torrent to transmission-daemon
-# Start daemon if needed
+# Description: Add torrent to transmission-daemon & start daemon if needed
 
 set -euo pipefail
 

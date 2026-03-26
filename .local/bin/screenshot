@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Author: cipherodio
-# Description: Take screenshots using maim + rofi
+# Description: Take screenshots using maim via rofi
 
 set -euo pipefail
 

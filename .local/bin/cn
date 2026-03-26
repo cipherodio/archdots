@@ -31,6 +31,7 @@ STORIES_DIR="$BASE_DIR/stories"
 REFERENCE_DIR="$BASE_DIR/reference"
 INBOX_DIR="$BASE_DIR/inbox"
 
+# Editor
 EDITOR="${EDITOR:-nvim}"
 
 # Env variables date format

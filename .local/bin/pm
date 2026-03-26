@@ -4,7 +4,6 @@
 
 set -euo pipefail
 
-# Colors
 if [ -t 1 ] && [ -z "${NO_COLOR:-}" ]; then
     BOLD=$(printf '\033[1m')
     GREEN=$(printf '\033[32m')
@@ -33,7 +32,6 @@ usage() {
     printf "  %sq%s <pkg>    Query installed package\n" "$CYAN" "$RESET"
 }
 
-# If no args, show help
 if [[ $# -eq 0 ]]; then
     usage
     exit 0

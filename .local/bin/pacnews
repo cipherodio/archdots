@@ -7,7 +7,6 @@ set -euo pipefail
 NEWS_FEED="https://archlinux.org/feeds/news/"
 NEWS_LIMIT=10
 
-# Colors
 ESC="$(printf '\033')"
 BOLD="${ESC}[1m"
 BLUE="${ESC}[34m"
@@ -15,7 +14,6 @@ YELLOW="${ESC}[33m"
 RED="${ESC}[31m"
 RESET="${ESC}[0m"
 
-# Check required commands
 for cmd in curl sudo; do
     if ! command -v "$cmd" &>/dev/null; then
         printf '%sError: %s is not installed.%s\n' "$RED" "$cmd" "$RESET"
@@ -62,7 +60,6 @@ fi
 
 case "$answer" in
 [yY])
-    # Check if pacman is already running
     if [[ -f /var/lib/pacman/db.lck ]]; then
         printf '%s%s⚠️  Pacman is already running (lock file exists).%s\n' "$BOLD" "$RED" "$RESET"
         exit 1

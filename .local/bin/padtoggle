@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 # Author: cipherodio
-# Description: Toggle touchpad on/off using xinput + rofi
+# Description: Toggle touchpad using xinput via rofi
 
 set -euo pipefail
 
-# Sanity checks
 for cmd in xinput rofi notify-send; do
     command -v "$cmd" >/dev/null 2>&1 || {
         notify-send "podtoggle error" "$cmd not found"
@@ -12,7 +11,6 @@ for cmd in xinput rofi notify-send; do
     }
 done
 
-# Get touchpad ID
 id="$(
     xinput list |
         sed -n 's/.*[Tt]ouchpad.*id=\([0-9]\+\).*/\1/p' |
@@ -24,20 +22,17 @@ if [ -z "$id" ]; then
     exit 1
 fi
 
-# Get current state
 enabled="$(
     xinput list-props "$id" |
         awk '/Device Enabled/ { print $NF }'
 )"
 
-# Rofi confirmation
 confirm() {
     local prompt="$1"
     choice="$(printf "Yes\nNo\n" | rofi -dmenu -i -p "$prompt")"
     [ "$choice" = "Yes" ]
 }
 
-# Toggle
 if [ "$enabled" = "1" ]; then
     if confirm "[● TOUCHPAD ON] Disable touchpad?"; then
         xinput disable "$id"

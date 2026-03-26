@@ -4,20 +4,16 @@
 
 set -euo pipefail
 
-# Input files
 bmdirs="$XDG_CONFIG_HOME/shell/bm-dirs"
 bmfiles="$XDG_CONFIG_HOME/shell/bm-files"
 
-# Output files
 shell_shortcuts="$XDG_CONFIG_HOME/shell/shrc"
 zsh_named_dirs="$XDG_CONFIG_HOME/shell/zshdirrc"
 lf_shortcuts="$XDG_CONFIG_HOME/lf/shrc"
 
-# Reset outputs
 rm -f "$zsh_named_dirs" "$lf_shortcuts"
 printf "# vim: filetype=sh\nalias " >"$shell_shortcuts"
 
-# Helper: read bookmarks
 read_bookmarks() {
     while read -r key path _; do
         [[ -z $key || $key == \#* ]] && continue
@@ -25,7 +21,6 @@ read_bookmarks() {
     done <"$1"
 }
 
-# Directory bookmarks
 while IFS=$'\t' read -r key path; do
     expanded_path=${path@P}
 
@@ -39,11 +34,9 @@ while IFS=$'\t' read -r key path; do
         "$key" "$expanded_path" >>"$lf_shortcuts"
 done < <(read_bookmarks "$bmdirs")
 
-# File bookmarks
 while IFS=$'\t' read -r key path; do
     expanded_path=${path@P}
 
-    # $EDITOR intentionally deferred
     printf "%s=\"\\\$EDITOR %s\" \\\\\n" \
         "$key" "$expanded_path" >>"$shell_shortcuts"
 

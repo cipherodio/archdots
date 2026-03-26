@@ -6,7 +6,6 @@ set -euo pipefail
 
 file="$1"
 
-# Guard
 [[ -e "$file" ]] || exit 0
 
 case "$file" in

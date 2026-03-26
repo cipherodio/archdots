@@ -1,17 +1,14 @@
 #!/usr/bin/env bash
+# Author: cipherodio
+# Description: Backup files to external drive
 
 set -euo pipefail
 
-# ===== CONFIG =====
-
-# Source → Destination pairs
 declare -A DIRS=(
     ["$HOME/.local/share/calcurse"]="$HOME/.local/mnt/sda1/home/calcurse"
     ["$HOME/.local/share/task"]="$HOME/.local/mnt/sda1/home/task"
     ["$HOME/hub/src/cipherkeys"]="$HOME/.local/mnt/sda1/home/cipherkeys"
 )
-
-# ===== BACKUP =====
 
 for SRC in "${!DIRS[@]}"; do
     DEST="${DIRS[$SRC]}"
@@ -26,8 +23,6 @@ for SRC in "${!DIRS[@]}"; do
     echo "Done."
     echo
 done
-
-# ===== POST-SYNC: refresh lf =====
 
 if command -v lf >/dev/null 2>&1 && pgrep -x lf >/dev/null 2>&1; then
     lf -remote "send reload" >/dev/null 2>&1 || true

@@ -12,7 +12,6 @@ TORRENTLIST="$(
 )"
 
 for TORRENTID in $TORRENTLIST; do
-    # Remove asterisk from errored torrents
     TORRENTID="$(printf '%s\n' "$TORRENTID" | sed 's/\*//g')"
 
     info="$(transmission-remote -t "$TORRENTID" -i)"

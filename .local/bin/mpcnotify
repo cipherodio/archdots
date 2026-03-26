@@ -8,7 +8,6 @@ MSG_ID="280307"
 
 song="$(mpc current)"
 
-# Exit quietly if nothing is playing
 [ -n "$song" ] || exit 0
 
 dunstify \

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Author: cipherodio
 # Description: Mount USB drives and Android phones using rofi
+# Dependencies: simple-mtpfs
 # Mount point: ~/.local/mnt/<device>
 
 set -euo pipefail
@@ -11,13 +12,13 @@ mkdir -p "$MNT"
 USER_UID="$(id -u)"
 USER_GID="$(id -g)"
 
-# --- Android devices (simple-mtpfs) ---
+# Android devices
 phones="$(
     simple-mtpfs -l 2>/dev/null |
         sed 's/^/📱 /' || true
 )"
 
-# --- USB partitions (unmounted only) ---
+# Unmounted USB partitions
 usbparts="$(
     lsblk -nrpo NAME,TYPE,MOUNTPOINT |
         awk '$2=="part" && $3=="" { printf "💾 %s\n", $1 }' || true

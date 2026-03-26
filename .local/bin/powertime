@@ -11,11 +11,9 @@ fi
 
 info="$(acpi -b | head -n1)"
 
-# Extract fields safely
 percent="$(awk -F', ' '{print $2}' <<<"$info")"
 time="$(awk -F', ' '{print $3}' <<<"$info")"
 
-# If time is missing (e.g. Full or unknown)
 if [[ -z "${time:-}" ]]; then
     time="No estimate"
 fi

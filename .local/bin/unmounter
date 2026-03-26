@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Author: cipherodio
 # Description: Unmount USB drives and Android phones using rofi
+# Dependencies: simple-mtpfs
 # Unmounts devices in ~/.local/mnt
 
 set -euo pipefail
@@ -8,7 +9,7 @@ IFS=$'\n'
 
 MNT="$HOME/.local/mnt"
 
-# Android devices (simple-mtpfs)
+# Android devices
 mounteddroids="$(
     mount |
         awk '/simple-mtpfs/ { print "📱 " $3 }' || true

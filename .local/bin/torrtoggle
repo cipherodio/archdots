@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Author: cipherodio
-# Description: Toggle transmission-daemon using rofi
+# Description: Toggle transmission-daemon via rofi
 
 set -euo pipefail
 

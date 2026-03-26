@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Author: cipherodio
-# Description: Sync personal data, music, and wallpapers using rsync + rofi
+# Description: Sync personal data, music, and wallpapers using rsync via rofi
 
 set -euo pipefail
 
@@ -17,7 +17,6 @@ targetmusicdir="$HOME/.local/mnt/sda1/music/"
 sourcewalldir="/data/wallpapers/"
 targetwalldir="$HOME/.local/mnt/sda1/walls/"
 
-# Actions
 dpr() {
     rsync -anPv "$sourcefiledir" "$targetfiledir"
 }
@@ -42,7 +41,6 @@ wall() {
     rsync -aPv "$sourcewalldir" "$targetwalldir"
 }
 
-# Rofi menu
 choice="$(
     printf "%s\n" \
         "📁 Dry run: personal data" \
