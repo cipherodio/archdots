@@ -1,11 +1,9 @@
-# shell aliases (sourced by zsh)
+# shell aliases - sourced by zsh
 
 # Use neovim for vim if present
 [ -x "$(command -v nvim)" ] && alias vim="nvim" vimdiff="nvim -d"
 
-# ffmpeg="ffmpeg -hide_banner"
 # Verbosity and settings
-# shellcheck disable=SC2139,SC2304
 alias \
     cp="cp -iv" \
     mv="mv -iv" \
@@ -13,7 +11,6 @@ alias \
     bc="bc -ql" \
     mkd="mkdir -pv" \
     du="du -shc" \
-    mbsync="mbsync -c $HOME/.config/mbsync/mbsyncrc" \
     ve="python -m venv" \
     va="source $HOME/.venv/devtool/bin/activate" \
     vd="deactivate"
@@ -27,14 +24,14 @@ alias \
     ccat="highlight --out-format=ansi"
 
 # These common commands are just too long! abbreviate them
-# shellcheck disable=SC2139
 alias \
     pk="pkill" \
     rg="\rg --ignore-file ~/.config/ripgrep/ignore" \
     o="$FILE" \
     v="$EDITOR" \
     ec="emacsclient -c -n -a 'emacs'" \
-    z="zathura"
+    z="zathura" \
+    lf="lfprev"
 
 # Make
 alias \
@@ -43,7 +40,6 @@ alias \
     cm="make clean && rm -f config.h && git reset --hard origin/main"
 
 # Miscellaneous
-# shellcheck disable=SC2139
 alias \
     getpath="find -type f | fzf | sed 's/^..//' | tr -d '\n' | xclip -selection c" \
     twp="task status:deleted purge" \
