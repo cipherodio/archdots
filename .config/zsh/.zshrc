@@ -35,8 +35,8 @@ fi
 [ -f "$XDG_CONFIG_HOME/shell/zshdirrc" ] && source "$XDG_CONFIG_HOME/shell/zshdirrc"
 
 # LS colors (interactive only)
-if [[ -f $XDG_CONFIG_HOME/lscolors/onedark ]]; then
-  source "$XDG_CONFIG_HOME/lscolors/onedark"
+if [[ -f $XDG_CONFIG_HOME/lscolors/nord ]]; then
+  source "$XDG_CONFIG_HOME/lscolors/nord"
 fi
 
 # Sync tab-completion colors with your One Dark LS_COLORS
@@ -150,6 +150,9 @@ bindkey -s "^[d" "^ujfzf\n"
 
 # Source zsh-auto-suggestions
 source "$ZPLUG"/auto-suggestions/zsh-autosuggestions.zsh
+
+# Auto suggestion bind to ctrl+p
+bindkey '^P' autosuggest-accept
 
 # Source zsh-fast-syntax-highlighting
 source "$ZPLUG"/fasthl/fast-syntax-highlighting.plugin.zsh

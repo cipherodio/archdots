@@ -58,7 +58,7 @@ export SUDO_ASKPASS="$HOME/.local/bin/rofipass"
 export SUDO_PROMPT="[sudo] password for %p: "
 
 # Fzf
-export FZF_DEFAULT_OPTS_FILE="$XDG_CONFIG_HOME/fzf/themes/onedark"
+export FZF_DEFAULT_OPTS_FILE="$XDG_CONFIG_HOME/fzf/themes/nord"
 export FZF_DEFAULT_OPTS="
 --gutter ' '
 --exact
@@ -88,7 +88,7 @@ if [[ -f "$HOME/hub/src/cipherkeys/zshenv-local" ]]; then
 fi
 
 # Fix for java applications in dwm
-export _JAVA_AWT_WM_NONREPARENTING=1
+# export _JAVA_AWT_WM_NONREPARENTING=1
 
 # NOTE: Set Qt to use GTK theme (For now this breaks kdenlive, shotcut)
 
