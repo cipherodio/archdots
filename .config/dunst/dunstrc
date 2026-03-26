@@ -22,7 +22,7 @@
     horizontal_padding = 8
     text_icon_padding = 0
     frame_width = 1
-    frame_color = "#73b8f1"
+    frame_color = "#81a1c1"
     separator_color = frame
     sort = yes
 
@@ -54,21 +54,21 @@
     per_monitor_dpi = false
 
 [urgency_low]
-    background = "#282c34"
-    foreground = "#abb2bf"
+    background = "#2e3440"
+    foreground = "#d8dee9"
 # NOTE: Need highlight for my audiobar script progress bar color
-    highlight = "#e5c07b"
+    highlight = "#ebcb8b"
     timeout = 3
 
 [urgency_normal]
-    background = "#282c34"
-    foreground = "#abb2bf"
+    background = "#2e3440"
+    foreground = "#d8dee9"
     timeout = 5
 
 [urgency_critical]
-    background = "#282c34"
-    foreground = "#abb2bf"
-    frame_color = "#e06c75"
+    background = "#2e3440"
+    foreground = "#d8dee9"
+    frame_color = "#bf616a"
     timeout = 10
 
 # use dunst -print to show appname and summary
