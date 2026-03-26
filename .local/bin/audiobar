@@ -1,35 +1,34 @@
 #!/usr/bin/env bash
 # Author: cipherodio
-# Description: Show volume change as a dunst progress bar
+# Description: Show volume change as a dunst progress bar using wpctl
 
 set -euo pipefail
 
-sink=${1:-0}
-delta=${2:-0}
-
+sink="@DEFAULT_AUDIO_SINK@"
+action=${1:-0}
 msg_id=991049
-max_vol=150
-min_vol=0
 
-# Get current volume (integer percent)
-current_vol=$(
-    pactl get-sink-volume "$sink" |
-        awk '{print $5}' |
-        tr -d '%'
-)
+if [[ "$action" == "toggle" ]]; then
+    wpctl set-mute "$sink" toggle
+else
+    if [[ "$action" =~ ^- ]]; then
+        change="${action#-}%-"
+    elif [[ "$action" =~ ^\+ ]]; then
+        change="${action#+}%+"
+    else
+        change="${action}%+"
+    fi
+    wpctl set-volume "$sink" "$change"
+    wpctl set-mute "$sink" 0
+fi
 
-# Calculate new volume
-new_vol=$((current_vol + delta))
-((new_vol > max_vol)) && new_vol=$max_vol
-((new_vol < min_vol)) && new_vol=$min_vol
+vol_raw=$(wpctl get-volume "$sink")
+current_vol=$(echo "$vol_raw" | awk '{print $2 * 100}' | xargs printf "%.0f")
 
-# Apply volume
-pactl set-sink-volume "$sink" "${new_vol}%"
-
-# Notify
-dunstify \
-    -a "audiobar" \
-    -u low \
-    -r "$msg_id" \
-    -h "int:value:$new_vol" \
-    "󰕾 Volume: ${new_vol}%"
+if [[ "$vol_raw" == *"[MUTED]"* ]]; then
+    dunstify -a "audiobar" -u low -r "$msg_id" "Muted"
+else
+    dunstify -a "audiobar" -u low -r "$msg_id" \
+        -h "int:value:$current_vol" \
+        "Volume: ${current_vol}%"
+fi
