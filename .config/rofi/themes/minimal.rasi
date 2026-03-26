@@ -1,0 +1,78 @@
+// * {
+//     bg: #282c34;
+//     fg: #abb2bf;
+//     yellow: #e5c07b;
+// }
+@import "../colors/nord.rasi"
+
+configuration {
+    drun {
+        display-name: "  ";
+    }
+    font: "monospace 14";
+}
+
+window {
+    width: 25%;
+    border: 1;
+    border-color : @yellow;
+    background-color: @bg;
+}
+
+mainbox {
+    background-color: @bg;
+    padding: 10px;
+}
+
+inputbar {
+    children: [prompt,entry];
+    background-color: @bg;
+}
+
+
+prompt {
+    background-color: @bg;
+    text-color: @fg;
+}
+
+entry {
+    background-color: @bg;
+    text-color: @fg;
+}
+
+
+listview {
+    background-color : @bg;
+    padding: 5px 0 0;
+    lines: 8;
+}
+
+element {
+    background-color: @bg;
+    text-color: @fg;
+}
+
+element-icon {
+    background-color: inherit;
+    padding: 0 10px 0 0;
+    size: 1.2em;
+}
+
+
+element selected {
+    background-color: @yellow;
+    // text-color: @bg;
+}
+
+element-text {
+    background-color : inherit;
+    text-color : inherit;
+    padding : 2px;
+}
+
+element-text selected {
+    background-color: @yellow;
+    text-color: @bg;
+    // padding: 0.2em 0.2em 0.2em 0.2em;
+    // border-radius: 5px;
+}

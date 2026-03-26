@@ -17,4 +17,4 @@ drun {
     parse-dbus: false;
 }
 
-@theme "~/.config/rofi/themes/onedark.rasi"
+@theme "~/.config/rofi/themes/minimal.rasi"
