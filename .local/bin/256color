@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Author: cipherodio (optimized)
+# Author: cipherodio
 # Description: Print all 256 ANSI colours with readable contrast
 
 set -euo pipefail
@@ -9,19 +9,16 @@ readonly COLOURS=256
 contrast_colour() {
     local c=$1 g
 
-    # First 16 ANSI colours
     if ((c < 16)); then
         ((c == 0)) && printf 15 || printf 0
         return
     fi
 
-    # Greyscale ramp (232–255)
     if ((c > 231)); then
         ((c < 244)) && printf 15 || printf 0
         return
     fi
 
-    # 6×6×6 colour cube
     g=$((((c - 16) % 36) / 6))
     ((g > 2)) && printf 0 || printf 15
 }
@@ -57,8 +54,6 @@ print_blocks() {
         done
     done
 }
-
-# --- Output ---
 
 print_run 0 16
 printf '\n'
