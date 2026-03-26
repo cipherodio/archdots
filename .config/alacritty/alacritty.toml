@@ -1,5 +1,5 @@
 [general]
-import = ["~/.config/alacritty/themes/onedark.toml"]
+import = ["~/.config/alacritty/themes/nord.toml"]
 live_config_reload = true
 
 [colors]
@@ -31,21 +31,21 @@ style = "Regular"
 
 [font.bold]
 family = "monospace"
-style = "ExtraBold"
+style = "Bold"
 
 [font.italic]
 family = "monospace"
-style = "SemiBold Italic"
+style = "Italic"
 
 [font.bold_italic]
 family = "monospace"
-style = "ExtraBold Italic"
+style = "Bold Italic"
 
 [window]
 opacity = 1
 dynamic_padding = true
-padding.x = 10
-padding.y = 10
+padding.x = 15
+padding.y = 15
 decorations = "none"
 
 # [scrolling]
@@ -59,8 +59,8 @@ style = { blinking = "Never" }
 unfocused_hollow = false
 thickness = 0.16
 
-[mouse]
-hide_when_typing = true
+# [mouse]
+# hide_when_typing = true
 
 [keyboard]
 bindings = [
