@@ -65,6 +65,16 @@ highlight article ":.*\\(embedded flash\\)$" magenta default
 bind-key ` macro-prefix
 unbind-key ,
 browser linkhandler
-macro d set browser "setsid -f rofihandler"; open-in-browser; set browser linkhandler
-macro c set browser "echo %u | xclip -r -sel c"; open-in-browser ; set browser linkhandler
-macro b set browser "$BROWSER"; open-in-browser; set browser linkhandler
+
+# Options: macro+d or `+d
+# copy: copy link
+# browser: open in $BROWSER
+# mpv: open in mpv
+# download: attachments
+# ytv: download videos
+# yta: download audio only
+macro d set browser "setsid -f rofihandler %u"; open-in-browser; set browser linkhandler
+# Copy link to clipboard
+macro c set browser "setsid -f sh -c 'printf %s %u | xclip -r -sel c && notify-send \"󱓦 URL copied to clipboard\"'"; open-in-browser; set browser linkhandler
+# Open in $BROWSER
+macro b set browser "setsid -f $BROWSER"; open-in-browser; set browser linkhandler
