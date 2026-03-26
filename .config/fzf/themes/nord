@@ -1,0 +1,13 @@
+--color=bg:-1
+--color=bg+:#3b4252
+--color=fg:#e5e9f0
+--color=fg+:#eceff4
+--color=hl:#81a1c1
+--color=hl+:#88c0d0
+--color=header:#5e81ac
+--color=info:#b48ead
+--color=pointer:#81a1c1
+--color=marker:#a3be8c
+--color=spinner:#b48ead
+--color=prompt:#88c0d0
+--color=border:#4c566a
