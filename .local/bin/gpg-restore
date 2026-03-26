@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Author: cipherodio
-# Description: Restore GPG keys, ownertrust, public key, and password-store (human-readable verification)
+# Description: Restore GPG keys, ownertrust, public key, and password-store
 
 set -euo pipefail
 
@@ -36,7 +36,7 @@ gpg --batch --yes --decrypt private.asc.gpg | gpg --import
 printf '==> Restoring ownertrust…\n'
 gpg --import-ownertrust ownertrust.txt
 
-# Human-readable verification
+# Verification
 printf '\n==> Verifying imported keys (human-readable)…\n'
 printf '\nPublic keys:\n'
 gpg --list-keys --fingerprint
@@ -55,7 +55,7 @@ fi
 chmod 700 "$PASS_DIR"
 find "$PASS_DIR" -type f -name '*.gpg' -exec chmod 600 {} +
 
-# Verify pass works
+# Verify if pass works
 printf '\n==> Verifying pass…\n'
 pass ls >/dev/null
 
