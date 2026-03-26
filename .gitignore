@@ -51,6 +51,7 @@ hub/
 .config/go/
 .config/ibus/
 .config/lf/shrc
+.config/inkscape/
 .config/Meltytech
 .config/mozilla/
 .config/mpd/database
