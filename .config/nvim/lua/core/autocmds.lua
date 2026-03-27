@@ -43,13 +43,19 @@ autocmd({ "BufLeave", "WinLeave", "InsertEnter", "CmdlineEnter" }, {
 })
 
 autocmd("BufWritePre", {
-    desc = "Remove trailing white spaces",
+    desc = "Remove trailing white spaces and convert tabs to spaces",
     group = groups.whitespaces,
     callback = function()
         if not vim.bo.modifiable then
             return
         end
-        vim.cmd([[silent! %s/\s\+$//]])
+        local view = vim.fn.winsaveview()
+        pcall(function()
+            vim.cmd("undojoin")
+        end)
+        vim.cmd([[silent! keepjumps keepmarks %s/\s\+$//e]])
+        vim.cmd([[silent! keepjumps keepmarks retab!]])
+        vim.fn.winrestview(view)
     end,
 })
 
