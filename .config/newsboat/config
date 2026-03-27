@@ -3,13 +3,14 @@ show-read-feeds yes
 auto-reload no
 confirm-mark-all-feeds-read no
 confirm-mark-feed-read no
-max-items 50
+max-items 1000
 reload-threads 8
 show-read-feeds yes
 show-read-articles yes
 error-log "~/.config/newsboat/error.log"
 goto-first-unread no
 goto-next-feed no
+text-width 72
 
 # Bindings
 bind-key j down
@@ -30,36 +31,35 @@ bind-key N prev-unread
 bind-key D pb-download
 bind-key U show-urls
 bind-key x pb-delete
+bind-key s select-tag
+bind-key c clear-tag
 
 # Formats
-feedlist-format "%t %u"
+feedlist-format "[%T] %u %t"
 articlelist-format "%4i %f %D %?T?|%-17T| ?%t"
-feedlist-title-format "%N feeds with new articles(%u/%t) "
 articlelist-title-format "%T"
 
-# Feed list
-highlight feedlist "(Distro News|Youtube|Subreddits)" red black bold
-highlight feedlist "(Webtoon|Tech News)" red black bold
-
-# Colors
-color listnormal color244 default
-color listnormal_unread white default
-color listfocus red default
-color listfocus_unread red default bold
+# Appearance
 color info blue default bold
-color article white default bold
 
-highlight all "---.*---" yellow
-highlight feedlist ".*(0/0))" black green bold
-highlight article "(^Feed:.*|^Title:.*|^Author:.*)" cyan default bold
-highlight article "(^Link:.*|^Date:.*)" default default underline
-highlight article "https?://[^ ]+" green default
-highlight article "\\[[0-9][0-9]*\\]" magenta default bold
-highlight article "\\[image [0-9][0-9]*\\]" green default bold
-highlight article "\\[embedded flash: [0-9][0-9]*\\]" green default bold
-highlight article ":.*\\(link\\)$" cyan default
-highlight article ":.*\\(image\\)$" blue default
-highlight article ":.*\\(embedded flash\\)$" magenta default
+highlight all "---.*---" color14 default bold
+highlight feedlist ".*(0/0))" color8 default
+
+color listnormal color242 default
+color listnormal_unread color15 default
+color listfocus color0 color4 bold
+color listfocus_unread color0 color4 bold
+
+color article       color15    default
+highlight article "https?://[^ ]+" color14 default underline
+highlight article "\\[[0-9]+\\]" color13 default bold
+highlight article "\\[image [0-9]+\\]" color12 default bold
+highlight article "(^Feed:.*)" red default bold
+highlight article "(^Title:.*)" yellow default bold
+highlight article "(^Date:.*)" green default underline
+highlight article "(^Author:.*)" blue default bold
+
+color end-of-text-marker default default invis
 
 # Macros
 bind-key ` macro-prefix
@@ -78,3 +78,14 @@ macro d set browser "setsid -f rofihandler %u"; open-in-browser; set browser lin
 macro c set browser "setsid -f sh -c 'printf %s %u | xclip -r -sel c && notify-send \"󱓦 URL copied to clipboard\"'"; open-in-browser; set browser linkhandler
 # Open in $BROWSER
 macro b set browser "setsid -f $BROWSER"; open-in-browser; set browser linkhandler
+
+# Podboat
+podlist-format "%i [%S] [%p %%] %b"
+download-path "~/hub/downloads/%n"
+download-filename-format "%t.%e"
+max-downloads 3
+player "mpv --audio-display=no"
+
+# Open podboat then auto start download on the list
+macro e enqueue ; set browser "podboat -a"; open-in-browser; set browser linkhandler
+
