@@ -12,7 +12,7 @@ assets = os.path.expanduser("~/.config/qtile/assets")
 # Widgets
 widget_texts = dict(
     font="monospace",
-    fontsize=20,
+    fontsize=16,
     padding=5,
 )
 widget_defaults = dict(
