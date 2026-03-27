@@ -3,31 +3,31 @@
 
 /* Colors */
 :root {
-	--tab-active-bg-color: #2e3440;
-	--tab-inactive-bg-color: #2e3440;
-	--tab-active-fg-fallback-color: #81a1c1;
-	--tab-inactive-fg-fallback-color: #616e88;
-	--urlbar-focused-bg-color: #3b4252;
-	--urlbar-not-focused-bg-color: #2e3440;
-	--toolbar-bgcolor: #2b2a33 !important;
-    --url-highlight-bg: #88c0d0;
+    --tab-active-bg-color: #2e3440;
+    --tab-inactive-bg-color: #2e3440;
+    --tab-active-fg-fallback-color: #81a1c1;
+    --tab-inactive-fg-fallback-color: #616e88;
+    --urlbar-focused-bg-color: #2e3440;
+    --urlbar-not-focused-bg-color: #2e3440;
+    --toolbar-bgcolor: #2b2a33 !important;
+    --url-highlight-bg: #5b7a88; */
     --url-highlight-fg: #d8dee9;
-	--tab-font: 'monospace';
-	--urlbar-font: 'monospace';
+    --tab-font: 'monospace';
+    --urlbar-font: 'monospace';
 
-	/* Try increasing if you encounter problems */
-	--urlbar-height-setting: 22px;
-	--tab-min-height: 18px !important;
+    /* Try increasing if you encounter problems */
+    --urlbar-height-setting: 22px;
+    --tab-min-height: 18px !important;
 
-	/* I don't recommend you touch this unless you know what you're doing */
-	--arrowpanel-menuitem-padding: 2px !important;
-	--arrowpanel-border-radius: 0px !important;
-	--arrowpanel-menuitem-border-radius: 0px !important;
-	--toolbarbutton-border-radius: 0px !important;
-	--toolbarbutton-inner-padding: 0px 2px !important;
-	--toolbar-field-focus-background-color: var(--urlbar-focused-bg-color) !important;
-	--toolbar-field-background-color: var(--urlbar-not-focused-bg-color) !important;
-	--toolbar-field-focus-border-color: transparent !important;
+    /* I don't recommend you touch this unless you know what you're doing */
+    --arrowpanel-menuitem-padding: 2px !important;
+    --arrowpanel-border-radius: 0px !important;
+    --arrowpanel-menuitem-border-radius: 0px !important;
+    --toolbarbutton-border-radius: 0px !important;
+    --toolbarbutton-inner-padding: 0px 2px !important;
+    --toolbar-field-focus-background-color: var(--urlbar-focused-bg-color) !important;
+    --toolbar-field-background-color: var(--urlbar-not-focused-bg-color) !important;
+    --toolbar-field-focus-border-color: transparent !important;
 }
 
 /* -- GENERAL DEBLOAT -- */
@@ -63,7 +63,7 @@ toolbar .toolbarbutton-1 { padding: 0 0 !important; }
 * close to the urlbar
 */
 #downloads-button {
-	margin-left: 2px !important;
+    margin-left: 2px !important;
 }
 
 /*
@@ -71,37 +71,37 @@ toolbar .toolbarbutton-1 { padding: 0 0 !important; }
 * touch the edge of the window
 */
 #PanelUI-menu-button {
-	padding: 0px 4px 0px 0px !important;
+    padding: 0px 4px 0px 0px !important;
 }
 
 #urlbar-container {
-	--urlbar-container-height: var(--urlbar-height-setting) !important;
-	margin-left: 0 !important;
-	margin-right: 0 !important;
-	padding-top: 0 !important;
-	padding-bottom: 0 !important;
-	font-family: var(--urlbar-font, 'monospace');
-	font-size: 14px;
+    --urlbar-container-height: var(--urlbar-height-setting) !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    font-family: var(--urlbar-font, 'monospace');
+    font-size: 14px;
 }
 
 #urlbar {
-	--urlbar-height: var(--urlbar-height-setting) !important;
-	--urlbar-toolbar-height: var(--urlbar-height-setting) !important;
-	min-height: var(--urlbar-height-setting) !important;
-	border-color: var(--lwt-toolbar-field-border-color, hsla(240,5%,5%,.25)) !important;
+    --urlbar-height: var(--urlbar-height-setting) !important;
+    --urlbar-toolbar-height: var(--urlbar-height-setting) !important;
+    min-height: var(--urlbar-height-setting) !important;
+    border-color: var(--lwt-toolbar-field-border-color, hsla(240,5%,5%,.25)) !important;
 }
 
 #urlbar-input {
-	margin-left: 0.4em !important;
-	margin-right: 0.4em !important;
+    margin-left: 0.4em !important;
+    margin-right: 0.4em !important;
 }
 #urlbar > .urlbar-input-container {
-	padding: 0 !important;
-	border: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
 }
 
 #navigator-toolbox {
-	border: none !important;
+    border: none !important;
 }
 
 /* Keep pop-up menus from overlapping with navbar */
@@ -113,7 +113,7 @@ toolbar .toolbarbutton-1 { padding: 0 0 !important; }
 /* -- UNIFIED EXTENSION BUTTON -- */
 /* Make extension icons smaller */
 #unified-extensions-view {
-	--uei-icon-size: 16px;
+    --uei-icon-size: 16px;
 }
 
 /* Hide bloat */
@@ -121,30 +121,30 @@ toolbar .toolbarbutton-1 { padding: 0 0 !important; }
 #unified-extensions-view > .panel-header,
 #unified-extensions-view > toolbarseparator,
 #unified-extensions-manage-extensions {
-	display: none !important;
+    display: none !important;
 }
 
 /* Add 3px padding on the top and the bottom of the box */
 .panel-subview-body {
-	padding: 3px 0px !important;
+    padding: 3px 0px !important;
 }
 
 #unified-extensions-view .toolbarbutton-icon {
-	padding: 0 !important;
+    padding: 0 !important;
 }
 
 .unified-extensions-item-contents {
-	line-height: 1 !important;
-	white-space: nowrap !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
 }
 
 #unified-extensions-panel .unified-extensions-item {
-	margin-block: 0 !important;
+    margin-block: 0 !important;
 }
 
 .toolbar-menupopup :is(menu, menuitem), .subview-subheader, panelview
 .toolbarbutton-1, .subviewbutton, .widget-overflow-list .toolbarbutton-1 {
-	padding: 4px !important;
+    padding: 4px !important;
 }
 
 /* -- DEBLOAT URLBAR -- */
@@ -160,11 +160,11 @@ toolbar .toolbarbutton-1 { padding: 0 0 !important; }
 * tab title text color
 */
 #identity-icon-box {
-	margin-inline-end: 0 !important;
-	padding: 0 4px !important;
+    margin-inline-end: 0 !important;
+    padding: 0 4px !important;
 }
 .tabbrowser-tab[usercontextid] > .tab-stack > .tab-background > .tab-context-line {
-	display: none !important;
+    display: none !important;
 }
 
 /* Go to arrow button at the end of the urlbar when searching */
@@ -175,65 +175,65 @@ toolbar .toolbarbutton-1 { padding: 0 0 !important; }
 
 /* -- STYLE TAB TOOLBAR -- */
 #titlebar {
-	--proton-tab-block-margin: 0px !important;
-	--tab-block-margin: 0px !important;
+    --proton-tab-block-margin: 0px !important;
+    --tab-block-margin: 0px !important;
 }
 
 #TabsToolbar, .tabbrowser-tab {
-	max-height: var(--tab-min-height) !important;
-	font-size: 14px !important;
+    max-height: var(--tab-min-height) !important;
+    font-size: 14px !important;
 }
 
 /* Change color of normal tabs */
 tab:not([selected="true"]) {
-	background-color: var(--tab-inactive-bg-color) !important;
-	color: var(--identity-icon-color, var(--tab-inactive-fg-fallback-color)) !important;
+    background-color: var(--tab-inactive-bg-color) !important;
+    color: var(--identity-icon-color, var(--tab-inactive-fg-fallback-color)) !important;
 }
 
 tab {
-	font-family: var(--tab-font, monospace);
-	font-weight: bold;
-	border: none !important;
-	padding-top: 0 !important;
+    font-family: var(--tab-font, monospace);
+    font-weight: bold;
+    border: none !important;
+    padding-top: 0 !important;
 }
 
 .tab-content {
-	padding: 0 0 0 var(--tab-inline-padding);
+    padding: 0 0 0 var(--tab-inline-padding);
 }
 
 .tab-background {
-	margin-block: 0 !important;
-	min-height: var(--tab-min-height);
-	outline-offset: 0 !important;
+    margin-block: 0 !important;
+    min-height: var(--tab-min-height);
+    outline-offset: 0 !important;
 }
 
 /* Safari style tab width */
 .tabbrowser-tab[fadein] {
-	max-width: 100vw !important;
-	border: none
+    max-width: 100vw !important;
+    border: none
 }
 
 /* Hide close button on tabs */
 #tabbrowser-tabs .tabbrowser-tab .tab-close-button { display: none !important; }
 
 .tabbrowser-tab {
-	/* Remove border between tabs */
-	padding-inline: 0px !important;
-	/* Reduce fade effect of tab text */
-	--tab-label-mask-size: 1em !important;
-	/* Fix pinned tab behaviour on overflow */
-	overflow-clip-margin: 0px !important;
+    /* Remove border between tabs */
+    padding-inline: 0px !important;
+    /* Reduce fade effect of tab text */
+    --tab-label-mask-size: 1em !important;
+    /* Fix pinned tab behaviour on overflow */
+    overflow-clip-margin: 0px !important;
 }
 
 /* Tab: selected colors */
 #tabbrowser-tabs .tabbrowser-tab[selected] .tab-content {
-	background: var(--tab-active-bg-color) !important;
-	color: var(--identity-icon-color, var(--tab-active-fg-fallback-color)) !important;
+    background: var(--tab-active-bg-color) !important;
+    color: var(--identity-icon-color, var(--tab-active-fg-fallback-color)) !important;
 }
 
 /* Tab: hovered colors */
 #tabbrowser-tabs .tabbrowser-tab:hover:not([selected]) .tab-content {
-	background: var(--tab-active-bg-color) !important;
+    background: var(--tab-active-bg-color) !important;
 }
 
 /* Hide window controls */
@@ -249,7 +249,7 @@ tab {
 
 /* Remove dark space between pinned tab and first non-pinned tab */
 #pinned-tabs-container {
-	margin-inline-end: 0 !important;
+    margin-inline-end: 0 !important;
 }
 
 /* Remove dropdown menu button which displays all tabs on overflow */
@@ -257,11 +257,11 @@ tab {
 
 /* Fix displaying of pinned tabs on overflow */
 #tabbrowser-tabs:not([secondarytext-unsupported]) .tab-label-container {
-	height: var(--tab-min-height) !important;
+    height: var(--tab-min-height) !important;
 }
 
 #tabbrowser-tabs {
-	min-height: var(--tab-min-height) !important;
+    min-height: var(--tab-min-height) !important;
 }
 
 /* Remove overflow scroll buttons */
@@ -269,51 +269,51 @@ tab {
 
 /* Remove new tab button */
 #tabs-newtab-button {
-	display: none !important;
+    display: none !important;
 }
 
 /* Hide private browsing indicator */
 #private-browsing-indicator-with-label {
-	display: none;
+    display: none;
 }
 
 /* -- AUTOHIDE NAVBAR -- */
 :root {
-	--uc-navbar-transform: calc(0px - var(--urlbar-height-setting));
+    --uc-navbar-transform: calc(0px - var(--urlbar-height-setting));
 }
 
 #navigator-toolbox > div {
-	display: contents;
+    display: contents;
 }
 
 :root[sessionrestored] :where(
-	#nav-bar,
-	#PersonalToolbar,
-	#tab-notification-deck,
-	.global-notificationbox
+    #nav-bar,
+    #PersonalToolbar,
+    #tab-notification-deck,
+    .global-notificationbox
 ) {
-	transform: translateY(var(--uc-navbar-transform));
+    transform: translateY(var(--uc-navbar-transform));
 }
 
 :root:is([customizing], [chromehidden*="toolbar"]) :where(
-	#nav-bar,
-	#PersonalToolbar,
-	#tab-notification-deck,
-	.global-notificationbox
+    #nav-bar,
+    #PersonalToolbar,
+    #tab-notification-deck,
+    .global-notificationbox
 ) {
-	transform: none !important;
-	opacity: 1 !important;
+    transform: none !important;
+    opacity: 1 !important;
 }
 
 #nav-bar:not([customizing]) {
-	opacity: 0;
-	position: relative;
-	z-index: 2;
+    opacity: 0;
+    position: relative;
+    z-index: 2;
 }
 
 #titlebar {
-	position: relative;
-	z-index: 3;
+    position: relative;
+    z-index: 3;
 }
 
 #navigator-toolbox,
@@ -321,13 +321,13 @@ tab {
 #sidebar-main,
 #sidebar-splitter,
 #tabbrowser-tabbox {
-	z-index: auto !important;
+    z-index: auto !important;
 }
 
 /* Show when toolbox is focused, like when urlbar has received focus */
 #navigator-toolbox:focus-within > .browser-toolbar {
-	transform: translateY(0);
-	opacity: 1;
+    transform: translateY(0);
+    opacity: 1;
 }
 
 /* Show when toolbox is hovered */
@@ -335,28 +335,28 @@ tab {
 .browser-titlebar:hover ~ :is(#nav-bar, #PersonalToolbar),
 #nav-bar:hover,
 #nav-bar:hover + #PersonalToolbar {
-	transform: translateY(0);
-	opacity: 1;
+    transform: translateY(0);
+    opacity: 1;
 }
 
 :root[sessionrestored] #urlbar[popover] {
-	opacity: 0;
-	pointer-events: none;
-	transform: translateY(var(--uc-navbar-transform));
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(var(--uc-navbar-transform));
 }
 
 #mainPopupSet:has(> [panelopen]:not(
-	#ask-chat-shortcuts,
-	#selection-shortcut-action-panel,
-	#chat-shortcuts-options-panel,
-	#tab-preview-panel
+    #ask-chat-shortcuts,
+    #selection-shortcut-action-panel,
+    #chat-shortcuts-options-panel,
+    #tab-preview-panel
 )) ~ toolbox #urlbar[popover],
 .browser-titlebar:is(:hover, :focus-within) ~ #nav-bar #urlbar[popover],
 #nav-bar:is(:hover, :focus-within) #urlbar[popover],
 #urlbar-container > #urlbar[popover]:is([focused], [open]) {
-	opacity: 1;
-	pointer-events: auto;
-	transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
 }
 
 /*
@@ -364,18 +364,18 @@ tab {
 * other selectors as well
 */
 #mainPopupSet:has(> [panelopen]:not(
-	#ask-chat-shortcuts,
-	#selection-shortcut-action-panel,
-	#chat-shortcuts-options-panel,
-	#tab-preview-panel
+    #ask-chat-shortcuts,
+    #selection-shortcut-action-panel,
+    #chat-shortcuts-options-panel,
+    #tab-preview-panel
 )) ~ #navigator-toolbox > .browser-toolbar {
-	transform: translateY(0);
-	opacity: 1;
+    transform: translateY(0);
+    opacity: 1;
 }
 
 /* Move up the content view */
 :root[sessionrestored]:not([chromehidden~="toolbar"]) > body > #browser {
-	margin-top: var(--uc-navbar-transform);
+    margin-top: var(--uc-navbar-transform);
 }
 
 /* -- MY EDITS -- */
