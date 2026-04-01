@@ -11,7 +11,7 @@ transparent_background_colors = true
 # args = ["--login", "-c", "tmux a -t main || tmux new -s main"]
 
 [font]
-size = 10
+size = 9
 offset.x = 0
 offset.y = 0
 glyph_offset.x = 0
