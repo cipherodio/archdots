@@ -20,6 +20,7 @@ blender
 cef_user_data
 dconf
 downloads
+eln-cache
 elpa
 go
 htop
