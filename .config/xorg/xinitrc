@@ -6,7 +6,7 @@ setwallpaper &
 xrdb "${XDG_CONFIG_HOME:-$HOME/.config}"/xorg/xdefaults &
 xrdbpid=$!
 # /usr/bin/emacs --daemon &
-# emacs --daemon &
+emacs --daemon &
 
 autostart="mpd picom dunst unclutter"
 
