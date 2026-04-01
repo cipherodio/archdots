@@ -15,7 +15,7 @@ return {
         date_format = "%Y-%m-%d",
         help = false,
         help_separator = false,
-        border = "solid",
+        border = "single",
         title = false,
         calendar = {
             enabled = true,
