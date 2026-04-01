@@ -5,7 +5,6 @@
 set -euo pipefail
 
 playlist="$(
-    # mpc playlist -f "%position% - %title% - %artist% - %album%" || true
     mpc playlist -f "%title% - %artist%" || true
 )"
 

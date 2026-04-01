@@ -6,8 +6,15 @@ set -euo pipefail
 
 MSG_ID="280307"
 
-song="$(mpc current)"
+# Small delay to avoid race from mpcplaylist script
+sleep 0.15
 
+status="$(mpc status)"
+
+# Only notify if actually playing
+grep -q '\[playing\]' <<<"$status" || exit 0
+
+song="$(mpc current)"
 [ -n "$song" ] || exit 0
 
 dunstify \
