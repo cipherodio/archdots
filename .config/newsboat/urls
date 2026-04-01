@@ -1,10 +1,19 @@
+https://data.gmanetwork.com/gno/rss/weather/feed.xml "ph-news" "~Weather"
+https://www.youtube.com/feeds/videos.xml?channel_id=UCqYw-CTd1dU2yGI71sEyqNw "youtube-news" "~GMA News"
+
+https://www.youtube.com/feeds/videos.xml?channel_id=UC16niRr50-MSBwiO3YDb3RA "youtube-news" "~BBC News"
+
+https://www.youtube.com/feeds/videos.xml?channel_id=UCBx0UKTeZ6VS-bNFZ1cCTIA "yt-prank" "~Ser Geybin"
+
 https://www.archlinux.org/feeds/news/ "archlinux" "~News"
-https://archlinux.org/feeds/packages/ "archlinux" "~Updated Packages"
+https://archlinux.org/feeds/packages/ "archlinux" "~Packages"
 https://archlinux.org/feeds/releases/ "archlinux" "~ISO Release"
 https://voidlinux.org/atom.xml "voidlinux" "~News"
 https://www.youtube.com/feeds/videos.xml?channel_id=UCVls1GmFKf6WlTraIb_IaJg "youtube-linux" "~Distrotube"
 
-https://github.com/qtile/qtile/commits/master.atom "windowmanager" "~Qtile"
+https://github.com/qtile/qtile/commits/master.atom "gitcommit" "~Qtile"
+https://github.com/neovim/neovim/commits/master.atom "gitcommit" "~Neovim"
+https://github.com/nvim-orgmode/orgmode/commits/master.atom "gitcommit" "~Nvim-orgmode"
 
 https://www.reddit.com/r/unixporn.rss "reddit" "~Unixporn"
 
