@@ -37,7 +37,8 @@ cmd open ${{
     case $(file --mime-type "$(readlink -f $f)" -b) in
         text/troff) man ./ $f ;;
         text/*|application/javascript|inode/x-empty|application/json| \
-        application/octet-stream|application/x-wine-extension-ini) \
+        application/octet-stream|application/x-wine-extension-ini| \
+        application/mbox) \
         $EDITOR $fx ;;
         image/x-xcf|image/svg+xml) setsid -f gimp $f >/dev/null 2>&1 & ;;
         image/*) rotdir $f | setsid nsxiv -oai 2>/dev/null | lf-select & ;;
