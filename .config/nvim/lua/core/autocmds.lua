@@ -1,6 +1,6 @@
 local autocmd = vim.api.nvim_create_autocmd
-local f = require("utils.followlink")
 local h = require("utils.helper")
+local mh = require("utils.mdhelper")
 
 ---@param name string
 ---@return integer
@@ -157,7 +157,7 @@ autocmd("FileType", {
         vim.keymap.set(
             "n",
             "gf",
-            f.follow_markdown_link,
+            mh.follow_markdown_link,
             { buffer = true, silent = true, desc = "Follow Markdown link" }
         )
     end,

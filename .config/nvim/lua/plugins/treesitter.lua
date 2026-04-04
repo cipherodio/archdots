@@ -15,6 +15,7 @@ return {
             local parsers = {
                 "bash",
                 "commonlisp",
+                "c",
                 "cpp",
                 "css",
                 "diff",

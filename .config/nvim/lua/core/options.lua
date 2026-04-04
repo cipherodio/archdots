@@ -25,8 +25,7 @@ opt.mouse = "a"
 opt.clipboard = "unnamedplus"
 opt.confirm = true
 opt.virtualedit = "block"
-opt.formatoptions:remove("c", "r", "o")
-opt.formatoptions:append("j", "n", "q")
+opt.formatoptions = "jcroqlnt"
 opt.splitbelow = true
 opt.splitright = true
 opt.splitkeep = "screen"

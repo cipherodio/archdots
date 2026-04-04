@@ -1,7 +1,8 @@
-local cur = require("utils.currency")
+local cb = require("utils.currency")
 local h = require("utils.helper")
 local km = require("utils.keyhelper")
 local lsph = require("utils.lsphelper")
+local mh = require("utils.mdhelper")
 local r = require("utils.replacer")
 local s = require("utils.spellhelper")
 
@@ -26,8 +27,8 @@ km.emap("<esc>", h.smart_esc, { desc = "Editor: clear search on escape" })
 km.nmap("<leader>wd", "<cmd>%d<cr>", { desc = "Write: delete all text in file" })
 
 -- Personal
-km.nmap("<leader>mf", h.open_agenda, { desc = "Markdown: open agenda" })
-km.nmap("<leader>ab", cur.check_deepseek_balance, { desc = "AI: check balance" })
+km.nmap("<leader>mf", mh.open_agenda, { desc = "Markdown: open agenda" })
+km.nmap("<leader>ab", cb.check_deepseek_balance, { desc = "AI: check balance" })
 
 -- LSP's
 km.nmap("<leader>lo", lsph.show_root_dir, { desc = "LSP: show root directory" })

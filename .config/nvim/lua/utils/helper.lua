@@ -24,20 +24,6 @@ function M.smart_esc()
     return "<esc>"
 end
 
--- Toggle markdown conceal
-function M.toggle_conceal()
-    local cl = vim.api.nvim_get_option_value("conceallevel", { scope = "local" })
-
-    if cl == 0 then
-        vim.api.nvim_set_option_value("conceallevel", 2, { scope = "local" })
-        vim.api.nvim_set_option_value("concealcursor", "", { scope = "local" })
-    else
-        vim.api.nvim_set_option_value("conceallevel", 0, { scope = "local" })
-    end
-    local state = (cl == 0 and "ON" or "OFF")
-    print("Conceal: " .. state)
-end
-
 -- Smart quit with q
 function M.smart_quit()
     local wins = vim.api.nvim_list_wins()
@@ -75,11 +61,6 @@ function M.smart_dd()
     return "dd"
 end
 
--- Open my markdown notes
-function M.open_agenda()
-    vim.cmd.edit(vim.fn.expand("~/hub/src/mdnotes/agenda.md"))
-end
-
 -- Create/Open file with path completion (defaults to current file's directory)
 function M.create_and_open()
     local input = vim.fn.input("New file: ", "", "file")
@@ -93,7 +74,7 @@ function M.create_and_open()
     vim.cmd("edit " .. input)
 end
 
--- Create file on disk in current directory (Touch)
+-- Create file on disk in current directory
 function M.create_on_disk()
     local name = vim.fn.input("New file (Touch): ")
     if name ~= "" then
