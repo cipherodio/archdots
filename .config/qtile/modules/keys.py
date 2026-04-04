@@ -135,6 +135,7 @@ keys = [
     # Programs
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
     Key([mod], "d", lazy.spawn(rofi), desc="Rofi"),
+    Key([mod], "r", lazy.spawn("dmenu_run"), desc="Dmenu"),
     Key([mod], "o", lazy.spawn(filemanager), desc="File manager lf"),
     Key([mod], "b", lazy.spawn(browser), desc="Firefox web browser"),
     Key([mod, "shift"], "b", lazy.spawn(qbrowser), desc="Qute web browser"),
