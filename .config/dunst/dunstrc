@@ -57,7 +57,7 @@
     background = "#2e3440"
     foreground = "#d8dee9"
 # NOTE: Need highlight for my audiobar script progress bar color
-    highlight = "#ebcb8b"
+    highlight = "#616e88"
     timeout = 3
 
 [urgency_normal]
