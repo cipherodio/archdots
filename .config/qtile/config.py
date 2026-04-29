@@ -15,7 +15,7 @@ cursor_warp = False
 auto_fullscreen = True
 focus_on_window_activation = "smart"
 reconfigure_screens = True
-auto_minimize = True
+auto_minimize = False
 wl_input_rules = None
 wmname = "LG3D"
 
