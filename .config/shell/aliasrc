@@ -37,7 +37,8 @@ alias \
 alias \
     im="make && sudo make install" \
     um="sudo make uninstall" \
-    cm="make clean && rm -f config.h && git reset --hard origin/main"
+    cm="make clean && rm -f config.h && git reset --hard origin/main" \
+    dm="sudo make uninstall && make clean && rm -f config.h && git reset --hard origin/main"
 
 # Miscellaneous
 alias \
