@@ -34,7 +34,4 @@ Nsxiv.bar.font: monospace:size=16
 *color14: c14
 *color15: c15
 
-st.selectionbg: c08
-st.alpha: 0.8
-
 ! vim: ft=xdefaults
