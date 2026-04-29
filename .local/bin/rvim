@@ -12,7 +12,7 @@ confirm() {
 
 if confirm "Reset Neovim state?"; then
     rm -rf \
-        "$HOME/.config/nvim/lazy-lock.json" \
+        "$HOME/.config/nvim/nvim-pack-lock.json" \
         "$HOME/.local/share/nvim" \
         "$HOME/.local/state/nvim" \
         "$HOME/.cache/nvim"
