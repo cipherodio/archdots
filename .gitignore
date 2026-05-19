@@ -86,6 +86,7 @@ hub/
 .config/zsh/.history
 .config/zsh/.zcompdump
 .local/lib/
+.local/mnt/
 .local/share/applications/steam.desktop
 .local/share/audacity/
 .local/share/calcurse/
