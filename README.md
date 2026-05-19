@@ -11,7 +11,7 @@ deployment are guided by my [Archstrap repository][guide].
 
 | **Dependencies**    | **Description**         |
 | ------------------- | ----------------------- |
-| i3wm                | Window manager          |
+| i3wm/Qtile          | Window manager          |
 | Neovim              | Text editor             |
 | Alacritty           | Terminal emulator       |
 | JetBrains Nerd Font | Programming and UI font |
