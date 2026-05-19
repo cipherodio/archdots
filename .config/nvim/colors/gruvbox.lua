@@ -1,5 +1,3 @@
--- Made with 'mini.colors' module of https://nvim-mini.org/mini.nvim
-
 if vim.g.colors_name ~= nil then
     vim.cmd("highlight clear")
 end
