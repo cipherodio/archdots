@@ -21,7 +21,7 @@ local function prompt_and_insert(tag, label)
 
     vim.ui.input({
         prompt = label .. " date (YYYY-MM-DD): ",
-        default = os.date("%Y-%m-%d"),
+        default = tostring(os.date("%Y-%m-%d")),
     }, function(date)
         if not date or date == "" then
             return
@@ -41,7 +41,7 @@ function M.insert_scheduled_and_deadline()
 
     vim.ui.input({
         prompt = "Scheduled date (YYYY-MM-DD): ",
-        default = os.date("%Y-%m-%d"),
+        default = tostring(os.date("%Y-%m-%d")),
     }, function(sd)
         if not sd or sd == "" then
             return

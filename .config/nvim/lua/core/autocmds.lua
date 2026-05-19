@@ -1,6 +1,8 @@
 local autocmd = vim.api.nvim_create_autocmd
+
 local h = require("utils.helper")
-local mh = require("utils.mdhelper")
+local k = require("utils.keyhelper")
+local m = require("utils.mdhelper")
 
 ---@param name string
 ---@return integer
@@ -8,6 +10,7 @@ local function augroup(name)
     return vim.api.nvim_create_augroup(name, { clear = true })
 end
 
+-- Augroups
 local groups = {
     relnumbers = augroup("relnumbers"),
     whitespaces = augroup("whitespaces"),
@@ -22,12 +25,13 @@ local groups = {
     markdown_gf = augroup("markdown_gf"),
 }
 
+-- Relative numbers
 autocmd({ "BufEnter", "WinEnter", "InsertLeave", "CmdlineLeave" }, {
     desc = "Enable relative number",
     group = groups.relnumbers,
     callback = function()
-        if vim.o.nu and vim.api.nvim_get_mode().mode ~= "i" then
-            vim.opt.relativenumber = true
+        if vim.wo.number and vim.api.nvim_get_mode().mode ~= "i" then
+            vim.wo.relativenumber = true
         end
     end,
 })
@@ -36,12 +40,13 @@ autocmd({ "BufLeave", "WinLeave", "InsertEnter", "CmdlineEnter" }, {
     desc = "Disable relative number",
     group = groups.relnumbers,
     callback = function()
-        if vim.o.nu then
-            vim.opt.relativenumber = false
+        if vim.wo.number then
+            vim.wo.relativenumber = false
         end
     end,
 })
 
+-- Cleanup whitespace
 autocmd("BufWritePre", {
     desc = "Remove trailing white spaces and convert tabs to spaces",
     group = groups.whitespaces,
@@ -59,6 +64,7 @@ autocmd("BufWritePre", {
     end,
 })
 
+-- Yank highlight
 autocmd("TextYankPost", {
     desc = "Highlight text on yank",
     group = groups.yankhighlight,
@@ -70,6 +76,7 @@ autocmd("TextYankPost", {
     end,
 })
 
+-- Disable comment continuation
 autocmd("BufWinEnter", {
     desc = "Never insert comment when using 'o' to enter insert mode",
     group = groups.nocomment_o,
@@ -78,16 +85,16 @@ autocmd("BufWinEnter", {
     end,
 })
 
+-- Restore cursor position
 autocmd("BufReadPost", {
-    desc = "Save cursor position on quit",
+    desc = "Restore last cursor position",
     group = groups.cursor_pos,
-    callback = function()
-        h.restore_cursor()
-    end,
+    callback = h.restore_cursor,
 })
 
+-- Close windows with q
 autocmd("FileType", {
-    desc = "Close with just letter q",
+    desc = "Close temporary buffers with q",
     group = groups.closewith_q,
     pattern = {
         "help",
@@ -98,22 +105,22 @@ autocmd("FileType", {
     },
     callback = function(event)
         vim.bo[event.buf].buflisted = false
-        vim.keymap.set("n", "q", h.smart_quit, {
+        k("n", "q", h.smart_quit, {
             buffer = event.buf,
-            silent = true,
             desc = "Smart quit",
         })
     end,
 })
 
+-- Auto-create missing directories
 autocmd("BufWritePre", {
-    desc = "Auto create dir if nonexistent after save",
+    desc = "Auto-create missing directories on save",
     group = groups.create_dir,
     callback = function(event)
         if event.match:match("^%w%w+://") then
             return
         end
-        local file = vim.uv.fs_realpath(event.match) or event.match
+        local file = vim.fn.expand("<afile>:p")
         local dir = vim.fn.fnamemodify(file, ":p:h")
         if vim.fn.isdirectory(dir) == 0 then
             vim.fn.mkdir(dir, "p")
@@ -121,8 +128,9 @@ autocmd("BufWritePre", {
     end,
 })
 
+-- Reload shortcuts
 autocmd("BufWritePost", {
-    desc = "Auto reload bin script shortcuts when configuration is updated",
+    desc = "Reload shortcuts after config update",
     group = groups.reload_shortcuts,
     pattern = { "bm-files", "bm-dirs" },
     callback = function()
@@ -130,8 +138,9 @@ autocmd("BufWritePost", {
     end,
 })
 
+-- Reload Xresources
 autocmd("BufWritePost", {
-    desc = "Auto reload xdefaults when configuraton is updated",
+    desc = "Reload Xresources after config update",
     group = groups.reload_xdefaults,
     pattern = { "xdefaults" },
     callback = function(args)
@@ -139,8 +148,9 @@ autocmd("BufWritePost", {
     end,
 })
 
+-- Reload dunst
 autocmd("BufWritePost", {
-    desc = "Auto reload dunstrc when configuration is updated",
+    desc = "Reload dunst after config update",
     group = groups.reload_dunst,
     pattern = { "dunstrc" },
     callback = function()
@@ -149,16 +159,15 @@ autocmd("BufWritePost", {
     end,
 })
 
+-- Markdown follow link
 autocmd("FileType", {
-    desc = "Follow Markdown links",
+    desc = "Follow markdown links with gf",
     group = groups.markdown_gf,
     pattern = "markdown",
-    callback = function()
-        vim.keymap.set(
-            "n",
-            "gf",
-            mh.follow_markdown_link,
-            { buffer = true, silent = true, desc = "Follow Markdown link" }
-        )
+    callback = function(event)
+        k("n", "gf", m.follow_markdown_link, {
+            buffer = event.buf,
+            desc = "Follow markdown link",
+        })
     end,
 })

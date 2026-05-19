@@ -1,5 +1,11 @@
 local M = {}
 
+-- Package
+function M.plugin_stats()
+    -- vim.pack.update(nil, { offline = true })
+    vim.pack.update()
+end
+
 -- Save and restore cursor position
 function M.restore_cursor()
     if vim.bo.buftype ~= "" or vim.wo.diff then

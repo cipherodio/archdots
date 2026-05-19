@@ -1,0 +1,25 @@
+vim.pack.add({
+    { src = "https://github.com/stevearc/conform.nvim" },
+}, { confirm = false })
+
+local c = require("conform")
+
+c.setup({
+    formatters_by_ft = {
+        lua = { "stylua" },
+        sh = { "shfmt", "shellcheck" },
+        zsh = { "shellcheck" },
+        python = { "ruff_fix", "ruff_organize_imports", "ruff_format" },
+        markdown = { "rumdl" },
+        xml = { "xmlstarlet" },
+    },
+    format_on_save = function(bufnr)
+        if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+            return
+        end
+        return {
+            timeout_ms = 3000,
+            lsp_fallback = true,
+        }
+    end,
+})

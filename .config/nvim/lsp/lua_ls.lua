@@ -13,28 +13,22 @@ return {
         Lua = {
             runtime = {
                 version = "LuaJIT",
-                path = {
-                    "lua/?.lua",
-                    "lua/?/init.lua",
-                },
-            },
-            telemetry = { enable = false },
-            diagnostics = {
-                globals = {
-                    "vim",
-                },
-                -- disable = {
-                --     "missing-fields",
+                -- path = {
+                --     "lua/?.lua",
+                --     "lua/?/init.lua",
                 -- },
             },
+            telemetry = { enable = false },
+            -- diagnostics = {
+            --     globals = {
+            --         "vim",
+            --     },
+            -- },
             workspace = {
                 checkThirdParty = false,
-                library = {
-                    vim.env.VIMRUNTIME,
-                    -- vim.fn.stdpath("config") .. "/lua",
-                    -- vim.fn.stdpath("data") .. "/lazy",
-                    -- "${3rd}/luv/library",
-                },
+                -- library = {
+                --     vim.env.VIMRUNTIME,
+                -- },
             },
             doc = { privateName = { "^_" } },
             codeLens = { enable = true },

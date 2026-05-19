@@ -1,5 +1,13 @@
 local M = {}
 
+-- Toggle colors
+function M.toggle_colors()
+    local is_on = vim.lsp.document_color.is_enabled({ bufnr = 0 })
+    vim.lsp.document_color.enable(not is_on, { bufnr = 0 })
+    local status = not is_on and "Enabled" or "Disabled"
+    vim.notify("Document Color: " .. status)
+end
+
 -- Show LSP root directory for active clients
 function M.show_root_dir()
     local clients = vim.lsp.get_clients()
@@ -24,15 +32,14 @@ end
 
 -- Toggle CodeLens
 function M.toggle_codelens()
-    local bufnr = 0
-    local lenses = vim.lsp.codelens.get(bufnr)
-    local is_enabled = lenses ~= nil and #lenses > 0
+    local filter = { bufnr = 0 }
+    local is_enabled = vim.lsp.codelens.is_enabled(filter)
 
     if is_enabled then
-        vim.lsp.codelens.clear(nil, bufnr)
+        vim.lsp.codelens.enable(false, filter)
         print("CodeLens: OFF")
     else
-        vim.lsp.codelens.refresh({ bufnr = bufnr })
+        vim.lsp.codelens.enable(true, filter)
         print("CodeLens: ON")
     end
 end
