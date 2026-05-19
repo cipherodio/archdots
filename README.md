@@ -8,16 +8,20 @@ These are my personal configuration files (_dotfiles_) for [Arch
 Linux][arch] and the [Qtile][qtile] window manager. System installation
 and setup are guided by my [Archstrap repository][guide].
 
-| **Dependencies**  | **Description**         |
-| ----------------- | ----------------------- |
-| Qtile/Awesome     | Window manager          |
-| Neovim            | Text editor             |
-| Alacritty         | Terminal emulator       |
-| Iosevka Nerd Font | Programming and UI font |
+| **Dependencies**    | **Description**         |
+| ------------------- | ----------------------- |
+| i3wm                | Window manager          |
+| Neovim              | Text editor             |
+| Alacritty           | Terminal emulator       |
+| JetBrains Nerd Font | Programming and UI font |
 
-## 📸 Screenshots
+## 📸 Qtile Screenshot
 
 ![screenshot_01](.local/wallpapers/screenshot01.jpeg)
+
+## 📸 i3wm Screenshot
+
+![screenshot_02](.local/wallpapers/screenshot02.jpeg)
 
 ## 🚀 Dotfiles Installation
 
@@ -36,11 +40,6 @@ cat ~/.ssh/gitlabkey.pub | xclip -selection clipboard
 # Finalize setup and clone additional repositories
 curl -fsSL https://gitlab.com/cipherodio/archstrap/-/raw/main/setup.sh | bash
 ```
-
-## Credits
-
-Qtile widgets inspired by
-[@darkkal44](https://github.com/darkkal44/cozytile).
 
 [arch]: https://archlinux.org/
 [qtile]: https://qtile.org/
