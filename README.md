@@ -5,8 +5,9 @@
 ## 📔 Overview
 
 These are my personal configuration files (_dotfiles_) for [Arch
-Linux][arch] and the [Qtile][qtile] window manager. System installation
-and setup are guided by my [Archstrap repository][guide].
+Linux][arch], featuring setups for both the [Qtile][qtile] and
+[i3wm][i3] window managers. System installation and environment
+deployment are guided by my [Archstrap repository][guide].
 
 | **Dependencies**    | **Description**         |
 | ------------------- | ----------------------- |
@@ -43,4 +44,5 @@ curl -fsSL https://gitlab.com/cipherodio/archstrap/-/raw/main/setup.sh | bash
 
 [arch]: https://archlinux.org/
 [qtile]: https://qtile.org/
+[i3]: https://i3wm.org
 [guide]: https://gitlab.com/cipherodio/archstrap
