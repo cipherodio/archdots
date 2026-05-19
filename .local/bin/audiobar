@@ -18,17 +18,18 @@ else
     else
         change="${action}%+"
     fi
+
     wpctl set-volume "$sink" "$change"
     wpctl set-mute "$sink" 0
 fi
 
 vol_raw=$(wpctl get-volume "$sink")
-current_vol=$(echo "$vol_raw" | awk '{print $2 * 100}' | xargs printf "%.0f")
+vol=$(awk '{print int($2 * 100)}' <<<"$vol_raw")
 
 if [[ "$vol_raw" == *"[MUTED]"* ]]; then
     dunstify -a "audiobar" -u low -r "$msg_id" "Muted"
 else
     dunstify -a "audiobar" -u low -r "$msg_id" \
-        -h "int:value:$current_vol" \
-        "Volume: ${current_vol}%"
+        -h "int:value:$vol" \
+        "Volume: ${vol}%"
 fi
