@@ -34,12 +34,7 @@ fi
 [ -f "$XDG_CONFIG_HOME/shell/aliasrc" ] && source "$XDG_CONFIG_HOME/shell/aliasrc"
 [ -f "$XDG_CONFIG_HOME/shell/zshdirrc" ] && source "$XDG_CONFIG_HOME/shell/zshdirrc"
 
-# LS colors (interactive only)
-if [[ -f $XDG_CONFIG_HOME/lscolors/nord ]]; then
-  source "$XDG_CONFIG_HOME/lscolors/nord"
-fi
-
-# Sync tab-completion colors with your One Dark LS_COLORS
+# Sync tab-completion colors with LS_COLORS
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
 # Shell opts
