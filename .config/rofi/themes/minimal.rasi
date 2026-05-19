@@ -1,9 +1,4 @@
-// * {
-//     bg: #282c34;
-//     fg: #abb2bf;
-//     yellow: #e5c07b;
-// }
-@import "../colors/nord.rasi"
+@import "../colors/gruvbox.rasi"
 
 configuration {
     drun {
