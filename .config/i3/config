@@ -1,0 +1,153 @@
+font pango:monospace 14
+gaps inner 10
+gaps outer 5
+
+exec_always --no-startup-id autotiling
+
+for_window [class="^.*"] border pixel 2
+for_window [class="mpv"] floating enable
+for_window [class="^scratchpad_.*$"] floating enable
+for_window [class="^scratchpad_.*$"] resize set 80 ppt 80 ppt
+for_window [class="^scratchpad_.*$"] move position center
+for_window [class="^scratchpad_.*$"] move scratchpad
+
+# Variables
+set $mod Mod4
+set $alt Mod1
+set $browser firefox
+set $term alacritty
+set $fm "alacritty -e lfprev"
+
+# General
+bindsym $mod+Control+r reload
+bindsym $mod+Shift+r restart
+bindsym $mod+q kill
+bindsym $alt+b bar mode toggle
+floating_modifier $mod
+
+# Navigation
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+bindsym $mod+Tab workspace back_and_forth
+bindsym $mod+Control+p focus parent
+
+# System
+bindsym $mod+Escape exec "power"
+bindsym $mod+F4 exec "rofipassmenu"
+bindsym $mod+p exec "picomtoggle"
+bindsym $mod+g exec "gameon"
+bindsym $mod+c exec "camtoggle"
+bindsym $mod+Shift+c exec "cluttertoggle"
+bindsym XF86TouchpadToggle exec "padtoggle"
+bindsym Print exec "screenshot"
+bindsym $mod+Print exec "timeshot"
+bindsym $mod+F9 exec "mounter"
+bindsym $mod+Shift+F9 exec "unmounter"
+bindsym $mod+grave exec "emojis"
+bindsym $mod+F2 exec "podconnect"
+bindsym $mod+o exec $fm
+bindsym $mod+F8 exec "screencast"
+
+# Volume
+bindsym XF86AudioRaiseVolume exec --no-startup-id audiobar +5 && pkill -RTMIN+10 i3blocks
+bindsym XF86AudioLowerVolume exec --no-startup-id audiobar -5 && pkill -RTMIN+10 i3blocks
+bindsym XF86AudioMute exec --no-startup-id audiobar toggle && pkill -RTMIN+10 i3blocks
+bindsym $alt+Shift+equal exec --no-startup-id audiobar +5 && pkill -RTMIN+10 i3blocks
+bindsym $alt+Shift+minus exec --no-startup-id audiobar -5 && pkill -RTMIN+10 i3blocks
+bindsym $alt+Shift+0 exec --no-startup-id audiobar toggle && pkill -RTMIN+10 i3blocks
+
+# Brightness
+bindsym $alt+Ctrl+equal exec --no-startup-id brightbar +5 && pkill -RTMIN+11 i3blocks
+bindsym $alt+Ctrl+minus exec --no-startup-id brightbar -5 && pkill -RTMIN+11 i3blocks
+bindsym XF86MonBrightnessUp exec --no-startup-id brightbar +5 && pkill -RTMIN+11 i3blocks
+bindsym XF86MonBrightnessDown exec --no-startup-id brightbar -5 && pkill -RTMIN+11 i3blocks
+
+# Backlight
+bindsym $alt+Shift+Up exec "backlightkey"
+
+# Programs
+bindsym $mod+Return exec $term
+bindsym $mod+d exec --no-startup-id rofi -show drun
+bindsym $mod+b exec $browser
+bindsym $mod+w exec "bookmarklink"
+bindsym $mod+F12 exec "torrtoggle"
+bindsym $mod+Shift+F12 exec "torrclear"
+bindsym $mod+s exec "spotify-toggle"
+bindsym $mod+period exec "spotify-next"
+bindsym $mod+comma exec "spotify-prev"
+bindsym $mod+Shift+s exec "mpcplaylist"
+bindsym $mod+Shift+p exec "mpc toggle"
+bindsym $mod+Shift+period exec "mpc next"
+bindsym $mod+Shift+comma exec "mpc prev"
+
+# Layouts
+bindsym $alt+Shift+b split h
+bindsym $alt+Shift+v split v
+bindsym $mod+f fullscreen toggle
+bindsym $mod+Control+space floating toggle
+bindsym $mod+Shift+space focus mode_toggle
+bindsym $alt+s layout toggle split
+
+# Workspace
+bindsym $mod+1 workspace number 1
+bindsym $mod+2 workspace number 2
+bindsym $mod+3 workspace number 3
+bindsym $mod+4 workspace number 4
+bindsym $mod+5 workspace number 5
+
+# Move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4
+bindsym $mod+Shift+5 move container to workspace number 5
+
+# Resize window
+mode "resize" {
+        bindsym h resize shrink width 10 px or 10 ppt
+        bindsym j resize grow height 10 px or 10 ppt
+        bindsym k resize shrink height 10 px or 10 ppt
+        bindsym l resize grow width 10 px or 10 ppt
+
+        # back to normal: Enter or Escape or Mod+r
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym $mod+r mode "default"
+}
+bindsym $mod+r mode "resize"
+
+# Scratchpads
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+minus scratchpad show
+bindsym $alt+Shift+h exec --no-startup-id spi3 htop
+bindsym $alt+Shift+m exec --no-startup-id spi3 ncmpcpp
+bindsym $alt+Shift+n exec --no-startup-id spi3 newsboat
+bindsym $alt+Shift+p exec --no-startup-id spi3 pulsemixer
+
+# Border color
+client.focused #cc241d #cc241d #1d2021 #cc241d #cc241d
+client.focused_inactive #1d2021 #1d2021 #ebdbb2 #1d2021 #1d2021
+client.unfocused #1d2021 #1d2021 #ebdbb2 #1d2021 #1d2021
+client.urgent #b16286 #b16286 #1d2021 #b16286 #b16286
+
+bar {
+    bindsym button4 nop
+    bindsym button5 nop
+    position top
+    mode dock
+    modifier None
+    status_command i3blocks
+    colors {
+        background #1d2021
+        statusline #ebdbb2
+        focused_workspace #1d2021 #1d2021 #d79921
+        inactive_workspace #1d2021 #1d2021 #928374
+        urgent_workspace #1d2021 #1d2021 #cc241d
+    }
+}

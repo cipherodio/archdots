@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Author: cipherodio
+# Description: Date and time
+
+# Use an array for clock icons (Index 0-12)
+icons=("🕛" "🕐" "🕑" "🕒" "🕓" "🕔" "🕕" "🕖" "🕗" "🕘" "🕙" "🕚" "🕛")
+
+# Get date in "Fri 27 Mar" format and time info
+printf -v current_date "%(%a-%d-%b)T" -1
+printf -v current_time "%(%I:%M%p)T" -1
+printf -v hour "%(%I)T" -1
+
+# Strip leading zero for array index lookup
+icon="${icons[10#$hour]}"
+
+case "$BLOCK_BUTTON" in
+1)
+    cal_output=$(cal | sed "s/\<$(date +'%e' | tr -d ' ')\>/<b><span color='red'>&<\/span><\/b>/")
+    notify-send "This Month" "$cal_output" && notify-send "Appointments" "$(calcurse -d3)"
+    ;;
+2)
+    notify-send "📅 Time/date module" -- "- Left: calendar\n- Right: calcurse"
+    ;;
+3) setsid -f "$TERMINAL" -e calcurse ;;
+esac
+
+# Final output: 📅Wed 06 May 🕐05:49AM
+printf "📅%s %s%s\n" "$current_date" "$icon" "$current_time"

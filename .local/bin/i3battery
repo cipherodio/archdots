@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+# Battery status and backlight control
+
+case $BLOCK_BUTTON in
+2)
+    notify-send "🔋 Battery module" -- "🔋: discharging\n🟠: not charging\n♻: stagnant charge\n🔌: charging\n⚡: charged\n❗: battery very low!"
+    ;;
+esac
+
+# Loop through all attached batteries
+for battery in /sys/class/power_supply/BAT?*; do
+    # If not the first battery, print a space separator
+    [[ -n "$output" ]] && output+=" "
+
+    # Read status and capacity directly
+    read -r raw_status <"$battery/status"
+    read -r capacity <"$battery/capacity"
+
+    case "$raw_status" in
+    "Full") status="⚡" ;;
+    "Discharging") status="🔋" ;;
+    "Charging") status="🔌" ;;
+    "Not charging") status="🟠" ;;
+    "Unknown") status="♻️" ;;
+    *) status="?" ;;
+    esac
+
+    # Handle low battery warning
+    warn=""
+    [[ "$status" == "🔋" && "$capacity" -le 25 ]] && warn="❗"
+
+    # Append to output string
+    output+="${status}${warn}${capacity}%"
+done
+
+# Print final result with a single printf
+printf "%s\n" "$output"

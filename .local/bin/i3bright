@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+# Use find for a more robust path lookup
+backlight_dir=$(find /sys/class/backlight/ -maxdepth 1 -not -path /sys/class/backlight/ -print -quit)
+
+case $BLOCK_BUTTON in
+2)
+    notify-send "💡 Brightness module" -- "- Scroll: adjust brightness."
+    ;;
+4)
+    brightnessctl set +5% >/dev/null
+    ;;
+5)
+    brightnessctl set 5%- >/dev/null
+    ;;
+esac
+
+# Read current and max brightness
+read -r curr_brightness <"$backlight_dir/brightness"
+read -r max_brightness <"$backlight_dir/max_brightness"
+
+# Calculate and print percentage
+brightness_per=$((100 * curr_brightness / max_brightness))
+
+# Removed space between icon and value
+printf "💡%d%%\n" "$brightness_per"

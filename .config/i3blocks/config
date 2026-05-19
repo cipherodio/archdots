@@ -1,0 +1,32 @@
+# Global properties
+separator=true
+separator_block_width=15
+markup=pango
+
+# Modules
+[volume]
+command=i3volume
+interval=once
+signal=10
+
+[brightness]
+command=i3bright
+interval=once
+signal=11
+
+[memory]
+command=i3memory
+interval=30
+
+[internet]
+command=i3internet
+interval=10
+signal=4
+
+[time]
+command=i3clock
+interval=1
+
+[battery]
+command=i3battery
+interval=30
