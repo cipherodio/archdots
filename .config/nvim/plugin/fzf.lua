@@ -6,7 +6,7 @@ vim.pack.add({
 
 local f = require("fzf-lua")
 local fb = require("fzf-lua-file-browser")
-local fbact = require("fzf-lua-file-browser.actions")
+local fba = require("fzf-lua-file-browser.actions")
 
 local fh = require("utils.fzfhelper")
 local k = require("utils.keyhelper")
@@ -40,14 +40,14 @@ f.register_ui_select()
 -- Fzf file browser
 fb.setup({
     actions = {
-        ["default"] = fbact.open,
-        ["ctrl-p"] = fbact.parent,
-        ["ctrl-w"] = fbact.cwd,
-        ["ctrl-e"] = fbact.home,
-        ["ctrl-t"] = fbact.toggle_hidden,
-        ["ctrl-n"] = fbact.create,
-        ["ctrl-r"] = fbact.rename,
-        ["ctrl-d"] = fbact.delete,
+        ["default"] = fba.open,
+        ["ctrl-p"] = fba.parent,
+        ["ctrl-w"] = fba.cwd,
+        ["ctrl-e"] = fba.home,
+        ["ctrl-t"] = fba.toggle_hidden,
+        ["ctrl-n"] = fba.create,
+        ["ctrl-r"] = fba.rename,
+        ["ctrl-d"] = fba.delete,
     },
 
     hijack_netrw = true,

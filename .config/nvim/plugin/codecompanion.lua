@@ -12,21 +12,23 @@ c.setup({
     adapters = {
         http = {
             deepseek = function()
-                return ca.extend("deepseek", {
+                return ca.extend("openai", {
+                    name = "deepseek",
+                    url = "https://api.deepseek.com/v1/chat/completions",
                     env = { api_key = "DEEPSEEK_API_KEY" },
                     schema = {
                         model = {
-                            default = "deepseek-chat",
+                            default = "deepseek-v4-flash",
                             choices = {
-                                ["deepseek-chat"] = {
-                                    formatted_name = "DeepSeek Chat",
+                                ["deepseek-v4-flash"] = {
+                                    formatted_name = "DeepSeek v4 Flash",
                                     opts = {
                                         can_reason = false,
                                         can_use_tools = true,
                                     },
                                 },
-                                ["deepseek-reasoner"] = {
-                                    formatted_name = "DeepSeek Reasoner",
+                                ["deepseek-v4-pro"] = {
+                                    formatted_name = "DeepSeek V4 Pro",
                                     opts = {
                                         can_reason = true,
                                         can_use_tools = false,
@@ -35,10 +37,10 @@ c.setup({
                             },
                         },
                         max_tokens = { default = 8192 },
-                        temperature = { default = 1.0 },
-                        top_p = { default = 1.0 },
-                        frequency_penalty = { default = 0 },
-                        presence_penalty = { default = 0 },
+                        temperature = { default = 1.2 },
+                        top_p = { default = 0.95 },
+                        frequency_penalty = { default = 0.4 },
+                        presence_penalty = { default = 0.4 },
                     },
                 })
             end,
@@ -47,11 +49,11 @@ c.setup({
     strategies = {
         chat = {
             adapter = "deepseek",
-            model = "deepseek-chat",
+            -- model = "deepseek-v4-flash",
         },
         inline = {
             adapter = "deepseek",
-            model = "deepseek-chat",
+            -- model = "deepseek-v4-flash",
         },
     },
     prompt_library = {

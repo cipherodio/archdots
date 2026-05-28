@@ -3,7 +3,6 @@ vim.pack.add({
 }, { confirm = false })
 
 local a = require("markdown-agenda")
-local k = require("utils.keyhelper")
 
 a.setup({
     directory = "~/hub/src/mdnotes",
@@ -13,6 +12,10 @@ a.setup({
     help_separator = false,
     border = "single",
     title = false,
+    -- keymaps = { open = false },
+    keymaps = {
+        open = "<leader>ma",
+    },
     calendar = {
         enabled = true,
         months_to_show = 3,
@@ -21,5 +24,3 @@ a.setup({
         week_start = "monday",
     },
 })
-
-k("n", "<leader>ma", "<cmd>MarkdownAgenda<cr>", { desc = "Markdown: agenda" })

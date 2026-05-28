@@ -19,6 +19,7 @@ wk.setup({
             { "<leader>e", group = "explorer" },
             { "<leader>l", group = "lsp" },
             { "<leader>m", group = "markdown" },
+            { "<leader>p", group = "plugin" },
             { "<leader>s", group = "spelling" },
             { "<leader>t", group = "treesitter" },
         },
