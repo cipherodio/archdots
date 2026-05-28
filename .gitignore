@@ -73,6 +73,8 @@ hub/
 .config/shell/zshdirrc
 .config/Signal/
 .config/spotify/
+StardewValley
+gog_com-Stardew_Valley_1.desktop
 .config/systemd/
 .config/transmission-daemon/bandwidth-groups.json
 .config/transmission-daemon/dht.dat
