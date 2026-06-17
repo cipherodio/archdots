@@ -1,35 +1,33 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
-# Description: Handle URL via rofi
+# Description: Handle URL via dmenu
 # Used in: newsboat
 
-set -euo pipefail
+set -eu
 
 exec 2>/dev/null
 
 url=${1-}
-[[ -n $url ]] || exit 0
-
-choices=(
-    copy
-    browser
-    mpv
-    download
-    ytv
-    yta
-    nsxiv
-)
+[ -n "$url" ] || exit 0
 
 program=$(
-    printf '%s\n' "${choices[@]}" |
-        rofi -dmenu -p 'Open with'
+    printf '%s\n' \
+        copy \
+        browser \
+        mpv \
+        download \
+        ytv \
+        yta \
+        nsxiv |
+        dmenu -i -l 7 -p "Open with"
 )
 
-[[ -n ${program-} ]] || exit 0
+[ -n "$program" ] || exit 0
 
-case $program in
+case "$program" in
 copy)
-    printf '%s' "$url" | xclip -selection clipboard >/dev/null 2>&1
+    printf '%s' "$url" |
+        xclip -selection clipboard >/dev/null 2>&1
     ;;
 
 browser)
@@ -42,20 +40,22 @@ mpv)
 
 download)
     notify-send "Download" "started"
-    {
-        cd "$HOME/hub/downloads"
+
+    (
+        cd "$HOME/hub/downloads" || exit 1
+
         if curl -sLO "$url"; then
             notify-send "Download" "finished: ${url##*/}"
         else
             notify-send "Download" "FAILED"
         fi
-    } >/dev/null 2>&1 &
-    disown
+    ) >/dev/null 2>&1 &
     ;;
 
 ytv)
     notify-send "YouTube Video" "Download started"
-    {
+
+    (
         if yt-dlp --batch-file /dev/null \
             -f 'bestvideo+bestaudio' \
             --merge-output-format mp4 \
@@ -64,15 +64,16 @@ ytv)
             "$url"; then
             notify-send "YouTube Video" "Download finished"
         else
-            notify-send "YouTube Video" "Download FAILED (Check /tmp/ytdl-error.log)"
+            notify-send "YouTube Video" \
+                "Download FAILED (Check /tmp/ytdl-error.log)"
         fi
-    } </dev/null >/tmp/ytdl-error.log 2>&1 &
-    disown
+    ) </dev/null >/tmp/ytdl-error.log 2>&1 &
     ;;
 
 yta)
     notify-send "YouTube Audio" "Download started"
-    {
+
+    (
         if yt-dlp --batch-file /dev/null \
             -x \
             --audio-format mp3 \
@@ -82,23 +83,24 @@ yta)
             "$url"; then
             notify-send "YouTube Audio" "Download finished"
         else
-            notify-send "YouTube Audio" "Download FAILED (Check /tmp/ytdl-error.log)"
+            notify-send "YouTube Audio" \
+                "Download FAILED (Check /tmp/ytdl-error.log)"
         fi
-    } </dev/null >/tmp/ytdl-error.log 2>&1 &
-    disown
+    ) </dev/null >/tmp/ytdl-error.log 2>&1 &
     ;;
 
 nsxiv)
     notify-send "Image" "opening..."
-    {
+
+    (
         file=${url##*/}
-        tmp="/tmp/$file"
+        tmp=/tmp/"$file"
+
         if curl -sL "$url" >"$tmp"; then
             nsxiv -ab "$tmp"
         else
             notify-send "Image" "Download FAILED"
         fi
-    } >/dev/null 2>&1 &
-    disown
+    ) >/dev/null 2>&1 &
     ;;
 esac
