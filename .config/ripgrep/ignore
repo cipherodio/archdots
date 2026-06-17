@@ -47,6 +47,7 @@ projects
 pubring.kbx
 pubring.kbx~
 pulse
+random_seed
 resume
 review
 screenshot
@@ -54,6 +55,7 @@ shaders
 share
 spotify
 src
+StardewValley
 state
 sticker.sql
 tl.utf-8.add.spl
@@ -66,4 +68,5 @@ trustdb.gpg
 unity3d
 var
 wallpapers
+Zomboid
 zplug
