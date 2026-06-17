@@ -1,0 +1,13 @@
+#!/bin/sh
+# Author: cipherodio
+# Description: dmenu-based askpass helper for sudo
+
+set -eu
+
+prompt=${1:-Password}
+
+pass=$(dmenu -P -p "$prompt" </dev/null) || exit 1
+
+[ -n "$pass" ] || exit 1
+
+printf '%s' "$pass"
