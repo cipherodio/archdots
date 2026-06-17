@@ -1,8 +1,8 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Skip audio notification for specific senders
 
-set -euo pipefail
+set -eu
 
 case ${1:-} in
 audiobar | brightbar | backlightkey | mpcnotify | Signal)
