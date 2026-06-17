@@ -1,11 +1,19 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Display contents of clipboard and primary selection
 
-set -euo pipefail
+set -eu
 
 clip="$(xclip -o -selection clipboard 2>/dev/null || true)"
 prim="$(xclip -o -selection primary 2>/dev/null || true)"
 
-[ -n "$clip" ] && notify-send "Clipboard" "$clip"
-[ -n "$prim" ] && notify-send "Primary" "$prim"
+menu="$(printf "clipboard\nprimary\n" | dmenu -i -p "Select:")"
+
+case "$menu" in
+clipboard)
+    [ -n "$clip" ] && printf '%s\n' "$clip" | dmenu -p "Clipboard"
+    ;;
+primary)
+    [ -n "$prim" ] && printf '%s\n' "$prim" | dmenu -p "Primary"
+    ;;
+esac
