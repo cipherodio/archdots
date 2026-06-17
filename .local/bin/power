@@ -1,13 +1,10 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
-# Description: Power menu via rofi
+# Description: Power menu via dmenu
 
-set -euo pipefail
+set -eu
 
-ROFI_STYLE='window { width: 250px; } listview { lines: 4; }'
-CONFIRM_SIZE='window { width: 145px; } listview { lines: 2; }'
-
-for cmd in rofi systemctl notify-send loginctl; do
+for cmd in dmenu systemctl notify-send loginctl; do
     command -v "$cmd" >/dev/null 2>&1 || {
         notify-send "power error" "$cmd not found"
         exit 1
@@ -15,32 +12,36 @@ for cmd in rofi systemctl notify-send loginctl; do
 done
 
 confirm() {
-    printf "Yes\nNo" | rofi -dmenu -i -p "$1" -theme-str "$CONFIRM_SIZE" | grep -qx "Yes"
+    printf 'Yes\n' |
+        dmenu -p "$1" >/dev/null
 }
 
-options=$(
-    cat <<EOF
-  Poweroff
-󰊳  Restart
-󱑚  Suspend
-  Logout
-EOF
+choice=$(
+    printf '%s\n' \
+        '🔌  Poweroff' \
+        '🔄  Restart' \
+        '💤  Suspend' \
+        '🚪  Logout' |
+        dmenu -i -l 4 -p "Bye ${USER:-user}!"
 )
 
-choice="$(printf '%s\n' "$options" | rofi -dmenu -i -p "Bye $USER!" -theme-str "$ROFI_STYLE")"
 [ -n "$choice" ] || exit 0
 
 case "$choice" in
-"  Poweroff")
-    confirm "Power off?" && systemctl poweroff
+'🔌  Poweroff')
+    confirm "Power off?" &&
+        systemctl poweroff
     ;;
-"󰊳  Restart")
-    confirm "Restart?" && systemctl reboot
+'🔄  Restart')
+    confirm "Restart?" &&
+        systemctl reboot
     ;;
-"󱑚  Suspend")
-    confirm "Suspend?" && systemctl suspend
+'💤 Suspend')
+    confirm "Suspend?" &&
+        systemctl suspend
     ;;
-"  Logout")
-    confirm "Logout?" && loginctl terminate-user "$USER"
+'🚪  Logout')
+    confirm "Logout?" &&
+        loginctl terminate-user "$USER"
     ;;
 esac
