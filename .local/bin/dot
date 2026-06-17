@@ -1,31 +1,40 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Wrapper for bare-repo dotfiles management
 
-set -euo pipefail
+set -eu
+
+DOTS="$HOME/.config/.dots"
+WORKTREE="$HOME"
 
 dotfiles() {
-    git --git-dir="$HOME/.config/.dots" --work-tree="$HOME" "$@"
+    git --git-dir="$DOTS" --work-tree="$WORKTREE" "$@"
 }
 
 cmd=${1-}
 
-case $cmd in
+LICENSE="$HOME/LICENSE"
+README="$HOME/README.md"
+
+case "$cmd" in
 out)
     dotfiles pull
-    dotfiles update-index --assume-unchanged \
-        "$HOME/LICENSE" \
-        "$HOME/README.md"
 
-    rm -rf "$HOME/LICENSE" "$HOME/README.md"
+    [ -e "$LICENSE" ] && dotfiles update-index --assume-unchanged "$LICENSE"
+    [ -e "$README" ] && dotfiles update-index --assume-unchanged "$README"
+
+    rm -f "$LICENSE" "$README"
     ;;
 
 in)
-    dotfiles update-index --no-assume-unchanged \
-        "$HOME/LICENSE" \
-        "$HOME/README.md"
+    [ -e "$LICENSE" ] && dotfiles update-index --no-assume-unchanged "$LICENSE"
+    [ -e "$README" ] && dotfiles update-index --no-assume-unchanged "$README"
 
     dotfiles checkout -f
+    ;;
+
+"")
+    dotfiles st
     ;;
 
 *)
