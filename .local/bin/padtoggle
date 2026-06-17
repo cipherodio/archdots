@@ -1,45 +1,44 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
-# Description: Toggle touchpad using xinput via rofi
+# Description: Toggle touchpad using xinput via dmenu
 
-set -euo pipefail
+set -eu
 
-for cmd in xinput rofi notify-send; do
+for cmd in xinput dmenu notify-send; do
     command -v "$cmd" >/dev/null 2>&1 || {
-        notify-send "podtoggle error" "$cmd not found"
+        notify-send "padtoggle error" "$cmd not found"
         exit 1
     }
 done
 
-id="$(
+id=$(
     xinput list |
-        sed -n 's/.*[Tt]ouchpad.*id=\([0-9]\+\).*/\1/p' |
-        head -n1
-)"
+        sed -n 's/.*[Tt]ouchpad.*id=\([0-9][0-9]*\).*/\1/p' |
+        head -n 1
+)
 
 if [ -z "$id" ]; then
     notify-send "Touchpad" "Touchpad not found"
     exit 1
 fi
 
-enabled="$(
+enabled=$(
     xinput list-props "$id" |
         awk '/Device Enabled/ { print $NF }'
-)"
+)
 
 confirm() {
-    local prompt="$1"
-    choice="$(printf "Yes\nNo\n" | rofi -dmenu -i -p "$prompt")"
-    [ "$choice" = "Yes" ]
+    printf '%s\n' "Yes" |
+        dmenu -p "$1" >/dev/null
 }
 
 if [ "$enabled" = "1" ]; then
-    if confirm "[● TOUCHPAD ON] Disable touchpad?"; then
+    if confirm "[🟢 TOUCHPAD ON] Disable touchpad?"; then
         xinput disable "$id"
         notify-send "Touchpad" "OFF"
     fi
 else
-    if confirm "[○ TOUCHPAD OFF] Enable touchpad?"; then
+    if confirm "[🔴 TOUCHPAD OFF] Enable touchpad?"; then
         xinput enable "$id"
         notify-send "Touchpad" "ON"
     fi
