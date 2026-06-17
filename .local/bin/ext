@@ -1,23 +1,24 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: General-purpose archive extraction script
 
-set -euo pipefail
+set -eu
 
 extract_here=false
 
 usage() {
     printf "Options:\n"
-    printf "  -c  Extract archive into current directory (default: new directory)\n"
+    printf "  -c  Extract into current directory (default: new directory)\n"
     exit 1
 }
 
-while getopts ":hc" opt; do
+while getopts "hc" opt; do
     case "$opt" in
     c) extract_here=true ;;
     h | *) usage ;;
     esac
 done
+
 shift $((OPTIND - 1))
 
 [ $# -eq 1 ] || {
@@ -25,33 +26,40 @@ shift $((OPTIND - 1))
     exit 1
 }
 
-archive="$(readlink -f -- "$1")"
+archive=$1
 
 [ -f "$archive" ] || {
-    printf "File \"%s\" not found.\n" "$archive"
+    printf "File '%s' not found.\n" "$archive"
     exit 1
 }
 
+# Absolute path
+case "$archive" in
+/*) archive_path=$archive ;;
+*) archive_path=$(pwd)/$archive ;;
+esac
+
 if ! $extract_here; then
-    dir="${archive%.*}"
-    mkdir -p -- "$dir"
-    cd -- "$dir"
+    base=$(basename "$archive")
+    dir=${base%.*}
+    mkdir -p "$dir" || exit 1
+    cd "$dir" || exit 1
 fi
 
 case "$archive" in
-*.tar.bz2 | *.tbz2) tar xvjf "$archive" ;;
-*.tar.xz) tar -xJf "$archive" ;;
-*.tar.gz | *.tgz) tar xvzf "$archive" ;;
-*.tar) tar xvf "$archive" ;;
-*.bz2) bunzip2 "$archive" ;;
-*.gz) gunzip "$archive" ;;
-*.xz) unxz "$archive" ;;
-*.lzma) unlzma "$archive" ;;
-*.rar) unrar x -ad "$archive" ;;
-*.zip) unzip "$archive" ;;
-*.Z) uncompress "$archive" ;;
-*.7z) 7z x "$archive" ;;
-*.exe) cabextract "$archive" ;;
+*.tar.bz2 | *.tbz2) tar xvjf "$archive_path" ;;
+*.tar.xz) tar -xJf "$archive_path" ;;
+*.tar.gz | *.tgz) tar xvzf "$archive_path" ;;
+*.tar) tar xvf "$archive_path" ;;
+*.bz2) bunzip2 "$archive_path" ;;
+*.gz) gunzip "$archive_path" ;;
+*.xz) unxz "$archive_path" ;;
+*.lzma) unlzma "$archive_path" ;;
+*.rar) unrar x -ad "$archive_path" ;;
+*.zip) unzip "$archive_path" ;;
+*.Z) uncompress "$archive_path" ;;
+*.7z) 7z x "$archive_path" ;;
+*.exe) cabextract "$archive_path" ;;
 *)
     printf "extract: '%s' - unknown archive method\n" "$archive"
     exit 1
