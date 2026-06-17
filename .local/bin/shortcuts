@@ -1,48 +1,43 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Generate shell, zsh, and lf shortcuts from bookmark files
-
-set -euo pipefail
 
 bmdirs="$XDG_CONFIG_HOME/shell/bm-dirs"
 bmfiles="$XDG_CONFIG_HOME/shell/bm-files"
 
-shell_shortcuts="$XDG_CONFIG_HOME/shell/shrc"
-zsh_named_dirs="$XDG_CONFIG_HOME/shell/zshdirrc"
-lf_shortcuts="$XDG_CONFIG_HOME/lf/shrc"
+shrc="$XDG_CONFIG_HOME/shell/shrc"
+zshrc="$XDG_CONFIG_HOME/shell/zshdirrc"
+lf="$XDG_CONFIG_HOME/lf/shrc"
 
-rm -f "$zsh_named_dirs" "$lf_shortcuts"
-printf "# vim: filetype=sh\nalias " >"$shell_shortcuts"
-
-read_bookmarks() {
-    while read -r key path _; do
-        [[ -z $key || $key == \#* ]] && continue
-        printf '%s\t%s\n' "$key" "$path"
-    done <"$1"
+expand_path() {
+    eval "printf '%s\n' \"$1\""
 }
 
-while IFS=$'\t' read -r key path; do
-    expanded_path=${path@P}
+rm -f "$lf" "$zshrc"
+printf '# vim: filetype=sh\nalias ' >"$shrc"
 
-    printf "%s=\"cd %s\" \\\\\n" \
-        "$key" "$expanded_path" >>"$shell_shortcuts"
+# Directories
+while read -r key path _; do
+    case "$key" in
+    '' | \#*) continue ;;
+    esac
 
-    printf "hash -d %s=%s\n" \
-        "$key" "$expanded_path" >>"$zsh_named_dirs"
+    printf '%s="cd %s" \\\n' "$key" "$path" >>"$shrc"
+    printf 'hash -d %s=%s\n' "$key" "$path" >>"$zshrc"
 
-    printf "map g%s cd \"%s\"\n" \
-        "$key" "$expanded_path" >>"$lf_shortcuts"
-done < <(read_bookmarks "$bmdirs")
+    lf_path=$(expand_path "$path")
+    printf 'map g%s cd "%s"\n' "$key" "$lf_path" >>"$lf"
+done <"$bmdirs"
 
-while IFS=$'\t' read -r key path; do
-    expanded_path=${path@P}
+# Files
+while read -r key path _; do
+    case "$key" in
+    '' | \#*) continue ;;
+    esac
 
-    printf "%s=\"\\\$EDITOR %s\" \\\\\n" \
-        "$key" "$expanded_path" >>"$shell_shortcuts"
+    printf '%s="\044EDITOR %s" \\\n' "$key" "$path" >>"$shrc"
+    printf 'hash -d %s=%s\n' "$key" "$path" >>"$zshrc"
 
-    printf "hash -d %s=%s\n" \
-        "$key" "$expanded_path" >>"$zsh_named_dirs"
-
-    printf "map E%s \\\$EDITOR \"%s\"\n" \
-        "$key" "$expanded_path" >>"$lf_shortcuts"
-done < <(read_bookmarks "$bmfiles")
+    lf_path=$(expand_path "$path")
+    printf 'map E%s \044EDITOR "%s"\n' "$key" "$lf_path" >>"$lf"
+done <"$bmfiles"
