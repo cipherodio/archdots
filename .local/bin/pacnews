@@ -1,13 +1,13 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Show latest Arch Linux news and optionally run system upgrade
 
-set -euo pipefail
+set -eu
 
 NEWS_FEED="https://archlinux.org/feeds/news/"
 NEWS_LIMIT=10
 
-ESC="$(printf '\033')"
+ESC=$(printf '\033')
 BOLD="${ESC}[1m"
 BLUE="${ESC}[34m"
 YELLOW="${ESC}[33m"
@@ -15,61 +15,71 @@ RED="${ESC}[31m"
 RESET="${ESC}[0m"
 
 for cmd in curl sudo; do
-    if ! command -v "$cmd" &>/dev/null; then
+    if ! command -v "$cmd" >/dev/null 2>&1; then
         printf '%sError: %s is not installed.%s\n' "$RED" "$cmd" "$RESET"
         exit 1
     fi
 done
 
-printf '%s%s🔔 Latest Arch Linux news:%s\n\n' "$BOLD" "$BLUE" "$RESET"
+printf '%s%s🔔 Latest Arch Linux news:%s\n\n' \
+    "$BOLD" "$BLUE" "$RESET"
 
-if ! news="$(
+if ! news=$(
     curl -fs --max-time 10 --connect-timeout 5 "$NEWS_FEED" |
         sed -n '/<item>/,/<\/item>/ {
             s/.*<title>\(.*\)<\/title>.*/\1/p
         }' |
-        sed -e 's/&gt;/>/g' -e 's/&lt;/</g' -e 's/&amp;/\&/g' -e 's/&quot;/"/g' -e "s/&apos;/'/g" |
+        sed \
+            -e 's/&gt;/>/g' \
+            -e 's/&lt;/</g' \
+            -e 's/&amp;/\&/g' \
+            -e 's/&quot;/"/g' \
+            -e "s/&apos;/'/g" |
         head -n "$NEWS_LIMIT"
-)"; then
-    printf '%sError: failed to fetch Arch Linux news.%s\n' "$RED" "$RESET"
+); then
+    printf '%sError: failed to fetch Arch Linux news.%s\n' \
+        "$RED" "$RESET"
     exit 1
 fi
 
-if [[ -z "$news" ]]; then
-    printf '%sWarning: No news items found.%s\n' "$YELLOW" "$RESET"
+if [ -z "$news" ]; then
+    printf '%sWarning: No news items found.%s\n' \
+        "$YELLOW" "$RESET"
 fi
 
-while IFS= read -r title; do
-    case "$title" in
-    *[Mm]anual\ intervention*)
-        printf '%s- %s%s\n' "$RED" "$title" "$RESET"
-        ;;
-    *)
-        printf '%s- %s%s\n' "$YELLOW" "$title" "$RESET"
-        ;;
-    esac
-done <<<"$news"
+printf '%s\n' "$news" |
+    while IFS= read -r title; do
+        case "$title" in
+        *[Mm]anual\ intervention*)
+            printf '%s- %s%s\n' "$RED" "$title" "$RESET"
+            ;;
+        *)
+            printf '%s- %s%s\n' "$YELLOW" "$title" "$RESET"
+            ;;
+        esac
+    done
 
-printf '\n%sContinue with system upgrade? [y/N] %s' "$BOLD" "$RESET"
-read -r -t 30 answer
+printf '\n%sContinue with system upgrade? [y/N] %s' \
+    "$BOLD" "$RESET"
 
-if [[ -z "$answer" ]]; then
-    printf '\n%s⏹️  No response - upgrade cancelled.%s\n' "$BOLD" "$RESET"
-    exit 0
-fi
+IFS= read -r answer
 
-case "$answer" in
+case ${answer:-} in
 [yY])
-    if [[ -f /var/lib/pacman/db.lck ]]; then
-        printf '%s%s⚠️  Pacman is already running (lock file exists).%s\n' "$BOLD" "$RED" "$RESET"
+    if [ -f /var/lib/pacman/db.lck ]; then
+        printf '%s%s⚠️  Pacman is already running (lock file exists).%s\n' \
+            "$BOLD" "$RED" "$RESET"
         exit 1
     fi
 
-    printf '%s%s⏫ Running pacman -Syu...%s\n' "$BOLD" "$RED" "$RESET"
+    printf '%s%s⏫ Running pacman -Syu...%s\n' \
+        "$BOLD" "$RED" "$RESET"
+
     exec sudo pacman -Syu
     ;;
 *)
-    printf '%s⏹️  Upgrade cancelled.%s\n' "$BOLD" "$RESET"
+    printf '%s⏹️  Upgrade cancelled.%s\n' \
+        "$BOLD" "$RESET"
     exit 0
     ;;
 esac
