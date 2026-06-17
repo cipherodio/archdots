@@ -1,27 +1,27 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
-# Description: Toggle webcam preview via mpv with rofi confirmation
+# Description: Toggle webcam preview via mpv with dmenu
 
-set -euo pipefail
+set -eu
 
 CAM_DEVICE=/dev/video0
-MPV_MATCH="mpv.* $CAM_DEVICE"
+MPV_MATCH="mpv.*$CAM_DEVICE"
 
 confirm() {
-    printf 'Yes\n' | rofi -dmenu -i -p "$1" >/dev/null
+    printf 'Yes\n' | dmenu -p "$1" >/dev/null
 }
 
 camera_running() {
-    pgrep -f "$MPV_MATCH" >/dev/null
+    pgrep -f "$MPV_MATCH" >/dev/null 2>&1
 }
 
 if camera_running; then
-    if confirm "[● CAM ON] Turn OFF camera?"; then
+    if confirm "[🟢 CAM ON] Turn OFF camera?"; then
         pkill -f "$MPV_MATCH"
         notify-send "Camera" "OFF"
     fi
 else
-    if confirm "[○ CAM OFF] Turn ON camera?"; then
+    if confirm "[🔴 CAM OFF] Turn ON camera?"; then
         mpv \
             --no-osc \
             --no-input-default-bindings \
@@ -31,7 +31,7 @@ else
             --title="mpvfloat" \
             --profile=low-latency \
             --untimed \
-            "$CAM_DEVICE" &
+            "$CAM_DEVICE" >/dev/null 2>&1 &
         notify-send "Camera" "ON"
     fi
 fi
