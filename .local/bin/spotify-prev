@@ -1,8 +1,8 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Go to previous track in Spotify via MPRIS
 
-set -euo pipefail
+set -eu
 
 dbus-send --print-reply \
     --dest=org.mpris.MediaPlayer2.spotify \
