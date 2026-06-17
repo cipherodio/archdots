@@ -1,12 +1,9 @@
 vim.pack.add({
     { src = "https://github.com/nvim-treesitter/nvim-treesitter", branch = "main" },
     { src = "https://github.com/andymass/vim-matchup" },
-    { src = "https://github.com/nvim-treesitter/nvim-treesitter-context" },
 }, { confirm = false })
 
 local k = require("utils.keyhelper")
-local t = require("nvim-treesitter")
-local tc = require("treesitter-context")
 local g = vim.g
 
 local parsers = {
@@ -55,36 +52,12 @@ if vim.fn.filereadable(m) == 0 then
     end)
 end
 
--- Treesitter
-t.setup({
-    highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = false,
-    },
-    indent = {
-        enable = true,
-    },
-    matchup = {
-        enable = true,
-        include_match_words = true,
-        enable_quotes = true,
-    },
-})
-
 -- Vim matchup
 g.matchup_matchparen_offscreen = {}
 g.matchup_matchparen_timeout = 300
 g.matchup_matchparen_deferred = 1
 g.matchup_matchline_statusline = 0
 g.matchup_matchparen_statusbar = 0
-
--- Treesitter context
-tc.setup({
-    enable = true,
-    max_lines = 1,
-    line_numbers = true,
-    mode = "cursor",
-})
 
 -- Filetype start
 vim.api.nvim_create_autocmd("FileType", {
