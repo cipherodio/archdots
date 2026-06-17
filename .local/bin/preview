@@ -1,12 +1,12 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Preview script for shell utilities
 
-set -euo pipefail
+set -eu
 
-file="$1"
+file=$1
 
-[[ -e "$file" ]] || exit 0
+[ -e "$file" ] || exit 0
 
 case "$file" in
 *.png | *.jpg | *.jpeg | *.mkv | *.mp4 | *.mp3)
@@ -42,9 +42,10 @@ case "$file" in
     ;;
 
 *)
-    if [[ -d "$file" ]]; then
+    if [ -d "$file" ]; then
         tree -L 1 --dirsfirst "$file"
-    elif [[ -f "$file" ]] && file --mime "$file" | grep -qE 'text|json|xml'; then
+    elif [ -f "$file" ] &&
+        file --mime "$file" | grep -qE 'text|json|xml'; then
         cat "$file"
     else
         file "$file"
