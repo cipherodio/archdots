@@ -1,20 +1,20 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
-# Description: Toggle transmission-daemon via rofi
+# Description: Toggle transmission-daemon via dmenu
 
-set -euo pipefail
+set -eu
 
 confirm() {
-    printf "Yes\nNo\n" | rofi -dmenu -i -p "$1" | grep -qx "Yes"
+    printf '%s\n' "Yes" | dmenu -i -p "$1" >/dev/null
 }
 
-if pidof transmission-daemon >/dev/null; then
-    if confirm "[● ON] Turn OFF transmission-daemon?"; then
+if pidof transmission-daemon >/dev/null 2>&1; then
+    if confirm "[🟢 ON] Turn OFF transmission-daemon?"; then
         killall transmission-daemon
         notify-send "Transmission" "Daemon stopped"
     fi
 else
-    if confirm "[○ OFF] Turn ON transmission-daemon?"; then
+    if confirm "[🔴 OFF] Turn ON transmission-daemon?"; then
         transmission-daemon >/dev/null 2>&1
         notify-send "Transmission" "Daemon started"
     fi

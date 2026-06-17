@@ -1,9 +1,10 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Remove completed & stopped torrents from Transmission
 
-set -euo pipefail
-IFS=$'\n'
+set -eu
+IFS='
+'
 
 TORRENTLIST="$(
     transmission-remote --list |
@@ -19,7 +20,7 @@ for TORRENTID in $TORRENTLIST; do
     DL_COMPLETED="$(printf '%s\n' "$info" | grep 'Percent Done: 100%')"
     STATE_STOPPED="$(printf '%s\n' "$info" | grep -E 'State: (Stopped|Finished|Idle)')"
 
-    if [[ -n "$DL_COMPLETED" && -n "$STATE_STOPPED" ]]; then
+    if [ -n "$DL_COMPLETED" ] && [ -n "$STATE_STOPPED" ]; then
         transmission-remote -t "$TORRENTID" -r
         notify-send "Transmission" "Completed torrent $TORRENTID removed."
     else
