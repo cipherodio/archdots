@@ -1,0 +1,39 @@
+#!/bin/sh
+# Author: cipherodio
+# Description: dmenu-based password picker for pass
+
+set -eu
+
+for cmd in pass dmenu xclip; do
+    command -v "$cmd" >/dev/null 2>&1 || {
+        printf 'passmenu: %s command not found\n' "$cmd" >&2
+        exit 1
+    }
+done
+
+PASS_DIR=${PASSWORD_STORE_DIR:-"$HOME/.password-store"}
+
+passwords=$(
+    find "$PASS_DIR" -type f -name '*.gpg' |
+        sed \
+            -e "s|^$PASS_DIR/||" \
+            -e 's/\.gpg$//'
+)
+
+[ -n "$passwords" ] || {
+    printf 'passmenu: no passwords found in %s\n' "$PASS_DIR" >&2
+    exit 1
+}
+
+selected=$(
+    printf '%s\n' "$passwords" |
+        dmenu -i -l 10 -p "password"
+)
+
+[ -n "$selected" ] || exit 0
+
+pass show "$selected" |
+    sed -n '1p' |
+    xclip -selection clipboard
+
+notify-send "Password" "Copied to clipboard"
