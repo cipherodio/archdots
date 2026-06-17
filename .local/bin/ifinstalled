@@ -1,8 +1,8 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Check if required commands/packages are installed
 
-set -euo pipefail
+set -eu
 
 for cmd in "$@"; do
     if ! command -v "$cmd" >/dev/null 2>&1 &&
