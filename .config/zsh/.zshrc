@@ -120,7 +120,7 @@ cd() {
 # Use lf to jump in directories with ctrl-o
 # shellcheck disable=2164
 lfcd() {
-    tmp="$(mktemp)"
+    tmp="$(mktemp -uq)"
     trap 'rm -f "$tmp" >/dev/null 2>&1 &&
         trap - HUP INT QUIT TERM PWR EXIT' HUP INT QUIT TERM PWR EXIT
     lf -last-dir-path="$tmp" "$@"
@@ -133,7 +133,7 @@ bindkey -s "^o" "^ulfcd\n"
 
 # Search $HOME with fzf and open in $EDITOR with alt-e
 efzf() {
-    rg --files -0 "$HOME" | fzf -m --read0 --print0 | xargs -0 -r "$EDITOR"
+    rg --files -0 "$HOME" | fzf -m --read0 --print0 | xargs -0 -r -o "$EDITOR"
 }
 bindkey -s "^[e" "^uefzf\n"
 
