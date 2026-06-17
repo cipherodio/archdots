@@ -3,8 +3,8 @@ c   $HOME/.config
 l   $HOME/.local
 s   $HOME/.local/share
 d   $HOME/hub/downloads
-w   $HOME/hub
-q   $HOME/hub/src
+q   $HOME/hub
+w   $HOME/hub/src
 b   $HOME/.local/bin
 e   $HOME/.local/mnt
 t   $HOME/hub/screenshot
