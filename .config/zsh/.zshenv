@@ -13,7 +13,7 @@ fi
 # Default programs:
 export EDITOR="nvim"
 export VISUAL="nvim"
-export TERMINAL="alacritty"
+export TERMINAL="st"
 export BROWSER="firefox"
 export READER="zathura"
 export FILE="lf"
@@ -59,7 +59,7 @@ export HISTSIZE=1000
 export SAVEHIST=1000
 export HISTFILE="$ZDOTDIR/.history"
 export LESSHISTFILE="-"
-export SUDO_ASKPASS="$HOME/.local/bin/rofipass"
+export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
 export SUDO_PROMPT="[sudo] password for %p: "
 
 # Fzf
