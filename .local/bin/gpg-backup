@@ -1,19 +1,19 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Backup GPG secret keys securely (symmetric encryption)
 
-set -euo pipefail
+set -eu
 
 BACKUP_DIR="${HOME}/hub/src/cipherkeys"
-KEY_EMAIL="${1:-}"
+KEY_EMAIL=${1:-}
 
-if [[ -z "$KEY_EMAIL" ]]; then
+if [ -z "$KEY_EMAIL" ]; then
     printf 'Usage: gpg-backup <email|keyid>\n' >&2
     exit 1
 fi
 
 mkdir -p "$BACKUP_DIR"
-cd "$BACKUP_DIR"
+cd "$BACKUP_DIR" || exit 1
 
 printf '==> Exporting public key…\n'
 gpg --armor --export "$KEY_EMAIL" >public.asc
