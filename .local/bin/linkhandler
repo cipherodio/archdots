@@ -1,15 +1,15 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Open link in proper application
 
-set -euo pipefail
+set -eu
 
 url=${1-}
-[[ -n $url ]] || exit 0
+[ -n "$url" ] || exit 0
 
 exec >/dev/null 2>&1
 
-case $url in
+case "$url" in
 *.mkv | *.webm | *.mp4 | *youtube.com/watch* | *youtube.com/playlist* | *youtu.be*)
     setsid -f mpv -quiet "$url"
     ;;
@@ -29,8 +29,8 @@ case $url in
     ;;
 
 *)
-    if [[ -f $url ]]; then
-        "${TERMINAL:-alacritty}" -e "${EDITOR:-nvim}" "$url"
+    if [ -f "$url" ]; then
+        "${TERMINAL:-st}" -e "${EDITOR:-nvim}" "$url"
     else
         setsid -f "${BROWSER:-firefox}" "$url"
     fi
