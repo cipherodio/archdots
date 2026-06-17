@@ -1,13 +1,13 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: nsxiv statusbar image information
 
-set -euo pipefail
+set -eu
 
-file="$1"
+file=$1
 
-filename="$(basename -- "$file")"
-filesize="$(du -Hh -- "$file" | cut -f1)"
-geometry="$(identify -format '%wx%h' "${file}[0]")"
+filename=$(basename -- "$file")
+filesize=$(du -Hh -- "$file" | cut -f1)
+geometry=$(identify -format '%wx%h' "${file}[0]")
 
-printf "%s | %s | %s\n" "$filesize" "$geometry" "$filename"
+printf '%s | %s | %s\n' "$filesize" "$geometry" "$filename"
