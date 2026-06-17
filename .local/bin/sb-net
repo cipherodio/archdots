@@ -1,0 +1,64 @@
+#!/bin/sh
+# Author: cipherodio
+# Description: Internet status for dwmblocks
+
+case "$BLOCK_BUTTON" in
+1)
+    setsid -f "$TERMINAL" -e nmtui
+    pkill -RTMIN+4 i3blocks 2>/dev/null
+    ;;
+2)
+    notify-send "🌐 Internet module" -- \
+        "- Left: connect\n- Right: show SSID\n❌: wifi disabled\n📡: no wifi\n📶: wifi quality\n❎: no ethernet\n🌐: ethernet"
+    ;;
+3)
+    ssidnotify
+    ;;
+esac
+
+wifiicon=""
+ethericon=""
+
+# Wifi
+for dev in /sys/class/net/w*; do
+    [ -e "$dev" ] || continue
+
+    read -r operstate <"$dev/operstate" 2>/dev/null
+
+    if [ "$operstate" = "up" ]; then
+        quality=$(awk -v dev="$(basename "$dev")" '
+            $1 ~ dev ":" { print int($3) }
+        ' /proc/net/wireless)
+
+        if [ -n "$quality" ] && [ "$quality" -gt 0 ] 2>/dev/null; then
+            percent=$((quality * 100 / 70))
+            wifiicon="📶${percent}%"
+        else
+            wifiicon="📶"
+        fi
+
+    elif [ "$operstate" = "down" ]; then
+        read -r flags <"$dev/flags" 2>/dev/null
+
+        if [ "$flags" = "0x1003" ]; then
+            wifiicon="📡"
+        else
+            wifiicon="❌"
+        fi
+    fi
+done
+
+# Ethernet
+for dev in /sys/class/net/e*; do
+    [ -e "$dev" ] || continue
+
+    read -r operstate <"$dev/operstate" 2>/dev/null
+
+    if [ "$operstate" = "up" ]; then
+        ethericon="🌐"
+    elif [ -z "$wifiicon" ] || [ "$wifiicon" = "❌" ]; then
+        ethericon="❎"
+    fi
+done
+
+printf "%s %s\n" "$wifiicon" "$ethericon"

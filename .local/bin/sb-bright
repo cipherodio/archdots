@@ -1,0 +1,33 @@
+#!/bin/sh
+# Author: cipherodio
+# Description: Brightness status for dwmblocks
+
+for path in /sys/class/backlight/*; do
+    [ -e "$path" ] || continue
+    backlight_dir=$path
+    break
+done
+
+[ -n "$backlight_dir" ] || exit 1
+[ -e "$backlight_dir/brightness" ] || exit 1
+
+case "$BLOCK_BUTTON" in
+2)
+    notify-send "💡 Brightness module" -- "- Scroll: adjust brightness."
+    ;;
+4)
+    brightnessctl set +5% >/dev/null
+    ;;
+5)
+    brightnessctl set 5%- >/dev/null
+    ;;
+esac
+
+read -r curr_brightness <"$backlight_dir/brightness"
+read -r max_brightness <"$backlight_dir/max_brightness"
+
+[ "$max_brightness" -gt 0 ] 2>/dev/null || exit 1
+
+brightness_per=$((curr_brightness * 100 / max_brightness))
+
+printf "💡%d%%\n" "$brightness_per"

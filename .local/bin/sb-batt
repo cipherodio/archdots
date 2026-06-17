@@ -1,0 +1,45 @@
+#!/bin/sh
+# Author: cipherodio
+# Description: Battery status for dwmblocks
+
+case "$BLOCK_BUTTON" in
+2)
+    notify-send "🔋 Battery module" -- \
+        "🔋: discharging\n🟠: not charging\n♻: stagnant charge\n🔌: charging\n⚡: charged\n❗: battery very low!"
+    ;;
+esac
+
+output=""
+
+# Loop through batteries
+for battery in /sys/class/power_supply/BAT?*; do
+    [ -e "$battery" ] || continue
+
+    # Separator
+    if [ -n "$output" ]; then
+        output="$output "
+    fi
+
+    # Read status and capacity
+    read -r raw_status <"$battery/status"
+    read -r capacity <"$battery/capacity"
+
+    case "$raw_status" in
+    Full) status="⚡" ;;
+    Discharging) status="🔋" ;;
+    Charging) status="🔌" ;;
+    "Not charging") status="🟠" ;;
+    Unknown) status="♻️" ;;
+    *) status="?" ;;
+    esac
+
+    # Low battery warning
+    warn=""
+    if [ "$status" = "🔋" ] && [ "$capacity" -le 25 ] 2>/dev/null; then
+        warn="❗"
+    fi
+
+    output="${output}${status}${warn}${capacity}%"
+done
+
+printf "%s\n" "$output"

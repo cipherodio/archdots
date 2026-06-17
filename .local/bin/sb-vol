@@ -1,0 +1,46 @@
+#!/bin/sh
+# Author: cipherodio
+# Description: Volume status for dwmblocks
+
+case "$BLOCK_BUTTON" in
+1)
+    setsid -f "$TERMINAL" -e pulsemixer
+    pkill -RTMIN+10 "${STATUSBAR:-dwmblocks}"
+    ;;
+2)
+    notify-send "📢 Volume module" -- "- Left: mixer\n- Scroll: vol\n- Right: mute"
+    ;;
+3)
+    pulsemixer --toggle-mute
+    ;;
+4)
+    pulsemixer --change-volume +5
+    ;;
+5)
+    pulsemixer --change-volume -5
+    ;;
+esac
+
+# Get mute state
+mute=$(pulsemixer --get-mute)
+
+if [ "$mute" = "1" ]; then
+    printf "🔇\n"
+    exit
+fi
+
+# Get volume
+vol_val=$(pulsemixer --get-volume | awk '{print $1}')
+
+if [ "$vol_val" -ge 70 ] 2>/dev/null; then
+    icon="🔊"
+elif [ "$vol_val" -ge 30 ] 2>/dev/null; then
+    icon="🔉"
+elif [ "$vol_val" -ge 1 ] 2>/dev/null; then
+    icon="🔈"
+else
+    printf "🔇\n"
+    exit
+fi
+
+printf " %s%s%%\n" "$icon" "$vol_val"

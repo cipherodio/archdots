@@ -1,0 +1,34 @@
+#!/bin/sh
+# Author: cipherodio
+# Description: Memory status for dwmblocks
+
+case "$BLOCK_BUTTON" in
+1)
+    notify-send "🧠 Memory hogs" "$(
+        ps axch -o cmd,%mem |
+            awk '
+                {cmd[$1]+=$2}
+                END {
+                    for (i in cmd)
+                        print i, cmd[i]
+                }' |
+            sort -nrk2 |
+            head
+    )"
+    ;;
+2)
+    notify-send "🧠 Memory module" -- "- Left click: memory hogs\n- Right click: htop"
+    ;;
+3)
+    setsid -f "$TERMINAL" -e htop
+    ;;
+esac
+
+awk '
+/MemTotal:/ {t=$2}
+/MemAvailable:/ {a=$2}
+END {
+    if (t > 0 && a >= 0)
+        printf "🧠%d%%\n", (t-a)*100/t
+}
+' /proc/meminfo

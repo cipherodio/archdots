@@ -1,0 +1,57 @@
+#!/bin/sh
+# Author: cipherodio
+# Description: Date and time for dwmblocks
+
+icon_0="🕛"
+icon_1="🕐"
+icon_2="🕑"
+icon_3="🕒"
+icon_4="🕓"
+icon_5="🕔"
+icon_6="🕕"
+icon_7="🕖"
+icon_8="🕗"
+icon_9="🕘"
+icon_10="🕙"
+icon_11="🕚"
+icon_12="🕛"
+
+current_date=$(date '+%a-%d-%b')
+current_time=$(date '+%I:%M%p')
+hour=$(date '+%I')
+
+# Remove leading zero
+hour=${hour#0}
+
+# Select icon
+case "$hour" in
+0) icon=$icon_0 ;;
+1) icon=$icon_1 ;;
+2) icon=$icon_2 ;;
+3) icon=$icon_3 ;;
+4) icon=$icon_4 ;;
+5) icon=$icon_5 ;;
+6) icon=$icon_6 ;;
+7) icon=$icon_7 ;;
+8) icon=$icon_8 ;;
+9) icon=$icon_9 ;;
+10) icon=$icon_10 ;;
+11) icon=$icon_11 ;;
+*) icon=$icon_12 ;;
+esac
+
+case "$BLOCK_BUTTON" in
+1)
+    cal_output=$(cal | sed "s/\<$(date '+%e' | tr -d ' ')\>/<b><span color='red'>&<\/span><\/b>/")
+    notify-send "This Month" "$cal_output" &&
+        notify-send "Appointments" "$(calcurse -d3)"
+    ;;
+2)
+    notify-send "📅 Time/date module" -- "- Left: calendar\n- Right: calcurse"
+    ;;
+3)
+    setsid -f "$TERMINAL" -e calcurse
+    ;;
+esac
+
+printf "📅%s %s%s\n" "$current_date" "$icon" "$current_time"
