@@ -1,15 +1,15 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Toggle laptop keyboard backlight with a clean notification
 
-set -euo pipefail
+set -eu
 
 msg_id=991050
 device="asus::kbd_backlight"
 
 current=$(brightnessctl --device="$device" get)
 
-if [ "$current" -eq "0" ]; then
+if [ "$current" -eq 0 ]; then
     brightnessctl --device="$device" set 1
     dunstify -a "kbd_backlight" -u low -r "$msg_id" \
         "Laptop Keyboard Backlight: ON"
