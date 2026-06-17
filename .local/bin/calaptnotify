@@ -1,8 +1,8 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Show calendar and appointments notification with today highlighted
 
-set -euo pipefail
+set -eu
 
 CAL_COLOR=${CAL_COLOR:-red}
 CAL_TIMEOUT=${CAL_TIMEOUT:-5000}
@@ -11,31 +11,34 @@ CAL_WEEKNUMBERS=${CAL_WEEKNUMBERS:-0}
 CAL_MONDAY_FIRST=${CAL_MONDAY_FIRST:-0}
 APPT_DAYS=${APPT_DAYS:-3}
 
-today=$(date +%e | sed 's/^ *//')
+today=$(date +%e)
+today=${today# }
 
-cal_cmd=(cal)
-((CAL_WEEKNUMBERS)) && cal_cmd+=(-w)
-((CAL_MONDAY_FIRST)) && cal_cmd+=(-m)
-
-calendar=$("${cal_cmd[@]}" | awk -v d="$today" -v c="$CAL_COLOR" '
-NR <= 2 { print; next }
-{
-    for (i = 1; i <= NF; i++) {
-        if ($i == d)
-            $i = "<b><span color=\"" c "\">" $i "</span></b>"
-    }
-    print
+render_calendar() {
+    cal "$@" | awk -v d="$today" -v c="$CAL_COLOR" '
+    NR <= 2 { print; next }
+    {
+        for (i = 1; i <= NF; i++) {
+            if ($i == d)
+                $i = "<b><span color=\"" c "\">" $i "</span></b>"
+        }
+        print
+    }'
 }
-')
+
+calendar=$(
+    if [ "$CAL_WEEKNUMBERS" -ne 0 ] && [ "$CAL_MONDAY_FIRST" -ne 0 ]; then
+        render_calendar -w -m
+    elif [ "$CAL_WEEKNUMBERS" -ne 0 ]; then
+        render_calendar -w
+    elif [ "$CAL_MONDAY_FIRST" -ne 0 ]; then
+        render_calendar -m
+    else
+        render_calendar
+    fi
+)
 
 appointments=$(calcurse -d"$APPT_DAYS")
 
-notify-send \
-    -u "$CAL_URGENCY" \
-    -t "$CAL_TIMEOUT" \
-    "CALENDAR" "$calendar"
-
-notify-send \
-    -u "$CAL_URGENCY" \
-    -t "$CAL_TIMEOUT" \
-    "APPOINTMENTS" "$appointments"
+notify-send -u "$CAL_URGENCY" -t "$CAL_TIMEOUT" "CALENDAR" "$calendar"
+notify-send -u "$CAL_URGENCY" -t "$CAL_TIMEOUT" "APPOINTMENTS" "$appointments"
