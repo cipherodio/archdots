@@ -1,7 +1,6 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Descriptiom: Original artwork by http://www.sanderfocus.nl/#/portfolio/tech-heroes
-# Converted to shell by #nixers @ irc.unix.chat
 
 cat <<'EOF'
                      [38;5;255m,_ ,_==▄▂[0m
