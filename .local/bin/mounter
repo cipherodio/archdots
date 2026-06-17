@@ -1,52 +1,54 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
-# Description: Mount USB drives and Android phones using rofi
+# Description: Mount USB drives and Android phones using dmenu
 # Dependencies: simple-mtpfs
 # Mount point: ~/.local/mnt/<device>
 
-set -euo pipefail
+set -eu
 
 MNT="$HOME/.local/mnt"
 mkdir -p "$MNT"
 
-USER_UID="$(id -u)"
-USER_GID="$(id -g)"
+USER_UID=$(id -u)
+USER_GID=$(id -g)
 
 # Android devices
-phones="$(
-    simple-mtpfs -l 2>/dev/null |
-        sed 's/^/📱 /' || true
-)"
+phones=$(
+    simple-mtpfs -l 2>/dev/null | sed 's/^/📱 /' || true
+)
 
 # Unmounted USB partitions
-usbparts="$(
-    lsblk -nrpo NAME,TYPE,MOUNTPOINT |
+usbparts=$(
+    lsblk -nrpo NAME,TYPE,MOUNTPOINT 2>/dev/null |
         awk '$2=="part" && $3=="" { printf "💾 %s\n", $1 }' || true
-)"
+)
 
-choices="$(printf "%s\n%s\n" "$phones" "$usbparts" | sed '/^$/d')"
+choices=$(printf "%s\n%s\n" "$phones" "$usbparts" | sed '/^$/d')
 
-if [ -z "$choices" ]; then
+[ -n "$choices" ] || {
     notify-send "mounter" "No mountable devices found"
     exit 0
-fi
+}
 
-chosen="$(printf "%s\n" "$choices" | rofi -dmenu -i -p 'Mount which device?')"
+chosen=$(
+    printf "%s\n" "$choices" |
+        dmenu -i -p "Mount which device?"
+)
+
 [ -n "$chosen" ] || exit 0
 
 case "$chosen" in
 💾*)
-    dev="${chosen#💾 }"
-    name="$(basename "$dev")"
+    dev=${chosen#💾 }
+    name=$(basename "$dev")
     mp="$MNT/$name"
 
     mkdir -p "$mp"
-    fstype="$(lsblk -no FSTYPE "$dev")"
+    fstype=$(lsblk -no FSTYPE "$dev")
 
     case "$fstype" in
     vfat | exfat | fat | ntfs)
-        sudo -A mount "$dev" "$mp" \
-            -o uid="$USER_UID",gid="$USER_GID",rw,umask=0022
+        sudo -A mount "$dev" "$mp" -o uid="$USER_UID",gid="$USER_GID",rw,umask=0022
         ;;
     ext4 | btrfs | xfs)
         sudo -A mount "$dev" "$mp"
@@ -63,14 +65,13 @@ case "$chosen" in
 📱*)
     notify-send "📱 Android" "Allow file access on your phone"
 
-    num="${chosen#📱 }"
-    num="${num%%:*}"
+    num=${chosen#📱 }
+    num=${num%%:*}
+
     mp="$MNT/android-$num"
     mkdir -p "$mp"
 
-    sudo simple-mtpfs \
-        -o allow_other \
-        --device "$num" "$mp"
+    sudo simple-mtpfs -o allow_other --device "$num" "$mp"
 
     notify-send "📱 Android mounted" "$mp"
     ;;
