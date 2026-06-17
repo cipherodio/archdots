@@ -1,29 +1,27 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
-# Description: Move a file to trash (needs GNU mv)
+# Description: Move a file to trash
 
-set -euo pipefail
+set -eu
 
 td="$HOME/.local/trash"
 mkdir -p "$td"
 
-args=()
+# If no args, exit
+[ $# -gt 0 ] || exit 0
 
-for o in "$@"; do
-    case "$o" in
+for f in "$@"; do
+    case "$f" in
     --)
-        shift
-        break
+        continue
         ;;
     -*)
-        exec rm "$@"
+        # treat as invalid file, pass to rm fallback
+        printf "Skipping invalid option: %s\n" "$f" >&2
+        continue
         ;;
     *)
-        args+=("$o")
+        mv --backup=t -v "$f" "$td"
         ;;
     esac
 done
-
-((${#args[@]})) || exit 0
-
-mv --backup=t -v "${args[@]}" "$td"
