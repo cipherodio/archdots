@@ -1,0 +1,55 @@
+#!/bin/sh
+# Author: cipherodio
+# Description: List of searchable programs in dmenu
+
+set -eu
+
+choice=$(
+    printf '%s\n' \
+        "Blender" \
+        "Audacity" \
+        "Firefox" \
+        "Signal Messenger" \
+        "GIMP" \
+        "Inkscape" \
+        "Steam" \
+        "Stardew Valley" \
+        "Spotify" \
+        "Btop" \
+        "Htop" \
+        "Nvtop" \
+        "Lf File Manager" \
+        "Xterm" |
+        dmenu -i "$@"
+)
+
+[ -n "$choice" ] || exit 0
+
+case "$choice" in
+"Signal Messenger")
+    setsid signal-desktop >/dev/null 2>&1 &
+    ;;
+"Btop")
+    setsid st -e btop >/dev/null 2>&1 &
+    ;;
+"Htop")
+    setsid st -e htop >/dev/null 2>&1 &
+    ;;
+"Nvtop")
+    setsid st -e nvtop >/dev/null 2>&1 &
+    ;;
+"Lf File Manager")
+    setsid st -e lfprev >/dev/null 2>&1 &
+    ;;
+"Stardew Valley")
+    setsid "/data/gog/Stardew Valley/start.sh" >/dev/null 2>&1 &
+    ;;
+"Spotify")
+    setsid spotify-launcher >/dev/null 2>&1 &
+    ;;
+*)
+    # Converts uppercase to lowercase
+    lowercased=$(echo "$choice" | tr '[:upper:]' '[:lower:]')
+    setsid "$lowercased" >/dev/null 2>&1 &
+    ;;
+esac
