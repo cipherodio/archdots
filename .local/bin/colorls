@@ -1,34 +1,46 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Display LS_COLORS entries with human-readable names
 
-set -euo pipefail
+names() {
+    case "$1" in
+    no) printf "global default" ;;
+    fi) printf "normal file" ;;
+    di) printf "directory" ;;
+    ln) printf "symbolic link" ;;
+    pi) printf "named pipe" ;;
+    so) printf "socket" ;;
+    do) printf "door" ;;
+    bd) printf "block device" ;;
+    cd) printf "character device" ;;
+    or) printf "orphan symlink" ;;
+    mi) printf "missing file" ;;
+    su) printf "set uid" ;;
+    sg) printf "set gid" ;;
+    tw) printf "sticky other writable" ;;
+    ow) printf "other writable" ;;
+    st) printf "sticky" ;;
+    ex) printf "executable" ;;
+    *) printf "%s" "$1" ;;
+    esac
+}
 
-declare -A names=(
-    [no]="global default"
-    [fi]="normal file"
-    [di]="directory"
-    [ln]="symbolic link"
-    [pi]="named pipe"
-    [so]="socket"
-    [do]="door"
-    [bd]="block device"
-    [cd]="character device"
-    [or]="orphan symlink"
-    [mi]="missing file"
-    [su]="set uid"
-    [sg]="set gid"
-    [tw]="sticky other writable"
-    [ow]="other writable"
-    [st]="sticky"
-    [ex]="executable"
-)
+ls_colors=${LS_COLORS:-}
 
-IFS=':' read -ra entries <<<"${LS_COLORS:-}"
+set -f
 
-for entry in "${entries[@]}"; do
-    key="${entry%%=*}"
-    color="${entry#*=}"
-    name="${names[$key]:-$key}"
-    printf '\e[%sm%s\e[m\n' "$color" "$name"
+OLDIFS=$IFS
+IFS=:
+
+for entry in $ls_colors; do
+    [ -z "$entry" ] && continue
+
+    key=${entry%%=*}
+    color=${entry#*=}
+    name=$(names "$key")
+
+    printf '\033[%sm%s\033[0m\n' "$color" "$name"
 done
+
+IFS=$OLDIFS
+set +f
