@@ -9,13 +9,9 @@ Nsxiv.bar.font: monospace:size=16
 
 #include "colorschemes/gruvbox"
 
-! special
-#define accent c04
-! #define dfont monospace
-
 *background: bg
 *foreground: fg
-*cursorColor: fg
+! *cursorColor: fg
 
 *color0: c00
 *color1: c01
@@ -33,5 +29,13 @@ Nsxiv.bar.font: monospace:size=16
 *color13: c13
 *color14: c14
 *color15: c15
+
+st.alpha: 0.8
+! st.cursorColor: #add8e6
+
+dmenu.background: bg
+dmenu.foreground: fg
+dmenu.selbackground: ub
+dmenu.selforeground: fg
 
 ! vim: ft=xdefaults

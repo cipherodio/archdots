@@ -33,4 +33,7 @@
 #define c07 #a89984
 #define c15 #ebdbb2
 
+! Extras
+#define ub #005577
+
 ! vim: ft=xdefaults
