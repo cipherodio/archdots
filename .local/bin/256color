@@ -1,57 +1,92 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Print all 256 ANSI colours with readable contrast
 
-set -euo pipefail
-
-readonly COLOURS=256
+COLOURS=256
 
 contrast_colour() {
-    local c=$1 g
+    cc_c=$1
 
-    if ((c < 16)); then
-        ((c == 0)) && printf 15 || printf 0
+    if [ "$cc_c" -lt 16 ]; then
+        if [ "$cc_c" -eq 0 ]; then
+            printf '15'
+        else
+            printf '0'
+        fi
         return
     fi
 
-    if ((c > 231)); then
-        ((c < 244)) && printf 15 || printf 0
+    if [ "$cc_c" -gt 231 ]; then
+        if [ "$cc_c" -lt 244 ]; then
+            printf '15'
+        else
+            printf '0'
+        fi
         return
     fi
 
-    g=$((((c - 16) % 36) / 6))
-    ((g > 2)) && printf 0 || printf 15
+    cc_g=$((((cc_c - 16) % 36) / 6))
+
+    if [ "$cc_g" -gt 2 ]; then
+        printf '0'
+    else
+        printf '15'
+    fi
 }
 
 print_colour() {
-    local c=$1 fg
-    fg=$(contrast_colour "$c")
+    pc_c=$1
+    pc_fg=$(contrast_colour "$pc_c")
 
-    printf '\e[48;5;%sm\e[38;5;%sm%3d\e[0m ' "$c" "$fg" "$c"
+    printf '\033[48;5;%sm\033[38;5;%sm%3d\033[0m ' \
+        "$pc_c" "$pc_fg" "$pc_c"
 }
 
 print_run() {
-    local start=$1 count=$2 i
+    pr_start=$1
+    pr_count=$2
 
-    for ((i = start; i < start + count && i < COLOURS; i++)); do
-        print_colour "$i"
+    pr_i=$pr_start
+    pr_end=$((pr_start + pr_count))
+
+    while [ "$pr_i" -lt "$pr_end" ] && [ "$pr_i" -lt "$COLOURS" ]; do
+        print_colour "$pr_i"
+        pr_i=$((pr_i + 1))
     done
+
     printf '  '
 }
 
 print_blocks() {
-    local start=$1 end=$2 cols=$3 rows=$4 per_line=$5
-    local block_len=$((cols * rows))
-    local i row block
+    pb_start=$1
+    pb_end=$2
+    pb_cols=$3
+    pb_rows=$4
+    pb_per_line=$5
 
-    for ((i = start; i <= end; i += block_len * per_line)); do
+    pb_block_len=$((pb_cols * pb_rows))
+    pb_i=$pb_start
+
+    while [ "$pb_i" -le "$pb_end" ]; do
         printf '\n'
-        for ((row = 0; row < rows; row++)); do
-            for ((block = 0; block < per_line; block++)); do
-                print_run $((i + block * block_len + row * cols)) "$cols"
+
+        pb_row=0
+        while [ "$pb_row" -lt "$pb_rows" ]; do
+
+            pb_block=0
+            while [ "$pb_block" -lt "$pb_per_line" ]; do
+                print_run \
+                    $((pb_i + pb_block * pb_block_len + pb_row * pb_cols)) \
+                    "$pb_cols"
+
+                pb_block=$((pb_block + 1))
             done
+
             printf '\n'
+            pb_row=$((pb_row + 1))
         done
+
+        pb_i=$((pb_i + pb_block_len * pb_per_line))
     done
 }
 
