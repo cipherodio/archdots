@@ -1,12 +1,12 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Click Qtile Wlan widget then notify connected SSID
 
-set -euo pipefail
+set -eu
 
-SSID=$(nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -d: -f2 || true)
+SSID="$(nmcli -t -f active,ssid dev wifi 2>/dev/null | grep '^yes' | cut -d: -f2 || true)"
 
-if [[ -z "$SSID" ]]; then
+if [ -z "$SSID" ]; then
     notify-send "Wi-Fi Disconnected" "No active network found" --icon=network-error
 else
     notify-send "Wi-Fi Connected" "SSID: $SSID" --icon=network-wireless
