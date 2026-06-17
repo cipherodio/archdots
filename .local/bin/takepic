@@ -1,9 +1,9 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Toggle webcam preview using mpv
 
-if pgrep -f "/dev/video0" >/dev/null 2>&1; then
-    pkill -f "/dev/video0"
+if pgrep mpv >/dev/null 2>&1; then
+    pkill mpv >/dev/null 2>&1
     exit 0
 fi
 
@@ -12,7 +12,7 @@ exec mpv \
     --input-conf=/dev/null \
     --geometry=-0-0 \
     --autofit=30% \
-    --title="mpvfloat" \
+    --title=mpvfloat \
     --profile=low-latency \
     --untimed \
-    /dev/video0
+    /dev/video0 >/dev/null 2>&1

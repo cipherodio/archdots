@@ -1,19 +1,21 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
-# Description: Timed screenshot with rofi selector
+# Description: Timed screenshot with dmenu selector
 
-set -euo pipefail
+set -eu
 
 timer="$(
-    printf "1\n5\n10" |
-        rofi -dmenu -i -p "Seconds to wait"
+    printf "%s\n" "1" "5" "10" |
+        dmenu -i -p "Seconds to wait"
 )" || exit 1
 
-output="$HOME/hub/screenshot/$(date '+%G-%d-%b-%I:%M%p').png"
+[ -n "$timer" ] || exit 1
+
+output="$HOME/hub/screenshot/$(date '+%Y-%d-%b-%I:%M%p').png"
 
 sleep "$timer"
 
 maim -q "$output"
-xclip -selection clipboard -t image/png "$output"
+xclip -selection clipboard -t image/png <"$output"
 
 notify-send "📸 Screenshot taken"
