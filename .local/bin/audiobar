@@ -1,35 +1,44 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Show volume change as a dunst progress bar using wpctl
 
-set -euo pipefail
+set -eu
 
 sink="@DEFAULT_AUDIO_SINK@"
 action=${1:-0}
 msg_id=991049
 
-if [[ "$action" == "toggle" ]]; then
+if [ "$action" = "toggle" ]; then
     wpctl set-mute "$sink" toggle
 else
-    if [[ "$action" =~ ^- ]]; then
-        change="${action#-}%-"
-    elif [[ "$action" =~ ^\+ ]]; then
-        change="${action#+}%+"
-    else
-        change="${action}%+"
-    fi
+    case "$action" in
+    -*) change="${action#-}%-" ;;
+    +*) change="${action#+}%+" ;;
+    *) change="${action}%+" ;;
+    esac
 
     wpctl set-volume "$sink" "$change"
     wpctl set-mute "$sink" 0
 fi
 
 vol_raw=$(wpctl get-volume "$sink")
-vol=$(awk '{print int($2 * 100)}' <<<"$vol_raw")
 
-if [[ "$vol_raw" == *"[MUTED]"* ]]; then
+vol=$(printf '%s\n' "$vol_raw" | awk '{
+    for (i=1; i<=NF; i++) {
+        if ($i ~ /^[0-9.]+$/) {
+            print int($i * 100)
+            exit
+        }
+    }
+}')
+
+case "$vol_raw" in
+*"[MUTED]"*)
     dunstify -a "audiobar" -u low -r "$msg_id" "Muted"
-else
+    ;;
+*)
     dunstify -a "audiobar" -u low -r "$msg_id" \
         -h "int:value:$vol" \
         "Volume: ${vol}%"
-fi
+    ;;
+esac
