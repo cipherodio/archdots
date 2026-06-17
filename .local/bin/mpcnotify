@@ -1,20 +1,19 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Show currently playing song from MPD via dunst
 
-set -euo pipefail
+set -eu
 
 MSG_ID="280307"
 
-# Small delay to avoid race from mpcplaylist script
 sleep 0.15
 
-status="$(mpc status)"
+status=$(mpc status 2>/dev/null)
 
 # Only notify if actually playing
-grep -q '\[playing\]' <<<"$status" || exit 0
+printf '%s\n' "$status" | grep -q '\[playing\]' || exit 0
 
-song="$(mpc current)"
+song=$(mpc current 2>/dev/null)
 [ -n "$song" ] || exit 0
 
 dunstify \
