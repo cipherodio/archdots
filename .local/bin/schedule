@@ -1,15 +1,15 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Show calendar with today highlighted & print agenda via less
 
-set -euo pipefail
+set -eu
 
 AGENDA_FILE="$HOME/hub/src/mdnotes/agenda.md"
 
-today="$(date +%e | tr -d ' ')"
+today=$(date +%e | tr -d ' ')
 
-GREEN=$'\033[1;32m'
-RESET=$'\033[0m'
+GREEN=$(printf '\033[1;32m')
+RESET=$(printf '\033[0m')
 
 {
     cal | awk -v today="$today" -v green="$GREEN" -v reset="$RESET" '
@@ -20,13 +20,14 @@ RESET=$'\033[0m'
                 $i = green $i reset
         }
         print
-    }
-    '
+    }'
+
     printf '\n'
 
-    if [[ -f $AGENDA_FILE ]]; then
+    if [ -f "$AGENDA_FILE" ]; then
         highlight --out-format=ansi "$AGENDA_FILE"
     else
-        printf '%sAgenda file not found:%s %s\n' "$GREEN" "$RESET" "$AGENDA_FILE"
+        printf '%sAgenda file not found:%s %s\n' \
+            "$GREEN" "$RESET" "$AGENDA_FILE"
     fi
 } | less -R
