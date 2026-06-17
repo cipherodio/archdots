@@ -1,8 +1,8 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Update newsboat RSS feeds can be used via cron
 
-set -euo pipefail
+set -eu
 
 CACHE="$HOME/.cache/news_unread"
 
@@ -11,7 +11,8 @@ ping -q -c 1 1.1.1.1 >/dev/null 2>&1 || exit 0
 notify-send "RSS" "Updating feeds…"
 
 if pgrep -x newsboat >/dev/null 2>&1; then
-    win_id="$(xdotool search --class newsboat | head -n1 || true)"
+    win_id=$(xdotool search --class newsboat | head -n 1 || true)
+
     if [ -n "$win_id" ]; then
         xdotool windowactivate "$win_id" key R
         exit 0
@@ -21,5 +22,5 @@ fi
 newsboat -x reload
 newsboat -x print-unread | cut -d ' ' -f 1 >"$CACHE"
 
-unread="$(cat "$CACHE" 2>/dev/null || echo 0)"
+unread=$(cat "$CACHE" 2>/dev/null || printf '0')
 notify-send "RSS" "Update complete\n$unread unread"

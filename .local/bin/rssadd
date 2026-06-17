@@ -1,16 +1,20 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Add an RSS feed to newsboat
 
-set -euo pipefail
+set -eu
 
-url="${1:-}"
+url=${1:-}
 rssfile="$HOME/.config/newsboat/urls"
 
-if [[ -z "$url" || ! "$url" =~ ^https?://[^[:space:]]+\.[A-Za-z]+[^[:space:]]*$ ]]; then
+case "$url" in
+http://*.* | https://*.*)
+    ;;
+*)
     notify-send "RSS add" "That doesn't look like a valid URL."
     exit 1
-fi
+    ;;
+esac
 
 mkdir -p "$(dirname "$rssfile")"
 touch "$rssfile"
