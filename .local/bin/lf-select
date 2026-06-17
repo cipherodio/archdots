@@ -1,8 +1,8 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Select files in lf from stdin
 
-set -euo pipefail
+set -eu
 
 while IFS= read -r file; do
     [ -n "$file" ] || continue
