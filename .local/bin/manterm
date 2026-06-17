@@ -1,21 +1,22 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
-# Description: Search via rofi and open man pages in a terminal
+# Description: Search via dmenu and open man pages in a terminal
 
-set -euo pipefail
+set -eu
 
-: "${TERMINAL:=alacritty}"
+TERMINAL=${TERMINAL:-st}
 
 choice=$(
     apropos . |
         awk '{ print $1 " " $2 }' |
         sort -u |
-        rofi -dmenu -i -lines 10 -p " manpage "
-) || exit 0
+        dmenu -i -l 10 -p "manpage"
+)
 
 [ -n "$choice" ] || exit 0
 
-name="${choice%% *}"
-section="$(sed -n 's/.*(\(.*\)).*/\1/p' <<<"$choice")"
+name=${choice%% *}
+section=${choice#*(}
+section=${section%)}
 
 "$TERMINAL" -e man "$section" "$name" &

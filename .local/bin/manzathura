@@ -1,19 +1,20 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
-# Description: Search man pages and open them as PDF in zathura
+# Description: Search man pages via dmenu and open them as PDF in zathura
 
-set -euo pipefail
+set -eu
 
 choice=$(
     apropos . |
         awk '{ print $1 " " $2 }' |
         sort -u |
-        rofi -dmenu -i -lines 10 -p " manpage "
-) || exit 0
+        dmenu -i -l 10 -p "manpage"
+)
 
 [ -n "$choice" ] || exit 0
 
-name="${choice%% *}"
-section="$(sed -n 's/.*(\(.*\)).*/\1/p' <<<"$choice")"
+name=${choice%% *}
+section=${choice#* }
+section=$(printf '%s' "$section" | tr -d '()')
 
-man -Tpdf "$section" "$name" 2>/dev/null | zathura - &
+man -Tpdf "$section" "$name" 2>/dev/null | zathura -
