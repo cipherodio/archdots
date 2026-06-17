@@ -53,20 +53,18 @@ cmd extract ${{
     set -f
 
     printf "%s\n" "$fx" | while IFS= read -r file; do
-        dir="${file%.*}"
-
         case "$file" in
             *.tar|*.tar.gz|*.tgz|*.tar.bz*|*.tbz*|*.tar.xz|*.txz)
-                tar -xf "$file" --one-top-level="$dir"
+                tar -xf "$file"
                 ;;
             *.zip)
-                unzip "$file" -d "$dir"
+                unzip "$file"
                 ;;
             *.rar)
-                unrar x "$file" "$dir"
+                unrar x "$file"
                 ;;
             *.7z)
-                7z x "$file" -o"$dir"
+                7z x "$file"
                 ;;
         esac
     done
@@ -99,19 +97,20 @@ cmd copyimg ${{
 # Compress current file or selected files with tar and gunzip
 cmd tar ${{
     set -f
-    mkdir $1
-    cp -r $fx $1
-    tar czf $1.tar.gz $1
-    rm -rf $1
+    for f in $fx; do
+        name="$(basename "$f")"
+        parent="$(dirname "$f")"
+        tar czf "${name}.tar.gz" -C "$parent" "$name"
+    done
 }}
 
 # Compress current file or selected files with zip
 cmd zip ${{
     set -f
-    mkdir $1
-    cp -r $fx $1
-    zip -r $1.zip $1
-    rm -rf $1
+    for f in $fx; do
+        name="$(basename "$f")"
+        zip -r "${name}.zip" "$name"
+    done
 }}
 
 cmd moveto ${{
@@ -164,6 +163,7 @@ map C copyto
 map M moveto
 map E extract
 map Z zip
+map T tar
 map S copyimg
 
 map O push :mkdir<space>
