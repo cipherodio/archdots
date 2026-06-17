@@ -1,8 +1,8 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Launch newsboat and cache unread article count
 
-set -euo pipefail
+set -eu
 
 CACHE="$HOME/.cache/news_unread"
 
