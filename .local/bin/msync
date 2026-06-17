@@ -1,8 +1,8 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Update mirrorlist
 
-set -euo pipefail
+set -eu
 
 COUNTRY="Singapore,Hong Kong"
 MIRRORLIST="/etc/pacman.d/mirrorlist"
@@ -18,4 +18,4 @@ sudo reflector \
     --sort rate \
     --save "$MIRRORLIST"
 
-echo "Mirrorlist updated."
+printf 'Mirrorlist updated.\n'
