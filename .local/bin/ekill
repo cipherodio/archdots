@@ -1,29 +1,25 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Toggle Emacs daemon on/off with confirmation
 
-set -euo pipefail
-
-menu() {
-    if command -v rofi >/dev/null; then
-        rofi -dmenu -p "$1"
-    else
-        dmenu -i -p "$1"
-    fi
-}
+set -eu
 
 confirm() {
-    printf 'Yes\n' | menu "$1" >/dev/null
+    printf '%s\n' "Yes" | dmenu -p "$1" >/dev/null
 }
 
-if pgrep -x emacs >/dev/null; then
-    confirm '[● ON] Stop Emacs daemon?' && {
-        pkill emacs
+is_emacs_daemon_running() {
+    emacsclient -e '(daemonp)' 2>/dev/null | grep -q t
+}
+
+if is_emacs_daemon_running; then
+    if confirm '[🟢 ON] Stop Emacs daemon?'; then
+        emacsclient -e '(kill-emacs)' >/dev/null 2>&1 || true
         notify-send "Emacs" "Daemon stopped"
-    }
+    fi
 else
-    confirm '[○ OFF] Start Emacs daemon?' && {
-        emacs --daemon
+    if confirm '[🔴 OFF] Start Emacs daemon?'; then
+        emacs --daemon >/dev/null 2>&1 &
         notify-send "Emacs" "Daemon started"
-    }
+    fi
 fi
