@@ -1,8 +1,8 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Pacman wrapper for common operations
 
-set -euo pipefail
+set -eu
 
 if [ -t 1 ] && [ -z "${NO_COLOR:-}" ]; then
     BOLD=$(printf '\033[1m')
@@ -11,7 +11,11 @@ if [ -t 1 ] && [ -z "${NO_COLOR:-}" ]; then
     BLUE=$(printf '\033[34m')
     RESET=$(printf '\033[0m')
 else
-    BOLD="" GREEN="" CYAN="" BLUE="" RESET=""
+    BOLD=""
+    GREEN=""
+    CYAN=""
+    BLUE=""
+    RESET=""
 fi
 
 usage() {
@@ -32,12 +36,12 @@ usage() {
     printf "  %sq%s <pkg>    Query installed package\n" "$CYAN" "$RESET"
 }
 
-if [[ $# -eq 0 ]]; then
+if [ $# -eq 0 ]; then
     usage
     exit 0
 fi
 
-cmd="$1"
+cmd=$1
 shift
 
 case "$cmd" in
