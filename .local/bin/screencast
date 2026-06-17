@@ -1,12 +1,11 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
-# Description: Rofi-based screen/audio/webcam recorder
+# Description: dmenu-based screen/audio/webcam recorder
 
-set -euo pipefail
+set -eu
 
 PIDFILE="/tmp/recordingpid"
 OUTDIR="$HOME/hub/screencapture"
-RECTYPE=""
 
 getdim() {
     xdpyinfo | awk '/dimensions:/ {print $2}'
@@ -17,7 +16,7 @@ cleanup_pid() {
 }
 
 is_recording() {
-    if [[ -f "$PIDFILE" ]]; then
+    if [ -f "$PIDFILE" ]; then
         if kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
             return 0
         else
@@ -28,26 +27,34 @@ is_recording() {
 }
 
 confirm() {
-    printf 'Yes\n' | rofi -dmenu -i -p "$1" >/dev/null
+    printf 'Yes\n' | dmenu -p "$1" >/dev/null
 }
 
 killrecording() {
-    local pid
-    pid="$(cat "$PIDFILE" 2>/dev/null)" || return 1
+    line=$(cat "$PIDFILE" 2>/dev/null) || return 1
+
+    pid=${line%% *}
+    type=${line#* }
+
+    [ -n "$pid" ] || return 1
+
     kill -15 "$pid" 2>/dev/null || true
-    cleanup_pid
-    notify-send "Recording" "Stopped (${RECTYPE:-unknown})"
+    rm -f "$PIDFILE"
+
+    notify-send "Recording" "Stopped ($type)"
 }
 
 record() {
-    RECTYPE="$1"
+    type=$1
     shift
-    "$@" >/dev/null 2>&1 &
-    printf '%s\n' "$!" >"$PIDFILE"
-    notify-send "Recording" "Started ($RECTYPE)"
-}
 
-trap 'is_recording && killrecording' INT TERM
+    "$@" >/dev/null 2>&1 &
+    pid=$!
+
+    printf '%s %s\n' "$pid" "$type" >"$PIDFILE"
+
+    notify-send "Recording" "Started ($type)"
+}
 
 screencast() {
     record screencast ffmpeg -y \
@@ -65,15 +72,25 @@ video() {
 }
 
 videoselected() {
-    slop -f "%x %y %w %h" | {
-        read -r X Y W H
-        record "video selected" ffmpeg \
-            -f x11grab -framerate 30 \
-            -video_size "${W}x${H}" \
-            -i ":0.0+${X},${Y}" \
-            -c:v libx264 -qp 0 \
-            "$OUTDIR/box-$(date '+%y%m%d-%H%M-%S').mkv"
-    }
+    geom=$(slop -f '%x %y %w %h') || return 0
+
+    X=${geom%% *}
+    geom=${geom#* }
+    Y=${geom%% *}
+    geom=${geom#* }
+    W=${geom%% *}
+    H=${geom#* }
+
+    [ -n "$H" ] || return 0
+
+    FILE="$OUTDIR/box-$(date '+%y%m%d-%H%M-%S').mkv"
+
+    record "video selected" ffmpeg \
+        -f x11grab -framerate 30 \
+        -video_size "${W}x${H}" \
+        -i "$DISPLAY+${X},${Y}" \
+        -c:v libx264 -qp 0 \
+        "$FILE"
 }
 
 audio() {
@@ -96,8 +113,7 @@ webcamhidef() {
 }
 
 askrecording() {
-    local choice
-    choice="$(
+    choice=$(
         printf '%s\n' \
             screencast \
             video \
@@ -105,8 +121,10 @@ askrecording() {
             audio \
             webcam \
             "webcam (hi-def)" |
-            rofi -dmenu -i -p "Select recording"
-    )" || exit 0
+            dmenu -i -p "Select recording"
+    )
+
+    [ -n "$choice" ] || exit 0
 
     case "$choice" in
     screencast) screencast ;;
