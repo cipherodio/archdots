@@ -1,19 +1,19 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
 # Description: Set wallpaper using feh
 
-set -euo pipefail
+set -eu
 
 BGDIR="${XDG_DATA_HOME:-$HOME/.local/share}"
 BGFILE="$BGDIR/bg"
 
 mkdir -p "$BGDIR"
 
-if [ -f "${1:-}" ]; then
+if [ -n "${1:-}" ] && [ -f "$1" ]; then
     cp -f "$1" "$BGFILE"
 
     setsid -f notify-send -i "$BGFILE" \
-        " Wallpaper changed" >/dev/null 2>&1
+        "Wallpaper changed" >/dev/null 2>&1
 fi
 
 [ -f "$BGFILE" ] || exit 0
