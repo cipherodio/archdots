@@ -1,33 +1,38 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Author: cipherodio
-# Description: Take screenshots using maim via rofi
+# Description: Take screenshots using maim via dmenu
 
-set -euo pipefail
+set -eu
 
 OUTDIR="$HOME/hub/screenshot"
 mkdir -p "$OUTDIR"
 
-output="$OUTDIR/$(date '+%G-%d-%b-%I:%M%p').png"
+output="$OUTDIR/$(date '+%Y-%m-%d-%H%M%S').png"
 
-choice="$(
+choice=$(
     printf '%s\n' \
         "Selected area" \
         "Current window" \
         "Fullscreen" |
-        rofi -dmenu -i -p "Screenshot"
-)" || exit 0
+        dmenu -i -p "Screenshot"
+)
+
+[ -n "${choice:-}" ] || exit 0
 
 case "$choice" in
 "Selected area")
     maim -u -s "$output" &&
-        notify-send "📸 Screenshot taken" "$output"
+        notify-send "Screenshot taken" "$output"
     ;;
 "Current window")
-    maim -B -q -d 0.2 -i "$(xdotool getactivewindow)" "$output" &&
-        notify-send "📸 Screenshot taken" "$output"
+    if command -v xdotool >/dev/null 2>&1; then
+        win=$(xdotool getactivewindow)
+        maim -B -q -d 0.2 -i "$win" "$output" &&
+            notify-send "Screenshot taken" "$output"
+    fi
     ;;
 "Fullscreen")
     maim -q -d 0.2 "$output" &&
-        notify-send "📸 Screenshot taken" "$output"
+        notify-send "Screenshot taken" "$output"
     ;;
 esac
