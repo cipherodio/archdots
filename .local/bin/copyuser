@@ -1,0 +1,22 @@
+#!/bin/sh
+
+set -eu
+
+PASS_DIR="${PASSWORD_STORE_DIR:-$HOME/.password-store}"
+
+entry=$(
+    find "$PASS_DIR" -type f -name "*.gpg" |
+        sed "s|$PASS_DIR/||; s|\.gpg$||" |
+        dmenu -i -l 10 -p "copy pass username:"
+)
+
+[ -n "$entry" ] || exit 0
+
+pass show "$entry" |
+    sed -n '
+    s/^login:[[:space:]]*//p
+    s/^username:[[:space:]]*//p
+    s/^user:[[:space:]]*//p
+' |
+    head -n 1 |
+    xclip -selection clipboard
