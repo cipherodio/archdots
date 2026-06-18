@@ -61,4 +61,4 @@ for dev in /sys/class/net/e*; do
     fi
 done
 
-printf "%s %s\n" "$wifiicon" "$ethericon"
+printf "%s%s\n" "$wifiicon" "$ethericon"
