@@ -19,7 +19,11 @@ if [ -t 1 ] && [ -z "${NO_COLOR:-}" ]; then
     GREEN=$(printf '\033[32m')
     RESET=$(printf '\033[0m')
 else
-    BLUE="" CYAN="" YELLOW="" GREEN="" RESET=""
+    BLUE=""
+    CYAN=""
+    YELLOW=""
+    GREEN=""
+    RESET=""
 fi
 
 usage() {
@@ -45,6 +49,16 @@ print_header() {
     printf "%s=========================================%s\n" "$BLUE" "$RESET"
 }
 
+clone_if_missing() {
+    REPO_URL="$1"
+    REPO_NAME=$(basename "$REPO_URL" .git)
+
+    if [ ! -d "$REPO_NAME/.git" ]; then
+        printf "%sRepository missing.%s Cloning...\n" "$CYAN" "$RESET"
+        git clone "$REPO_URL"
+    fi
+}
+
 install_only() {
     ensure_target_dir
 
@@ -60,17 +74,15 @@ install_only() {
             continue
         fi
 
-        if [ ! -d "$REPO_NAME" ]; then
-            printf "%sCloning repository...%s\n" "$CYAN" "$RESET"
-            git clone "$REPO_URL"
-        fi
+        clone_if_missing "$REPO_URL"
 
-        if ! cd "$REPO_NAME"; then
-            continue
-        fi
+        cd "$REPO_NAME" || continue
 
-        printf "%sBuilding and installing %s...%s\n" "$GREEN" "$REPO_NAME" "$RESET"
+        printf "%sBuilding and installing %s...%s\n" \
+            "$GREEN" "$REPO_NAME" "$RESET"
+
         makepkg -si --noconfirm
+
         cd "$TARGET_DIR" || exit 1
     done
 }
@@ -85,28 +97,30 @@ update_if_changed() {
 
         print_header "Checking updates:" "$REPO_NAME"
 
-        if [ ! -d "$REPO_NAME" ]; then
-            printf "%sRepository not cloned.%s Skipping.\n" "$YELLOW" "$RESET"
-            continue
-        fi
+        clone_if_missing "$REPO_URL"
 
-        if ! cd "$REPO_NAME"; then
-            continue
-        fi
-
-        if ! git rev-parse --abbrev-ref --symbolic-full-name '@{u}' >/dev/null 2>&1; then
-            printf "%sNo upstream branch set.%s Skipping.\n" "$YELLOW" "$RESET"
-            cd "$TARGET_DIR" || exit 1
-            continue
-        fi
+        cd "$REPO_NAME" || continue
 
         git fetch --quiet
 
+        if ! git rev-parse --abbrev-ref --symbolic-full-name '@{u}' \
+            >/dev/null 2>&1; then
+            BRANCH=$(git branch --show-current)
+
+            if git show-ref --verify --quiet \
+                "refs/remotes/origin/$BRANCH"; then
+                git branch --set-upstream-to="origin/$BRANCH" \
+                    "$BRANCH" >/dev/null 2>&1 || true
+            fi
+        fi
+
         LOCAL=$(git rev-parse HEAD)
-        REMOTE=$(git rev-parse '@{u}')
+        REMOTE=$(git rev-parse '@{u}' 2>/dev/null || printf '%s' "$LOCAL")
 
         if [ "$LOCAL" != "$REMOTE" ]; then
-            printf "%sUpstream changed.%s Rebuilding...\n" "$GREEN" "$RESET"
+            printf "%sUpstream changed.%s Rebuilding...\n" \
+                "$GREEN" "$RESET"
+
             git pull --quiet
             makepkg -si --noconfirm
         else
@@ -122,7 +136,9 @@ list_packages() {
 
     printf '%s\n' "$AUR_REPOS" | while IFS= read -r REPO_URL; do
         [ -z "$REPO_URL" ] && continue
+
         REPO_NAME=$(basename "$REPO_URL" .git)
+
         printf " %s- %s%s\n" "$CYAN" "$REPO_NAME" "$RESET"
     done
 }
