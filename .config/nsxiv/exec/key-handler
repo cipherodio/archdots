@@ -7,10 +7,19 @@ set -eu
 bm_dirs="$HOME/.config/shell/bm-dirs"
 
 choose_dir() {
-    sed 's/[[:space:]].*#.*$//;/^[[:space:]]*$/d' "$bm_dirs" |
-        awk '{print $2}' |
-        rofi -dmenu -i -lines 20 -p "$1" |
-        sed "s|~|$HOME|g"
+    choice=$(sed 's/[[:space:]].*#.*$//;/^[[:space:]]*$/d' "$bm_dirs" |
+        awk '{print $NF}' |
+        dmenu -i -l 20 -p "$1") || return 1
+
+    [ -z "$choice" ] && return 1
+
+    # expand variables safely
+    choice=$(printf "%s" "$choice" |
+        sed -e "s|^~|$HOME|" \
+            -e "s|\$HOME|$HOME|" \
+            -e "s|\$NVD_DIR|${NVD_DIR:-}|")
+
+    printf '%s\n' "$choice"
 }
 
 while IFS= read -r file; do
@@ -20,11 +29,14 @@ while IFS= read -r file; do
         ;;
 
     c)
-        destdir=$(choose_dir 'Copy file(s) to where?')
+        if ! destdir=$(choose_dir 'Copy file(s) to where?'); then
+            notify-send "Cancelled."
+            continue
+        fi
 
         if [ ! -d "$destdir" ]; then
             notify-send "Invalid directory, cancelled."
-            exit 1
+            continue
         fi
 
         cp "$file" "$destdir" &&
@@ -33,11 +45,14 @@ while IFS= read -r file; do
         ;;
 
     m)
-        destdir=$(choose_dir 'Move file(s) to where?')
+        if ! destdir=$(choose_dir 'Move file(s) to where?'); then
+            notify-send "Cancelled."
+            continue
+        fi
 
         if [ ! -d "$destdir" ]; then
             notify-send "Invalid directory, cancelled."
-            exit 1
+            continue
         fi
 
         mv "$file" "$destdir" &&
