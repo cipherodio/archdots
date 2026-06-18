@@ -4,7 +4,7 @@
 
 set -eu
 
-BACKUP_DIR="${HOME}/hub/src/cipherkeys"
+BACKUP_DIR="${HOME}/hub/src/cipherdata/secrets"
 KEY_EMAIL=${1:-}
 
 if [ -z "$KEY_EMAIL" ]; then
