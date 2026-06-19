@@ -1,5 +1,4 @@
 #!/bin/sh
-
 # File preview handler for lf.
 
 set -C -f
@@ -19,7 +18,9 @@ image() {
         command -v "$UB" >/dev/null 2>&1; then
 
         printf '{"action": "add", "identifier": "PREVIEW", "x": "%s", "y": "%s", "width": "%s", "height": "%s", "scaler": "contain", "path": "%s"}\n' \
-            "$4" "$5" "$(($2 - 1))" "$(($3 - 1))" "$1" >"$FIFO_UEBERZUG"
+            "$4" "$5" "$(($2 - 1))" "$(($3 - 1))" "$1" \
+            2>/dev/null >"$FIFO_UEBERZUG" || true
+
     else
         mediainfo "$6"
     fi
@@ -77,7 +78,7 @@ image/svg+xml)
 image/x-xcf)
     CACHE=$(get_cache "$1")
     [ ! -f "$CACHE.jpg" ] &&
-        magick "$1[0]" "$CACHE.jpg"
+        magick "$1" "$CACHE.jpg"
     image "$CACHE.jpg" "$2" "$3" "$4" "$5" "$1"
     ;;
 

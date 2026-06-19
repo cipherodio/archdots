@@ -1,23 +1,34 @@
 #!/bin/sh
 # Author: cipherodio
 # Description: Wrapper for lf with ueberzugpp image previews.
-# Dependencies: ueberzugpp gnome-epub-thumbnailer lynx atool
-
-set -e
 
 cleanup() {
-    exec 3>&-
-    rm "$FIFO_UEBERZUG"
+    # close fd safely
+    exec 3>&- 2>/dev/null || true
+
+    # kill ueberzug if still alive
+    [ -n "$UEBERZUG_PID" ] && kill "$UEBERZUG_PID" 2>/dev/null || true
+
+    # remove fifo safely
+    [ -p "$FIFO_UEBERZUG" ] && rm -f "$FIFO_UEBERZUG" 2>/dev/null || true
 }
 
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-    lf "$@"
-else
-    [ ! -d "$HOME/.cache/lf" ] && mkdir -p "$HOME/.cache/lf"
-    export FIFO_UEBERZUG="$HOME/.cache/lf/ueberzug-$$"
-    mkfifo "$FIFO_UEBERZUG"
-    ueberzug layer -s -p json <"$FIFO_UEBERZUG" &
-    exec 3>"$FIFO_UEBERZUG"
-    trap cleanup HUP INT QUIT TERM PWR EXIT
-    lf "$@" 3>&-
+    exec lf "$@"
 fi
+
+mkdir -p "$HOME/.cache/lf"
+
+FIFO_UEBERZUG="$HOME/.cache/lf/ueberzug-$$"
+export FIFO_UEBERZUG
+
+mkfifo "$FIFO_UEBERZUG"
+
+ueberzug layer -s -p json <"$FIFO_UEBERZUG" &
+UEBERZUG_PID=$!
+
+exec 3>"$FIFO_UEBERZUG"
+
+trap cleanup HUP INT QUIT TERM EXIT
+
+lf "$@" 3>&-

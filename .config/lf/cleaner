@@ -1,4 +1,6 @@
 #!/bin/sh
-if [ -n "$FIFO_UEBERZUG" ]; then
-	printf '{"action": "remove", "identifier": "PREVIEW"}\n' > "$FIFO_UEBERZUG"
-fi
+
+[ -n "$FIFO_UEBERZUG" ] || exit 0
+
+printf '{"action": "remove", "identifier": "PREVIEW"}\n' \
+    2>/dev/null >"$FIFO_UEBERZUG" || true
