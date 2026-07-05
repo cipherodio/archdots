@@ -4,12 +4,12 @@
 # Usage: cn [options]
 # -i quick notes
 # -j journal for current date
-# -r permanent notes
-# -s create new story
+# -v vault note
+# -p create new prose
 # -ii fzf inbox directory
 # -jj fzf journal directory
-# -rr fzf reference directory
-# -ss fzf stories directory
+# -vv fzf vault directory
+# -pp fzf prose directory
 
 set -eu
 
@@ -27,18 +27,16 @@ fi
 # Directories
 BASE_DIR="$HOME/hub/src/mdnotes"
 JOURNAL_DIR="$BASE_DIR/journal"
-STORIES_DIR="$BASE_DIR/stories"
-REFERENCE_DIR="$BASE_DIR/reference"
+PROSE_DIR="$BASE_DIR/prose"
+VAULT_DIR="$BASE_DIR/vault"
 INBOX_DIR="$BASE_DIR/inbox"
 
 EDITOR="${EDITOR:-nvim}"
 
-META_DATE_FMT="%b %d, %Y %a"
+META_DATE_FMT="%B %d, %Y %a %I:%M %p"
 FILE_DATE_FMT="%b-%d-%Y-%a"
-TIME_FMT="%I:%M %p"
 
 current_date=$(date +"$META_DATE_FMT")
-current_time=$(date +"$TIME_FMT")
 
 # Usage
 usage() {
@@ -50,12 +48,12 @@ usage() {
 
     printf "%sCommands:%s\n" "$BOLD" "$RESET"
     printf "  %s-j%s   Today's journal\n" "$CYAN" "$RESET"
-    printf "  %s-s%s   Create new story\n" "$CYAN" "$RESET"
-    printf "  %s-r%s   Permanent note\n" "$CYAN" "$RESET"
-    printf "  %s-i%s   Quick note\n" "$CYAN" "$RESET"
+    printf "  %s-p%s   Create new prose\n" "$CYAN" "$RESET"
+    printf "  %s-v%s   Vault note\n" "$CYAN" "$RESET"
+    printf "  %s-i%s   Inbox note\n" "$CYAN" "$RESET"
     printf "  %s-jj%s  Browse journal\n" "$CYAN" "$RESET"
-    printf "  %s-ss%s  Browse stories\n" "$CYAN" "$RESET"
-    printf "  %s-rr%s  Browse reference\n" "$CYAN" "$RESET"
+    printf "  %s-pp%s  Browse prose\n" "$CYAN" "$RESET"
+    printf "  %s-vv%s  Browse vault\n" "$CYAN" "$RESET"
     printf "  %s-ii%s  Browse inbox\n" "$CYAN" "$RESET"
 
     exit 0
@@ -95,10 +93,6 @@ pick_and_open() {
     open_editor "$BASE_DIR/$file"
 }
 
-title_case() {
-    printf "%s\n" "$1" | awk '{print toupper(substr($0,1,1)) substr($0,2)}'
-}
-
 # Mode
 mode=${1:-}
 
@@ -118,8 +112,7 @@ case "$mode" in
 ---
 title: $title
 author: $author
-date created: "$current_date"
-time created: "$current_time"
+created: "$current_date"
 ---
 EOF
     fi
@@ -127,25 +120,24 @@ EOF
     open_editor "$filepath"
     ;;
 
--s)
+-p)
     title=$(prompt "Title")
     author=$(prompt "Author")
     description=$(prompt "Description")
     filename_input=$(prompt "Filename (leave blank to use title)")
 
     slug=$(slugify "${filename_input:-$title}")
-    filepath="$STORIES_DIR/$slug.md"
+    filepath="$PROSE_DIR/$slug.md"
 
     if [ ! -e "$filepath" ]; then
         cat >"$filepath" <<EOF
 ---
-title: $(title_case "$title")
-author: $author
-date created: "$current_date"
-time created: "$current_time"
-date completed: ""
-date uploaded: ""
-description: $description
+title: $title
+author:${author:+ $author}
+created: "$current_date"
+completed: ""
+uploaded: ""
+description:${description:+ $description}
 ---
 EOF
     fi
@@ -153,53 +145,55 @@ EOF
     open_editor "$filepath"
     ;;
 
--r)
+-v)
     title=$(prompt "Title")
     author=$(prompt "Author")
     description=$(prompt "Description")
     filename_input=$(prompt "Filename (leave blank to use title)")
 
     slug=$(slugify "${filename_input:-$title}")
-    filepath="$REFERENCE_DIR/$slug.md"
+    filepath="$VAULT_DIR/$slug.md"
 
-    cat >"$filepath" <<EOF
+    if [ ! -e "$filepath" ]; then
+        cat >"$filepath" <<EOF
 ---
-title: $(title_case "$title")
-author: $author
-date created: "$current_date"
-time created: "$current_time"
-description: $description
+title: $title
+author:${author:+ $author}
+created: "$current_date"
+description:${description:+ $description}
 ---
 EOF
+    fi
 
     open_editor "$filepath"
     ;;
 
 -i)
     title=$(prompt "Title")
+    author=$(prompt "Author")
     description=$(prompt "Description")
     filename_input=$(prompt "Filename (leave blank to use title)")
-    author="Jeremy"
 
     slug=$(slugify "${filename_input:-$title}")
     filepath="$INBOX_DIR/$slug.md"
 
-    cat >"$filepath" <<EOF
+    if [ ! -e "$filepath" ]; then
+        cat >"$filepath" <<EOF
 ---
-title: $(title_case "$title")
-author: $author
-date created: "$current_date"
-time created: "$current_time"
-description: $description
+title: $title
+author:${author:+ $author}
+created: $current_date
+description:${description:+ $description}
 ---
 EOF
+    fi
 
     open_editor "$filepath"
     ;;
 
 -jj) pick_and_open "$JOURNAL_DIR" ;;
--ss) pick_and_open "$STORIES_DIR" ;;
--rr) pick_and_open "$REFERENCE_DIR" ;;
+-pp) pick_and_open "$PROSE_DIR" ;;
+-vv) pick_and_open "$VAULT_DIR" ;;
 -ii) pick_and_open "$INBOX_DIR" ;;
 
 *) usage ;;
