@@ -1,8 +1,14 @@
 local M = {}
 
--- Package
+-- Update plugin
 function M.plugin_stats()
     -- vim.pack.update(nil, { offline = true })
+    vim.pack.update()
+end
+
+-- Delete plugin
+function M.plugin_delete(plugin)
+    vim.pack.del({ plugin })
     vim.pack.update()
 end
 
@@ -38,6 +44,15 @@ function M.smart_quit()
         vim.cmd("close")
     else
         vim.cmd("quit")
+    end
+end
+
+-- Close md-agenda buffer safely
+function M.close_md_agenda(buf)
+    if buf and vim.api.nvim_buf_is_valid(buf) then
+        vim.cmd("bd! " .. buf)
+    else
+        vim.cmd("bd!")
     end
 end
 
@@ -89,6 +104,47 @@ function M.create_on_disk()
         vim.cmd("redraw")
         print("Created: " .. name)
     end
+end
+
+-- Check current deepseek balance
+function M.check_deepseek_balance()
+    local api_key = os.getenv("DEEPSEEK_API_KEY") or os.getenv("LLM_KEY")
+    if not api_key or api_key == "" then
+        print("Error: No API Key found.")
+        return
+    end
+    print("Checking balance... 󰔟")
+    local cmd = string.format(
+        "curl -s -X GET 'https://api.deepseek.com/user/balance' "
+            .. "-H 'Authorization: Bearer %s' | "
+            .. 'jq -r \'.balance_infos[0] | "󰇁" + .total_balance + " " + .currency\'',
+        api_key
+    )
+    local output = {}
+
+    vim.fn.jobstart({ "sh", "-c", cmd }, {
+        stdout_buffered = true,
+        on_stdout = function(_, data)
+            if data then
+                for _, line in ipairs(data) do
+                    if line ~= "" then
+                        table.insert(output, line)
+                    end
+                end
+            end
+        end,
+        on_exit = function(_, code)
+            vim.schedule(function()
+                local result =
+                    table.concat(output, " "):gsub("%s+", " "):gsub("^%s*(.-)%s*$", "%1")
+                if code == 0 and result ~= "" and result ~= "null" then
+                    print(result)
+                else
+                    print("Failed to fetch balance. Check your API key or credits.")
+                end
+            end)
+        end,
+    })
 end
 
 return M

@@ -1,13 +1,4 @@
 vim.diagnostic.config({
-    -- virtual_lines = true,
-    -- virtual_text = {
-    --     prefix = "",
-    --     format = function(diagnostic)
-    --         local win = vim.api.nvim_get_current_win()
-    --         local cfg = vim.api.nvim_win_get_config(win)
-    --         return (cfg.relative ~= "") and diagnostic.message or "◾"
-    --     end,
-    -- },
     float = {
         border = "single",
         header = "",
@@ -15,11 +6,11 @@ vim.diagnostic.config({
         source = "if_many",
     },
     underline = false,
-    severity_sort = true,
     signs = true,
+    update_in_insert = false,
 })
 
--- NOTE: For performace and to stop color pop delay
+-- For performace and to stop color pop delay
 -- Disable Semantic Tokens
 vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)

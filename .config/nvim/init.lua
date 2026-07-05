@@ -1,21 +1,9 @@
--- Experimental loader
 vim.loader.enable()
 
--- Experimental UI2
 require("vim._core.ui2").enable({
-    msg = {
-        targets = { echomsg = "msg" },
-        msg = {
-            height = 0.3,
-            timeout = 5000,
-        },
-    },
+    msg = { targets = { echomsg = "msg" } },
 })
 
--- Colorscheme
-vim.cmd.colorscheme("gruvbox")
-
--- Use pcall to load modules
 ---@param module string
 local function spec(module)
     local success, err_msg = pcall(require, module)

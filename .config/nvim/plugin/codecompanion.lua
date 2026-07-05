@@ -3,16 +3,12 @@ vim.pack.add({
     { src = "https://github.com/olimorris/codecompanion.nvim" },
 }, { confirm = false })
 
-local c = require("codecompanion")
-local ca = require("codecompanion.adapters")
-local k = require("utils.keyhelper")
-
-c.setup({
+require("codecompanion").setup({
     opts = { log_level = "DEBUG" },
     adapters = {
         http = {
             deepseek = function()
-                return ca.extend("openai", {
+                return require("codecompanion.adapters").extend("openai", {
                     name = "deepseek",
                     url = "https://api.deepseek.com/v1/chat/completions",
                     env = { api_key = "DEEPSEEK_API_KEY" },
@@ -57,11 +53,20 @@ c.setup({
         },
     },
     prompt_library = {
-        ["New Story"] = require("utils.prompts.new_story"),
-        ["Generate Commit"] = require("utils.prompts.commit"),
+        ["Write New Story"] = require("prompt.writer"),
+        ["Generate Commit"] = require("prompt.commit"),
     },
 })
 
 -- Keymaps
-k({ "n", "v" }, "<leader>ac", "<cmd>CodeCompanionChat Toggle<cr>", { desc = "AI: chat" })
-k("n", "<leader>aa", "<cmd>CodeCompanionAction<cr>", { desc = "AI: choose an action" })
+local map = vim.keymap.set
+
+map({ "n", "v" }, "<leader>ac", "<cmd>CodeCompanionChat Toggle<cr>", {
+    desc = "AI: chat",
+    silent = true,
+})
+
+map("n", "<leader>aa", "<cmd>CodeCompanionAction<cr>", {
+    desc = "AI: choose an action",
+    silent = true,
+})

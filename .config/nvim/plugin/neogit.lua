@@ -2,10 +2,7 @@ vim.pack.add({
     { src = "https://github.com/neogitorg/neogit" },
 }, { confirm = false })
 
-local k = require("utils.keyhelper")
-local n = require("neogit")
-
-n.setup({
+require("neogit").setup({
     console_timeout = 60000,
     auto_show_console = false,
     auto_refresh = true,
@@ -37,18 +34,21 @@ vim.api.nvim_create_autocmd("User", {
         "NeogitStageComplete",
     },
     callback = function()
-        n.refresh()
+        require("neogit").refresh()
     end,
 })
 
-k("n", "<leader>gg", function()
+-- Keymaps
+local map = vim.keymap.set
+
+map("n", "<leader>gg", function()
     vim.env.GIT_DIR = nil
     vim.env.GIT_WORK_TREE = nil
-    n.open({ cwd = vim.fn.expand("%:p:h") })
-end, { desc = "Neogit: project" })
+    require("neogit").open({ cwd = vim.fn.expand("%:p:h") })
+end, { desc = "Neogit: project", silent = true })
 
-k("n", "<leader>gd", function()
+map("n", "<leader>gd", function()
     vim.env.GIT_DIR = vim.fn.expand("~/.config/.dots")
     vim.env.GIT_WORK_TREE = vim.fn.expand("~")
-    n.open({ cwd = vim.fn.expand("~") })
-end, { desc = "Neogit: dotfiles" })
+    require("neogit").open({ cwd = vim.fn.expand("~") })
+end, { desc = "Neogit: dotfiles", silent = true })

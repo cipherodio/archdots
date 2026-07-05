@@ -1,6 +1,6 @@
 return {
     interaction = "chat",
-    description = "New Story",
+    description = "Write new Story",
     opts = {
         ignore_system_prompt = true,
         adapter = {

@@ -1,100 +1,205 @@
-local b = require("utils.balance")
-local h = require("utils.helper")
-local k = require("utils.keyhelper")
-local l = require("utils.lsphelper")
-local m = require("utils.mdhelper")
-local r = require("utils.replacer")
-local s = require("utils.spellhelper")
+local map = vim.keymap.set
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- General
-k("n", "q", "<nop>", { desc = "Disable q" })
-k.e("n", "<esc>", h.smart_esc, { desc = "Editor: clear search on escape" })
-k("n", "<leader>i", "<cmd>Inspect<cr>", { desc = "Editor: inspect" })
-k("n", "<leader>pu", h.plugin_stats, { desc = "Plugins: check status" })
-k("n", "<leader>mf", m.open_agenda, { desc = "Markdown: open agenda" })
-k("n", "<leader>ab", b.check_deepseek_balance, { desc = "AI: check balance" })
+-- Disable macro recording key
+map("n", "q", "<nop>", { silent = true })
 
-k("n", "<leader>ww", "<cmd>w<cr>", { desc = "Write: save" })
-k("n", "<leader>wa", "<cmd>wa<cr>", { desc = "Write: save all buffer" })
-k("n", "<leader>wq", "<cmd>wq<cr>", { desc = "Write: save and quit" })
-k("n", "<leader>wr", "<cmd>e!<cr>", { desc = "Write: undo all changes" })
-k("n", "<leader>wd", "<cmd>%d<cr>", { desc = "Write: delete all text" })
-k("n", "<leader>wn", h.create_and_open, { desc = "Write: new file in cwd" })
-k("n", "<leader>wt", h.create_on_disk, { desc = "Write: touch in cwd" })
+-- Clear search highlight on Escape
+map("n", "<esc>", require("fn.util").smart_esc, { silent = true, expr = true })
 
-k("n", "<leader>qq", "<cmd>q!<cr>", { desc = "Quit: force" })
-k("n", "<leader>qa", "<cmd>qa<cr>", { desc = "Quit: all" })
-k("n", "<leader>qd", "<cmd>q<cr>", { desc = "Quit: current buffer" })
+-- Inspect
+map("n", "<leader>i", "<cmd>Inspect<cr>", { desc = "Inspect", silent = true })
 
-k.r("n", "<leader>yd", 'yi"', { desc = "Yank: inside double quotes" })
-k.r("n", "<leader>ys", "yi'", { desc = "Yank: inside single quotes" })
+-- Check plugin updates, do gra inside to delete a plugin then :w
+-- map("n", "<leader>pu", require("fn.util").plugin_stats, {
+--     desc = "Plugins: check status",
+--     silent = true,
+-- })
+-- map("n", "<leader>pu", vim.pack.update, { desc = "Plugin: updates" })
+map("n", "<leader>pu", function()
+    vim.pack.update()
+end, { desc = "Plugin: update" })
 
--- LSP
-k("n", "<leader>lo", l.show_root_dir, { desc = "LSP: show root directory" })
-k("n", "<leader>lc", l.toggle_codelens, { desc = "LSP: toggle codelens" })
-k("n", "<leader>li", l.toggle_inlay_hints, { desc = "LSP: toggle inlay hints" })
-k("n", "<leader>lr", l.rename, { desc = "LSP: rename symbol" })
-k("n", "<leader>lf", l.toggle_autoformat, { desc = "Format: toggle" })
-k("n", "[d", l.diag_prev, { desc = "LSP: previous diagnostic" })
-k("n", "]d", l.diag_next, { desc = "LSP: next diagnostic" })
+-- Notes
+map("n", "<leader>mf", require("fn.markdown").open_agenda, {
+    desc = "Markdown: open agenda",
+    silent = true,
+})
 
--- Spelling
-k({ "n", "v" }, "zg", s.spell_add_lower(1), { desc = "Spell: add tagalog" })
-k({ "n", "v" }, "<leader>st", s.spell_add_lower(1), { desc = "Spell: add tagalog" })
-k({ "n", "v" }, "<leader>se", s.spell_add_lower(2), { desc = "Spell: add english" })
-k({ "n", "v" }, "<leader>sT", s.smart_spell(1), { desc = "Spell: undo spell tagalog" })
-k({ "n", "v" }, "<leader>sE", s.smart_spell(2), { desc = "Spell: undo spell english" })
-k("n", "<leader>sc", s.clean_spell_files, { desc = "Spell: clean spell file" })
-k("n", "<leader>sr", s.report_stats, { desc = "Spell: report writing stats" })
-k("n", "<leader>sn", "]s", { desc = "Spell: next spelling error" })
-k("n", "<leader>sp", "[s", { desc = "Spell: previous spelling error" })
-k("n", "<leader>sl", s.fzf_spell_all, { desc = "Fzf: list all spell errors" })
+-- Balance inquiry
+map("n", "<leader>ab", require("fn.util").check_deepseek_balance, {
+    desc = "AI: check balance",
+    silent = true,
+})
+
+-- Undo all changes
+map("n", "<leader>wr", "<cmd>e!<cr>", { desc = "Undo all changes", silent = true })
+
+-- Delete all text
+map("n", "<leader>wd", "<cmd>%d<cr>", { desc = "Delete all text", silent = true })
+
+-- Write files
+map("n", "<leader>ww", "<cmd>w<cr>", { desc = "Save", silent = true })
+map("n", "<leader>wa", "<cmd>wa<cr>", { desc = "Save all buffer", silent = true })
+map("n", "<leader>wq", "<cmd>wq<cr>", { desc = "Save and quit", silent = true })
+map("n", "<leader>wn", require("fn.util").create_and_open, {
+    desc = "New file in cwd",
+    silent = true,
+})
+map("n", "<leader>wt", require("fn.util").create_on_disk, {
+    desc = "Touch in cwd",
+    silent = true,
+})
+
+-- Quit
+map("n", "<leader>qq", "<cmd>q!<cr>", { desc = "Quit without save", silent = true })
+map("n", "<leader>qa", "<cmd>qa<cr>", { desc = "Quit all", silent = true })
+map("n", "<leader>qd", "<cmd>q<cr>", { desc = "Quit current window", silent = true })
+map("n", "<leader>qs", "<cmd>bd<cr>", { desc = "Quit current buffer", silent = true })
+
+-- Yank inside single and double quotes
+map("n", "<leader>yd", 'yi"', { desc = "Yank double quote", silent = true, remap = true })
+map("n", "<leader>ys", "yi'", { desc = "Yank single quote", silent = true, remap = true })
+
+-- Tabs
+-- map("n", "<M-h>", "<cmd>tabnext<cr>", { desc = "Tab next" })
+-- map("n", "<M-l>", "<cmd>tabprevious<cr>", { desc = "Tab previous" })
 
 -- Buffers
-k("n", "L", "<cmd>bnext<cr>", { desc = "Buffer: next" })
-k("n", "H", "<cmd>bprevious<cr>", { desc = "Buffer: previous" })
-k("n", "<leader>bv", "<cmd>vnew<cr>", { desc = "Split: new vertical" })
-k("n", "<leader>bh", "<cmd>new<cr>", { desc = "Split: new horizontal" })
-k("n", "<leader>bV", "<cmd>vsplit<cr>", { desc = "Split: vertical" })
-k("n", "<leader>bH", "<cmd>split<cr>", { desc = "Split: horizontal" })
-k("n", "<leader>bd", "<cmd>bd<cr>", { desc = "Split: close buffer" })
+map("n", "L", "<cmd>bnext<cr>", { desc = "Buffer: next", silent = true })
+map("n", "H", "<cmd>bprevious<cr>", { desc = "Buffer: previous", silent = true })
+map("n", "<leader>bv", "<cmd>vnew<cr>", { desc = "Split: new vertical", silent = true })
+map("n", "<leader>bh", "<cmd>new<cr>", { desc = "Split: new horizontal", silent = true })
+map("n", "<leader>bV", "<cmd>vsplit<cr>", { desc = "Split: vertical", silent = true })
+map("n", "<leader>bH", "<cmd>split<cr>", { desc = "Split: horizontal", silent = true })
 
 -- Window navigation
-k("n", "<C-h>", "<C-w>h", { desc = "move to left window" })
-k("n", "<C-j>", "<C-w>j", { desc = "move to lower window" })
-k("n", "<C-k>", "<C-w>k", { desc = "move to upper window" })
-k("n", "<C-l>", "<C-w>l", { desc = "move to right window" })
+map("n", "<C-h>", "<C-w>h", { desc = "move to left window", silent = true })
+map("n", "<C-j>", "<C-w>j", { desc = "move to lower window", silent = true })
+map("n", "<C-k>", "<C-w>k", { desc = "move to upper window", silent = true })
+map("n", "<C-l>", "<C-w>l", { desc = "move to right window", silent = true })
 
--- Move lines/selections
-k("n", "<A-j>", "<cmd>m .+1<cr>==", { desc = "move line down" })
-k("n", "<A-k>", "<cmd>m .-2<cr>==", { desc = "move line up" })
-k("i", "<A-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "move line down" })
-k("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "move line up" })
-k("v", "<A-j>", ":m '>+1<cr>gv=gv", { desc = "move selection down" })
-k("v", "<A-k>", ":m '<-2<cr>gv=gv", { desc = "move selection up" })
+-- LSP
+map("n", "<leader>lo", require("fn.lsp").show_root_dir, {
+    desc = "LSP: show root directory",
+    silent = true,
+})
+map("n", "<leader>lc", require("fn.lsp").toggle_codelens, {
+    desc = "LSP: toggle codelens",
+    silent = true,
+})
+map("n", "<leader>li", require("fn.lsp").toggle_inlay_hints, {
+    desc = "LSP: toggle inlay hints",
+    silent = true,
+})
+map("n", "<leader>lr", require("fn.lsp").rename, {
+    desc = "LSP: rename symbol",
+    silent = true,
+})
+map("n", "<leader>lf", require("fn.lsp").toggle_autoformat, {
+    desc = "Format: toggle",
+    silent = true,
+})
+map("n", "]d", require("fn.lsp").diag_next, {
+    desc = "LSP: next diagnostic",
+    silent = true,
+})
+map("n", "[d", require("fn.lsp").diag_prev, {
+    desc = "LSP: previous diagnostic",
+    silent = true,
+})
+
+-- Spell
+map({ "n", "v" }, "zg", require("fn.spell").spell_add_lower(1), {
+    desc = "Spell: add tagalog",
+    silent = true,
+})
+map({ "n", "v" }, "<leader>st", require("fn.spell").spell_add_lower(1), {
+    desc = "Spell: add tagalog",
+    silent = true,
+})
+map({ "n", "v" }, "<leader>se", require("fn.spell").spell_add_lower(2), {
+    desc = "Spell: add english",
+    silent = true,
+})
+map({ "n", "v" }, "<leader>sT", require("fn.spell").smart_spell(1), {
+    desc = "Spell: undo spell tagalog",
+    silent = true,
+})
+map({ "n", "v" }, "<leader>sE", require("fn.spell").smart_spell(2), {
+    desc = "Spell: undo spell english",
+    silent = true,
+})
+map("n", "<leader>sc", require("fn.spell").clean_spell_files, {
+    desc = "Spell: clean spell file",
+    silent = true,
+})
+map("n", "<leader>sr", require("fn.spell").report_stats, {
+    desc = "Spell: report writing stats",
+    silent = true,
+})
+map("n", "<leader>sl", require("fn.spell").fzf_spell_all, {
+    desc = "Fzf: list all spell errors",
+    silent = true,
+})
+map("n", "<leader>sn", "]s", { desc = "Next spelling error", silent = true })
+map("n", "<leader>sp", "[s", { desc = "Previous spelling error", silent = true })
+
+-- Move lines
+map("n", "<A-j>", "<cmd>m .+1<cr>==", { desc = "move line down", silent = true })
+map("n", "<A-k>", "<cmd>m .-2<cr>==", { desc = "move line up", silent = true })
+map("i", "<A-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "move line down", silent = true })
+map("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "move line up", silent = true })
+map("v", "<A-j>", ":m '>+1<cr>gv=gv", { desc = "move selection down", silent = true })
+map("v", "<A-k>", ":m '<-2<cr>gv=gv", { desc = "move selection up", silent = true })
 
 -- Smart navigation
-k.e("n", "j", h.smart_j, { desc = "move down (visual if no count)" })
-k.e("n", "k", h.smart_k, { desc = "move up (visual if no count)" })
+map("n", "j", require("fn.util").smart_j, {
+    desc = "move down (visual if no count)",
+    silent = true,
+    expr = true,
+})
+map("n", "k", require("fn.util").smart_k, {
+    desc = "move up (visual if no count)",
+    silent = true,
+    expr = true,
+})
 
 -- Smart search
-k.e("n", "n", h.smart_n, { desc = "next search result" })
-k.e("n", "N", h.smart_N, { desc = "previous search result" })
+map("n", "n", require("fn.util").smart_n, {
+    desc = "next search result",
+    silent = true,
+    expr = true,
+})
+map("n", "N", require("fn.util").smart_N, {
+    desc = "previous search result",
+    silent = true,
+    expr = true,
+})
 
 -- Better indenting
-k("v", "<", "<gv", { desc = "indent left and stay in visual mode" })
-k("v", ">", ">gv", { desc = "indent right and stay in visual mode" })
+map("v", "<", "<gv", { desc = "indent left and stay in visual mode", silent = true })
+map("v", ">", ">gv", { desc = "indent right and stay in visual mode", silent = true })
 
 -- Do not yank on x/c
-k({ "n", "v" }, "x", '"_x', { desc = "delete without yanking" })
-k({ "n", "v" }, "c", '"_c', { desc = "change without yanking" })
+map({ "n", "v" }, "x", '"_x', { desc = "delete without yanking", silent = true })
+map({ "n", "v" }, "c", '"_c', { desc = "change without yanking", silent = true })
 
 -- Better deletion
-k.e("n", "dd", h.smart_dd, { desc = "no yank on empty" })
+map("n", "dd", require("fn.util").smart_dd, {
+    desc = "no yank on empty",
+    silent = true,
+    expr = true,
+})
 
 -- Replacer
-k("n", "<leader>ar", r.replace_word_fast, { desc = "Replacer: all word" })
-k("n", "<leader>aR", r.replace_word_confirm, { desc = "Replacer: tab to select word" })
+map("n", "<leader>ar", require("fn.replacer").replace_word_fast, {
+    desc = "Replacer: all word",
+    silent = true,
+})
+map("n", "<leader>aR", require("fn.replacer").replace_word_confirm, {
+    desc = "Replacer: tab to select word",
+    silent = true,
+})

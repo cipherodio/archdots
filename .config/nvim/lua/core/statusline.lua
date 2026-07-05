@@ -1,40 +1,71 @@
 local M = {}
 
--- Helper: current git branch
-local function git_branch()
-    local gitsigns = vim.b.gitsigns_head
-    if gitsigns and gitsigns ~= "" then
-        -- return (" %s"):format(gitsigns)
-        return ("🍀 %s"):format(gitsigns)
+local colors = require("fn.colors")
+local group = vim.api.nvim_create_augroup("StatusLine", { clear = true })
+
+-- Join non-empty statusline sections
+local function join(parts, separator)
+    local result = {}
+
+    for _, part in ipairs(parts) do
+        if part and part ~= "" then
+            result[#result + 1] = part
+        end
     end
+
+    return table.concat(result, separator)
+end
+
+-- Highlights
+local function set_highlights()
+    vim.api.nvim_set_hl(0, "StatusLineGitAdded", { fg = colors.c02 })
+    vim.api.nvim_set_hl(0, "StatusLineGitChanged", { fg = colors.c03 })
+    vim.api.nvim_set_hl(0, "StatusLineGitDeleted", { fg = colors.c01 })
+end
+
+set_highlights()
+
+vim.api.nvim_create_autocmd("ColorScheme", {
+    desc = "Restore custom statusline highlights",
+    group = group,
+    callback = set_highlights,
+})
+
+-- Current git branch
+local function git_branch()
+    local branch = vim.b.gitsigns_head
+
+    if branch and branch ~= "" then
+        return ("🍀 %s"):format(branch)
+    end
+
     return ""
 end
 
--- Helper: gitsigns diff stats
+-- Gitsigns diff stats
 local function git_diff()
-    local gs = vim.b.gitsigns_status_dict
-    if not gs then
+    local status = vim.b.gitsigns_status_dict
+
+    if not status then
         return ""
     end
 
     local parts = {}
 
-    if gs.added and gs.added > 0 then
-        table.insert(parts, ("+%d"):format(gs.added))
+    if status.added and status.added > 0 then
+        parts[#parts + 1] = ("%%#StatusLineGitAdded#+%d%%*"):format(status.added)
     end
-
-    if gs.changed and gs.changed > 0 then
-        table.insert(parts, ("~%d"):format(gs.changed))
+    if status.changed and status.changed > 0 then
+        parts[#parts + 1] = ("%%#StatusLineGitChanged#~%d%%*"):format(status.changed)
     end
-
-    if gs.removed and gs.removed > 0 then
-        table.insert(parts, ("-%d"):format(gs.removed))
+    if status.removed and status.removed > 0 then
+        parts[#parts + 1] = ("%%#StatusLineGitDeleted#-%d%%*"):format(status.removed)
     end
 
     return table.concat(parts, " ")
 end
 
--- Helper: active LSP names
+-- LSP status
 local function lsp_status()
     local clients = vim.lsp.get_clients({
         bufnr = 0,
@@ -47,12 +78,11 @@ local function lsp_status()
     return "LSP"
 end
 
--- Cursor
+-- Cursor position
 local function cursor_position()
     local line = vim.fn.line(".")
     local col = vim.fn.col(".")
     local total = vim.fn.line("$")
-
     local percent
 
     if line == 1 then
@@ -68,33 +98,21 @@ end
 
 -- Main statusline
 function M.statusline()
-    local left = table.concat({
-        git_branch(),
-        git_diff(),
-    }, " ")
-
-    local right = table.concat({
+    local left = join({ git_branch(), git_diff() }, " ")
+    local right = join({
         vim.ui.progress_status(),
         vim.diagnostic.status(),
         lsp_status(),
         cursor_position(),
     }, "  ")
 
-    return table.concat({
-        " ",
-        left,
-        "%=",
-        right,
-        " ",
-    })
+    return table.concat({ " ", left, "%=", right, " " })
 end
 
 vim.o.statusline = "%!v:lua.require'core.statusline'.statusline()"
 
-local group = vim.api.nvim_create_augroup("StatusLineRefresh", { clear = true })
-
 vim.api.nvim_create_autocmd("User", {
-    desc = "Show Gitsigns right after opening a file",
+    desc = "Refresh statusline after Gitsigns updates",
     pattern = "GitSignsUpdate",
     group = group,
     callback = function()

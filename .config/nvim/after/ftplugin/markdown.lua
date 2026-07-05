@@ -1,9 +1,8 @@
-local k = require("utils.keyhelper")
 local o = vim.opt_local
-local m = require("utils.mdhelper")
-local s = require("utils.scheduler")
 local autocmd = vim.api.nvim_create_autocmd
-
+local map = vim.keymap.set
+---@param name string
+---@return integer
 local function augroup(name)
     return vim.api.nvim_create_augroup(name, { clear = true })
 end
@@ -13,46 +12,51 @@ o.spell = true
 o.textwidth = 72
 o.formatoptions = "tjnq"
 
+-- No spell for specific files
+local nospell_files = {
+    ["agenda.md"] = true,
+}
+
+if nospell_files[vim.fn.expand("%:t")] then
+    vim.opt_local.spell = false
+end
+
+-- o.foldmethod = "expr"
+-- o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+-- o.foldlevel = 0
+-- o.foldlevelstart = 0
+-- o.foldenable = true
+
 -- Autocmds
+-- Auto-snap back to the left
 autocmd("CursorMovedI", {
     desc = "Snap back to the left after hitting textwidth 72",
     group = augroup("snapback"),
+    callback = require("fn.markdown").smart_snap,
     buffer = 0,
-    callback = m.smart_snap,
 })
 
 -- Keymaps
-k("n", "<leader>mc", m.toggle_conceal, {
-    buffer = true,
+map("n", "<leader>mC", require("fn.markdown").toggle_conceal, {
     desc = "Markdown: toggle conceal",
+    buffer = true,
+    silent = true,
 })
 
-k("n", "<leader>ms", s.insert_scheduled, {
-    buffer = true,
-    desc = "Markdown: schedule task",
-})
-
-k("n", "<leader>md", s.insert_deadline, {
-    buffer = true,
-    desc = "Markdown: deadline task",
-})
-
-k("n", "<leader>mb", s.insert_scheduled_and_deadline, {
-    buffer = true,
-    desc = "Markdown: scheduled + deadline",
-})
-
-k("n", "<A-CR>", m.toggle, {
-    buffer = true,
+map("n", "<A-CR>", require("fn.markdown").toggle, {
     desc = "Markdown: toggle checkbox",
+    buffer = true,
+    silent = true,
 })
 
-k("n", "<S-CR>", m.new_checkbox, {
-    buffer = true,
+map("n", "<S-CR>", require("fn.markdown").new_checkbox, {
     desc = "Markdown: new line checkbox",
+    buffer = true,
+    silent = true,
 })
 
-k("i", "<S-CR>", m.new_checkbox, {
-    buffer = true,
+map("i", "<S-CR>", require("fn.markdown").new_checkbox, {
     desc = "Markdown: new line checkbox",
+    buffer = true,
+    silent = true,
 })

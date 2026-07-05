@@ -13,22 +13,10 @@ return {
         Lua = {
             runtime = {
                 version = "LuaJIT",
-                -- path = {
-                --     "lua/?.lua",
-                --     "lua/?/init.lua",
-                -- },
             },
             telemetry = { enable = false },
-            -- diagnostics = {
-            --     globals = {
-            --         "vim",
-            --     },
-            -- },
             workspace = {
                 checkThirdParty = false,
-                -- library = {
-                --     vim.env.VIMRUNTIME,
-                -- },
             },
             doc = { privateName = { "^_" } },
             codeLens = { enable = true },

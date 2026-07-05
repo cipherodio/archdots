@@ -1,12 +1,28 @@
 vim.pack.add({
+    "https://github.com/saghen/blink.lib",
+    { src = "https://github.com/saghen/blink.pairs", version = vim.version.range("*") },
     { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.*") },
     { src = "https://github.com/rafamadriz/friendly-snippets" },
     { src = "https://github.com/ribru17/blink-cmp-spell" },
+    { src = "https://github.com/saghen/blink.indent" },
 }, { confirm = false })
 
-local b = require("blink.cmp")
+---@diagnostic disable-next-line: undefined-field
+-- require("blink.pairs").download():pwait(70000)
+---@diagnostic disable-next-line: undefined-field
+require("blink.pairs").build():pwait(60000)
 
-b.setup({
+require("blink.pairs").setup({
+    highlights = {
+        enabled = true,
+        matchparen = {
+            enabled = true,
+            include_surrounding = true,
+        },
+    },
+})
+
+require("blink.cmp").setup({
     keymap = {
         ["<C-b>"] = { "scroll_documentation_up" },
         ["<C-f>"] = { "scroll_documentation_down" },
@@ -16,11 +32,25 @@ b.setup({
         ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
         ["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
     },
+    cmdline = {
+        completion = {
+            menu = { auto_show = true },
+        },
+    },
     completion = {
         ghost_text = { enabled = false },
+        list = {
+            selection = {
+                preselect = false,
+                auto_insert = false,
+            },
+        },
     },
     appearance = { nerd_font_variant = "mono" },
-    signature = { enabled = true },
+    signature = {
+        enabled = true,
+        trigger = { enabled = false },
+    },
     sources = {
         default = {
             "lazydev",
@@ -69,5 +99,16 @@ b.setup({
             markdown = { "spell", "lsp", "snippets", "buffer" },
             gitcommit = { "snippets", "spell", "buffer" },
         },
+    },
+})
+
+require("blink-indent").setup({
+    static = {
+        enabled = true,
+        char = "│",
+    },
+    scope = {
+        enabled = false,
+        char = "│",
     },
 })

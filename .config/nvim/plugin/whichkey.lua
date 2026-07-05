@@ -2,26 +2,25 @@ vim.pack.add({
     { src = "https://github.com/folke/which-key.nvim" },
 }, { confirm = false })
 
-local wk = require("which-key")
-
-wk.setup({
+require("which-key").setup({
     preset = "classic",
     spec = {
         {
             mode = { "n", "v" },
-            { "<leader>a", group = "action" },
-            { "<leader>w", group = "write/save" },
-            { "<leader>q", group = "quit" },
-            { "<leader>y", group = "yank" },
-            { "<leader>f", group = "find" },
-            { "<leader>g", group = "git" },
-            { "<leader>b", group = "buffer" },
-            { "<leader>e", group = "explorer" },
-            { "<leader>l", group = "lsp" },
-            { "<leader>m", group = "markdown" },
-            { "<leader>p", group = "plugin" },
-            { "<leader>s", group = "spelling" },
-            { "<leader>t", group = "treesitter" },
+            { "<leader>a", group = "Action" },
+            { "<leader>w", group = "Write/save" },
+            { "<leader>q", group = "Quit" },
+            { "<leader>y", group = "Yank" },
+            { "<leader>f", group = "Find" },
+            { "<leader>g", group = "Git" },
+            { "<leader>b", group = "Buffer" },
+            { "<leader>e", group = "Explorer" },
+            { "<leader>l", group = "Lsp" },
+            { "<leader>m", group = "Markdown" },
+            { "<leader>p", group = "Plugin" },
+            { "<leader>s", group = "Spelling" },
+            { "<leader>t", group = "Task" },
+            { "<leader>c", group = "Calendar" },
         },
     },
     win = {
