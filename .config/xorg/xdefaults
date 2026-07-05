@@ -30,7 +30,7 @@ Nsxiv.bar.font: monospace:size=16
 *color14: c14
 *color15: c15
 
-st.alpha: 1
+st.alpha: 0.9
 st.background: bg
 st.foreground: fg
 ! st.cursorColor: #add8e6

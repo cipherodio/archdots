@@ -1,34 +1,49 @@
-# 🍚 Arch Linux Dotfiles
+# 🍚 ARCH LINUX DOTFILES
 
 ![archlinux_logo](.local/wallpapers/archlinux-logo.svg)
 
-## 📔 Overview
+## 📔 OVERVIEW
 
-These are my personal configuration files (_dotfiles_) for [Arch
-Linux][arch], featuring setups for both the [Qtile][qtile] and
-[i3wm][i3] window managers. System installation and environment
-deployment are guided by my [Archstrap repository][guide].
+These are my personal configuration files (*dotfiles*) for
+[Arch Linux][arch].
 
-| **Dependencies**    | **Description**         |
-| ------------------- | ----------------------- |
-| i3wm/Qtile          | Window manager          |
-| Neovim              | Text editor             |
-| Alacritty           | Terminal emulator       |
-| JetBrains Nerd Font | Programming and UI font |
+This repository includes configurations for three tiling window
+managers:
 
-## 📸 Qtile Screenshot
+- [DWM][dwm]
+- [Qtile][qtile]
+- [i3wm][i3wm]
 
-![screenshot_01](.local/wallpapers/screenshot01.jpeg)
+System installation and environment deployment are guided by my
+[Archstrap repository][guide].
 
-## 📸 i3wm Screenshot
+| **Dependencies** | **Description**         |
+| ---------------- | ----------------------- |
+| DWM              | Window manager          |
+| Neovim           | Text editor             |
+| St               | Terminal emulator       |
+| Geist Nerd Font  | Programming and UI font |
 
-![screenshot_02](.local/wallpapers/screenshot02.jpeg)
+## 📸 DWM
 
-## 🚀 Dotfiles Installation
+Primary window manager.
+
+[![screenshot_01](.local/wallpapers/dwm.jpeg)](.local/wallpapers/dwm.jpeg)
+
+## 📸 QTILE
+
+[![screenshot_02](.local/wallpapers/qtile.jpeg)](.local/wallpapers/qtile.jpeg)
+
+## 📸 i3WM
+
+[![screenshot_03](.local/wallpapers/i3wm.jpeg)](.local/wallpapers/i3wm.jpeg)
+
+## 🚀 DOTFILES INSTALLATION
 
 I manage my dotfiles using a **Git bare repository** and a custom
-wrapper script, [dot](.local/bin/dot). To configure a fresh system,
-follow these steps:
+wrapper script, [dot](.local/bin/dot).
+
+To configure a fresh system, follow these steps:
 
 ```sh
 # Bootstrap dotfiles and packages
@@ -43,6 +58,7 @@ curl -fsSL https://gitlab.com/cipherodio/archstrap/-/raw/main/setup.sh | bash
 ```
 
 [arch]: https://archlinux.org/
+[dwm]: https://dwm.suckless.org/
 [qtile]: https://qtile.org/
-[i3]: https://i3wm.org
+[i3wm]: https://i3wm.org
 [guide]: https://gitlab.com/cipherodio/archstrap
