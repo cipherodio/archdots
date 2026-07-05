@@ -1,5 +1,10 @@
 [global]
-disable = ["MD036"]
+disable = [
+"MD036",
+"MD032",
+"MD022",
+"MD047" # File should end with single newline character
+]
 
 [MD013]
 line-length = 72
@@ -22,3 +27,6 @@ indent = 4
 
 [MD051]
 anchor-style = "github"
+
+[MD033]
+allowed-elements = ["details"]
