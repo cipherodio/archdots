@@ -14,6 +14,9 @@ https://www.youtube.com/feeds/videos.xml?channel_id=UCVls1GmFKf6WlTraIb_IaJg "yo
 https://github.com/qtile/qtile/commits/master.atom "gitcommit" "~Qtile"
 https://github.com/neovim/neovim/commits/master.atom "gitcommit" "~Neovim"
 https://github.com/nvim-orgmode/orgmode/commits/master.atom "gitcommit" "~Nvim-orgmode"
+https://github.com/kdheepak/taskwarrior-tui/commits/main.atom "gitcommit" "~Taskwarrior-tui"
+https://github.com/GothenburgBitFactory/taskwarrior/commits/develop.atom "gitcommit" "~Taskwarrior"
+https://github.com/GothenburgBitFactory/libshared/commits/master.atom "gitcommit" "~Taskwarrior-libshared"
 
 https://www.reddit.com/r/unixporn.rss "reddit" "~Unixporn"
 https://www.reddit.com/r/neovim.rss "reddit" "~Neovim"
