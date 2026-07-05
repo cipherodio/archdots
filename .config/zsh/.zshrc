@@ -48,10 +48,11 @@ setopt hist_ignore_all_dups
 setopt no_nomatch
 
 # Tab completion
-autoload -U compinit && compinit -u
+zmodload zsh/complist
+autoload -Uz compinit
+compinit -u
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z-_}={A-Za-z_-}' 'r:|=*' 'l:|=* r:|=*'
-zmodload zsh/complist
 
 # Vi mode
 bindkey -v
@@ -118,18 +119,13 @@ cd() {
 }
 
 # Use lf to jump in directories with ctrl-o
-# shellcheck disable=2164
 lfcd() {
-    tmp="$(mktemp -uq)"
-    trap 'rm -f "$tmp" >/dev/null 2>&1 &&
-        trap - HUP INT QUIT TERM PWR EXIT' HUP INT QUIT TERM PWR EXIT
-    lf -last-dir-path="$tmp" "$@"
-    if [ -f "$tmp" ]; then
-        dir="$(cat "$tmp")"
-        [ -d "$dir" ] && [ "$dir" != "$(pwd)" ] && cd "$dir"
-    fi
+    local dir
+
+    dir=$(command lf -print-last-dir "$@")
+    [[ -d $dir && $dir != $PWD ]] && cd "$dir"
 }
-bindkey -s "^o" "^ulfcd\n"
+bindkey -s '^o' '^ulfcd\n'
 
 # Search $HOME with fzf and open in $EDITOR with alt-e
 efzf() {
