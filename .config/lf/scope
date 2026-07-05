@@ -34,7 +34,7 @@ get_cache() {
     )"
 }
 
-# --- Fast path: highlight by extension ---
+# --- Highlight by extension
 case "$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]')" in
 *.md | *.markdown | *.txt | *.py | *.toml | *.sh | *.zsh | *.bash | *.lua | \
     *.json | *.js | *.css | *.html | *rc | *config | *.conf | *profile | \

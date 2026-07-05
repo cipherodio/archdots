@@ -1,8 +1,9 @@
 # Options
-set shell bash
+# set shell bash
 set shellopts '-eu'
-set hidden true
-#set drawbox true
+set nohidden
+set hiddenfiles .steam*:.Xauthority:.gtkrc-2.0:.pki:.dots
+# set drawbox true
 set icons
 set ifs "\n"
 set ignorecase true
@@ -29,6 +30,7 @@ set info size:time
 # Preview mode
 set cleaner '~/.config/lf/cleaner'
 set previewer '~/.config/lf/scope'
+set autoquit true
 set statfmt "\033[36m%p\033[0m| %u| %g| %S| %t| -> %l"
 
 #cmd trash %set -f; mv $fx ~/.trash
@@ -146,8 +148,8 @@ cmd chmod ${{
 }}
 
 cmd bulkrename $vidir
-cmd mkdir $mkdir -p "$(echo $* | tr ' ' '\ ')"
-cmd touch $touch "$(echo $* | tr ' ' '\ ')"
+cmd mkdir $mkdir -p -- "$@"
+cmd touch $touch -- "$@"
 cmd setwallpaper "$1"
 
 # Basic binds
@@ -156,6 +158,7 @@ map p paste
 map t cut
 map y copy
 map r clear
+map . set hidden!
 
 map gg top
 map G bottom
@@ -166,8 +169,8 @@ map Z zip
 map T tar
 map S copyimg
 
-map O push :mkdir<space>
-map o push :touch<space>
+map O push :mkdir<space>""<left>
+map o push :touch<space>""<left>
 # Reset NTFS/Windows permissions: Read-all, Write-user, Recursively
 map - $chmod -R a=r,u+w,a+X $fx; lf -remote "send $id reload"
 # Set file to executable
