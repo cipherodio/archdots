@@ -77,7 +77,8 @@ export FZF_DEFAULT_OPTS="
 export GROFF_NO_SGR=1
 export PAGER="less"
 export LESS="-R"
-export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
+# export LESS="R"
+# export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
 
 export LESS_TERMCAP_mb=$'\e[1;31m'
 export LESS_TERMCAP_md=$'\e[1;36m'
