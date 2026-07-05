@@ -1,0 +1,91 @@
+#!/bin/sh
+# Author: cipherodio
+# Description: Select and restore files from an external drive
+
+set -eu
+
+MOUNT_BASE="$HOME/.local/mnt/sda1"
+BACKUP_BASE="$MOUNT_BASE/home/backup"
+
+restore_dir() {
+    SRC=$1
+    DEST=$2
+
+    if [ ! -d "$SRC" ]; then
+        notify-send -u critical \
+            "Restore failed" \
+            "Backup directory does not exist: $SRC" 2>/dev/null || true
+        exit 1
+    fi
+
+    mkdir -p "$DEST"
+    rsync -a -- "$SRC/" "$DEST/"
+}
+
+choice=$(
+    printf '%s\n' \
+        "all" \
+        "calcurse" \
+        "taskwarrior" \
+        "cipherdata" |
+        dmenu -i -l 10 -p "Select what file to restore:"
+) || exit 0
+
+[ -n "$choice" ] || exit 0
+
+if [ ! -d "$MOUNT_BASE" ]; then
+    notify-send -u critical \
+        "Restore failed" \
+        "Drive is not mounted at $MOUNT_BASE" 2>/dev/null || true
+    exit 1
+fi
+
+case "$choice" in
+"all")
+    restore_dir \
+        "$BACKUP_BASE/calcurse" \
+        "$HOME/.local/share/calcurse"
+
+    restore_dir \
+        "$BACKUP_BASE/taskwarrior" \
+        "$HOME/.local/share/task"
+
+    restore_dir \
+        "$BACKUP_BASE/cipherdata" \
+        "$HOME/hub/data/cipherdata"
+    ;;
+"calcurse")
+    restore_dir \
+        "$BACKUP_BASE/calcurse" \
+        "$HOME/.local/share/calcurse"
+    ;;
+"taskwarrior")
+    restore_dir \
+        "$BACKUP_BASE/taskwarrior" \
+        "$HOME/.local/share/task"
+    ;;
+"cipherdata")
+    restore_dir \
+        "$BACKUP_BASE/cipherdata" \
+        "$HOME/hub/data/cipherdata"
+    ;;
+*)
+    exit 1
+    ;;
+esac
+
+if command -v lf >/dev/null 2>&1 &&
+    pgrep -x lf >/dev/null 2>&1; then
+    lf -remote "send reload" >/dev/null 2>&1 || true
+fi
+
+if command -v notify-send >/dev/null 2>&1; then
+    case "$choice" in
+    "all")
+        notify-send "Successfully restored all files"
+        ;;
+    *)
+        notify-send "Successfully restored $choice"
+        ;;
+    esac
+fi

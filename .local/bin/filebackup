@@ -1,0 +1,86 @@
+#!/bin/sh
+# Author: cipherodio
+# Description: Select and back up files to an external drive
+
+set -eu
+
+MOUNT_BASE="$HOME/.local/mnt/sda1"
+BACKUP_BASE="$MOUNT_BASE/home/backup"
+
+backup_dir() {
+    SRC=$1
+    DEST=$2
+
+    [ -d "$SRC" ] || return
+
+    mkdir -p "$DEST"
+    rsync -a --delete -- "$SRC/" "$DEST/"
+}
+
+choice=$(
+    printf '%s\n' \
+        "all" \
+        "calcurse" \
+        "taskwarrior" \
+        "cipherdata" |
+        dmenu -i -l 10 -p "Select what file to backup:"
+) || exit 0
+
+[ -n "$choice" ] || exit 0
+
+if [ ! -d "$MOUNT_BASE" ]; then
+    notify-send -u critical \
+        "Backup failed" \
+        "Drive is not mounted at $MOUNT_BASE" 2>/dev/null || true
+    exit 1
+fi
+
+case "$choice" in
+"all")
+    backup_dir \
+        "$HOME/.local/share/calcurse" \
+        "$BACKUP_BASE/calcurse"
+
+    backup_dir \
+        "$HOME/.local/share/task" \
+        "$BACKUP_BASE/taskwarrior"
+
+    backup_dir \
+        "$HOME/hub/data/cipherdata" \
+        "$BACKUP_BASE/cipherdata"
+    ;;
+"calcurse")
+    backup_dir \
+        "$HOME/.local/share/calcurse" \
+        "$BACKUP_BASE/calcurse"
+    ;;
+"taskwarrior")
+    backup_dir \
+        "$HOME/.local/share/task" \
+        "$BACKUP_BASE/taskwarrior"
+    ;;
+"cipherdata")
+    backup_dir \
+        "$HOME/hub/data/cipherdata" \
+        "$BACKUP_BASE/cipherdata"
+    ;;
+*)
+    exit 1
+    ;;
+esac
+
+if command -v lf >/dev/null 2>&1 &&
+    pgrep -x lf >/dev/null 2>&1; then
+    lf -remote "send reload" >/dev/null 2>&1 || true
+fi
+
+if command -v notify-send >/dev/null 2>&1; then
+    case "$choice" in
+    "all")
+        notify-send "Successfully backup all files"
+        ;;
+    *)
+        notify-send "Successfully backup $choice"
+        ;;
+    esac
+fi
