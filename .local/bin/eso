@@ -1,0 +1,20 @@
+#!/bin/sh
+# Author: cipherodio
+# Description: ESO launcher
+
+set -eu
+
+steam_library="/data/steam"
+steam_client="$HOME/.local/share/Steam"
+
+proton="$steam_client/steamapps/common/Proton - Experimental/proton"
+compat_data="$steam_library/steamapps/compatdata/306130"
+eso_launcher="$steam_library/steamapps/common/Zenimax Online/Launcher/Bethesda.net_Launcher.exe"
+
+cd "$steam_library/steamapps/common/Zenimax Online/Launcher"
+
+STEAM_COMPAT_CLIENT_INSTALL_PATH="$steam_client" \
+    STEAM_COMPAT_DATA_PATH="$compat_data" \
+    SteamAppId=306130 \
+    SteamGameId=306130 \
+    "$proton" run "$eso_launcher"
