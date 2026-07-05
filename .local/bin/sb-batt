@@ -2,11 +2,16 @@
 # Author: cipherodio
 # Description: Battery status for dwmblocks
 
+notif_guide="🔋 Battery module
+🔋: discharging
+🟠: not charging
+♻: stagnant charge
+🔌: charging
+⚡: charged
+❗: battery very low!"
+
 case "$BLOCK_BUTTON" in
-2)
-    notify-send "🔋 Battery module" -- \
-        "🔋: discharging\n🟠: not charging\n♻: stagnant charge\n🔌: charging\n⚡: charged\n❗: battery very low!"
-    ;;
+2) notify-send "$notif_guide" ;;
 esac
 
 output=""

@@ -2,26 +2,26 @@
 # Author: cipherodio
 # Description: Memory status for dwmblocks
 
+notif_hog=$(
+    ps axch -o cmd,%mem |
+        awk '
+            {cmd[$1]+=$2}
+            END {
+                for (i in cmd)
+                    print i, cmd[i]
+            }' |
+        sort -nrk2 |
+        head
+)
+
+notif_guide="🧠 Memory module
+- Left click: memory hogs
+- Right click: htop"
+
 case "$BLOCK_BUTTON" in
-1)
-    notify-send "🧠 Memory hogs" "$(
-        ps axch -o cmd,%mem |
-            awk '
-                {cmd[$1]+=$2}
-                END {
-                    for (i in cmd)
-                        print i, cmd[i]
-                }' |
-            sort -nrk2 |
-            head
-    )"
-    ;;
-2)
-    notify-send "🧠 Memory module" -- "- Left click: memory hogs\n- Right click: htop"
-    ;;
-3)
-    setsid -f "$TERMINAL" -e htop
-    ;;
+1) notify-send "🧠 Memory hogs" "$notif_hog" ;;
+2) notify-send "$notif_guide" ;;
+3) setsid -f "$TERMINAL" -e htop ;;
 esac
 
 awk '

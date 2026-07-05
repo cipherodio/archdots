@@ -2,6 +2,12 @@
 # Author: cipherodio
 # Description: Date and time for dwmblocks
 
+notif_apt=$(cal | sed "s/\<$(date '+%e' | tr -d ' ')\>/<b><span color='red'>&<\/span><\/b>/")
+
+notif_guide="📅 Time/date module
+- Left: calendar
+- Right: calcurse"
+
 icon_0="🕛"
 icon_1="🕐"
 icon_2="🕑"
@@ -41,17 +47,9 @@ case "$hour" in
 esac
 
 case "$BLOCK_BUTTON" in
-1)
-    cal_output=$(cal | sed "s/\<$(date '+%e' | tr -d ' ')\>/<b><span color='red'>&<\/span><\/b>/")
-    notify-send "This Month" "$cal_output" &&
-        notify-send "Appointments" "$(calcurse -d3)"
-    ;;
-2)
-    notify-send "📅 Time/date module" -- "- Left: calendar\n- Right: calcurse"
-    ;;
-3)
-    setsid -f "$TERMINAL" -e calcurse
-    ;;
+1) notify-send "This Month" "$notif_apt" && notify-send "Appointments" "$(calcurse -d3)" ;;
+2) notify-send "$notif_guide" ;;
+3) setsid -f "$TERMINAL" -e calcurse ;;
 esac
 
 printf "📅%s %s%s\n" "$current_date" "$icon" "$current_time"

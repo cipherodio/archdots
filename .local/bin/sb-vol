@@ -2,23 +2,20 @@
 # Author: cipherodio
 # Description: Volume status for dwmblocks
 
+notif_guide="📢 Volume module
+- Left: mixer
+- Scroll: vol
+- Right: mute"
+
 case "$BLOCK_BUTTON" in
 1)
     setsid -f "$TERMINAL" -e pulsemixer
     pkill -RTMIN+10 "${STATUSBAR:-dwmblocks}"
     ;;
-2)
-    notify-send "📢 Volume module" -- "- Left: mixer\n- Scroll: vol\n- Right: mute"
-    ;;
-3)
-    pulsemixer --toggle-mute
-    ;;
-4)
-    pulsemixer --change-volume +5
-    ;;
-5)
-    pulsemixer --change-volume -5
-    ;;
+2) notify-send "$notif_guide" ;;
+3) pulsemixer --toggle-mute ;;
+4) pulsemixer --change-volume +5 ;;
+5) pulsemixer --change-volume -5 ;;
 esac
 
 # Get mute state
@@ -43,4 +40,4 @@ else
     exit
 fi
 
-printf " %s%s%%\n" "$icon" "$vol_val"
+printf "%s%s%%\n" "$icon" "$vol_val"

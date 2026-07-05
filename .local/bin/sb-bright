@@ -2,6 +2,9 @@
 # Author: cipherodio
 # Description: Brightness status for dwmblocks
 
+notif_guide="💡 Brightness module
+- Scroll: adjust brightness."
+
 for path in /sys/class/backlight/*; do
     [ -e "$path" ] || continue
     backlight_dir=$path
@@ -12,15 +15,9 @@ done
 [ -e "$backlight_dir/brightness" ] || exit 1
 
 case "$BLOCK_BUTTON" in
-2)
-    notify-send "💡 Brightness module" -- "- Scroll: adjust brightness."
-    ;;
-4)
-    brightnessctl set +5% >/dev/null
-    ;;
-5)
-    brightnessctl set 5%- >/dev/null
-    ;;
+2) notify-send "$notif_guide" ;;
+4) brightnessctl set +5% >/dev/null ;;
+5) brightnessctl set 5%- >/dev/null ;;
 esac
 
 read -r curr_brightness <"$backlight_dir/brightness"

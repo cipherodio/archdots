@@ -2,17 +2,21 @@
 # Author: cipherodio
 # Description: Internet status for dwmblocks
 
+notif_guide="🌐 Internet module
+- Left: connect
+- Right: show SSID
+❌: wifi disabled
+📡: no wifi
+📶: wifi quality
+❎: no ethernet
+🌐: ethernet"
+
 case "$BLOCK_BUTTON" in
-1)
+1) ssidnotify ;;
+2) notify-send "$notif_guide" ;;
+3)
     setsid -f "$TERMINAL" -e nmtui
     pkill -RTMIN+4 i3blocks 2>/dev/null
-    ;;
-2)
-    notify-send "🌐 Internet module" -- \
-        "- Left: connect\n- Right: show SSID\n❌: wifi disabled\n📡: no wifi\n📶: wifi quality\n❎: no ethernet\n🌐: ethernet"
-    ;;
-3)
-    ssidnotify
     ;;
 esac
 
