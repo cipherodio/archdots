@@ -89,8 +89,8 @@ export LESS_TERMCAP_us=$'\e[1;32m'
 export LESS_TERMCAP_ue=$'\e[0m'
 
 # Load local
-if [[ -f "$HOME/hub/cipherdata/zshenv-local" ]]; then
-    source "$HOME/hub/cipherdata/zshenv-local"
+if [[ -f "$HOME/hub/data/cipherdata/zshenv-local" ]]; then
+    source "$HOME/hub/data/cipherdata/zshenv-local"
 fi
 
 # Fix for java applications in dwm
