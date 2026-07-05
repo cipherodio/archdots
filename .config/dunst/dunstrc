@@ -2,8 +2,6 @@
 [global]
     monitor = 0
     follow = none
-    # width = 330
-    # height = 350
     width = 370
     height = (0,350)
     origin = top-right
@@ -23,12 +21,12 @@
     padding = 8
     horizontal_padding = 8
     text_icon_padding = 0
-    frame_width = 1
-    frame_color = "#d79921"
+    frame_width = 2
+    frame_color = "#458588"
     separator_color = frame
     sort = yes
 
-    font = Monospace 16
+    font = Monospace 14
     line_height = 0
     markup = full
     format = "<b>%s</b>\n%b"
@@ -42,7 +40,7 @@
     show_indicators = false
     sticky_history = yes
     history_length = 20
-    dmenu = rofi -dmenu -p dunst
+    dmenu = dmenu -p dunst
     browser = /usr/bin/xdg-open
     always_run_script = true
     title = Dunst
