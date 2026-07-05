@@ -1,14 +1,14 @@
 [user]
-	email = cipherodio@gmail.com
-	name = cipherodio
+    email = cipherodio@gmail.com
+    name = cipherodio
     useConfigOnly = true
 [pager]
-	branch = false
+    branch = false
 [init]
-	defaultBranch = main
-	defaultRefFormat = files
+    defaultBranch = main
+    defaultRefFormat = files
 [core]
-	editor = nvim
+    editor = nvim
     pager = LESS='--raw-control-chars' less
 [log]
     date = local
