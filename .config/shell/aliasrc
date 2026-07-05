@@ -43,8 +43,8 @@ alias \
 # Miscellaneous
 alias \
     getpath="find -type f | fzf | sed 's/^..//' | tr -d '\n' | xclip -selection c" \
-    twp="task status:deleted purge" \
-    twc="task status:completed delete" \
+    ta="task all" \
+    wf="curl -s 'wttr.in/$LOCATION'" \
     fxp="chmod -R a=r,u+w,a+X" \
     checkpath="echo $PATH | sed 's/:/\n/g' | sort | uniq -c" \
     df="df -h" \
