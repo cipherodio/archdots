@@ -33,6 +33,10 @@ require("gruvbox").setup({
         ["@string.special.path.bash"] = { fg = "#83a598" },
         -- Gitignore
         ["@string.special.path.gitignore"] = { fg = "#83a598" },
+        -- Tabs
+        TabLine = { bg = "NONE" },
+        TabLineSel = { bg = "NONE" },
+        TabLineFill = { bg = "NONE" },
         -- Blink.cmp
         BlinkCmpDoc = { bg = "#3c3836" },
         -- Blink pairs
