@@ -1,0 +1,29 @@
+#!/bin/sh
+
+cache="$HOME/.cache/moonphase"
+
+case "$BLOCK_BUTTON" in
+1) notify-send "🌜 $(sed -n '2p' "$cache")" ;;
+esac
+
+if json=$(curl -sf "wttr.in/$LOCATION?format=j1"); then
+    phase=$(printf '%s' "$json" | jq -r '
+        .weather[0].astronomy[0].moon_phase
+    ')
+
+    case "$phase" in
+    "New Moon") moon="🌑" ;;
+    "Waxing Crescent") moon="🌒" ;;
+    "First Quarter") moon="🌓" ;;
+    "Waxing Gibbous") moon="🌔" ;;
+    "Full Moon") moon="🌕" ;;
+    "Waning Gibbous") moon="🌖" ;;
+    "Last Quarter") moon="🌗" ;;
+    "Waning Crescent") moon="🌘" ;;
+    *) moon="🌜" ;;
+    esac
+
+    printf '%s\n%s\n' "$moon" "$phase" >"$cache"
+fi
+
+[ -r "$cache" ] && sed -n '1p' "$cache"

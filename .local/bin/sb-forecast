@@ -1,0 +1,22 @@
+#!/bin/sh
+
+cache="$HOME/.cache/weatherstatus"
+weatherreport="$HOME/.cache/weatherreport"
+
+case "$BLOCK_BUTTON" in
+3) setsid -f "$TERMINAL" -e less -Sf "$weatherreport" ;;
+esac
+
+if json=$(curl -sf "wttr.in/$LOCATION?format=j1"); then
+    weather=$(printf '%s' "$json" | jq -r '
+        .current_condition[0] as $c
+        | .weather[0].hourly[0] as $h
+        | "🌞+\($c.temp_C)(\($c.FeelsLikeC))°C 🍃\($c.winddir16Point) \($c.windspeedKmph) km/h ☔\($h.chanceofrain)%"
+    ') || exit 1
+
+    printf ' %s\n' "$weather" >"$cache"
+
+    curl -sf "wttr.in/$LOCATION" >"$weatherreport"
+fi
+
+[ -r "$cache" ] && cat "$cache"
