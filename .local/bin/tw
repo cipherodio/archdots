@@ -1,0 +1,41 @@
+#!/bin/sh
+# Author: cipherodio
+# Description: Taskwarrior wrapper script
+# Usage: tw [options]
+# tw task
+# tw -a task all
+# tw -c clear all deleted and completed task
+
+set -eu
+
+cleanup_tasks() {
+    completed_count=$(task rc.verbose=nothing status:completed count)
+    deleted_count=$(task rc.verbose=nothing status:deleted count)
+
+    if [ "$completed_count" -eq 0 ] && [ "$deleted_count" -eq 0 ]; then
+        printf '%s\n' 'no current task needs to be deleted'
+        return
+    fi
+
+    if [ "$completed_count" -gt 0 ]; then
+        task rc.confirmation=no status:completed delete
+    fi
+
+    task rc.confirmation=no status:deleted purge
+
+    printf '%s\n' 'deleted task clean up'
+}
+
+case ${1-} in
+-a)
+    shift
+    exec task all "$@"
+    ;;
+-c)
+    shift
+    cleanup_tasks
+    ;;
+*)
+    exec task "$@"
+    ;;
+esac
