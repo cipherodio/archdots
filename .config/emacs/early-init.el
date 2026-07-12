@@ -18,7 +18,7 @@
         (tool-bar-lines . 0)
         (vertical-scroll-bars . nil)
         (horizontal-scroll-bars . nil)
-        (alpha-background . 90)))
+        (alpha-background . 100)))
 
 ;; Cleaner startup.
 (setq inhibit-startup-screen t

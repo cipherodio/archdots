@@ -34,17 +34,14 @@
     ;; Wrap paragraphs at 72 columns while typing.
     (setq-local fill-column 72)
     (auto-fill-mode 1))
-
+  :custom
+  ;; Recognize and highlight Pandoc-style YAML front matter.
+  (markdown-use-pandoc-style-yaml-metadata t)
   :mode
   (("\\.md\\'" . markdown-mode)
    ("\\.markdown\\'" . markdown-mode))
-
   :hook
-  (markdown-mode . cipher/markdown-mode-setup)
-
-  :custom
-  ;; Recognize and highlight Pandoc-style YAML front matter.
-  (markdown-use-pandoc-style-yaml-metadata t))
+  (markdown-mode . cipher/markdown-mode-setup))
 
 (provide 'core-lang)
 ;;; core-lang.el ends here

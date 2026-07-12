@@ -7,45 +7,41 @@
 
 (use-package org
   :ensure nil
-
+  :functions
+  (cape-capf-sort
+   cipher/cape-dict-prefix
+   corfu-mode)
   :preface
   (defun cipher/org-mode-setup ()
     "Configure Org buffers for writing."
-    ;; Use US English for spell checking in this Org buffer.
-    (setq-local ispell-local-dictionary "en_US")
-
-    ;; Use the generated plain English word list for completion.
+    ;; Wrap paragraphs at 72 columns while typing.
+    (setq-local fill-column 72)
+    (auto-fill-mode)
+    ;; Use English and Tagalog word lists for completion.
     (setq-local cape-dict-file
-                (expand-file-name
-                 "dict/en_US.txt"
-                 user-emacs-directory))
-
-    ;; Use prefix matching for dictionary words.
-    ;;
-    ;; Typing `take' matches words beginning with `take', such as
-    ;; `taken' and `takes'.
-    (setq-local completion-category-overrides
-                (cons '(cape-dict (styles basic))
-                      completion-category-overrides))
-
+                (list
+                 (expand-file-name
+                  "spell/dict/en_US.txt" user-emacs-directory)
+                 (expand-file-name
+                  "spell/dict/tl_PH.txt" user-emacs-directory)
+                 (expand-file-name
+                  "spell/user/en_US.add" user-emacs-directory)
+                 (expand-file-name
+                  "spell/user/tl_PH.add" user-emacs-directory)))
     ;; Display no more than 15 candidates in the Corfu popup.
     (setq-local corfu-count 15)
-
     ;; Add dictionary completion only to this Org buffer.
-    ;;
     ;; `cape-capf-sort' lets Corfu rank candidates instead of
     ;; preserving their dictionary-file order.
     (add-hook 'completion-at-point-functions
-              (cape-capf-sort #'cape-dict)
-              90
-              t)
-
+              (cape-capf-sort #'cipher/cape-dict-prefix) 90 t)
     ;; Display automatic completion candidates through Corfu.
     (corfu-mode 1)
-
     ;; Check and underline misspelled words while writing.
     (flyspell-mode 1))
-
+  :custom
+  (org-link-descriptive nil)
+  (org-hide-emphasis-markers nil)
   :hook
   (org-mode . cipher/org-mode-setup))
 

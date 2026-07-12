@@ -7,17 +7,17 @@
 ;;; Code:
 
 (use-package apheleia
-  :demand t
-
+  :defines
+  (apheleia-formatters
+   apheleia-mode-alist)
+  :functions apheleia-global-mode
   :preface
   (defun cipher/apheleia-shfmt-arguments ()
     "Return additional Shfmt arguments for the current buffer."
     ;; Let Shfmt read indentation settings from .editorconfig when one
     ;; exists. Otherwise, match the current Emacs indentation settings.
     (unless (or indent-tabs-mode
-                (locate-dominating-file
-                 default-directory
-                 ".editorconfig"))
+                (locate-dominating-file default-directory ".editorconfig"))
       (list "-i" (number-to-string tab-width))))
 
   (defun cipher/apheleia-toggle-autoformat ()
@@ -29,20 +29,16 @@
           (message "Autoformat: OFF"))
       (apheleia-global-mode 1)
       (message "Autoformat: ON")))
-
+  :demand t
   :config
   ;; Format shell scripts with Shfmt.
-  ;;
   ;; When no .editorconfig exists, use spaces and the current value of
   ;; `tab-width', which is globally configured as four.
   (setf (alist-get 'cipher-shfmt apheleia-formatters)
         '("shfmt"
           "-filename"
-          filepath
-          (cipher/apheleia-shfmt-arguments)))
-
+          filepath (cipher/apheleia-shfmt-arguments)))
   ;; Apply automatic ShellCheck fixes.
-  ;;
   ;; ShellCheck generates a patch instead of formatted text, so run it
   ;; against Apheleia's temporary file and apply the generated patch.
   (setf (alist-get 'cipher-shellcheck apheleia-formatters)
@@ -58,7 +54,6 @@
            "patch -s -p1 \"$1\" < \"$patch_file\"")
           "zsh"
           inplace))
-
   ;; Format Lua while searching parent directories for StyLua
   ;; configuration and respecting ignore files.
   (setf (alist-get 'cipher-stylua apheleia-formatters)
@@ -66,9 +61,7 @@
           "--search-parent-directories"
           "--respect-ignores"
           "--stdin-filepath"
-          filepath
-          "-"))
-
+          filepath "-"))
   ;; Apply all automatically fixable Ruff lint corrections.
   (setf (alist-get 'cipher-ruff-fix apheleia-formatters)
         '("ruff"
@@ -78,12 +71,9 @@
           "--exit-zero"
           "--no-cache"
           "--stdin-filename"
-          filepath
-          "-"))
-
+          filepath "-"))
   ;; Organize Python imports with Ruff.
-  (setf (alist-get 'cipher-ruff-organize-imports
-                   apheleia-formatters)
+  (setf (alist-get 'cipher-ruff-organize-imports apheleia-formatters)
         '("ruff"
           "check"
           "--fix"
@@ -92,22 +82,17 @@
           "--exit-zero"
           "--no-cache"
           "--stdin-filename"
-          filepath
-          "-"))
-
+          filepath "-"))
   ;; Format Python source code with Ruff.
   (setf (alist-get 'cipher-ruff-format apheleia-formatters)
         '("ruff"
           "format"
           "--force-exclude"
           "--stdin-filename"
-          filepath
-          "-"))
-
+          filepath "-"))
   ;; Format Markdown with Rumdl.
   (setf (alist-get 'cipher-rumdl apheleia-formatters)
         '("rumdl" "fmt" "-"))
-
   ;; Format XML using two spaces for indentation.
   (setf (alist-get 'cipher-xmlstarlet apheleia-formatters)
         '("xmlstarlet"
@@ -115,37 +100,27 @@
           "--indent-spaces"
           "2"
           "-"))
-
   ;; Associate file names and major modes with formatter chains.
-  ;;
-  ;; Zsh files appear before `bash-ts-mode' so that files such as
-  ;; .zshrc use only ShellCheck, matching the Neovim zsh formatter
-  ;; configuration.
+  ;; Zsh files appear before `bash-ts-mode' so that files such as .zshrc
+  ;; use only ShellCheck, matching the Neovim zsh formatter configuration.
   (setq apheleia-mode-alist
         '(("\\(?:^\\|/\\)\\.z\\(?:shenv\\|shrc\\|profile\\|login\\|logout\\)\\'"
            . cipher-shellcheck)
-
           ("\\.zsh\\'"
            . cipher-shellcheck)
-
           (bash-ts-mode
            . (cipher-shfmt
               cipher-shellcheck))
-
           (lua-ts-mode
            . cipher-stylua)
-
           (python-ts-mode
            . (cipher-ruff-fix
               cipher-ruff-organize-imports
               cipher-ruff-format))
-
           (markdown-mode
            . cipher-rumdl)
-
           (nxml-mode
            . cipher-xmlstarlet)))
-
   ;; Automatically format configured buffers when saving.
   (apheleia-global-mode 1))
 

@@ -1,4 +1,4 @@
-;;; core-ui.el --- User interface configuration -*- lexical-binding: t; -*-
+;;; core-interface.el --- User interface configuration -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 ;; Font and theme configuration.
@@ -14,7 +14,6 @@
       (set-face-attribute 'default frame
                           :family "GeistMono Nerd Font"
                           :height 140)
-
       (set-face-attribute 'fixed-pitch frame
                           :family "GeistMono Nerd Font"
                           :height 140)))
@@ -30,7 +29,8 @@
   :demand t
   :config
   ;; Load the high-contrast Gruvbox dark theme during startup.
+  ;; values: gruvbox-light-soft | gruvbox-dark-hard
   (load-theme 'gruvbox-dark-hard t))
 
-(provide 'core-ui)
-;;; core-ui.el ends here
+(provide 'core-interface)
+;;; core-interface.el ends here

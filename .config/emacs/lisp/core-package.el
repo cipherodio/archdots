@@ -1,7 +1,7 @@
 ;;; core-package.el --- Package configuration -*- lexical-binding: t; -*-
 
 ;;; Commentary:
-;; Configure package archives and load `use-package`.
+;; Configure package archives and load `use-package'.
 
 ;;; Code:
 
