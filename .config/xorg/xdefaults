@@ -46,7 +46,7 @@ dwm.urgbordercolor: c09
 dwm.urgfgcolor: c00
 
 ! ST
-st.alpha: 0.9
+st.alpha: 1.0
 
 st.background: bg
 st.foreground: fg
