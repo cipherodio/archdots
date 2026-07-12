@@ -13,7 +13,7 @@ set dircounts true
 set cursorpreviewfmt "\033[7m"
 
 # Top status
-set promptfmt "\033[34;1m  %d\033[0m\033[1m%f\033[0m"
+set promptfmt "\033[34;1m📁  %d\033[0m\033[1m%f\033[0m"
 
 # Time format
 # https://www.golinuxcloud.com/golang-time-format/
