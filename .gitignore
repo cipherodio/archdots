@@ -24,6 +24,7 @@ known_hosts
 .local/share/newsboat
 .local/share/nvim
 .local/share/task
+.local/share/taskwarrior-tui
 .local/share/vulkan
 .local/share/xorg
 .local/share/zathura
