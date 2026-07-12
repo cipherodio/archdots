@@ -1,6 +1,7 @@
 .cache
 audacity
 blender
+current
 .config/cef_user_data/
 dunstrc.d
 .config/dconf/
