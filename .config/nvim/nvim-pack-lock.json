@@ -23,7 +23,7 @@
       "version": ">=0.0.0"
     },
     "codecompanion.nvim": {
-      "rev": "a8a754491999d97695d6134e8d3d98effe6b2a98",
+      "rev": "16ebb400e2405f5c1a4b9c79e94bcfaa563713ac",
       "src": "https://github.com/olimorris/codecompanion.nvim"
     },
     "conform.nvim": {
@@ -75,7 +75,7 @@
       "src": "https://github.com/nvim-lua/plenary.nvim"
     },
     "taskmd.nvim": {
-      "rev": "56aaa26de89eba382ac78756b71fe2284a5714c0",
+      "rev": "c5dd570f4a968d5fa290b3ac996b28a608c27818",
       "src": "https://github.com/cipherodio/taskmd.nvim"
     },
     "todo-comments.nvim": {

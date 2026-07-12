@@ -5,6 +5,7 @@ vim.pack.add({
 
 require("codecompanion").setup({
     opts = { log_level = "DEBUG" },
+    display = { diff = { enabled = false } },
     adapters = {
         http = {
             opts = {
