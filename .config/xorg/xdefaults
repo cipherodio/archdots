@@ -1,43 +1,81 @@
 ! Xorg configuration
-/*Xft.dpi: 144*/
-xft:Monospace:size=16
-xterm*faceName: Monospace
-xterm*faceSize: 16
+#include "colorschemes/gruvbox"
+! *Xft.dpi: 144*
+! xft:Monospace:size=16
 Xcursor.size: 32
 Xcursor.theme: Adwaita
 Nsxiv.bar.font: monospace:size=16
 
-#include "colorschemes/gruvbox"
+! Xterm
+xterm*faceName: Monospace
+xterm*faceSize: 12
 
-! *background: bg
-! *foreground: fg
-! *cursorColor: fg
+xterm*background: bg
+xterm*foreground: fg
+xterm*cursorColor: fg
 
-*color0: c00
-*color1: c01
-*color2: c02
-*color3: c03
-*color4: c04
-*color5: c05
-*color6: c06
-*color7: c07
-*color8: c08
-*color9: c09
-*color10: c10
-*color11: c11
-*color12: c12
-*color13: c13
-*color14: c14
-*color15: c15
+xterm*color0:  c00
+xterm*color1:  c01
+xterm*color2:  c02
+xterm*color3:  c03
+xterm*color4:  c04
+xterm*color5:  c05
+xterm*color6:  c06
+xterm*color7:  c07
+xterm*color8:  c08
+xterm*color9:  c09
+xterm*color10: c10
+xterm*color11: c11
+xterm*color12: c12
+xterm*color13: c13
+xterm*color14: c14
+xterm*color15: c15
 
+! Suckless
+! DWM
+dwm.normbgcolor: bg
+dwm.normfgcolor: fg
+dwm.normbordercolor: c01
+
+dwm.selbgcolor: c04
+dwm.selbordercolor:c09
+dwm.selfgcolor: c00
+
+dwm.urgbgcolor: c09
+dwm.urgbordercolor: c09
+dwm.urgfgcolor: c00
+
+! ST
 st.alpha: 0.9
+
 st.background: bg
 st.foreground: fg
-! st.cursorColor: #add8e6
+st.cursorColor: c16
+st.selectionbg: #665c54
 
-! dmenu.background: bg
-! dmenu.foreground: fg
-! dmenu.selbackground: ub
-! dmenu.selforeground: fg
+st.color0: c00
+st.color1: c01
+st.color2: c02
+st.color3: c03
+st.color4: c04
+st.color5: c05
+st.color6: c06
+st.color7: c07
+st.color8: c08
+st.color9: c09
+st.color10: c10
+st.color11: c11
+st.color12: c12
+st.color13: c13
+st.color14: c14
+st.color15: c15
+
+! Dmenu
+dmenu.background: bg
+dmenu.foreground: fg
+dmenu.selbackground: c04
+dmenu.selforeground: bg
+dmenu.promptbackground: bg
+dmenu.promptforeground: c08
 
 ! vim: ft=xdefaults

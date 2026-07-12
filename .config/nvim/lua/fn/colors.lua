@@ -1,18 +1,30 @@
+local theme = require("fn.theme")
+
 local M = {}
 
--- Gruvbox dark
 M.gruvbox = {
-    c00 = "#1d2021",
-    c01 = "#fb4934",
-    c02 = "#b8bb26",
-    c03 = "#fabd2f",
-    c04 = "#458588",
-    c05 = "#b16286",
-    c06 = "#689d7a",
-    c07 = "#ebdbb2",
+    dark = {
+        c00 = "#1d2021",
+        c01 = "#fb4934",
+        c02 = "#b8bb26",
+        c03 = "#fabd2f",
+        c04 = "#458588",
+        c05 = "#b16286",
+        c06 = "#689d7a",
+        c07 = "#ebdbb2",
+    },
+    light = {
+        c00 = "#fbf1c7",
+        c01 = "#cc241d",
+        c02 = "#98971a",
+        c03 = "#d79921",
+        c04 = "#458588",
+        c05 = "#b16286",
+        c06 = "#689d6a",
+        c07 = "#3c3836",
+    },
 }
 
--- Vague
 M.vague = {
     c00 = "#252530",
     c01 = "#d8647e",
@@ -24,7 +36,6 @@ M.vague = {
     c07 = "#cdcdcd",
 }
 
--- Nord
 M.nord = {
     c00 = "#2e3440",
     c01 = "#bf616a",
@@ -36,8 +47,16 @@ M.nord = {
     c07 = "#d8dee9",
 }
 
--- Active colorscheme
-local ACTIVE = "gruvbox"
+local active = "gruvbox"
 
--- Export active palette as flat table
-return M[ACTIVE]
+function M.current()
+    local palette = M[active]
+
+    if palette.dark and palette.light then
+        return palette[theme.mode()]
+    end
+
+    return palette
+end
+
+return M

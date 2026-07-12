@@ -1,0 +1,162 @@
+#!/bin/sh
+# Author: cipherodio
+# Description: Dark and light theme switcher
+# This changes colors of: fzf, dunst, Xresources, st, dwm, dmenu
+# NOTE: This needs patches:
+# DWM: xresources
+# ST: xresources-signal-reloading
+# DMENU: xresources
+
+set -eu
+
+program=${0##*/}
+config_home=${XDG_CONFIG_HOME:-"$HOME/.config"}
+state_home=${XDG_STATE_HOME:-"$HOME/.local/state"}
+uid=$(id -u)
+
+fzf_dir="$config_home/fzf/themes"
+dunst_dir="$config_home/dunst/themes"
+dunst_dropins="$config_home/dunst/dunstrc.d"
+xdefaults="$config_home/xorg/xdefaults"
+
+state_dir="$state_home/theme"
+state_file="$state_dir/current"
+
+notify() {
+    notify-send \
+        --app-name="$program" \
+        "$1" "$2" >/dev/null 2>&1 ||
+        true
+}
+
+die() {
+    printf '%s: %s\n' "$program" "$1" >&2
+    notify "Theme error" "$1"
+    exit 1
+}
+
+restart_dunst() {
+    pgrep -u "$uid" -x dunst >/dev/null 2>&1 ||
+        return 0
+
+    command -v dunst >/dev/null 2>&1 ||
+        die "dunst is not installed"
+
+    pkill -TERM -u "$uid" -x dunst ||
+        die "Failed to stop Dunst."
+
+    attempts=0
+    while pgrep -u "$uid" -x dunst >/dev/null 2>&1; do
+        attempts=$((attempts + 1))
+        [ "$attempts" -lt 100 ] ||
+            die "Dunst did not stop."
+        sleep 0.02
+    done
+
+    setsid -f dunst >/dev/null 2>&1 ||
+        die "Failed to start Dunst."
+
+    attempts=0
+    until pgrep -u "$uid" -x dunst >/dev/null 2>&1; do
+        attempts=$((attempts + 1))
+        [ "$attempts" -lt 100 ] ||
+            die "Dunst did not start."
+        sleep 0.02
+    done
+}
+
+action=${1-}
+switching=false
+
+case $action in
+"")
+    command -v dmenu >/dev/null 2>&1 ||
+        die "dmenu is not installed"
+
+    mode=$(
+        printf '%s\n' dark light |
+            dmenu -i -l 2 -p "Select colorscheme:" ||
+            true
+    )
+
+    [ -n "$mode" ] || exit 0
+    switching=true
+    ;;
+light | dark)
+    mode=$action
+    switching=true
+    ;;
+reload | restore)
+    if [ -r "$state_file" ]; then
+        IFS= read -r mode <"$state_file"
+    elif [ "$action" = restore ]; then
+        mode=dark
+    else
+        die "Unable to determine the current theme."
+    fi
+    ;;
+*)
+    notify \
+        "Invalid theme command" \
+        "Usage: $program [light|dark|reload|restore]"
+    exit 2
+    ;;
+esac
+
+case $mode in
+light)
+    define=LIGHT_THEME
+    ;;
+dark)
+    define=DARK_THEME
+    ;;
+*)
+    die "Invalid theme: $mode"
+    ;;
+esac
+
+fzf_theme="$fzf_dir/gruvbox-$mode"
+dunst_theme="$dunst_dir/gruvbox-$mode.conf"
+dunst_link="$dunst_dropins/99-theme.conf"
+
+for file in "$xdefaults" "$fzf_theme" "$dunst_theme"; do
+    [ -f "$file" ] ||
+        die "Missing file: $file"
+done
+
+mkdir -p "$state_dir" "$dunst_dropins" ||
+    die "Failed to create theme directories."
+
+xrdb -load -D"$define" "$xdefaults" ||
+    die "Failed to load Xresources."
+
+ln -sfn "gruvbox-$mode" "$fzf_dir/current" ||
+    die "Failed to switch fzf theme."
+
+ln -sfn "../themes/gruvbox-$mode.conf" "$dunst_link" ||
+    die "Failed to switch Dunst theme."
+
+printf '%s\n' "$mode" >"$state_file" ||
+    die "Failed to save the current theme."
+
+if "$switching"; then
+    restart_dunst
+fi
+
+if [ "$action" != restore ]; then
+    command -v xdotool >/dev/null 2>&1 ||
+        die "xdotool is not installed"
+
+    xdotool key --clearmodifiers super+F5 ||
+        die "Failed to reload DWM colors."
+fi
+
+pkill -USR1 -u "$uid" -x st 2>/dev/null ||
+    true
+
+if "$switching"; then
+    pkill -USR1 -u "$uid" -x nvim 2>/dev/null ||
+        true
+
+    notify "Theme changed" "Colorscheme changed to $mode."
+fi

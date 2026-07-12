@@ -1,19 +1,16 @@
 #!/bin/sh
 
+theme restore
 xrate
 setwallpaper &
 dwmblocks &
-xrdb "${XDG_CONFIG_HOME:-$HOME/.config}"/xorg/xdefaults &
-xrdbpid=$!
+# emacs --daemon &
 
 autostart="mpd picom dunst unclutter"
 
 for program in $autostart; do
     pidof -sx "$program" || "$program" &
 done >/dev/null 2>&1
-
-# Ensure that xrdb has finished running before moving on to start the WM/DE.
-[ -n "$xrdbpid" ] && wait "$xrdbpid"
 
 dbus-update-activation-environment --all
 dbus-launch --exit-with-session ssh-agent dwm

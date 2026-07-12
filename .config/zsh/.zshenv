@@ -5,11 +5,6 @@ export PATH="$HOME/.local/bin:$PATH"
 
 unsetopt PROMPT_SP 2>/dev/null
 
-# LS colors
-if [[ -f "$HOME/.config/lscolors/gruvbox" ]]; then
-  source "$HOME/.config/lscolors/gruvbox"
-fi
-
 # Default programs:
 export EDITOR="nvim"
 export VISUAL="nvim"
@@ -63,7 +58,8 @@ export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
 export SUDO_PROMPT="[sudo] password for %p: "
 
 # Fzf
-export FZF_DEFAULT_OPTS_FILE="$XDG_CONFIG_HOME/fzf/themes/gruvbox"
+export FZF_DEFAULT_OPTS_FILE="$XDG_CONFIG_HOME/fzf/themes/current"
+# export FZF_DEFAULT_OPTS_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/fzf/themes/current"
 export FZF_DEFAULT_OPTS="
 --gutter ' '
 --exact

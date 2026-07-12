@@ -22,8 +22,6 @@
     horizontal_padding = 8
     text_icon_padding = 0
     frame_width = 2
-    frame_color = "#458588"
-    separator_color = frame
     sort = yes
 
     font = Monospace 14
@@ -52,24 +50,6 @@
 
 [experimental]
     per_monitor_dpi = false
-
-[urgency_low]
-    background = "#2f2f2f"
-    foreground = "#ebdbb2"
-# NOTE: Need highlight for my audiobar script progress bar color
-    highlight = "#d79921"
-    timeout = 3
-
-[urgency_normal]
-    background = "#2f2f2f"
-    foreground = "#ebdbb2"
-    timeout = 5
-
-[urgency_critical]
-    background = "#2f2f2f"
-    foreground = "#ebdbb2"
-    frame_color = "#cc241d"
-    timeout = 10
 
 # use dunst -print to show appname and summary
 [history-ignore-audiobar]

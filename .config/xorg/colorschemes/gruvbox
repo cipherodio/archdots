@@ -1,39 +1,83 @@
-#define bg #1d2021
-#define fg #ebdbb2
+#ifdef LIGHT_THEME
+#define bg  #fbf1c7
+#define fg  #3c3836
 
 ! black
-#define c00 #282828
-#define c08 #928374
+#define c00   #fdf4c1
+#define c08   #928374
 
 ! red
-#define c01 #cc241d
-#define c09 #fb4934
+#define c01   #cc241d
+#define c09   #9d0006
 
 ! green
-#define c02 #98971a
-#define c10 #b8bb26
+#define c02   #98971a
+#define c10   #79740e
 
 ! yellow
-#define c03 #d79921
-#define c11 #fabd2f
+#define c03   #d79921
+#define c11   #b57614
 
 ! blue
-#define c04 #458588
-#define c12 #83a598
+#define c04   #458588
+#define c12   #076678
 
 ! magenta
-#define c05 #b16286
-#define c13 #d3869b
+#define c05   #b16286
+#define c13   #8f3f71
 
 ! cyan
-#define c06 #689d6a
-#define c14 #8ec07c
+#define c06   #689d6a
+#define c14   #427b58
 
 ! white
-#define c07 #a89984
-#define c15 #ebdbb2
+#define c07   #7c6f64
+#define c15   #3c3836
 
-! Extras
-#define ub #005577
+! extras
+#define c16   #83a598
+
+#elif defined(DARK_THEME)
+#define bg  #1d2021
+#define fg  #ebdbb2
+
+! black
+#define c00   #282828
+#define c08   #928374
+
+! red
+#define c01   #cc241d
+#define c09   #fb4934
+
+! green
+#define c02   #98971a
+#define c10   #b8bb26
+
+! yellow
+#define c03   #d79921
+#define c11   #fabd2f
+
+! blue
+#define c04   #458588
+#define c12   #83a598
+
+! magenta
+#define c05   #b16286
+#define c13   #d3869b
+
+! cyan
+#define c06   #689d6a
+#define c14   #8ec07c
+
+! white
+#define c07   #a89984
+#define c15   #ebdbb2
+
+! extras
+#define c16   #add8e6
+
+#else
+#error No theme was selected
+#endif
 
 ! vim: ft=xdefaults
