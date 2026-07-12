@@ -1,17 +1,12 @@
 return {
-    strategy = "inline",
+    interaction = "inline",
     description = "Generate Commit",
     opts = {
-        index = 10,
-        is_default = true,
+        alias = "commit",
         is_slash_cmd = true,
-        short_name = "commit",
         auto_submit = true,
         user_prompt = false,
         placement = "replace",
-        adapter = {
-            opts = { show_diff = false },
-        },
     },
     prompts = {
         {
@@ -29,10 +24,16 @@ return {
         {
             role = "user",
             content = function()
-                local diff = vim.fn.system("git diff --staged")
-                if diff == "" then
-                    return "I have no staged changes. Please tell the user to stage some files first."
+                local diff = vim.fn.system("git diff --no-ext-diff --staged")
+
+                if vim.v.shell_error ~= 0 then
+                    return "Unable to read the staged Git changes."
                 end
+
+                if diff == "" then
+                    return "There are no staged changes. Tell the user to stage some files first."
+                end
+
                 return "Write a conventional commit message for these staged changes:\n\n```diff\n"
                     .. diff
                     .. "\n```"

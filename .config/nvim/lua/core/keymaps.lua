@@ -112,6 +112,11 @@ map("n", "[d", require("fn.lsp").diag_prev, {
 })
 
 -- Spell
+map("n", "<leader>sS", require("fn.spell").toggle_spell, {
+    desc = "Spell: Toggle spell",
+    silent = true,
+})
+
 map({ "n", "v" }, "zg", require("fn.spell").spell_add_lower(1), {
     desc = "Spell: add tagalog",
     silent = true,

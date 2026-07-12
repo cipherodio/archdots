@@ -8,9 +8,8 @@ vim.pack.add({
 }, { confirm = false })
 
 ---@diagnostic disable-next-line: undefined-field
--- require("blink.pairs").download():pwait(70000)
----@diagnostic disable-next-line: undefined-field
-require("blink.pairs").build():pwait(60000)
+require("blink.pairs").download():pwait(60000)
+-- require("blink.pairs").build():pwait(60000)
 
 require("blink.pairs").setup({
     highlights = {

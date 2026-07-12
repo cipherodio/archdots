@@ -1,5 +1,11 @@
 local M = {}
 
+---Toggle spell checking in the current window.
+function M.toggle_spell()
+    vim.wo.spell = not vim.wo.spell
+    vim.notify("Spell check " .. (vim.wo.spell and "ON" or "OFF"))
+end
+
 -- Add word with zg as lowercase works with visual mode
 function M.spell_add_lower(count)
     return function()
@@ -93,10 +99,6 @@ end
 
 -- Misspelled word list with previewer
 function M.fzf_spell_all()
-    if not vim.wo.spell then
-        return print("   Spell check is OFF")
-    end
-
     local entries = {}
     local bufnr = vim.api.nvim_get_current_buf()
     local fname = vim.api.nvim_buf_get_name(bufnr)
@@ -112,30 +114,24 @@ function M.fzf_spell_all()
             end
         end
     end
-    for i = start_line, #lines do
-        local line_text = lines[i]
-        local col_offset = 0
-        while #line_text > 0 do
-            local res = vim.fn.spellbadword(line_text)
-            local word = res[1]
-            if not word or word == "" then
-                break
-            end
-            local s, e = line_text:find(word, 1, true)
-            if not s then
-                break
-            end
-            table.insert(entries, string.format("%d:%d: %s", i, col_offset + s, word))
-            line_text = line_text:sub(e + 1)
-            col_offset = col_offset + e
+
+    for lnum = start_line, #lines do
+        for _, result in ipairs(vim.spell.check(lines[lnum])) do
+            local word = result[1]
+            local col = result[3]
+
+            table.insert(entries, string.format("%d:%d: %s", lnum, col, word))
         end
     end
+
     if #entries == 0 then
         return print("   No " .. lang .. " misspellings!")
     end
+
     local preview_cmd = "word={3..}; sed -n '{1}p' "
         .. vim.fn.shellescape(fname)
         .. ' | sed "s/$word/\\x1b[31m&\\x1b[0m/g"'
+
     ---@type table
     local opts = {
         prompt = string.format("Spell (%s)> ", lang),
@@ -158,10 +154,14 @@ function M.fzf_spell_all()
                 if not selected or #selected == 0 then
                     return
                 end
-                local sel = selected[1]
-                local lnum, col = sel:match("(%d+):(%d+):")
+
+                local lnum, col = selected[1]:match("^(%d+):(%d+):")
+
                 if lnum and col then
-                    vim.api.nvim_win_set_cursor(0, { tonumber(lnum), tonumber(col) - 1 })
+                    vim.api.nvim_win_set_cursor(0, {
+                        tonumber(lnum),
+                        tonumber(col) - 1,
+                    })
                     vim.cmd("normal! zz")
                 end
             end,

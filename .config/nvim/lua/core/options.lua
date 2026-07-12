@@ -1,8 +1,9 @@
 local o = vim.opt
 local g = vim.g
+local theme = require("fn.theme")
 
 o.termguicolors = true -- True color support
-o.background = "dark" -- Dark highlight groups
+o.background = theme.mode() -- Switch dark or light theme
 o.number = true -- Absolute line numbers
 o.signcolumn = "yes:1" -- Always show sign column
 o.laststatus = 3 -- Global statusline

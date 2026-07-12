@@ -42,6 +42,7 @@ M.smart_git = function(picker_name)
                 seen[file] = true
             end
         end
+
         for _, file in ipairs(all_tracked) do
             local clean_file = file:gsub('^"(.*)"$', "%1")
             if not seen[clean_file] then
@@ -49,6 +50,7 @@ M.smart_git = function(picker_name)
                 seen[clean_file] = true
             end
         end
+
         return results
     end
 
@@ -99,6 +101,7 @@ M.smart_git = function(picker_name)
                 end
             end,
         })
+
         return
     end
 
@@ -115,6 +118,7 @@ M.smart_git = function(picker_name)
             cmd = grep_cmd,
             prompt = "   Grep " .. (is_standard and "Project" or "Dotfiles") .. "> ",
         })
+
         return
     end
 

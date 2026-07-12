@@ -16,7 +16,9 @@ function M.show_root_dir()
         vim.notify("No active LSP clients found", vim.log.levels.WARN)
         return
     end
+
     local info = { "Active LSP Roots:" }
+
     for _, client in ipairs(clients) do
         local root = client.config.root_dir or "Single File Mode (nil)"
         table.insert(info, string.format("[%s]: %s", client.name, root))

@@ -17,10 +17,17 @@ local function join(parts, separator)
 end
 
 -- Highlights
+-- local function set_highlights()
+--     vim.api.nvim_set_hl(0, "StatusLineGitAdded", { fg = colors.c02 })
+--     vim.api.nvim_set_hl(0, "StatusLineGitChanged", { fg = colors.c03 })
+--     vim.api.nvim_set_hl(0, "StatusLineGitDeleted", { fg = colors.c01 })
+-- end
+
 local function set_highlights()
-    vim.api.nvim_set_hl(0, "StatusLineGitAdded", { fg = colors.c02 })
-    vim.api.nvim_set_hl(0, "StatusLineGitChanged", { fg = colors.c03 })
-    vim.api.nvim_set_hl(0, "StatusLineGitDeleted", { fg = colors.c01 })
+    local palette = colors.current()
+    vim.api.nvim_set_hl(0, "StatusLineGitAdded", { fg = palette.c02 })
+    vim.api.nvim_set_hl(0, "StatusLineGitChanged", { fg = palette.c03 })
+    vim.api.nvim_set_hl(0, "StatusLineGitDeleted", { fg = palette.c01 })
 end
 
 set_highlights()

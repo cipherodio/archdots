@@ -124,9 +124,15 @@ autocmd("BufWritePost", {
 autocmd("BufWritePost", {
     desc = "Reload Xresources after config update",
     group = augroup("reload_xdefaults"),
-    pattern = { "xdefaults" },
-    callback = function(args)
-        vim.system({ "xrdb", args.file }, { detach = true })
+    pattern = "xdefaults",
+    callback = function()
+        local result = vim.system({ "theme", "reload" }, { text = true }):wait()
+        if result.code ~= 0 then
+            vim.notify(
+                vim.trim(result.stderr or "Failed to reload Xresources"),
+                vim.log.levels.ERROR
+            )
+        end
     end,
 })
 
@@ -154,23 +160,3 @@ autocmd("FileType", {
         })
     end,
 })
-
--- Show LSP progress
--- autocmd("LspProgress", {
---     desc = "LSP progress via nvim_echo",
---     group = augroup("lsp_progress"),
---     callback = function(ev)
---         local params = ev.data.params
---         local value = params.value
---         local msg = value.message or (value.kind == "end" and "done" or "")
---
---         vim.api.nvim_echo({ { msg } }, false, {
---             id = "lsp." .. ev.data.client_id .. "." .. params.token,
---             kind = "progress",
---             source = "vim.lsp",
---             title = value.title,
---             status = value.kind == "end" and "success" or "running",
---             percent = value.percentage,
---         })
---     end,
--- })
