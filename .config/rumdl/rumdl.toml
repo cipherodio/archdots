@@ -1,9 +1,9 @@
 [global]
 disable = [
-"MD036",
-"MD032",
-"MD022",
-"MD047" # File should end with single newline character
+  "MD036",  # Allow bold/italic text to be used as heading
+  "MD032",  # No space between header and content
+  "MD022",  # Allow headings without blank lines above or below
+  "MD047"  # Do not require newline at the end of the file
 ]
 
 [MD013]
@@ -13,6 +13,10 @@ reflow = true
 # reflow-mode = "normalize"
 reflow-mode = "default"
 tables = false
+
+# Indent list next line
+[MD077]
+style = "aligned"
 
 [MD060]
 enabled = true
