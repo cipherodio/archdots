@@ -1,0 +1,50 @@
+/* Gruvbox Dark Hard palette */
+@define-color gruvbox_bg0_hard #1d2021;
+@define-color gruvbox_bg0 #282828;
+@define-color gruvbox_bg1 #3c3836;
+@define-color gruvbox_bg2 #504945;
+@define-color gruvbox_bg3 #665c54;
+
+@define-color gruvbox_fg0 #fbf1c7;
+@define-color gruvbox_fg1 #ebdbb2;
+@define-color gruvbox_fg2 #d5c4a1;
+@define-color gruvbox_gray #928374;
+
+@define-color gruvbox_red #fb4934;
+@define-color gruvbox_green #b8bb26;
+@define-color gruvbox_yellow #fabd2f;
+@define-color gruvbox_blue #83a598;
+@define-color gruvbox_purple #d3869b;
+@define-color gruvbox_aqua #8ec07c;
+@define-color gruvbox_orange #fe8019;
+
+/* Conventional GTK theme colors */
+@define-color theme_bg_color @gruvbox_bg0_hard;
+@define-color theme_fg_color @gruvbox_fg1;
+
+@define-color theme_base_color @gruvbox_bg0;
+@define-color theme_text_color @gruvbox_fg1;
+
+@define-color theme_selected_bg_color @gruvbox_blue;
+@define-color theme_selected_fg_color @gruvbox_bg0_hard;
+
+@define-color theme_unfocused_bg_color @gruvbox_bg0_hard;
+@define-color theme_unfocused_fg_color @gruvbox_fg2;
+@define-color theme_unfocused_base_color @gruvbox_bg0;
+@define-color theme_unfocused_text_color @gruvbox_fg2;
+
+@define-color theme_unfocused_selected_bg_color @gruvbox_bg2;
+@define-color theme_unfocused_selected_fg_color @gruvbox_fg1;
+
+@define-color insensitive_bg_color @gruvbox_bg0;
+@define-color insensitive_fg_color @gruvbox_gray;
+
+@define-color borders @gruvbox_bg2;
+@define-color unfocused_borders @gruvbox_bg1;
+
+@define-color link_color @gruvbox_blue;
+@define-color visited_link_color @gruvbox_purple;
+
+@define-color warning_color @gruvbox_yellow;
+@define-color error_color @gruvbox_red;
+@define-color success_color @gruvbox_green;

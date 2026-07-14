@@ -1,0 +1,82 @@
+/* Gruvbox Dark Hard palette */
+:root {
+    /* Gruvbox palette */
+    --gruvbox-bg0-hard: #1d2021;
+    --gruvbox-bg0: #282828;
+    --gruvbox-bg1: #3c3836;
+    --gruvbox-bg2: #504945;
+    --gruvbox-bg3: #665c54;
+
+    --gruvbox-fg0: #fbf1c7;
+    --gruvbox-fg1: #ebdbb2;
+    --gruvbox-fg2: #d5c4a1;
+    --gruvbox-gray: #928374;
+
+    --gruvbox-red: #fb4934;
+    --gruvbox-green: #b8bb26;
+    --gruvbox-yellow: #fabd2f;
+    --gruvbox-blue: #83a598;
+    --gruvbox-purple: #d3869b;
+    --gruvbox-aqua: #8ec07c;
+    --gruvbox-orange: #fe8019;
+
+    /* Libadwaita colors */
+    --window-bg-color: var(--gruvbox-bg0-hard);
+    --window-fg-color: var(--gruvbox-fg1);
+
+    --view-bg-color: var(--gruvbox-bg0);
+    --view-fg-color: var(--gruvbox-fg1);
+
+    --headerbar-bg-color: var(--gruvbox-bg0);
+    --headerbar-fg-color: var(--gruvbox-fg1);
+    --headerbar-border-color: var(--gruvbox-bg2);
+    --headerbar-backdrop-color: var(--gruvbox-bg0);
+    --headerbar-shade-color: rgb(0 0 0 / 35%);
+    --headerbar-darker-shade-color: rgb(0 0 0 / 60%);
+
+    --sidebar-bg-color: var(--gruvbox-bg0);
+    --sidebar-fg-color: var(--gruvbox-fg1);
+    --sidebar-backdrop-color: var(--gruvbox-bg0);
+    --sidebar-border-color: rgb(0 0 0 / 35%);
+    --sidebar-shade-color: rgb(0 0 0 / 25%);
+
+    --secondary-sidebar-bg-color: var(--gruvbox-bg1);
+    --secondary-sidebar-fg-color: var(--gruvbox-fg1);
+    --secondary-sidebar-backdrop-color: var(--gruvbox-bg1);
+    --secondary-sidebar-border-color: rgb(0 0 0 / 35%);
+    --secondary-sidebar-shade-color: rgb(0 0 0 / 25%);
+
+    --card-bg-color: var(--gruvbox-bg1);
+    --card-fg-color: var(--gruvbox-fg1);
+    --card-shade-color: rgb(0 0 0 / 35%);
+
+    --dialog-bg-color: var(--gruvbox-bg1);
+    --dialog-fg-color: var(--gruvbox-fg1);
+
+    --popover-bg-color: var(--gruvbox-bg1);
+    --popover-fg-color: var(--gruvbox-fg1);
+    --popover-shade-color: rgb(0 0 0 / 35%);
+
+    --accent-bg-color: var(--gruvbox-blue);
+    --accent-fg-color: var(--gruvbox-bg0-hard);
+    --accent-color: var(--gruvbox-blue);
+
+    --destructive-bg-color: var(--gruvbox-red);
+    --destructive-fg-color: var(--gruvbox-bg0-hard);
+    --destructive-color: var(--gruvbox-red);
+
+    --success-bg-color: var(--gruvbox-green);
+    --success-fg-color: var(--gruvbox-bg0-hard);
+    --success-color: var(--gruvbox-green);
+
+    --warning-bg-color: var(--gruvbox-yellow);
+    --warning-fg-color: var(--gruvbox-bg0-hard);
+    --warning-color: var(--gruvbox-yellow);
+
+    --error-bg-color: var(--gruvbox-red);
+    --error-fg-color: var(--gruvbox-bg0-hard);
+    --error-color: var(--gruvbox-red);
+
+    --shade-color: rgb(0 0 0 / 25%);
+    --scrollbar-outline-color: transparent;
+}

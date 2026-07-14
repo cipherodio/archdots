@@ -1,0 +1,268 @@
+@import url("gruvbox-dark.css");
+
+/* Windows */
+window,
+window.background {
+    color: @gruvbox_fg1;
+    background-color: @gruvbox_bg0_hard;
+}
+
+/* Header bars, title bars, toolbars, and menu bars */
+headerbar,
+.titlebar,
+toolbar,
+menubar {
+    color: @gruvbox_fg1;
+    background-color: @gruvbox_bg0;
+    background-image: none;
+    border-color: @gruvbox_bg2;
+}
+
+headerbar:backdrop,
+.titlebar:backdrop {
+    color: @gruvbox_fg2;
+    background-color: @gruvbox_bg0_hard;
+}
+
+/* Buttons */
+button {
+    color: @gruvbox_fg1;
+    background-color: @gruvbox_bg1;
+    background-image: none;
+    border-color: @gruvbox_bg2;
+}
+
+button:hover {
+    color: @gruvbox_fg0;
+    background-color: @gruvbox_bg2;
+}
+
+button:active,
+button:checked {
+    color: @gruvbox_bg0_hard;
+    background-color: @gruvbox_blue;
+}
+
+button:disabled {
+    color: @gruvbox_gray;
+    background-color: @gruvbox_bg0;
+}
+
+button.suggested-action {
+    color: @gruvbox_bg0_hard;
+    background-color: @gruvbox_blue;
+}
+
+button.suggested-action:hover {
+    background-color: @gruvbox_aqua;
+}
+
+button.destructive-action {
+    color: @gruvbox_bg0_hard;
+    background-color: @gruvbox_red;
+}
+
+button.destructive-action:hover {
+    background-color: @gruvbox_orange;
+}
+
+/* Entries, views, and text areas */
+entry,
+spinbutton,
+textview text,
+treeview.view,
+iconview.view,
+list,
+list row {
+    color: @gruvbox_fg1;
+    background-color: @gruvbox_bg0;
+    border-color: @gruvbox_bg2;
+}
+
+entry:focus,
+spinbutton:focus {
+    border-color: @gruvbox_blue;
+}
+
+/* Selected text, rows, and items */
+entry selection,
+textview text selection,
+treeview.view:selected,
+iconview.view:selected,
+row:selected,
+flowboxchild:selected {
+    color: @gruvbox_bg0_hard;
+    background-color: @gruvbox_blue;
+}
+
+treeview.view:selected:backdrop,
+iconview.view:selected:backdrop,
+row:selected:backdrop,
+flowboxchild:selected:backdrop {
+    color: @gruvbox_fg1;
+    background-color: @gruvbox_bg2;
+}
+
+/* Menus and popovers */
+menu,
+popover.background {
+    color: @gruvbox_fg1;
+    background-color: @gruvbox_bg0;
+    border-color: @gruvbox_bg2;
+}
+
+menuitem {
+    color: @gruvbox_fg1;
+    background-color: transparent;
+}
+
+menuitem:hover,
+popover modelbutton:hover {
+    color: @gruvbox_bg0_hard;
+    background-color: @gruvbox_blue;
+}
+
+menuitem:disabled {
+    color: @gruvbox_gray;
+}
+
+/* Notebook tabs */
+notebook {
+    color: @gruvbox_fg1;
+    background-color: @gruvbox_bg0_hard;
+}
+
+notebook>header {
+    background-color: @gruvbox_bg0;
+    border-color: @gruvbox_bg2;
+}
+
+notebook>header>tabs>tab {
+    color: @gruvbox_gray;
+    background-color: @gruvbox_bg0;
+}
+
+notebook>header>tabs>tab:hover {
+    color: @gruvbox_fg1;
+    background-color: @gruvbox_bg2;
+}
+
+notebook>header>tabs>tab:checked {
+    color: @gruvbox_fg0;
+    background-color: @gruvbox_bg1;
+}
+
+/* Checkboxes and radio buttons */
+checkbutton check,
+radiobutton radio {
+    color: @gruvbox_fg1;
+    background-color: @gruvbox_bg0;
+    border-color: @gruvbox_bg2;
+}
+
+checkbutton check:hover,
+radiobutton radio:hover {
+    border-color: @gruvbox_blue;
+}
+
+checkbutton check:checked,
+radiobutton radio:checked {
+    color: @gruvbox_bg0_hard;
+    background-color: @gruvbox_blue;
+    border-color: @gruvbox_blue;
+}
+
+checkbutton:disabled,
+radiobutton:disabled {
+    color: @gruvbox_gray;
+}
+
+/* Switches */
+switch {
+    color: @gruvbox_fg1;
+    background-color: @gruvbox_bg2;
+    border-color: @gruvbox_bg3;
+}
+
+switch:checked {
+    color: @gruvbox_bg0_hard;
+    background-color: @gruvbox_blue;
+}
+
+switch slider {
+    background-color: @gruvbox_fg2;
+    border-color: @gruvbox_bg3;
+}
+
+/* Progress bars */
+progressbar trough {
+    background-color: @gruvbox_bg1;
+    border-color: @gruvbox_bg2;
+}
+
+progressbar progress {
+    background-color: @gruvbox_blue;
+}
+
+/* Scales */
+scale trough {
+    background-color: @gruvbox_bg1;
+}
+
+scale highlight {
+    background-color: @gruvbox_blue;
+}
+
+scale slider {
+    background-color: @gruvbox_fg2;
+    border-color: @gruvbox_bg3;
+}
+
+/* Scrollbars */
+scrollbar {
+    background-color: transparent;
+}
+
+scrollbar trough {
+    background-color: @gruvbox_bg0_hard;
+}
+
+scrollbar slider {
+    min-width: 8px;
+    min-height: 8px;
+    background-color: @gruvbox_bg2;
+    border-radius: 0;
+}
+
+scrollbar slider:hover {
+    background-color: @gruvbox_bg3;
+}
+
+scrollbar slider:active {
+    background-color: @gruvbox_blue;
+}
+
+/* Links */
+*:link {
+    color: @gruvbox_blue;
+}
+
+*:visited {
+    color: @gruvbox_purple;
+}
+
+/* Tooltips */
+tooltip.background {
+    color: @gruvbox_fg1;
+    background-color: @gruvbox_bg1;
+    border-color: @gruvbox_bg2;
+}
+
+tooltip label {
+    color: @gruvbox_fg1;
+}
+
+/* Separators */
+separator {
+    background-color: @gruvbox_bg2;
+}

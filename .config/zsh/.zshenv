@@ -22,14 +22,9 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 
 # Relocate variables
-#export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority"
-# export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 export TMUX_TMPDIR="$XDG_RUNTIME_DIR"
 export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store"
 export INPUTRC="$XDG_CONFIG_HOME/shell/inputrc"
-export MBSYNCRC="$HOME/.config/mbsync/mbsyncrc"
-export NOTMUCH_CONFIG="$XDG_CONFIG_HOME/notmuchrc"
-export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc-2.0"
 export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export ZPLUG="$ZDOTDIR/zplug"
@@ -59,7 +54,6 @@ export SUDO_PROMPT="[sudo] password for %p: "
 
 # Fzf
 export FZF_DEFAULT_OPTS_FILE="$XDG_CONFIG_HOME/fzf/themes/current"
-# export FZF_DEFAULT_OPTS_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/fzf/themes/current"
 export FZF_DEFAULT_OPTS="
 --gutter ' '
 --exact
@@ -73,8 +67,6 @@ export FZF_DEFAULT_OPTS="
 export GROFF_NO_SGR=1
 export PAGER="less"
 export LESS="-R"
-# export LESS="R"
-# export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
 
 export LESS_TERMCAP_mb=$'\e[1;31m'
 export LESS_TERMCAP_md=$'\e[1;36m'
@@ -89,8 +81,10 @@ if [[ -f "$HOME/hub/data/cipherdata/zshenv-local" ]]; then
     source "$HOME/hub/data/cipherdata/zshenv-local"
 fi
 
+# export GTK_THEME=Adwaita:dark
+
 # Fix for java applications in dwm
-# export _JAVA_AWT_WM_NONREPARENTING=1
+export _JAVA_AWT_WM_NONREPARENTING=1
 
 # NOTE: Set Qt to use GTK theme (For now this breaks kdenlive, shotcut)
 
