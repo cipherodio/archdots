@@ -2,7 +2,7 @@
 # set shell bash
 set shellopts '-eu'
 set nohidden
-set hiddenfiles .steam*:.Xauthority:.gtkrc-2.0:.pki:.dots
+set hiddenfiles .steam*:.Xauthority:.pki:.dots
 # set drawbox true
 set icons
 set ifs "\n"
