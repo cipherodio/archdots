@@ -9,7 +9,6 @@ vim.pack.add({
 
 ---@diagnostic disable-next-line: undefined-field
 require("blink.pairs").download():pwait(60000)
--- require("blink.pairs").build():pwait(60000)
 
 require("blink.pairs").setup({
     highlights = {
@@ -70,12 +69,15 @@ require("blink.cmp").setup({
                 module = "blink.cmp.sources.snippets",
                 score_offset = function()
                     local ft = vim.bo.filetype
+
                     if ft == "gitcommit" then
                         return 100
                     end
+
                     if ft == "markdown" then
                         return -100
                     end
+
                     return -20
                 end,
             },
@@ -84,12 +86,15 @@ require("blink.cmp").setup({
                 module = "blink-cmp-spell",
                 score_offset = function()
                     local ft = vim.bo.filetype
+
                     if ft == "markdown" then
                         return 50
                     end
+
                     if ft == "gitcommit" then
                         return 20
                     end
+
                     return 50
                 end,
             },

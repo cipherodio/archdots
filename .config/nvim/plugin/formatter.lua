@@ -15,9 +15,20 @@ require("conform").setup({
         if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
             return
         end
-        return {
+
+        local opts = {
             timeout_ms = 3000,
             lsp_fallback = true,
         }
+
+        if vim.bo[bufnr].filetype == "css" then
+            opts.formatting_options = {
+                wrapLineLength = 80,
+                preserveNewLines = true,
+                maxPreserveNewLines = 2,
+            }
+        end
+
+        return opts
     end,
 })

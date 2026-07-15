@@ -35,7 +35,9 @@ autocmd("BufWritePre", {
         if not vim.bo.modifiable then
             return
         end
+
         local view = vim.fn.winsaveview()
+
         pcall(function()
             vim.cmd("undojoin")
         end)
@@ -102,8 +104,10 @@ autocmd("BufWritePre", {
         if event.match:match("^%w%w+://") then
             return
         end
+
         local file = vim.fn.expand("<afile>:p")
         local dir = vim.fn.fnamemodify(file, ":p:h")
+
         if vim.fn.isdirectory(dir) == 0 then
             vim.fn.mkdir(dir, "p")
         end
@@ -127,6 +131,7 @@ autocmd("BufWritePost", {
     pattern = "xdefaults",
     callback = function()
         local result = vim.system({ "theme", "reload" }, { text = true }):wait()
+
         if result.code ~= 0 then
             vim.notify(
                 vim.trim(result.stderr or "Failed to reload Xresources"),

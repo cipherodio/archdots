@@ -37,7 +37,6 @@ end
 
 function M.winbar()
     local buf = vim.api.nvim_get_current_buf()
-
     local left = file_path(buf)
     local right = search_count()
 

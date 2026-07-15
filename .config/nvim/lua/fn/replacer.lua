@@ -11,6 +11,7 @@ local function fzf_input(prompt, default, callback)
         actions = {
             ["default"] = function()
                 local new = fzf.get_last_query()
+
                 if new then
                     new = new:gsub("%s+$", "")
                     vim.schedule(function()
@@ -29,15 +30,18 @@ function M.replace_word_fast()
     if old == "" then
         return
     end
+
     fzf_input("Replace with:", old, function(new)
         if not new or new == "" or new == old then
             return
         end
+
         local cmd = string.format(
             "%%s/\\<%s\\>/%s/gI",
             vim.pesc(old),
             vim.fn.escape(new, [[\/&]])
         )
+
         if pcall(function()
             vim.cmd(cmd)
         end) then
@@ -54,11 +58,14 @@ function M.replace_word_confirm()
     if old == "" then
         return
     end
+
     fzf_input("Replace with:", old, function(new)
         if not new or new == "" or new == old then
             return
         end
+
         vim.cmd(string.format("silent! vimgrep /\\<%s\\>/g %%", vim.pesc(old)))
+
         require("fzf-lua").quickfix({
             prompt = "Tab: Select | A-a: All | A-d: None | Enter: Replace > ",
             keymap = {
@@ -73,11 +80,13 @@ function M.replace_word_confirm()
                     if not selected or #selected == 0 then
                         return
                     end
+
                     for i = #selected, 1, -1 do
                         local entry = selected[i]
                         local lnum = entry:match(":(%d+):")
                             or entry:match("|(%d+)|")
                             or entry:match(":(%d+) ")
+
                         if lnum then
                             local cmd = string.format(
                                 "%ss/\\<%s\\>/%s/g",
@@ -85,9 +94,11 @@ function M.replace_word_confirm()
                                 vim.pesc(old),
                                 vim.fn.escape(new, [[\/&]])
                             )
+
                             vim.api.nvim_command(cmd)
                         end
                     end
+
                     vim.cmd("cclose")
                     vim.cmd("redraw")
                     print("Surgical replace complete.")

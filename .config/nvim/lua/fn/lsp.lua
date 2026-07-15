@@ -3,8 +3,11 @@ local M = {}
 -- Toggle colors
 function M.toggle_colors()
     local is_on = vim.lsp.document_color.is_enabled({ bufnr = 0 })
+
     vim.lsp.document_color.enable(not is_on, { bufnr = 0 })
+
     local status = not is_on and "Enabled" or "Disabled"
+
     vim.notify("Document Color: " .. status)
 end
 
@@ -21,8 +24,10 @@ function M.show_root_dir()
 
     for _, client in ipairs(clients) do
         local root = client.config.root_dir or "Single File Mode (nil)"
+
         table.insert(info, string.format("[%s]: %s", client.name, root))
     end
+
     print(table.concat(info, "\n"))
 end
 

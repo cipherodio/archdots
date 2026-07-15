@@ -7,6 +7,7 @@ require("vim._core.ui2").enable({
 ---@param module string
 local function spec(module)
     local ok, err_msg = pcall(require, module)
+
     if not ok then
         local msg = ("Error loading %s\n%s"):format(module, err_msg)
         vim.defer_fn(function()

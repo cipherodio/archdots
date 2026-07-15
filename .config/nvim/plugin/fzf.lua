@@ -10,7 +10,6 @@ require("fzf-lua").setup({
         file_icons = true,
         git_icons = true,
     },
-
     winopts = {
         border = "single",
         row = 0.55,
@@ -32,13 +31,15 @@ require("fzf-lua").register_ui_select()
 require("fzf-lua-file-browser").setup({
     actions = {
         ["default"] = require("fzf-lua-file-browser.actions").open,
-        ["ctrl-p"] = require("fzf-lua-file-browser.actions").parent,
+        ["ctrl-h"] = require("fzf-lua-file-browser.actions").parent,
         ["ctrl-w"] = require("fzf-lua-file-browser.actions").cwd,
         ["ctrl-e"] = require("fzf-lua-file-browser.actions").home,
         ["ctrl-t"] = require("fzf-lua-file-browser.actions").toggle_hidden,
         ["ctrl-n"] = require("fzf-lua-file-browser.actions").create,
         ["ctrl-r"] = require("fzf-lua-file-browser.actions").rename,
         ["ctrl-d"] = require("fzf-lua-file-browser.actions").delete,
+        ["ctrl-y"] = require("fn.fzf").copy_file,
+        ["ctrl-p"] = require("fn.fzf").paste_file,
     },
 
     hijack_netrw = true,

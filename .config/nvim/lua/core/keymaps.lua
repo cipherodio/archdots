@@ -13,14 +13,10 @@ map("n", "<esc>", require("fn.util").smart_esc, { silent = true, expr = true })
 map("n", "<leader>i", "<cmd>Inspect<cr>", { desc = "Inspect", silent = true })
 
 -- Check plugin updates, do gra inside to delete a plugin then :w
--- map("n", "<leader>pu", require("fn.util").plugin_stats, {
---     desc = "Plugins: check status",
---     silent = true,
--- })
--- map("n", "<leader>pu", vim.pack.update, { desc = "Plugin: updates" })
-map("n", "<leader>pu", function()
-    vim.pack.update()
-end, { desc = "Plugin: update" })
+map("n", "<leader>pu", require("fn.util").plugin_update, {
+    desc = "Plugins: check status",
+    silent = true,
+})
 
 -- Notes
 map("n", "<leader>mf", require("fn.markdown").open_agenda, {

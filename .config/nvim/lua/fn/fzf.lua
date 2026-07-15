@@ -1,7 +1,8 @@
 local M = {}
+local copied_path
 
 -- Helper for both bare and normal repository fzf keymaps
-M.smart_git = function(picker_name)
+function M.smart_git(picker_name)
     local fzf = require("fzf-lua")
     local home = vim.env.HOME
     local dot_git = home .. "/.config/.dots"
@@ -28,9 +29,11 @@ M.smart_git = function(picker_name)
 
         for _, line in ipairs(status_out) do
             local file = line:sub(4):gsub("^%s+", ""):gsub('^"(.*)"$', "%1")
+
             if file ~= "" and not seen[file] then
                 local stat = line:sub(1, 2)
                 local color_stat = stat
+
                 if stat:match("M") then
                     color_stat = green .. "M " .. reset
                 elseif stat:match("D") then
@@ -38,6 +41,7 @@ M.smart_git = function(picker_name)
                 elseif stat == "??" then
                     color_stat = cyan .. "??" .. reset
                 end
+
                 table.insert(results, color_stat .. "  |" .. file)
                 seen[file] = true
             end
@@ -45,6 +49,7 @@ M.smart_git = function(picker_name)
 
         for _, file in ipairs(all_tracked) do
             local clean_file = file:gsub('^"(.*)"$', "%1")
+
             if not seen[clean_file] then
                 table.insert(results, "    |" .. clean_file)
                 seen[clean_file] = true
@@ -56,6 +61,7 @@ M.smart_git = function(picker_name)
 
     if picker_name == "git_files" or picker_name == "git_status" then
         local status_cmd, all_files_cmd
+
         if is_standard then
             status_cmd = "git status --porcelain -uall ."
             all_files_cmd = (picker_name == "git_files") and "git ls-files" or nil
@@ -73,12 +79,15 @@ M.smart_git = function(picker_name)
                     )
                 or nil
         end
+
         local results = get_jackpot_list(status_cmd, all_files_cmd, target_cwd)
+
         if picker_name == "git_files" then
             table.sort(results, function(a, b)
                 return (a:match("|(.*)$") or "") < (b:match("|(.*)$") or "")
             end)
         end
+
         fzf.fzf_exec(results, {
             cwd = target_cwd,
             prompt = prompt_text .. (picker_name == "git_status" and "Status> " or ""),
@@ -93,6 +102,7 @@ M.smart_git = function(picker_name)
                     local file = selected[1]:match("|(.*)$")
                     local path = is_standard and (target_cwd .. "/" .. file)
                         or (home .. "/" .. file)
+
                     if selected[1]:match("D ") then
                         print("File is deleted: " .. file)
                     else
@@ -113,6 +123,7 @@ M.smart_git = function(picker_name)
                 dot_git,
                 home
             )
+
         fzf.live_grep({
             cwd = target_cwd,
             cmd = grep_cmd,
@@ -128,6 +139,74 @@ M.smart_git = function(picker_name)
         git_worktree = target_worktree,
         prompt = prompt_text,
     })
+end
+
+-- Mark file or directory for copying
+function M.copy_file(selected, opts)
+    local state = require("fzf-lua-file-browser.state")
+
+    if vim.tbl_isempty(selected) then
+        opts.browser.browse(opts)
+        return
+    end
+
+    local file = state.files[selected[1]]
+
+    if not file then
+        opts.browser.browse(opts)
+        return
+    end
+
+    copied_path = file.path
+
+    vim.notify("Copied: " .. file.name)
+    opts.browser.browse(opts)
+end
+
+-- Paste copied file or directory into the current directory
+function M.paste_file(_, opts)
+    local state = require("fzf-lua-file-browser.state")
+
+    if not copied_path then
+        vim.notify("No file copied", vim.log.levels.WARN)
+        opts.browser.browse(opts)
+        return
+    end
+
+    if not vim.uv.fs_stat(copied_path) then
+        vim.notify("Copied file no longer exists", vim.log.levels.ERROR)
+        copied_path = nil
+        opts.browser.browse(opts)
+        return
+    end
+
+    local destination = opts.cwd or state.cwd
+    local target = vim.fs.joinpath(destination, vim.fs.basename(copied_path))
+
+    if vim.fs.normalize(copied_path) == vim.fs.normalize(target) then
+        vim.notify("Source and destination are the same", vim.log.levels.WARN)
+        opts.browser.browse(opts)
+        return
+    end
+
+    local result = vim.system({
+        "cp",
+        "-a",
+        "--",
+        copied_path,
+        destination,
+    }, { text = true }):wait()
+
+    if result.code == 0 then
+        state.active = vim.fs.basename(copied_path)
+        vim.notify("Pasted: " .. state.active)
+    else
+        local message = vim.trim(result.stderr or "")
+
+        vim.notify(message ~= "" and message or "Paste failed", vim.log.levels.ERROR)
+    end
+
+    opts.browser.browse(opts)
 end
 
 return M

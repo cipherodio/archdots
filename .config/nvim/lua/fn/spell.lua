@@ -21,8 +21,10 @@ function M.spell_add_lower(count)
         else
             word = vim.fn.expand("<cword>"):gsub("[%_%*%~%`]", "")
         end
+
         if word and word ~= "" then
             local lower_word = vim.trim(word):lower()
+
             vim.cmd(prefix .. "spellgood " .. lower_word)
             print(
                 "   Added lowercase ("
@@ -43,9 +45,11 @@ function M.clean_spell_files()
         print("No .add files found.")
         return
     end
+
     for _, file in ipairs(files) do
         local lines = {}
         local f_in = io.open(file, "r")
+
         if f_in then
             for line in f_in:lines() do
                 if not line:match("^%s*#") and line:match("%S") then
@@ -55,6 +59,7 @@ function M.clean_spell_files()
             f_in:close()
 
             local f_out = io.open(file, "w")
+
             if f_out then
                 f_out:write(table.concat(lines, "\n") .. "\n")
                 f_out:close()
@@ -75,6 +80,7 @@ function M.smart_spell(count)
 
         if mode:find("[vV]") then
             local saved_reg = vim.fn.getreg("v")
+
             vim.cmd('normal! "vy')
             word = vim.fn.getreg("v")
             vim.fn.setreg("v", saved_reg)
@@ -86,9 +92,12 @@ function M.smart_spell(count)
         else
             word = vim.fn.expand("<cword>")
         end
+
         word = word:gsub("[%_%*%~%`]", "")
+
         if word and word ~= "" then
             local lower_word = vim.trim(word):lower()
+
             vim.cmd(prefix .. "spellundo " .. lower_word)
             print(
                 "   Removed (" .. (prefix == "" and "tl" or "en") .. "): " .. lower_word
@@ -162,6 +171,7 @@ function M.fzf_spell_all()
                         tonumber(lnum),
                         tonumber(col) - 1,
                     })
+
                     vim.cmd("normal! zz")
                 end
             end,
@@ -189,27 +199,36 @@ function M.report_stats()
     end
     for i = start_line, #lines do
         local line = lines[i]
+
         if line:find("<!%-%- toc %-%->") then
             skip_block = true
         end
+
         if not skip_block then
             for _ in line:gmatch("%S+") do
                 word_count = word_count + 1
             end
+
             if spell_enabled and #line > 0 then
                 local temp = line
+
                 while #temp > 0 do
                     local spell_res = vim.fn.spellbadword(temp)
                     local word = spell_res[1]
+
                     if not word or word == "" then
                         break
                     end
+
                     spell_count = spell_count + 1
+
                     local _, e = temp:find(word, 1, true)
+
                     temp = temp:sub((e or #word) + 1)
                 end
             end
         end
+
         if line:find("<!%-%- tocstop %-%->") then
             skip_block = false
         end
@@ -218,6 +237,7 @@ function M.report_stats()
     local time_label = reading_time == 1 and " minute" or " minutes"
     local spell_str = spell_enabled and (" | 󰖭 :" .. spell_count .. " misspelled")
         or " | 󰍉 Spell: OFF"
+
     print(
         " 󰅐 :"
             .. reading_time

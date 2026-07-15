@@ -10,7 +10,7 @@ end
 -- Options
 o.spell = true
 o.textwidth = 72
-o.formatoptions = "tjnq"
+o.formatoptions = "jnq"
 
 -- No spell for specific files
 local nospell_files = {
@@ -28,11 +28,11 @@ end
 -- o.foldenable = true
 
 -- Autocmds
--- Auto-snap back to the left
-autocmd("CursorMovedI", {
-    desc = "Snap back to the left after hitting textwidth 72",
-    group = augroup("snapback"),
-    callback = require("fn.markdown").smart_snap,
+-- Move current word as you type when reach the max textwidth
+autocmd("TextChangedI", {
+    desc = "Move current word to the next line at textwidth",
+    group = augroup("nextline"),
+    callback = require("fn.markdown").smart_textwidth,
     buffer = 0,
 })
 

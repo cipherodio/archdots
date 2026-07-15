@@ -17,17 +17,12 @@ local function join(parts, separator)
 end
 
 -- Highlights
--- local function set_highlights()
---     vim.api.nvim_set_hl(0, "StatusLineGitAdded", { fg = colors.c02 })
---     vim.api.nvim_set_hl(0, "StatusLineGitChanged", { fg = colors.c03 })
---     vim.api.nvim_set_hl(0, "StatusLineGitDeleted", { fg = colors.c01 })
--- end
-
 local function set_highlights()
     local palette = colors.current()
-    vim.api.nvim_set_hl(0, "StatusLineGitAdded", { fg = palette.c02 })
-    vim.api.nvim_set_hl(0, "StatusLineGitChanged", { fg = palette.c03 })
-    vim.api.nvim_set_hl(0, "StatusLineGitDeleted", { fg = palette.c01 })
+
+    vim.api.nvim_set_hl(0, "StatusLineGitAdded", { fg = palette.c10 })
+    vim.api.nvim_set_hl(0, "StatusLineGitChanged", { fg = palette.c11 })
+    vim.api.nvim_set_hl(0, "StatusLineGitDeleted", { fg = palette.c09 })
 end
 
 set_highlights()
@@ -62,9 +57,11 @@ local function git_diff()
     if status.added and status.added > 0 then
         parts[#parts + 1] = ("%%#StatusLineGitAdded#+%d%%*"):format(status.added)
     end
+
     if status.changed and status.changed > 0 then
         parts[#parts + 1] = ("%%#StatusLineGitChanged#~%d%%*"):format(status.changed)
     end
+
     if status.removed and status.removed > 0 then
         parts[#parts + 1] = ("%%#StatusLineGitDeleted#-%d%%*"):format(status.removed)
     end

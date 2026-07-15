@@ -1,8 +1,7 @@
 local M = {}
 
 -- Update plugin
-function M.plugin_stats()
-    -- vim.pack.update(nil, { offline = true })
+function M.plugin_update()
     vim.pack.update()
 end
 
@@ -17,8 +16,10 @@ function M.restore_cursor()
     if vim.bo.buftype ~= "" or vim.wo.diff then
         return
     end
+
     local mark = vim.api.nvim_buf_get_mark(0, '"')
     local line_count = vim.api.nvim_buf_line_count(0)
+
     if mark[1] > 1 and mark[1] <= line_count then
         if vim.api.nvim_win_get_cursor(0)[1] == 1 then
             vim.api.nvim_win_set_cursor(0, mark)
@@ -33,6 +34,7 @@ function M.smart_esc()
         vim.cmd("nohlsearch")
         vim.cmd("redrawstatus")
     end
+
     return "<esc>"
 end
 
@@ -79,6 +81,7 @@ function M.smart_dd()
     if vim.api.nvim_get_current_line():match("^%s*$") then
         return '"_dd'
     end
+
     return "dd"
 end
 
@@ -89,17 +92,21 @@ function M.create_and_open()
     if input == "" then
         return
     end
+
     if not (input:match("^/") or input:match("^~")) then
         input = vim.fn.expand("%:p:h") .. "/" .. input
     end
+
     vim.cmd("edit " .. input)
 end
 
 -- Create file on disk in current directory
 function M.create_on_disk()
     local name = vim.fn.input("New file (Touch): ")
+
     if name ~= "" then
         local path = vim.fn.expand("%:p:h") .. "/" .. name
+
         vim.fn.system({ "touch", path })
         vim.cmd("redraw")
         print("Created: " .. name)
@@ -109,11 +116,14 @@ end
 -- Check current deepseek balance
 function M.check_deepseek_balance()
     local api_key = os.getenv("DEEPSEEK_API_KEY") or os.getenv("LLM_KEY")
+
     if not api_key or api_key == "" then
         print("Error: No API Key found.")
         return
     end
+
     print("Checking balance... 󰔟")
+
     local cmd = string.format(
         "curl -s -X GET 'https://api.deepseek.com/user/balance' "
             .. "-H 'Authorization: Bearer %s' | "
@@ -137,6 +147,7 @@ function M.check_deepseek_balance()
             vim.schedule(function()
                 local result =
                     table.concat(output, " "):gsub("%s+", " "):gsub("^%s*(.-)%s*$", "%1")
+
                 if code == 0 and result ~= "" and result ~= "null" then
                     print(result)
                 else
