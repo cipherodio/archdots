@@ -1,17 +1,14 @@
 /* Gruvbox Dark Hard palette */
 :root {
-    /* Gruvbox palette */
     --gruvbox-bg0-hard: #1d2021;
     --gruvbox-bg0: #282828;
     --gruvbox-bg1: #3c3836;
     --gruvbox-bg2: #504945;
     --gruvbox-bg3: #665c54;
-
     --gruvbox-fg0: #fbf1c7;
     --gruvbox-fg1: #ebdbb2;
     --gruvbox-fg2: #d5c4a1;
     --gruvbox-gray: #928374;
-
     --gruvbox-red: #fb4934;
     --gruvbox-green: #b8bb26;
     --gruvbox-yellow: #fabd2f;
@@ -20,10 +17,8 @@
     --gruvbox-aqua: #8ec07c;
     --gruvbox-orange: #fe8019;
 
-    /* Libadwaita colors */
     --window-bg-color: var(--gruvbox-bg0-hard);
     --window-fg-color: var(--gruvbox-fg1);
-
     --view-bg-color: var(--gruvbox-bg0);
     --view-fg-color: var(--gruvbox-fg1);
 
@@ -79,4 +74,119 @@
 
     --shade-color: rgb(0 0 0 / 25%);
     --scrollbar-outline-color: transparent;
+}
+
+window,
+.background {
+    background-color: var(--window-bg-color);
+    color: var(--window-fg-color);
+}
+
+popover {
+    background-color: var(--popover-bg-color);
+    color: var(--popover-fg-color);
+}
+
+tooltip {
+    background-color: var(--popover-bg-color);
+    color: var(--popover-fg-color);
+    border-color: var(--popover-shade-color);
+}
+
+headerbar,
+.titlebar {
+    background-color: var(--headerbar-bg-color);
+    color: var(--headerbar-fg-color);
+    border-color: var(--headerbar-border-color);
+}
+
+.view,
+list,
+listview,
+gridview,
+columnview,
+textview,
+textview text {
+    background-color: var(--view-bg-color);
+    color: var(--view-fg-color);
+}
+
+row {
+    background-color: transparent;
+    color: var(--view-fg-color);
+}
+
+row:selected {
+    background-color: var(--accent-bg-color);
+    color: var(--accent-fg-color);
+}
+
+entry,
+button,
+dropdown,
+spinbutton,
+combobox,
+notebook,
+tab {
+    background-color: var(--card-bg-color);
+    color: var(--card-fg-color);
+    border-color: var(--headerbar-border-color);
+}
+
+button:hover,
+entry:focus,
+tab:checked {
+    background-color: var(--gruvbox-bg2);
+    color: var(--gruvbox-fg1);
+    border-color: var(--accent-bg-color);
+}
+
+button:disabled,
+entry:disabled,
+label:disabled {
+    background-color: var(--gruvbox-bg1);
+    color: var(--gruvbox-gray);
+}
+
+selection,
+*:selected {
+    background-color: var(--accent-bg-color);
+    color: var(--accent-fg-color);
+}
+
+separator {
+    background-color: var(--headerbar-border-color);
+}
+
+progressbar progress {
+    background-color: var(--accent-bg-color);
+}
+
+trough {
+    background-color: var(--gruvbox-bg1);
+}
+
+scrollbar slider {
+    background-color: var(--gruvbox-bg2);
+}
+
+scrollbar slider:hover {
+    background-color: var(--accent-bg-color);
+}
+
+.link,
+link {
+    color: var(--accent-color);
+}
+
+.error {
+    color: var(--error-color);
+}
+
+.warning {
+    color: var(--warning-color);
+}
+
+.success {
+    color: var(--success-color);
 }
