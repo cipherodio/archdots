@@ -11,6 +11,7 @@ alias \
     bc="bc -ql" \
     mkd="mkdir -pv" \
     du="du -shc" \
+    df="df -h" \
     ve="python -m venv" \
     va="source $HOME/.venv/devtool/bin/activate" \
     vd="deactivate"
@@ -46,7 +47,6 @@ alias \
     wf="curl -s 'wttr.in/$LOCATION'" \
     fxp="chmod -R a=r,u+w,a+X" \
     checkpath="echo $PATH | sed 's/:/\n/g' | sort | uniq -c" \
-    df="df -h" \
     fn="fc-match -a | grep -i" \
     fne="fc-list : family | grep -i" \
     srm="shred -zvu -n 5" \
