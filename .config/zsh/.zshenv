@@ -53,7 +53,7 @@ export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
 export SUDO_PROMPT="[sudo] password for %p: "
 
 # Fzf
-export FZF_DEFAULT_OPTS_FILE="$XDG_CONFIG_HOME/fzf/themes/current"
+export FZF_DEFAULT_OPTS_FILE="$XDG_CONFIG_HOME/fzf/current"
 export FZF_DEFAULT_OPTS="
 --gutter ' '
 --exact
