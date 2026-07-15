@@ -23,6 +23,7 @@ media_library_primary_tag = album_artist
 media_library_albums_split_by_date = no
 startup_screen = "playlist"
 display_volume_level = yes
+volume_change_step = 5
 ignore_leading_the = yes
 external_editor = nvim
 use_console_editor = yes
