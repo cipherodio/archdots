@@ -1,0 +1,63 @@
+#!/bin/sh
+set -eu
+
+program=${0##*/}
+
+if [ -z "${DEEPSEEK_API_KEY:-}" ]; then
+    printf '%s\n' "Error: DEEPSEEK_API_KEY is not set" >&2
+    exit 1
+fi
+
+if [ "$#" -gt 0 ]; then
+    prompt=$*
+elif [ ! -t 0 ]; then
+    prompt=$(cat)
+else
+    printf 'Usage: %s PROMPT\n' "$program" >&2
+    exit 1
+fi
+
+response=$(
+    jq -n --arg prompt "$prompt" '{
+        model: "deepseek-chat",
+        messages: [
+            {
+                role: "user",
+                content: $prompt
+            }
+        ],
+        stream: false
+    }' |
+        curl -sS https://api.deepseek.com/chat/completions \
+            -H 'Content-Type: application/json' \
+            -H "Authorization: Bearer $DEEPSEEK_API_KEY" \
+            --data-binary @-
+)
+
+if printf '%s\n' "$response" | jq -e '.error' >/dev/null; then
+    printf '%s\n' "$response" |
+        jq -r '"DeepSeek API error: \(.error.message)"' >&2
+    exit 1
+fi
+
+printf '%s\n' "$response" |
+    jq -r '.choices[0].message.content'
+
+printf '%s\n' "$response" |
+    jq -r '
+        "[usage] input=\(.usage.prompt_tokens) cache-hit=\(.usage.prompt_cache_hit_tokens // 0) cache-miss=\(.usage.prompt_cache_miss_tokens // 0) output=\(.usage.completion_tokens) total=\(.usage.total_tokens)"
+    ' >&2
+
+if balance=$(
+    curl -fsS https://api.deepseek.com/user/balance \
+        -H "Authorization: Bearer $DEEPSEEK_API_KEY"
+); then
+    printf '%s\n' "$balance" |
+        jq -r '
+            .balance_infos[]
+            | select(.currency == "USD")
+            | "[balance] $\(.total_balance) \(.currency)"
+        ' >&2
+else
+    printf '%s\n' "[balance] unavailable" >&2
+fi
