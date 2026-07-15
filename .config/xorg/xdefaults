@@ -1,5 +1,5 @@
 ! Xorg configuration
-#include "colorschemes/gruvbox"
+#include "current"
 ! *Xft.dpi: 144*
 ! xft:Monospace:size=16
 Xcursor.size: 32
