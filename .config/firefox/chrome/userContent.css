@@ -21,11 +21,7 @@ span.TridactylHint {
 
 /* Personal UI customization */
 /* This is for background color on startup */
-@-moz-document url-prefix(about:blank),
-url-prefix(about:home),
-url-prefix(about:blank),
-url-prefix(about:privatebrowsing),
-url-prefix(about:newtab) {
+@-moz-document url-prefix(about:blank), url-prefix(about:home), url-prefix(about:blank), url-prefix(about:privatebrowsing), url-prefix(about:newtab) {
     html:not(#ublock0-epicker),
     html:not(#ublock0-epicker) body,
     #newtab-customize-overlay {
