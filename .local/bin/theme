@@ -14,9 +14,14 @@ config_home=${XDG_CONFIG_HOME:-"$HOME/.config"}
 state_home=${XDG_STATE_HOME:-"$HOME/.local/state"}
 uid=$(id -u)
 
-fzf_dir="$config_home/fzf/themes"
-dunst_dir="$config_home/dunst/themes"
-dunst_dropins="$config_home/dunst/dunstrc.d"
+fzf_dir="$config_home/fzf"
+fzf_themes="$fzf_dir/themes"
+fzf_current="$fzf_dir/current"
+
+dunst_dir="$config_home/dunst"
+dunst_themes="$dunst_dir/themes"
+dunst_dropins="$dunst_dir/dunstrc.d"
+
 xdefaults="$config_home/xorg/xdefaults"
 
 state_dir="$state_home/theme"
@@ -75,7 +80,7 @@ case $action in
 
     mode=$(
         printf '%s\n' dark light |
-            dmenu -i -l 2 -p "Select colorscheme:" ||
+            dmenu -i -l 2 -p "Select theme mode:" ||
             true
     )
 
@@ -115,8 +120,8 @@ dark)
     ;;
 esac
 
-fzf_theme="$fzf_dir/gruvbox-$mode"
-dunst_theme="$dunst_dir/gruvbox-$mode.conf"
+fzf_theme="$fzf_themes/gruvbox/$mode"
+dunst_theme="$dunst_themes/gruvbox/$mode.conf"
 dunst_link="$dunst_dropins/99-theme.conf"
 
 for file in "$xdefaults" "$fzf_theme" "$dunst_theme"; do
@@ -124,16 +129,16 @@ for file in "$xdefaults" "$fzf_theme" "$dunst_theme"; do
         die "Missing file: $file"
 done
 
-mkdir -p "$state_dir" "$dunst_dropins" ||
+mkdir -p "$state_dir" "$fzf_dir" "$dunst_dropins" ||
     die "Failed to create theme directories."
 
 xrdb -load -D"$define" "$xdefaults" ||
     die "Failed to load Xresources."
 
-ln -sfn "gruvbox-$mode" "$fzf_dir/current" ||
+ln -sfn "themes/gruvbox/$mode" "$fzf_current" ||
     die "Failed to switch fzf theme."
 
-ln -sfn "../themes/gruvbox-$mode.conf" "$dunst_link" ||
+ln -sfn "../themes/gruvbox/$mode.conf" "$dunst_link" ||
     die "Failed to switch Dunst theme."
 
 printf '%s\n' "$mode" >"$state_file" ||
