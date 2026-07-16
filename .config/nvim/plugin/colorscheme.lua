@@ -28,7 +28,6 @@ local function apply_theme()
         dim_inactive = false,
         transparent_mode = true,
     }
-
     opts.overrides = {
         SignColumn = { bg = "NONE" },
         -- Help
@@ -39,6 +38,8 @@ local function apply_theme()
         -- Cursor
         CursorLine = { fg = "NONE", bg = "NONE" },
         ColorColumn = { bg = c.c17 },
+        -- Folds
+        Folded = { bg = "NONE" },
         -- Bash
         ["@string.special.path.bash"] = { fg = c.c12 },
         -- Gitignore
@@ -50,7 +51,7 @@ local function apply_theme()
         -- Blink.cmp
         BlinkCmpDoc = { bg = c.c16 },
         -- Blink pairs
-        MatchParen = { bg = "NONE", underline = false, bold = true },
+        MatchParen = { bg = "NONE", bold = true },
         -- Markdown
         ["@markup.heading.1.markdown"] = { fg = c.c09, bold = true },
         ["@markup.heading.2.markdown"] = { fg = c.c18, bold = true },
@@ -92,8 +93,6 @@ local function apply_theme()
         NeogitChangeDunstaged = { fg = c.c09, bg = "NONE" },
         -- Neogit change staged
         NeogitChangeDstaged = { fg = c.c09, bg = "NONE" },
-        -- Fold
-        Folded = { bg = "NONE" },
         -- Whichkey
         WhichKeyNormal = { bg = opts.transparent_mode and "NONE" or c.bg },
         WhichKeyBorder = { bg = opts.transparent_mode and "NONE" or c.bg },

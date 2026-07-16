@@ -12,10 +12,10 @@
     "Apply the configured font to graphical FRAME."
     (when (display-graphic-p frame)
       (set-face-attribute 'default frame
-                          :family "GeistMono Nerd Font"
+                          :family "Monospace"
                           :height 140)
       (set-face-attribute 'fixed-pitch frame
-                          :family "GeistMono Nerd Font"
+                          :family "Monospace"
                           :height 140)))
   :config
   ;; Apply the font to the initial graphical frame.
