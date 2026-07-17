@@ -30,6 +30,7 @@ known_hosts
 .local/share/zathura
 *log
 mozilla
+nimble
 password-store
 pid
 .pki

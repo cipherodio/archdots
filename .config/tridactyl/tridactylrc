@@ -8,6 +8,7 @@ guiset_quiet hoverlink right
 " General Settings
 "set modeindicatormodes {"ignore":"false"}
 "set modeindicatorshowkeys true
+"set newtab about:blank
 set modeindicator false
 set smoothscroll true
 " set hintfiltermode vimperator

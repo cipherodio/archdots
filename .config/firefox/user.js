@@ -20,7 +20,6 @@ user_pref("browser.startup.page", 0);
 user_pref("browser.startup.homepage", "about:blank");
 // Set New Tab page to blank
 user_pref("browser.newtabpage.enabled", false);
-user_pref("browser.newtab.url", "about:blank");
 
 // Disable preloading the New Tab page (saves a bit of memory and avoids any flash of content)
 user_pref("browser.newtab.preload", false);
