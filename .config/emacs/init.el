@@ -34,6 +34,8 @@
 (require 'core-keymaps)
 ;; Git change indicators.
 (require 'core-diff)
+;; Magit
+(require 'core-git)
 ;; Native Tree-sitter parsing for programming languages.
 (require 'core-treesit)
 ;; Language modes and file associations.
