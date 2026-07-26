@@ -9,10 +9,21 @@
 (require 'seq)
 
 (use-package magit
-  :functions magit-process-environment
-  :defines magit-status-show-untracked-files
-  :commands magit-status
-  :bind (("C-x g" . magit-status))
+  :functions
+  (magit-process-environment
+   magit-status-goto-initial-section)
+  :defines
+  (magit-mode-map
+   magit-section-initial-visibility-alist
+   magit-status-initial-section
+   magit-status-show-untracked-files)
+  :commands
+  (magit-status
+   magit-push)
+  :bind
+  (("C-x g" . cipher/magit-status)
+   :map magit-mode-map
+   ("p" . magit-push))
   :preface
   (defconst cipher/magit-dotfiles-git-dir
     (file-name-as-directory
@@ -23,6 +34,13 @@
     (file-name-as-directory
      (expand-file-name "~/"))
     "Working tree of the bare dotfiles repository.")
+
+  (defun cipher/magit-status ()
+    "Open Magit and move point to the first changed section."
+    (interactive)
+    (call-interactively #'magit-status)
+    (when (derived-mode-p 'magit-status-mode)
+      (magit-status-goto-initial-section)))
 
   (defun cipher/magit-path-inside-directory-p (path directory)
     "Return non-nil when PATH is inside DIRECTORY."
@@ -85,6 +103,18 @@
   (defun cipher/magit-status-setup ()
     "Show untracked files in the current Magit status buffer."
     (setq-local magit-status-show-untracked-files t))
+
+  :custom
+  ;; Expand the Untracked files section when the status buffer is created.
+  (magit-section-initial-visibility-alist
+   '((untracked . show)))
+
+  ;; Initially place point at Unstaged changes, then Untracked or Staged.
+  (magit-status-initial-section
+   '(((unstaged) (status))
+     ((untracked) (status))
+     ((staged) (status))
+     1))
 
   :hook
   (magit-status-mode . cipher/magit-status-setup)
