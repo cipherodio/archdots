@@ -16,6 +16,24 @@
     (setq-local truncate-lines t)
     (display-line-numbers-mode 1)
     (display-fill-column-indicator-mode 0))
+
+  (defun cipher/keyboard-quit ()
+    "Change default behavior of `keyboard-quit'.
+The behavior of this command is as follows:
+- When the region is active, disable it.
+- When a minibuffer is open, but not focused, closed the minibuffer.
+- When the completion buffer is selected, close it.
+- In every other case use the regular `keyboard-quit'."
+    (interactive)
+    (cond
+     ((region-active-p)
+      (keyboard-quit))
+     ((derived-mode-p 'completion-list-mode)
+      (delete-completion-window))
+     ((> (minibuffer-depth) 0)
+      (abort-recursive-edit))
+     (t
+      (keyboard-quit))))
   :init
   (add-to-list 'warning-suppress-types '(bytecomp))
   :custom
@@ -27,6 +45,10 @@
   (make-backup-files nil)
   ;; Scroll only enough to keep the cursor visible.
   (scroll-conservatively most-positive-fixnum)
+  ;; Defer fontification while moving rapidly through new text.
+  (jit-lock-defer-time 0.1)
+  ;; Skip unnecessary fontification while keyboard input is pending.
+  (redisplay-skip-fontification-on-input t)
   ;; Display literal tab characters using four columns.
   (tab-width 4)
   ;; Insert spaces instead of tab characters when indenting.
@@ -43,14 +65,11 @@
   (help-window-select t)
   ;; Show the current column number in the mode line.
   (column-number-mode 1)
+  :bind
+  (("<escape>" . cipher/keyboard-quit))
   :hook
   ((prog-mode . cipher/code-buffer-setup)
-   (conf-mode . cipher/code-buffer-setup))
-  :config
-  ;; Make the physical Escape key cancel pending commands.
-  (define-key key-translation-map
-              (kbd "<escape>")
-              (kbd "C-g")))
+   (conf-mode . cipher/code-buffer-setup)))
 
 
 (provide 'core-default)
