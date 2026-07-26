@@ -8,6 +8,9 @@
 (require 'flymake)
 (require 'subr-x)
 
+(declare-function eglot-managed-p "eglot")
+(declare-function lsp-workspaces "lsp-mode")
+
 (defface cipher/modeline-green
   '((t (:foreground "#b8bb26" :weight bold)))
   "Green modeline face.")
@@ -413,6 +416,23 @@
            (string-join items " ")
            " "))))))
 
+(defun cipher/modeline-lsp ()
+  "Return an LSP indicator when the current buffer is managed."
+  (when (or
+         (and (fboundp 'eglot-managed-p)
+              (eglot-managed-p))
+         (and (bound-and-true-p lsp-mode)
+              (fboundp 'lsp-workspaces)
+              (lsp-workspaces)))
+    (propertize
+     "LSP "
+     'face
+     (if (cipher/modeline-active-p)
+         'mode-line-emphasis
+       'mode-line-inactive)
+     'help-echo
+     "Language server active")))
+
 (defun cipher/modeline-major-mode ()
   "Return the current major mode and process status."
   (propertize
@@ -480,6 +500,8 @@
     mode-line-format-right-align
     (:eval
      (cipher/modeline-diagnostics))
+    (:eval
+     (cipher/modeline-lsp))
     (:eval
      (cipher/modeline-major-mode))
     "  "
