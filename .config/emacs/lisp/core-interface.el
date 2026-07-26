@@ -30,7 +30,19 @@
   :config
   ;; Load the high-contrast Gruvbox dark theme during startup.
   ;; values: gruvbox-light-soft | gruvbox-dark-hard
-  (load-theme 'gruvbox-dark-hard t))
+  (load-theme 'gruvbox-dark-hard t)
+  (set-face-attribute 'line-number nil
+                      :foreground "#665c54"
+                      :background 'unspecified)
+  (set-face-attribute 'line-number-current-line nil
+                      :foreground "#ebdbb2"
+                      :background 'unspecified)
+  (set-face-attribute 'mode-line nil
+                      :foreground "#ebdbb2"
+                      :background "#3c3836")
+  (set-face-attribute 'mode-line-inactive nil
+                      :foreground "#928374"
+                      :background "#282828"))
 
 (provide 'core-interface)
 ;;; core-interface.el ends here
