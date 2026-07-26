@@ -16,7 +16,24 @@
                           :height 140)
       (set-face-attribute 'fixed-pitch frame
                           :family "Monospace"
-                          :height 140)))
+                          :height 1.0)
+      (set-face-attribute 'variable-pitch frame
+                          :family "Atkinson Hyperlegible"
+                          :height 1.1
+                          :weight 'regular
+                          :slant 'normal)
+      (set-face-attribute 'bold frame
+                          :family "Monospace"
+                          :weight 'bold
+                          :slant 'normal)
+      (set-face-attribute 'italic frame
+                          :family "Monospace"
+                          :weight 'regular
+                          :slant 'italic)
+      (set-face-attribute 'bold-italic frame
+                          :family "Monospace"
+                          :weight 'bold
+                          :slant 'italic)))
   :config
   ;; Apply the font to the initial graphical frame.
   (cipher/apply-frame-font (selected-frame))
