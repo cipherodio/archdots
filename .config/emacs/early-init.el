@@ -22,7 +22,8 @@
 
 ;; Cleaner startup.
 (setq inhibit-startup-screen t
-      initial-scratch-message nil)
+      initial-scratch-message nil
+      auto-save-list-file-prefix nil)
 
 ;; Avoid resizing the frame at startup.
 (setq frame-inhibit-implied-resize t)
