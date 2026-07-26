@@ -18,7 +18,6 @@
    gptel-make-openai
    gptel-menu
    gptel-request
-   gptel-rewrite
    gptel-send)
   :defines
   (gptel--system-message
@@ -29,7 +28,6 @@
    gptel-mode-map
    gptel-model
    gptel-post-stream-hook
-   gptel-rewrite-default-action
    gptel-stream
    gptel-system-prompt
    gptel-temperature)
@@ -41,7 +39,6 @@
    ("C-c a s" . cipher/gptel-writing-chat)
    ("C-c a c" . cipher/gptel-coding-chat)
    ("C-c a t" . cipher/gptel-toggle-chat)
-   ("C-c a r" . cipher/gptel-rewrite)
    ("C-c a w" . cipher/gptel-write-story)
    ("C-c a m" . cipher/gptel-generate-commit))
   :preface
@@ -99,7 +96,6 @@
     '(("Open writing chat" . cipher/gptel-writing-chat)
       ("Open coding chat" . cipher/gptel-coding-chat)
       ("Toggle last chat" . cipher/gptel-toggle-chat)
-      ("Rewrite selected region" . cipher/gptel-rewrite)
       ("Write new Tagalog horror story" . cipher/gptel-write-story)
       ("Generate commit message" . cipher/gptel-generate-commit)
       ("Stop current generation" . cipher/gptel-abort)
@@ -212,20 +208,6 @@ MAX-TOKENS and TEMPERATURE configure the chat buffer."
     (require 'gptel)
     (require 'gptel-transient)
     (call-interactively #'gptel-menu))
-
-  (defun cipher/gptel-rewrite ()
-    "Rewrite the active region using DeepSeek Pro."
-    (interactive)
-    (unless (use-region-p)
-      (user-error "Select a region to rewrite first"))
-    (require 'gptel)
-    (require 'gptel-rewrite)
-    (setq-local gptel-backend cipher/gptel-deepseek-pro)
-    (setq-local gptel-model 'deepseek-v4-pro)
-    (setq-local gptel-max-tokens 8192)
-    (setq-local gptel-temperature nil)
-    (setq-local gptel-include-reasoning nil)
-    (call-interactively #'gptel-rewrite))
 
   (defun cipher/gptel-story-send ()
     "Send the story request using the fixed DeepSeek Flash settings."
@@ -370,8 +352,6 @@ MAX-TOKENS and TEMPERATURE configure the chat buffer."
   (gptel-log-level 'debug)
 
   :config
-  (require 'gptel-rewrite)
-
   ;; Follow streamed responses after gptel's internal
   ;; `save-excursion' has restored point.
   (add-hook
@@ -411,10 +391,7 @@ MAX-TOKENS and TEMPERATURE configure the chat buffer."
 
   ;; Flash is the default for chats that do not select a backend.
   (setq gptel-backend cipher/gptel-deepseek-flash)
-  (setq gptel-model 'deepseek-v4-flash)
-
-  ;; Apply inline rewrites directly instead of opening a diff view.
-  (setq gptel-rewrite-default-action 'accept))
+  (setq gptel-model 'deepseek-v4-flash))
 
 (provide 'core-ai)
 
