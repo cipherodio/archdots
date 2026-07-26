@@ -49,7 +49,7 @@
            "trap 'rm -f \"$patch_file\"' EXIT; "
            "shellcheck \"$1\" --format=diff > \"$patch_file\"; "
            "shellcheck_status=$?; "
-           "(( status <= 1 )) || exit \"$status\"; "
+           "(( shellcheck_status <= 1 )) || exit \"$shellcheck_status\"; "
            "[[ ! -s \"$patch_file\" ]] || "
            "patch -s -p1 \"$1\" < \"$patch_file\"")
           "zsh"
