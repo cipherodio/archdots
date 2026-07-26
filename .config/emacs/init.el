@@ -28,6 +28,8 @@
 (require 'core-default)
 ;; Interface
 (require 'core-interface)
+;; Modeline
+(require 'core-modeline)
 ;; Minibuffer completion, searching, and navigation.
 (require 'core-completion)
 ;; Keymaps
@@ -36,6 +38,8 @@
 (require 'core-diff)
 ;; Magit
 (require 'core-git)
+;; AI
+(require 'core-ai)
 ;; Native Tree-sitter parsing for programming languages.
 (require 'core-treesit)
 ;; Language modes and file associations.
