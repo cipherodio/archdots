@@ -25,6 +25,9 @@
       initial-scratch-message nil
       auto-save-list-file-prefix nil)
 
+;; Hide the default modeline until the custom one loads.
+(setq-default mode-line-format nil)
+
 ;; Avoid resizing the frame at startup.
 (setq frame-inhibit-implied-resize t)
 
