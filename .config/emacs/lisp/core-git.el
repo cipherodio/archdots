@@ -105,6 +105,8 @@
     (setq-local magit-status-show-untracked-files t))
 
   :custom
+  ;; Disable red highlighting for long commit summaries.
+  (git-commit-summary-max-length 1000)
   ;; Expand the Untracked files section when the status buffer is created.
   (magit-section-initial-visibility-alist
    '((untracked . show)))
