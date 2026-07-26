@@ -12,6 +12,30 @@
    cipher/cape-dict-prefix
    corfu-mode)
   :preface
+  (defun cipher/org-variable-pitch ()
+    "Use variable-pitch prose while preserving fixed-width Org elements."
+    (variable-pitch-mode 1)
+    (dolist (face
+             '(org-block
+               org-block-begin-line
+               org-block-end-line
+               org-checkbox
+               org-code
+               org-date
+               org-drawer
+               org-formula
+               org-indent
+              ;; org-list-dt
+               org-meta-line
+               org-priority
+               org-property-value
+               org-special-keyword
+               org-table
+               org-tag
+               org-todo
+               org-verbatim))
+      (face-remap-add-relative face 'fixed-pitch)))
+
   (defun cipher/org-mode-setup ()
     "Configure Org buffers for writing."
     ;; Wrap paragraphs at 72 columns while typing.
@@ -42,8 +66,42 @@
   :custom
   (org-link-descriptive nil)
   (org-hide-emphasis-markers nil)
+  ;;(org-hide-leading-stars t)
+  :custom-face
+  (org-document-title
+   ((t (:inherit variable-pitch
+                 :height 1.5
+                 :weight bold))))
+  (org-level-1
+   ((t (:inherit variable-pitch
+                 :height 1.3
+                 :weight bold))))
+  (org-level-2
+   ((t (:inherit variable-pitch
+                 :height 1.2
+                 :weight bold))))
+  (org-level-3
+   ((t (:inherit variable-pitch
+                 :height 1.1
+                 :weight bold))))
+  (org-level-4
+   ((t (:inherit variable-pitch
+                 :weight bold))))
+  (org-level-5
+   ((t (:inherit variable-pitch
+                 :weight bold))))
+  (org-level-6
+   ((t (:inherit variable-pitch
+                 :weight bold))))
+  (org-level-7
+   ((t (:inherit variable-pitch
+                 :weight bold))))
+  (org-level-8
+   ((t (:inherit variable-pitch
+                 :weight bold))))
   :hook
-  (org-mode . cipher/org-mode-setup))
+  ((org-mode . cipher/org-mode-setup)
+   (org-mode . cipher/org-variable-pitch)))
 
 (provide 'core-org)
 ;;; core-org.el ends here
