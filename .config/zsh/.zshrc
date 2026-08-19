@@ -121,8 +121,8 @@ cd() {
 # Use lf to jump in directories with ctrl-o
 lfcd() {
     local dir
-
     dir=$(command lf -print-last-dir "$@")
+    tput sgr0
     [[ -d $dir && $dir != $PWD ]] && cd "$dir"
 }
 bindkey -s '^o' '^ulfcd\n'
