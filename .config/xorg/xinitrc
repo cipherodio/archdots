@@ -6,7 +6,7 @@ setwallpaper &
 dwmblocks &
 # emacs --daemon &
 
-autostart="mpd picom dunst unclutter"
+autostart="mpd picom dunst"
 
 for program in $autostart; do
     pidof -sx "$program" || "$program" &
@@ -14,3 +14,4 @@ done >/dev/null 2>&1
 
 dbus-update-activation-environment --all
 dbus-launch --exit-with-session ssh-agent dwm
+# dbus-launch --exit-with-session ssh-agent awesome
