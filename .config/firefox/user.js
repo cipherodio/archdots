@@ -71,14 +71,8 @@ user_pref("media.gmp-widevinecdm.enabled", true);
 user_pref("media.gmp-widevinecdm.visible", true);
 
 // Disable Recommended extensions as you browse (CFR)
-user_pref(
-    "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons",
-    false,
-);
-user_pref(
-    "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features",
-    false,
-);
+user_pref("browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons",false);
+user_pref("browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features",false);
 // Disable personalized extension recommendations
 user_pref("extensions.htmlaboutaddons.recommendations.enabled", false);
 // Disable the "Discover" pane in Add-ons
