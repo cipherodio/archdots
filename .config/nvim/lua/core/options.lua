@@ -16,6 +16,10 @@ o.fillchars = {
     stl = " ", -- statusline fill character
     stlnc = " ", -- inactive statusline fill
     wbr = " ", -- window break char (rarely used)
+    foldopen = "",
+    foldclose = "",
+    fold = " ",
+    foldsep = " ",
 }
 o.mouse = "a" -- Enables mouse support
 o.clipboard = "unnamedplus" -- System clipboard
@@ -56,6 +60,12 @@ o.undolevels = 10000 -- Large undo history limit
 
 o.wildmode = "longest:full,full" -- Tab completion
 o.completeopt = "menu,menuone,noselect" -- Completion options
+
+-- o.foldlevel = 99
+-- o.foldlevelstart = 99
+-- o.foldcolumn = "1"
+-- o.foldenable = true
+-- o.foldmethod = "indent"
 
 -- o.foldenable = false -- Folding disabled
 -- o.foldcolumn = "1"

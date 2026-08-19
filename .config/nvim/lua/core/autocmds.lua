@@ -152,6 +152,16 @@ autocmd("BufWritePost", {
     end,
 })
 
+-- Reload picom
+autocmd("BufWritePost", {
+    desc = "Reload picom after config update",
+    group = augroup("reload_picom"),
+    pattern = "picom.conf",
+    callback = function()
+        vim.system({ "pkill", "-USR1", "-x", "picom" })
+    end,
+})
+
 -- Markdown follow link
 autocmd("FileType", {
     desc = "Follow markdown links with gf",
@@ -163,5 +173,15 @@ autocmd("FileType", {
             desc = "Follow markdown link",
             silent = true,
         })
+    end,
+})
+
+-- Vidir bulkrename fix for lf file manager
+autocmd("BufEnter", {
+    desc = "Set no expandtab for vidir",
+    group = augroup("notab_vidir"),
+    pattern = "/tmp/dir*",
+    callback = function()
+        vim.opt_local.expandtab = false
     end,
 })

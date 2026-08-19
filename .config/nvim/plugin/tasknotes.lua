@@ -1,36 +1,36 @@
 vim.pack.add({
-    { src = "https://github.com/cipherodio/taskmd.nvim" },
+    -- { src = "https://github.com/cipherodio/taskmd.nvim" },
     { src = "https://github.com/cipherodio/notesmd.nvim" },
     { src = "https://github.com/folke/todo-comments.nvim" },
 }, { confirm = false })
 
-require("taskmd").setup({
-    root_dir = "~/hub/src/mdnotes",
-    scan_dir = "events",
-    task_file = "agenda.md",
-    sync_on_open = {
-        enable = true,
-        autowrite = true,
-    },
-    write_on_command = true,
-    short_uuid = true,
-    highlight = {
-        file_output = {
-            enable = true,
-        },
-        calendar = {
-            border = "single",
-        },
-    },
-    keymaps = {
-        add = "<leader>ta",
-        sync = "<leader>ts",
-        delete = "<leader>tx",
-        done = "<leader>td",
-        fetch = "<leader>tf",
-        calendar = "<leader>c",
-    },
-})
+-- require("taskmd").setup({
+--     root_dir = "~/hub/src/mdnotes",
+--     scan_dir = "events",
+--     task_file = "agenda.md",
+--     sync_on_open = {
+--         enable = true,
+--         autowrite = true,
+--     },
+--     write_on_command = true,
+--     short_uuid = true,
+--     highlight = {
+--         file_output = {
+--             enable = true,
+--         },
+--         calendar = {
+--             border = "single",
+--         },
+--     },
+--     keymaps = {
+--         add = "<leader>ta",
+--         sync = "<leader>ts",
+--         delete = "<leader>tx",
+--         done = "<leader>td",
+--         fetch = "<leader>tf",
+--         calendar = "<leader>c",
+--     },
+-- })
 
 require("notesmd").setup({
     notes_dir = vim.fn.expand("~/hub/src/mdnotes"),
