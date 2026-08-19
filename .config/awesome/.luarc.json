@@ -1,0 +1,34 @@
+{
+    "runtime.version": "Lua 5.4",
+    "runtime.path": [
+        "?.lua",
+        "?/init.lua",
+        "?/?.lua",
+        "/usr/share/awesome/lib/?/init.lua",
+        "/usr/share/awesome/lib/?.lua"
+    ],
+    "diagnostics.globals": [
+        "terminal",
+        "editor",
+        "editor_cmd",
+        "modkey",
+        "altkey",
+        "emacscmd",
+        "browser",
+        "globalkeys",
+        "clientkeys",
+        "clientbuttons",
+        "awesome",
+        "client",
+        "screen",
+        "root",
+        "tag",
+        "mouse",
+        "button",
+        "key"
+    ],
+    "workspace.library": [
+        "/usr/share/awesome/lib"
+    ],
+    "workspace.checkThirdParty": false
+}
