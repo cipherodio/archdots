@@ -2,8 +2,8 @@
 #include "current"
 ! *Xft.dpi: 144*
 ! xft:Monospace:size=16
-Xcursor.size: 32
-Xcursor.theme: Adwaita
+! Xcursor.size: 32
+! Xcursor.theme: Adwaita
 Nsxiv.bar.font: monospace:size=16
 
 ! Xterm
@@ -35,10 +35,10 @@ xterm*color15: c15
 ! DWM
 dwm.normbgcolor: bg
 dwm.normfgcolor: fg
-dwm.normbordercolor: c01
+dwm.normbordercolor: c00
 
 dwm.selbgcolor: c04
-dwm.selbordercolor:c09
+dwm.selbordercolor:c01
 dwm.selfgcolor: c00
 
 dwm.urgbgcolor: c09
