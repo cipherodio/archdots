@@ -11,6 +11,7 @@ set scrolloff 10
 set period 1
 set dircounts true
 set cursorpreviewfmt "\033[7m"
+set dupfilefmt "%b.~%n~%e"
 
 # Top status
 set promptfmt "\033[34;1m📁  %d\033[0m\033[1m%f\033[0m"
@@ -24,14 +25,14 @@ set infotimefmtold "2006-02-Jan Monday 03:04PM"
 set info size:time
 
 # Single column mode without preview
-#set nopreview
-#set ratios 1
+# set nopreview
+# set ratios 1
 
 # Preview mode
 set cleaner '~/.config/lf/cleaner'
 set previewer '~/.config/lf/scope'
 set autoquit true
-set statfmt "\033[36m%p\033[0m| %u| %g| %S| %t| -> %l"
+set rulerfile ~/.config/lf/ruler
 
 #cmd trash %set -f; mv $fx ~/.trash
 
@@ -60,13 +61,13 @@ cmd extract ${{
                 tar -xf "$file"
                 ;;
             *.zip)
-                unzip "$file"
+                unzip "$file" || true
                 ;;
             *.rar)
-                unrar x "$file"
+                unrar x "$file" || true
                 ;;
             *.7z)
-                7z x "$file"
+                7z x "$file" || true
                 ;;
         esac
     done
@@ -147,7 +148,11 @@ cmd chmod ${{
     lf -remote 'send reload'
 }}
 
-cmd bulkrename $vidir
+cmd bulkrename ${{
+    [ -n "$fs" ] && vidir -- $fs || vidir
+    lf -remote "send $id reload"
+}}
+
 cmd mkdir $mkdir -p -- "$@"
 cmd touch $touch -- "$@"
 cmd setwallpaper "$1"
@@ -159,6 +164,7 @@ map t cut
 map y copy
 map r clear
 map . set hidden!
+map f calcdirsize
 
 map gg top
 map G bottom
