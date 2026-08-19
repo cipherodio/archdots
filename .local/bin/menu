@@ -9,12 +9,15 @@ choice=$(
         "Blender" \
         "Audacity" \
         "Firefox" \
+        "d2" \
+        "warmane" \
         "Signal Messenger" \
         "GIMP" \
         "Inkscape" \
         "Steam" \
         "The Elder Scrolls Online" \
         "Stardew Valley" \
+        "Albion-Online" \
         "Spotify" \
         "Btop" \
         "Htop" \
@@ -46,7 +49,10 @@ case "$choice" in
     setsid eso >/dev/null 2>&1 &
     ;;
 "Stardew Valley")
-    setsid "/data/gog/Stardew Valley/start.sh" >/dev/null 2>&1 &
+    setsid "/data/games/Stardew Valley/start.sh" >/dev/null 2>&1 &
+    ;;
+"Albion-Online")
+    setsid "/data/games/albiononline/Albion-Online" >/dev/null 2>&1 &
     ;;
 "Spotify")
     setsid spotify-launcher >/dev/null 2>&1 &
