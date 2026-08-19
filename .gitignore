@@ -1,12 +1,5 @@
-Sandbox Interactive GmbH
-menus
-StardewValley
-wineprefixes
-queue.json
-dht.dat
-stats.json
-bandwidth-groups.json
 audacity
+bandwidth-groups.json
 blender
 .cache
 cookie
@@ -14,6 +7,7 @@ current
 custom.el
 database
 dconf
+dht.dat
 .dots
 dunstrc.d
 eln-cache
@@ -37,6 +31,7 @@ known_hosts
 .local/share/xorg
 .local/share/zathura
 *log
+menus
 mozilla
 nimble
 password-store
@@ -44,16 +39,21 @@ pid
 *pki
 private-keys*
 pubring*
+queue.json
 random_seed
+Sandbox Interactive GmbH
 shrc
 Signal
 *.sql
+StardewValley
 state
+stats.json
 .steam*
 Steam
 systemd
 The Elder*
 tree-sitter
+wineprefixes
 .Xauthority
 *.xbel
 .zcompdump
