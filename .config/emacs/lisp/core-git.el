@@ -9,21 +9,14 @@
 (require 'seq)
 
 (use-package magit
-  :functions
-  (magit-process-environment
-   magit-status-goto-initial-section)
   :defines
   (magit-mode-map
    magit-section-initial-visibility-alist
    magit-status-initial-section
    magit-status-show-untracked-files)
-  :commands
-  (magit-status
-   magit-push)
-  :bind
-  (("C-x g" . cipher/magit-status)
-   :map magit-mode-map
-   ("p" . magit-push))
+  :functions
+  (magit-process-environment
+   magit-status-goto-initial-section)
   :preface
   (defconst cipher/magit-dotfiles-git-dir
     (file-name-as-directory
@@ -61,16 +54,13 @@
      (file-directory-p cipher/magit-dotfiles-git-dir)
      (or
       (cipher/magit-path-inside-directory-p
-       default-directory
-       cipher/magit-dotfiles-git-dir)
+       default-directory cipher/magit-dotfiles-git-dir)
       (and
        (cipher/magit-path-inside-directory-p
-        default-directory
-        cipher/magit-dotfiles-work-tree)
+        default-directory cipher/magit-dotfiles-work-tree)
        (not
         (cipher/magit-path-inside-directory-p
-         default-directory
-         cipher/magit-dotfiles-git-dir))
+         default-directory cipher/magit-dotfiles-git-dir))
        (not (cipher/magit-normal-repository-p))))))
 
   (defun cipher/magit-clean-git-environment (environment)
@@ -91,46 +81,44 @@
          (list
           (concat
            "GIT_DIR="
-           (directory-file-name
-            cipher/magit-dotfiles-git-dir))
+           (directory-file-name cipher/magit-dotfiles-git-dir))
           (concat
            "GIT_WORK_TREE="
-           (directory-file-name
-            cipher/magit-dotfiles-work-tree)))
+           (directory-file-name cipher/magit-dotfiles-work-tree)))
          (cipher/magit-clean-git-environment
           environment)))))
 
   (defun cipher/magit-status-setup ()
     "Show untracked files in the current Magit status buffer."
     (setq-local magit-status-show-untracked-files t))
-
   :custom
   ;; Disable red highlighting for long commit summaries.
   (git-commit-summary-max-length 1000)
   ;; Expand the Untracked files section when the status buffer is created.
   (magit-section-initial-visibility-alist
    '((untracked . show)))
-
   ;; Initially place point at Unstaged changes, then Untracked or Staged.
   (magit-status-initial-section
    '(((unstaged) (status))
      ((untracked) (status))
      ((staged) (status))
      1))
-
+  :bind
+  (("C-x g" . cipher/magit-status)
+   :map magit-mode-map
+   ("p" . magit-push))
   :hook
   (magit-status-mode . cipher/magit-status-setup)
-
+  :commands
+  (magit-status
+   magit-push)
   :config
   (unless
       (advice-member-p
-       #'cipher/magit-process-environment
-       'magit-process-environment)
+       #'cipher/magit-process-environment 'magit-process-environment)
     (advice-add
      'magit-process-environment
-     :around
-     #'cipher/magit-process-environment)))
+     :around #'cipher/magit-process-environment)))
 
 (provide 'core-git)
-
 ;;; core-git.el ends here

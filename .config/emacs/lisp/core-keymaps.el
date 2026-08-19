@@ -9,8 +9,6 @@
   :ensure nil
   :custom
   (which-key-idle-delay 0.3)
-  ;;(which-key-idle-delay 50)
-  ;;(which-key-idle-secondary-delay 0.5)
   ;; Prevent the popup from changing visible buffer position
   (which-key-preserve-window-configuration t)
   :demand t

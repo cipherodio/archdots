@@ -54,7 +54,7 @@
    (cond
     ((and buffer-read-only (buffer-modified-p)) " RO* ")
     (buffer-read-only " RO ")
-    ((buffer-modified-p) " MOD ")
+    ((buffer-modified-p) " ** ")
     (t " RW "))
    'face
    (if (cipher/modeline-active-p)
@@ -96,19 +96,16 @@
        ((and
          (file-directory-p cipher/modeline-dotfiles-git-dir)
          (cipher/modeline-inside-p
-          file
-          cipher/modeline-dotfiles-work-tree)
+          file cipher/modeline-dotfiles-work-tree)
          (not
           (cipher/modeline-inside-p
-           file
-           cipher/modeline-dotfiles-git-dir)))
+           file cipher/modeline-dotfiles-git-dir)))
         (list
          :root cipher/modeline-dotfiles-work-tree
          :git-dir cipher/modeline-dotfiles-git-dir
          :path
          (file-relative-name
-          file
-          cipher/modeline-dotfiles-work-tree)))))))
+          file cipher/modeline-dotfiles-work-tree)))))))
 
 (defun cipher/modeline-git-command ()
   "Return the shell command used to inspect one Git file."
@@ -116,7 +113,7 @@
    "branch=$(git symbolic-ref --quiet --short HEAD 2>/dev/null "
    "|| git rev-parse --short HEAD 2>/dev/null); "
    "printf '%s\\036' \"$branch\"; "
-   "git diff --no-ext-diff --no-color --numstat HEAD -- "
+   "git diff --no-ext-diff --no-color -U0 HEAD -- "
    "\"$CIPHER_MODELINE_PATH\" 2>/dev/null; "
    "printf '\\036'; "
    "git status --porcelain=v1 --untracked-files=all -- "
@@ -133,14 +130,41 @@
   (save-restriction
     (widen)
     (cond
-     ((= (point-min) (point-max))
-      0)
+     ((= (point-min) (point-max)) 0)
      ((eq (char-before (point-max)) ?\n)
       (line-number-at-pos
        (1- (point-max))))
      (t
       (line-number-at-pos
        (point-max))))))
+
+(defun cipher/modeline-git-hunk-stats (diff-text)
+  "Return added/modified/deleted line counts computed per-hunk from DIFF-TEXT.
+Returns nil if DIFF-TEXT contains no hunk headers (e.g. binary diff)."
+  (let ((added 0) (modified 0) (deleted 0) (found nil))
+    (dolist (line (split-string diff-text "\n"))
+      (when (string-match
+             "\\`@@ -[0-9]+\\(?:,\\([0-9]+\\)\\)? \\+[0-9]+\\(?:,\\([0-9]+\\)\\)? @@"
+             line)
+        (setq found t)
+        (let ((old-count (if (match-string 1 line)
+                             (string-to-number (match-string 1 line)) 1))
+              (new-count (if (match-string 2 line)
+                             (string-to-number (match-string 2 line)) 1)))
+          (cond
+           ((= old-count 0)
+            (setq added (+ added new-count)))
+           ((= new-count 0)
+            (setq deleted (+ deleted old-count)))
+           (t
+            (let ((changed (min old-count new-count)))
+              (setq modified (+ modified changed))
+              (when (> new-count old-count)
+                (setq added (+ added (- new-count old-count))))
+              (when (> old-count new-count)
+                (setq deleted (+ deleted (- old-count new-count))))))))))
+    (when found
+      (list :added added :modified modified :deleted deleted))))
 
 (defun cipher/modeline-git-parse (context output)
   "Parse per-file Git OUTPUT using CONTEXT."
@@ -149,7 +173,7 @@
          (branch
           (string-trim
            (or (nth 0 parts) "")))
-         (numstat
+         (diff-text
           (or (nth 1 parts) ""))
          (status
           (string-trim-right
@@ -176,20 +200,11 @@
        ((string-prefix-p "??" status)
         (setq added
               (cipher/modeline-buffer-lines)))
-       ((string-match
-         "\\`\\([0-9]+\\)\t\\([0-9]+\\)"
-         numstat)
-        (let* ((raw-added
-                (string-to-number
-                 (match-string 1 numstat)))
-               (raw-deleted
-                (string-to-number
-                 (match-string 2 numstat)))
-               (changed
-                (min raw-added raw-deleted)))
-          (setq added (- raw-added changed)
-                modified changed
-                deleted (- raw-deleted changed))))
+       ((cipher/modeline-git-hunk-stats diff-text)
+        (let ((stats (cipher/modeline-git-hunk-stats diff-text)))
+          (setq added (plist-get stats :added)
+                modified (plist-get stats :modified)
+                deleted (plist-get stats :deleted))))
        ((string-match-p "A" status)
         (setq added 1))
        ((string-match-p "D" status)
@@ -219,32 +234,26 @@
          '(exit signal))
     (let ((target
            (process-get
-            process
-            'target-buffer))
+            process 'target-buffer))
           (context
            (process-get
-            process
-            'git-context))
+            process 'git-context))
           (output
            (process-buffer process)))
       (unwind-protect
           (when (buffer-live-p target)
             (with-current-buffer target
-              (when
-                  (eq
-                   process
-                   cipher/modeline-git-process)
-                (setq
-                 cipher/modeline-git-process
-                 nil
-                 cipher/modeline-git-info
-                 (and
-                  (= (process-exit-status process) 0)
-                  (buffer-live-p output)
-                  (cipher/modeline-git-parse
-                   context
-                   (with-current-buffer output
-                     (buffer-string)))))
+              (when (eq
+                     process cipher/modeline-git-process)
+                (setq cipher/modeline-git-process nil
+                      cipher/modeline-git-info
+                      (and
+                       (= (process-exit-status process) 0)
+                       (buffer-live-p output)
+                       (cipher/modeline-git-parse
+                        context
+                        (with-current-buffer output
+                          (buffer-string)))))
                 (force-mode-line-update))))
         (when (buffer-live-p output)
           (kill-buffer output))))))
@@ -266,21 +275,18 @@
       (setenv "LC_ALL" "C")
       (setenv "GIT_DIR" nil)
       (setenv "GIT_WORK_TREE" nil)
-      (setenv
-       "CIPHER_MODELINE_PATH"
-       (plist-get context :path))
+      (setenv "CIPHER_MODELINE_PATH"
+              (plist-get context :path))
       (when-let ((git-dir
                   (plist-get context :git-dir)))
         (setenv "GIT_DIR" git-dir)
-        (setenv
-         "GIT_WORK_TREE"
-         (plist-get context :root)))
+        (setenv "GIT_WORK_TREE"
+                (plist-get context :root)))
       (condition-case error-data
           (let ((process
                  (make-process
                   :name
-                  (generate-new-buffer-name
-                   "cipher-modeline-git")
+                  (generate-new-buffer-name "cipher-modeline-git")
                   :buffer output
                   :command
                   (list
@@ -289,19 +295,15 @@
                    (cipher/modeline-git-command))
                   :connection-type 'pipe
                   :noquery t
-                  :sentinel
-                  #'cipher/modeline-git-sentinel)))
+                  :sentinel #'cipher/modeline-git-sentinel)))
             (process-put
-             process
-             'target-buffer
+             process 'target-buffer
              (current-buffer))
             (process-put
-             process
-             'git-context
+             process 'git-context
              context)
-            (setq
-             cipher/modeline-git-process
-             process))
+            (setq cipher/modeline-git-process
+                  process))
         (error
          (kill-buffer output)
          (message
@@ -390,27 +392,26 @@
            (setq notes
                  (1+ notes)))))
       (let ((items
-             (delq
-              nil
-              (list
-               (and
-                (> errors 0)
-                (propertize
-                 (format "E:%d" errors)
-                 'face
-                 'cipher/modeline-red))
-               (and
-                (> warnings 0)
-                (propertize
-                 (format "W:%d" warnings)
-                 'face
-                 'cipher/modeline-yellow))
-               (and
-                (> notes 0)
-                (propertize
-                 (format "N:%d" notes)
-                 'face
-                 'cipher/modeline-blue))))))
+             (delq nil
+                   (list
+                    (and
+                     (> errors 0)
+                     (propertize
+                      (format "E:%d" errors)
+                      'face
+                      'cipher/modeline-red))
+                    (and
+                     (> warnings 0)
+                     (propertize
+                      (format "W:%d" warnings)
+                      'face
+                      'cipher/modeline-yellow))
+                    (and
+                     (> notes 0)
+                     (propertize
+                      (format "N:%d" notes)
+                      'face
+                      'cipher/modeline-blue))))))
         (when items
           (concat
            (string-join items " ")
@@ -449,13 +450,9 @@
   (save-restriction
     (widen)
     (let* ((total
-            (max
-             1
-             (cipher/modeline-buffer-lines)))
+            (max 1 (cipher/modeline-buffer-lines)))
            (line
-            (min
-             (line-number-at-pos)
-             total))
+            (min (line-number-at-pos) total))
            (column
             (1+ (current-column)))
            (position
@@ -470,13 +467,12 @@
                (floor
                 (/ (* line 100.0)
                    total)))))))
-      (setq
-       cipher/modeline-position-text
-       (format
-        "%d:%d | %s"
-        line
-        column
-        position))))
+      (setq cipher/modeline-position-text
+            (format
+             "%d:%d | %s"
+             line
+             column
+             position))))
   (force-mode-line-update))
 
 (defun cipher/modeline-position ()
@@ -512,53 +508,28 @@
 
 (defun cipher/modeline-enable ()
   "Enable the custom modeline in the current buffer."
-  (setq-local
-   mode-line-format
-   cipher/modeline-format)
+  (setq-local mode-line-format cipher/modeline-format)
   (cipher/modeline-update-position))
 
-(set-face-attribute
- 'mode-line nil
- :box nil
- :underline nil
- :overline nil
- :height 0.95)
+(set-face-attribute 'mode-line nil
+                    :box nil
+                    :underline nil
+                    :overline nil
+                    :height 0.95)
 
-(set-face-attribute
- 'mode-line-inactive nil
- :box nil
- :underline nil
- :overline nil
- :height 0.95)
+(set-face-attribute 'mode-line-inactive nil
+                    :box nil
+                    :underline nil
+                    :overline nil
+                    :height 0.95)
 
-(setq-default
- mode-line-format
- cipher/modeline-format)
-
-(add-hook
- 'after-change-major-mode-hook
- #'cipher/modeline-enable)
-
-(add-hook
- 'post-command-hook
- #'cipher/modeline-update-position)
-
-(add-hook
- 'find-file-hook
- #'cipher/modeline-git-refresh)
-
-(add-hook
- 'after-save-hook
- #'cipher/modeline-git-refresh)
-
-(add-hook
- 'after-revert-hook
- #'cipher/modeline-git-refresh)
-
-(add-hook
- 'kill-buffer-hook
- #'cipher/modeline-git-stop)
+(setq-default mode-line-format cipher/modeline-format)
+(add-hook 'after-change-major-mode-hook #'cipher/modeline-enable)
+(add-hook 'post-command-hook #'cipher/modeline-update-position)
+(add-hook 'find-file-hook #'cipher/modeline-git-refresh)
+(add-hook 'after-save-hook #'cipher/modeline-git-refresh)
+(add-hook 'after-revert-hook #'cipher/modeline-git-refresh)
+(add-hook 'kill-buffer-hook #'cipher/modeline-git-stop)
 
 (provide 'core-modeline)
-
 ;;; core-modeline.el ends here

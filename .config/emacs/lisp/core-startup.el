@@ -7,7 +7,6 @@
 
 (use-package server
   :ensure nil
-
   :preface
   (defun cipher/report-startup-time ()
     "Report how long Emacs took to start."
@@ -26,21 +25,14 @@
     "Report startup time in the first daemon client frame."
     (when (daemonp)
       (remove-hook
-       'server-after-make-frame-hook
-       #'cipher/report-daemon-startup-time)
-
+       'server-after-make-frame-hook #'cipher/report-daemon-startup-time)
       (cipher/report-startup-time)))
-
   :custom
   ;; Disable client-frame instructions only in daemon mode.
   (server-client-instructions (not (daemonp)))
-
   :hook
-  ((emacs-startup
-    . cipher/report-normal-startup-time)
-
-   (server-after-make-frame
-    . cipher/report-daemon-startup-time)))
+  ((emacs-startup . cipher/report-normal-startup-time)
+   (server-after-make-frame . cipher/report-daemon-startup-time)))
 
 (provide 'core-startup)
 ;;; core-startup.el ends here

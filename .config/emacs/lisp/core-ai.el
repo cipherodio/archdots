@@ -12,13 +12,6 @@
 (declare-function magit-git-output "magit-git" (&rest args))
 
 (use-package gptel
-  :functions
-  (gptel
-   gptel-abort
-   gptel-make-openai
-   gptel-menu
-   gptel-request
-   gptel-send)
   :defines
   (gptel--system-message
    gptel-backend
@@ -31,16 +24,13 @@
    gptel-stream
    gptel-system-prompt
    gptel-temperature)
-  :commands
-  (gptel-abort
+  :functions
+  (gptel
+   gptel-abort
+   gptel-make-openai
+   gptel-menu
+   gptel-request
    gptel-send)
-  :bind
-  (("C-c a a" . cipher/gptel-actions)
-   ("C-c a s" . cipher/gptel-writing-chat)
-   ("C-c a c" . cipher/gptel-coding-chat)
-   ("C-c a t" . cipher/gptel-toggle-chat)
-   ("C-c a w" . cipher/gptel-write-story)
-   ("C-c a m" . cipher/gptel-generate-commit))
   :preface
   (defvar cipher/gptel-deepseek-flash nil
     "DeepSeek Flash backend used for writing.")
@@ -138,10 +128,9 @@
     (when (timerp cipher/gptel-scroll-timer)
       (cancel-timer cipher/gptel-scroll-timer))
     (setq cipher/gptel-scroll-timer
-          (run-at-time
-           0 nil
-           #'cipher/gptel-follow-stream-now
-           (current-buffer))))
+          (run-at-time 0 nil
+                       #'cipher/gptel-follow-stream-now
+                       (current-buffer))))
 
   (defun cipher/gptel-open-chat
       (name backend model
@@ -258,11 +247,9 @@ MAX-TOKENS and TEMPERATURE configure the chat buffer."
     (let ((message (string-trim response)))
       (when (string-prefix-p "```" message)
         (setq message
-              (replace-regexp-in-string
-               "\\````[^\n]*\n" "" message))
+              (replace-regexp-in-string "\\````[^\n]*\n" "" message))
         (setq message
-              (replace-regexp-in-string
-               "\n```\\'" "" message)))
+              (replace-regexp-in-string "\n```\\'" "" message)))
       (string-trim message)))
 
   (defun cipher/gptel-generate-commit ()
@@ -346,24 +333,26 @@ MAX-TOKENS and TEMPERATURE configure the chat buffer."
              nil
              #'string=)))
       (call-interactively command)))
-
   :custom
   ;; Match the DEBUG logging used by CodeCompanion.
   (gptel-log-level 'debug)
-
+  :bind
+  (("C-c a a" . cipher/gptel-actions)
+   ("C-c a s" . cipher/gptel-writing-chat)
+   ("C-c a c" . cipher/gptel-coding-chat)
+   ("C-c a t" . cipher/gptel-toggle-chat)
+   ("C-c a w" . cipher/gptel-write-story)
+   ("C-c a m" . cipher/gptel-generate-commit))
+  :commands
+  (gptel-abort
+   gptel-send)
   :config
   ;; Follow streamed responses after gptel's internal
   ;; `save-excursion' has restored point.
-  (add-hook
-   'gptel-post-stream-hook
-   #'cipher/gptel-auto-scroll)
-
+  (add-hook 'gptel-post-stream-hook #'cipher/gptel-auto-scroll)
   ;; Send and stop generation from every gptel chat buffer.
-  (define-key
-   gptel-mode-map
-   (kbd "C-c C-g")
-   #'cipher/gptel-abort)
-
+  (define-key gptel-mode-map
+              (kbd "C-c C-g") #'cipher/gptel-abort)
   (setq cipher/gptel-deepseek-flash
         (gptel-make-openai "DeepSeek V4 Flash - Writing"
           :host "api.deepseek.com"
@@ -373,10 +362,9 @@ MAX-TOKENS and TEMPERATURE configure the chat buffer."
           :models '(deepseek-v4-flash)
           :request-params
           '(:thinking (:type "disabled")
-            :temperature 0.6
-            :top_p 1.0
-            :max_tokens 8192)))
-
+                      :temperature 0.6
+                      :top_p 1.0
+                      :max_tokens 8192)))
   (setq cipher/gptel-deepseek-pro
         (gptel-make-openai "DeepSeek V4 Pro - Coding"
           :host "api.deepseek.com"
@@ -386,13 +374,11 @@ MAX-TOKENS and TEMPERATURE configure the chat buffer."
           :models '(deepseek-v4-pro)
           :request-params
           '(:thinking (:type "enabled")
-            :reasoning_effort "max"
-            :max_tokens 8192)))
-
+                      :reasoning_effort "max"
+                      :max_tokens 8192)))
   ;; Flash is the default for chats that do not select a backend.
   (setq gptel-backend cipher/gptel-deepseek-flash)
   (setq gptel-model 'deepseek-v4-flash))
 
 (provide 'core-ai)
-
 ;;; core-ai.el ends here

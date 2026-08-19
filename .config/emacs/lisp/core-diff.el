@@ -61,6 +61,7 @@ Use the home directory as the fallback root for the bare dotfiles repository."
             ,(concat "--git-dir=" cipher/dotfiles-git-dir)
             ,(concat "--work-tree=" cipher/dotfiles-work-tree)
             ,@flags)) arguments))
+
   (defun cipher/vc-git-call-dotfiles-args (arguments)
     "Add bare dotfiles options to `vc-git--call' ARGUMENTS."
     (if (cipher/dotfiles-vc-context-p)
@@ -110,25 +111,13 @@ Use the home directory as the fallback root for the bare dotfiles repository."
               (set-window-start window start)
               (set-window-vscroll window vscroll t))
             (set-marker start nil))))))
-  :custom
-  ;; Use distinct symbols temporarily while testing.
-  (diff-hl-margin-symbols-alist
-   '((insert . "▕")
-     (delete . "▕")
-     (change . "▕")
-     (unknown . "▕")
-     (ignored . "▕")
-     (reference . "▕")))
-  ;; Refresh shortly after editing.
-  (diff-hl-flydiff-delay 0.05)
   :custom-face
-  ;; Show colored characters instead of solid background blocks.
   (diff-hl-insert
-   ((t (:background unspecified :foreground "#b8bb26" :slant normal))))
+   ((t (:background "#b8bb26"))))
   (diff-hl-delete
-   ((t (:background unspecified :foreground "#fb4934" :slant normal))))
+   ((t (:background "#fb4934"))))
   (diff-hl-change
-   ((t (:background unspecified :foreground "#fabd2f" :slant normal))))
+   ((t (:background "#fabd2f"))))
   :demand t
   :config
   ;; Preserve the visible position during save and Flydiff updates.
@@ -137,8 +126,6 @@ Use the home directory as the fallback root for the bare dotfiles repository."
        #'cipher/diff-hl-update-preserve-window-start 'diff-hl-update)
     (advice-add 'diff-hl-update
                 :around #'cipher/diff-hl-update-preserve-window-start))
-  ;; Install margin rendering before enabling Diff-HL buffers.
-  (diff-hl-margin-mode 1)
   ;; Enable indicators in version-controlled file buffers.
   (global-diff-hl-mode 1)
   ;; Update indicators while editing.

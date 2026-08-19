@@ -32,23 +32,15 @@ The behavior of this command is as follows:
       (delete-completion-window))
      ((> (minibuffer-depth) 0)
       (abort-recursive-edit))
-     (t
-      (keyboard-quit))))
-  :init
-  (add-to-list 'warning-suppress-types '(bytecomp))
+     (t (keyboard-quit))))
   :custom
   ;; Trust the configuration files
   (trusted-content (list cipher/trusted-content-directory))
-  ;; Encoding
-  (set-default-coding-systems 'utf-8)
+  ;; (frame-resize-pixelwise t)
   ;; Do not create backup files such as `file~'.
   (make-backup-files nil)
   ;; Scroll only enough to keep the cursor visible.
-  (scroll-conservatively most-positive-fixnum)
-  ;; Defer fontification while moving rapidly through new text.
-  (jit-lock-defer-time 0.1)
-  ;; Skip unnecessary fontification while keyboard input is pending.
-  (redisplay-skip-fontification-on-input t)
+  (scroll-conservatively 50)
   ;; Display literal tab characters using four columns.
   (tab-width 4)
   ;; Insert spaces instead of tab characters when indenting.
@@ -69,8 +61,14 @@ The behavior of this command is as follows:
   (("<escape>" . cipher/keyboard-quit))
   :hook
   ((prog-mode . cipher/code-buffer-setup)
-   (conf-mode . cipher/code-buffer-setup)))
-
+   (conf-mode . cipher/code-buffer-setup))
+  :init
+  (add-to-list 'warning-suppress-types '(bytecomp))
+  :config
+  ;; Disable cursor blink
+  (blink-cursor-mode 0)
+  ;; Encoding
+  (set-default-coding-systems 'utf-8))
 
 (provide 'core-default)
 ;;; core-default.el ends here

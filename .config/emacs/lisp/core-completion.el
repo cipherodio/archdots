@@ -49,12 +49,12 @@ Use IGNORE-FILE when it is non-nil."
             (apply #'process-lines "rg" arguments))
            (file
             (consult--read files
-                          :prompt prompt
-                          :require-match t
-                          :category 'file
-                          :history 'file-name-history
-                          :sort nil
-                          :state (consult--file-preview))))
+                           :prompt prompt
+                           :require-match t
+                           :category 'file
+                           :history 'file-name-history
+                           :sort nil
+                           :state (consult--file-preview))))
       (find-file
        (expand-file-name file default-directory))))
 
@@ -118,27 +118,6 @@ Use IGNORE-FILE when it is non-nil."
   :hook
   ((prog-mode . corfu-mode)
    (conf-mode . corfu-mode)))
-
-(use-package cape
-  :preface
-  (defun cipher/cape-dict-prefix ()
-    "Complete dictionary words that begin with the word at point."
-    (when-let*
-        ((bounds (bounds-of-thing-at-point 'word))
-         (prefix
-          (buffer-substring-no-properties
-           (car bounds)
-           (point))))
-      (cape-wrap-predicate #'cape-dict
-                           (lambda (candidate)
-                             (string-prefix-p prefix candidate t)))))
-  :custom
-  ;; Limit how many matching dictionary words Cape retrieves.
-  (cape-dict-limit 1000)
-  :commands
-  (cape-dict
-   cape-capf-sort
-   cape-wrap-predicate))
 
 (provide 'core-completion)
 ;;; core-completion.el ends here
