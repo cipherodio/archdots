@@ -1,0 +1,64 @@
+{{define "printpermissionbit" -}}
+    {{if (eq . "d") -}}
+        {{. | printf "\033[38;5;3;4m%s\033[0m" -}}
+    {{else if (or (eq . "l") (eq . "t") (eq . "s") (eq . "p")) -}}
+        {{. | printf "\033[38;5;5m%s\033[0m" -}}
+    {{else if (eq . "r") -}}
+        {{. | printf "\033[38;5;11m%s\033[0m" -}}
+    {{else if (eq . "w") -}}
+        {{. | printf "\033[38;5;9m%s\033[0m" -}}
+    {{else if (eq . "x") -}}
+        {{. | printf "\033[38;5;10m%s\033[0m" -}}
+    {{else if (eq . "-") -}}
+        {{. | printf "\033[38;5;8m%s\033[0m" -}}
+    {{else -}}
+        {{. | printf "%s" -}}
+    {{end -}}
+{{end -}}
+{{printf " " -}}
+{{with .Message -}}
+    {{. -}}
+{{else with $stat := .Stat -}}
+    {{range $v := (len .Permissions) -}}
+        {{template "printpermissionbit" (substr $stat.Permissions $v 1) -}}
+    {{end -}}
+    {{with .User -}}
+        {{if (eq . (env "USER")) -}}
+            {{. | printf " \033[38;5;11;1m%8s\033[0m" -}}
+        {{else -}}
+            {{. | printf " %8s" -}}
+        {{end -}}
+    {{end -}}
+    {{with .Group -}}
+        {{. | printf " \033[38;5;11;1m%8s\033[0m" -}}
+    {{end -}}
+    {{$fsize := .Size -}}
+        {{if (ge .DirSize 0) -}}
+            {{$fsize = .DirSize -}}
+        {{end -}}
+        {{with $fsize -}}
+            {{printf " " -}}
+            {{if (lt . 1024) -}}
+                {{printf "\033[38;5;2m" -}}
+            {{else if (lt . 1048576) -}}
+                {{printf "\033[38;5;10m" -}}
+            {{else if (lt . 1073741824) -}}
+                {{printf "\033[38;5;11m" -}}
+            {{else if (lt . 1099511627776) -}}
+                {{printf "\033[38;5;9m" -}}
+            {{end -}}
+            {{. | humanize | printf "%5s\033[0m" -}}
+        {{end -}}
+    {{.ModTime | printf " \033[38;5;4m%s\033[0m" -}}
+    {{with .Target}} {{printf "\033[38;5;8m->\033[0m"}} {{. | printf "\033[38;5;5m%s\033[0m"}}{{end -}}
+{{end -}}
+{{.SPACER -}}
+{{with .Keys}}  {{.}}{{end -}}
+{{with .Progress}}  {{join . " "}}{{end -}}
+{{with .Copy}}  {{len . | printf "%s %d \033[0m" $.Options.copyfmt}}{{end -}}
+{{with .Cut}}  {{len . | printf "%s %d \033[0m" $.Options.cutfmt}}{{end -}}
+{{with .Select}}  {{len . | printf "%s %d \033[0m" $.Options.selectfmt}}{{end -}}
+{{with .Visual}}  {{len . | printf "%s %d \033[0m" $.Options.visualfmt}}{{end -}}
+{{with .Filter}}  {{join . " " | printf "\033[7;34m %s \033[0m"}}{{end -}}
+{{printf "  %d/%d" .Index .Total -}}
+{{printf " " -}}
