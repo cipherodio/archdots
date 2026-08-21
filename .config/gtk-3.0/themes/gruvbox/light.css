@@ -1,119 +1,72 @@
-/* Gruvbox Light Hard palette */
+/* Gruvbox Light Hard — minimal GTK3 override for Adwaita (light) base */
+
 @define-color theme_bg_color #f9f5d7;
 @define-color theme_fg_color #3c3836;
-
 @define-color theme_base_color #fbf1c7;
 @define-color theme_text_color #3c3836;
-
 @define-color theme_selected_bg_color #458588;
 @define-color theme_selected_fg_color #f9f5d7;
-
-@define-color theme_unfocused_bg_color #f9f5d7;
-@define-color theme_unfocused_fg_color #504945;
-@define-color theme_unfocused_base_color #fbf1c7;
-@define-color theme_unfocused_text_color #504945;
-
-@define-color theme_unfocused_selected_bg_color #d5c4a1;
-@define-color theme_unfocused_selected_fg_color #3c3836;
-
-@define-color insensitive_bg_color #ebdbb2;
-@define-color insensitive_fg_color #928374;
-
 @define-color borders #d5c4a1;
-@define-color unfocused_borders #ebdbb2;
 
-@define-color link_color #458588;
-@define-color visited_link_color #b16286;
-
-@define-color warning_color #d79921;
-@define-color error_color #cc241d;
-@define-color success_color #98971a;
-
-/* Common GTK styling */
+/* Base surfaces */
 window,
+.background,
 dialog,
 popover,
+popover.background,
 menu,
-.background {
-    background-color: @theme_bg_color;
-    color: @theme_fg_color;
-}
-
+.menu,
 headerbar,
-toolbar,
-menubar,
+headerbar.titlebar,
 .titlebar,
+toolbar,
+.toolbar,
+menubar,
 .sidebar {
-    background-color: @theme_bg_color;
-    color: @theme_fg_color;
-    border-color: @borders;
+    background-color: @theme_bg_color !important;
+    color: @theme_fg_color !important;
+    background-image: none !important;
 }
 
+/* Content/list surfaces */
 .view,
 textview,
 textview text,
 treeview,
+treeview.view,
 list,
-row {
-    background-color: @theme_base_color;
-    color: @theme_text_color;
+scrolledwindow {
+    background-color: @theme_base_color !important;
+    color: @theme_text_color !important;
 }
 
+/* Controls — background/text only, let Adwaita keep its own
+   hover/focus/pressed shading so contrast stays correct */
 entry,
 button,
 combobox,
-spinbutton,
-notebook,
-tab {
-    background-color: @theme_base_color;
-    color: @theme_text_color;
-    border-color: @borders;
+spinbutton {
+    background-color: @theme_base_color !important;
+    background-image: none !important;
+    color: @theme_text_color !important;
+    border-color: @borders !important;
 }
 
-button:hover,
-entry:focus,
-tab:checked,
-row:selected {
-    background-color: @theme_selected_bg_color;
-    color: @theme_selected_fg_color;
-    border-color: @theme_selected_bg_color;
-}
-
+/* Selection — the one state worth forcing everywhere */
 selection,
 *:selected {
-    background-color: @theme_selected_bg_color;
-    color: @theme_selected_fg_color;
+    background-color: @theme_selected_bg_color !important;
+    color: @theme_selected_fg_color !important;
 }
 
-button:disabled,
-entry:disabled,
-label:disabled {
-    background-color: @insensitive_bg_color;
-    color: @insensitive_fg_color;
-}
-
-tooltip {
-    background-color: @theme_base_color;
-    color: @theme_text_color;
-    border-color: @borders;
+/* Tooltips and separators */
+tooltip,
+tooltip.background {
+    background-color: @theme_base_color !important;
+    color: @theme_text_color !important;
+    border-color: @borders !important;
 }
 
 separator {
-    background-color: @borders;
-}
-
-progressbar progress {
-    background-color: @theme_selected_bg_color;
-}
-
-trough {
-    background-color: @theme_unfocused_selected_bg_color;
-}
-
-scrollbar slider {
-    background-color: @theme_unfocused_selected_bg_color;
-}
-
-scrollbar slider:hover {
-    background-color: @theme_selected_bg_color;
+    background-color: @borders !important;
 }

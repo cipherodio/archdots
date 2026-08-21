@@ -1,192 +1,91 @@
-/* Gruvbox Light Hard palette */
-:root {
-    --gruvbox-bg0-hard: #f9f5d7;
-    --gruvbox-bg0: #fbf1c7;
-    --gruvbox-bg1: #ebdbb2;
-    --gruvbox-bg2: #d5c4a1;
-    --gruvbox-bg3: #bdae93;
-    --gruvbox-fg0: #282828;
-    --gruvbox-fg1: #3c3836;
-    --gruvbox-fg2: #504945;
-    --gruvbox-gray: #928374;
-    --gruvbox-red: #cc241d;
-    --gruvbox-green: #98971a;
-    --gruvbox-yellow: #d79921;
-    --gruvbox-blue: #458588;
-    --gruvbox-purple: #b16286;
-    --gruvbox-aqua: #689d6a;
-    --gruvbox-orange: #d65d0e;
+/* Gruvbox Dark Hard — minimal GTK4 override
+   Covers plain GTK4 apps (legacy @theme_* names) AND
+   libadwaita apps (@window_bg_color etc.), since GTK4 apps
+   are a mix of both and libadwaita ignores the legacy names. */
 
-    --window-bg-color: var(--gruvbox-bg0-hard);
-    --window-fg-color: var(--gruvbox-fg1);
-    --view-bg-color: var(--gruvbox-bg0);
-    --view-fg-color: var(--gruvbox-fg1);
+@define-color theme_bg_color #1d2021;
+@define-color theme_fg_color #ebdbb2;
+@define-color theme_base_color #282828;
+@define-color theme_text_color #ebdbb2;
+@define-color theme_selected_bg_color #83a598;
+@define-color theme_selected_fg_color #1d2021;
+@define-color borders #504945;
 
-    --headerbar-bg-color: var(--gruvbox-bg0);
-    --headerbar-fg-color: var(--gruvbox-fg1);
-    --headerbar-border-color: var(--gruvbox-bg2);
-    --headerbar-backdrop-color: var(--gruvbox-bg0);
-    --headerbar-shade-color: rgb(60 56 54 / 18%);
-    --headerbar-darker-shade-color: rgb(60 56 54 / 30%);
+/* libadwaita named colors */
+@define-color window_bg_color #1d2021;
+@define-color window_fg_color #ebdbb2;
+@define-color view_bg_color #282828;
+@define-color view_fg_color #ebdbb2;
+@define-color headerbar_bg_color #1d2021;
+@define-color headerbar_fg_color #ebdbb2;
+@define-color headerbar_border_color #504945;
+@define-color popover_bg_color #1d2021;
+@define-color popover_fg_color #ebdbb2;
+@define-color card_bg_color #282828;
+@define-color card_fg_color #ebdbb2;
+@define-color dialog_bg_color #1d2021;
+@define-color dialog_fg_color #ebdbb2;
+@define-color accent_bg_color #83a598;
+@define-color accent_fg_color #1d2021;
+@define-color accent_color #83a598;
+@define-color borders #504945;
 
-    --sidebar-bg-color: var(--gruvbox-bg0);
-    --sidebar-fg-color: var(--gruvbox-fg1);
-    --sidebar-backdrop-color: var(--gruvbox-bg0);
-    --sidebar-border-color: rgb(60 56 54 / 20%);
-    --sidebar-shade-color: rgb(60 56 54 / 12%);
-
-    --secondary-sidebar-bg-color: var(--gruvbox-bg1);
-    --secondary-sidebar-fg-color: var(--gruvbox-fg1);
-    --secondary-sidebar-backdrop-color: var(--gruvbox-bg1);
-    --secondary-sidebar-border-color: rgb(60 56 54 / 20%);
-    --secondary-sidebar-shade-color: rgb(60 56 54 / 12%);
-
-    --card-bg-color: var(--gruvbox-bg1);
-    --card-fg-color: var(--gruvbox-fg1);
-    --card-shade-color: rgb(60 56 54 / 18%);
-
-    --dialog-bg-color: var(--gruvbox-bg1);
-    --dialog-fg-color: var(--gruvbox-fg1);
-
-    --popover-bg-color: var(--gruvbox-bg1);
-    --popover-fg-color: var(--gruvbox-fg1);
-    --popover-shade-color: rgb(60 56 54 / 18%);
-
-    --accent-bg-color: var(--gruvbox-blue);
-    --accent-fg-color: var(--gruvbox-bg0-hard);
-    --accent-color: var(--gruvbox-blue);
-
-    --destructive-bg-color: var(--gruvbox-red);
-    --destructive-fg-color: var(--gruvbox-bg0-hard);
-    --destructive-color: var(--gruvbox-red);
-
-    --success-bg-color: var(--gruvbox-green);
-    --success-fg-color: var(--gruvbox-bg0-hard);
-    --success-color: var(--gruvbox-green);
-
-    --warning-bg-color: var(--gruvbox-yellow);
-    --warning-fg-color: var(--gruvbox-fg0);
-    --warning-color: var(--gruvbox-yellow);
-
-    --error-bg-color: var(--gruvbox-red);
-    --error-fg-color: var(--gruvbox-bg0-hard);
-    --error-color: var(--gruvbox-red);
-
-    --shade-color: rgb(60 56 54 / 12%);
-    --scrollbar-outline-color: transparent;
-}
-
+/* Base surfaces */
 window,
-.background {
-    background-color: var(--window-bg-color);
-    color: var(--window-fg-color);
-}
-
-popover {
-    background-color: var(--popover-bg-color);
-    color: var(--popover-fg-color);
-}
-
-tooltip {
-    background-color: var(--popover-bg-color);
-    color: var(--popover-fg-color);
-    border-color: var(--popover-shade-color);
-}
-
+.background,
+dialog,
+popover,
+popover.background,
+menu,
+.menu,
 headerbar,
-.titlebar {
-    background-color: var(--headerbar-bg-color);
-    color: var(--headerbar-fg-color);
-    border-color: var(--headerbar-border-color);
+.titlebar,
+toolbar,
+.toolbar,
+menubar {
+    background-color: @theme_bg_color !important;
+    color: @theme_fg_color !important;
+    background-image: none !important;
 }
 
+/* Content/list surfaces (GTK4 renamed treeview -> columnview/listview) */
 .view,
+textview,
+textview text,
 list,
 listview,
-gridview,
 columnview,
-textview,
-textview text {
-    background-color: var(--view-bg-color);
-    color: var(--view-fg-color);
+scrolledwindow {
+    background-color: @theme_base_color !important;
+    color: @theme_text_color !important;
 }
 
-row {
-    background-color: transparent;
-    color: var(--view-fg-color);
-}
-
-row:selected {
-    background-color: var(--accent-bg-color);
-    color: var(--accent-fg-color);
-}
-
+/* Controls */
 entry,
 button,
 dropdown,
-spinbutton,
-combobox,
-notebook,
-tab {
-    background-color: var(--card-bg-color);
-    color: var(--card-fg-color);
-    border-color: var(--headerbar-border-color);
+spinbutton {
+    background-color: @theme_base_color !important;
+    background-image: none !important;
+    color: @theme_text_color !important;
+    border-color: @borders !important;
 }
 
-button:hover,
-entry:focus,
-tab:checked {
-    background-color: var(--gruvbox-bg2);
-    color: var(--gruvbox-fg1);
-    border-color: var(--accent-bg-color);
-}
-
-button:disabled,
-entry:disabled,
-label:disabled {
-    background-color: var(--gruvbox-bg1);
-    color: var(--gruvbox-gray);
-}
-
+/* Selection */
 selection,
 *:selected {
-    background-color: var(--accent-bg-color);
-    color: var(--accent-fg-color);
+    background-color: @theme_selected_bg_color !important;
+    color: @theme_selected_fg_color !important;
+}
+
+/* Tooltips and separators */
+tooltip,
+tooltip.background {
+    background-color: @theme_base_color !important;
+    color: @theme_text_color !important;
+    border-color: @borders !important;
 }
 
 separator {
-    background-color: var(--headerbar-border-color);
-}
-
-progressbar progress {
-    background-color: var(--accent-bg-color);
-}
-
-trough {
-    background-color: var(--gruvbox-bg1);
-}
-
-scrollbar slider {
-    background-color: var(--gruvbox-bg2);
-}
-
-scrollbar slider:hover {
-    background-color: var(--accent-bg-color);
-}
-
-.link,
-link {
-    color: var(--accent-color);
-}
-
-.error {
-    color: var(--error-color);
-}
-
-.warning {
-    color: var(--warning-color);
-}
-
-.success {
-    color: var(--success-color);
+    background-color: @borders !important;
 }

@@ -1,0 +1,32 @@
+#!/bin/sh
+# gtktheme - pick gruvbox light/dark GTK theme via dmenu and symlink it in
+
+choice=$(printf 'dark\nlight\n' | dmenu -p "gtk theme:") || exit 1
+
+case "$choice" in
+dark | light)
+    ;;
+*)
+    exit 1
+    ;;
+esac
+
+ln -sfn "$HOME/.config/gtk-3.0/themes/gruvbox/$choice.css" "$HOME/.config/gtk-3.0/gtk.css"
+ln -sfn "$HOME/.config/gtk-4.0/themes/gruvbox/$choice.css" "$HOME/.config/gtk-4.0/gtk.css"
+
+if [ "$choice" = "dark" ]; then
+    pref=true
+else
+    pref=false
+fi
+
+for ini in "$HOME/.config/gtk-3.0/settings.ini" "$HOME/.config/gtk-4.0/settings.ini"; do
+    [ -f "$ini" ] || continue
+    if grep -q '^gtk-application-prefer-dark-theme=' "$ini"; then
+        sed -i "s/^gtk-application-prefer-dark-theme=.*/gtk-application-prefer-dark-theme=$pref/" "$ini"
+    else
+        printf 'gtk-application-prefer-dark-theme=%s\n' "$pref" >>"$ini"
+    fi
+done
+
+command -v notify-send >/dev/null 2>&1 && notify-send "GTK theme" "Switched to gruvbox $choice"
