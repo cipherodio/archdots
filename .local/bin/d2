@@ -7,5 +7,5 @@
 # exec wine "/data/games/Diablo II/Game.exe" -w
 
 # d2dx and PlugY
-export WINEPREFIX="$HOME/.local/share/wineprefixes/diablo2"
+export WINEPREFIX="$HOME/.local/share/wineprefixes/d2"
 exec wine start /d "Z:\data\games\Diablo II" PlugY.exe >/dev/null 2>&1

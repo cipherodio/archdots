@@ -1,5 +1,5 @@
 #!/bin/sh
 # Wow warmane wotlk 3.3.5a
 
-export WINEPREFIX="$HOME/.local/share/wineprefixes/warmane"
-exec wine start /d "Z:\data\games\World of Warcraft" Wow.exe >/dev/null 2>&1
+export WINEPREFIX="$HOME/.local/share/wineprefixes/privatewow"
+exec wine start /d "Z:\data\games\warmane\World of Warcraft" Wow.exe >/dev/null 2>&1
