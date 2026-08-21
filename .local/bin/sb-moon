@@ -1,29 +1,28 @@
 #!/bin/sh
-
 cache="$HOME/.cache/moonphase"
 
 case "$BLOCK_BUTTON" in
 1) notify-send "🌜 $(sed -n '2p' "$cache")" ;;
 esac
 
-if json=$(curl -sf "wttr.in/$LOCATION?format=j1"); then
+if json=$(curl -sf --connect-timeout 5 --max-time 10 "wttr.in/$LOCATION?format=j1" 2>/dev/null); then
     phase=$(printf '%s' "$json" | jq -r '
         .weather[0].astronomy[0].moon_phase
-    ')
-
-    case "$phase" in
-    "New Moon") moon="🌑" ;;
-    "Waxing Crescent") moon="🌒" ;;
-    "First Quarter") moon="🌓" ;;
-    "Waxing Gibbous") moon="🌔" ;;
-    "Full Moon") moon="🌕" ;;
-    "Waning Gibbous") moon="🌖" ;;
-    "Last Quarter") moon="🌗" ;;
-    "Waning Crescent") moon="🌘" ;;
-    *) moon="🌜" ;;
-    esac
-
-    printf '%s\n%s\n' "$moon" "$phase" >"$cache"
+    ' 2>/dev/null)
+    if [ -n "$phase" ] && [ "$phase" != "null" ]; then
+        case "$phase" in
+        "New Moon") moon="🌑" ;;
+        "Waxing Crescent") moon="🌒" ;;
+        "First Quarter") moon="🌓" ;;
+        "Waxing Gibbous") moon="🌔" ;;
+        "Full Moon") moon="🌕" ;;
+        "Waning Gibbous") moon="🌖" ;;
+        "Last Quarter") moon="🌗" ;;
+        "Waning Crescent") moon="🌘" ;;
+        *) moon="🌜" ;;
+        esac
+        printf '%s\n%s\n' "$moon" "$phase" >"$cache"
+    fi
 fi
 
 [ -r "$cache" ] && sed -n '1p' "$cache"
